@@ -121,15 +121,12 @@ export default function NewsSection() {
           </p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {Array.from({ length: 3 }).map((_, i) => <SkeletonNewsCard key={i} />)}
-          </div>
-        ) : (
-          <div ref={gridRef} className="fade-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {news.map((item) => <NewsCard key={item.id} item={item} />)}
-          </div>
-        )}
+        <div ref={gridRef} className="fade-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => <SkeletonNewsCard key={i} />)
+            : news.map((item) => <NewsCard key={item.id} item={item} />)
+          }
+        </div>
 
         <div className="mt-6 flex items-center justify-center">
           <span className="flex items-center gap-1.5 text-white/20 text-xs">
