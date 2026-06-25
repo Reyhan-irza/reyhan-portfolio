@@ -11,7 +11,7 @@ const contacts = [
     icon: SiWhatsapp,
     color: "text-emerald-400",
     borderHover: "hover:border-emerald-500/30",
-    href: "https://wa.me/62881385242876",
+    href: "https://wa.me/6281385242876",
   },
   {
     id: "instagram",
