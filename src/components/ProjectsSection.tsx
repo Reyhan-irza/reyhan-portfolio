@@ -235,7 +235,7 @@ function ProjectCard({
   return (
     <div
       ref={ref}
-      className="fade-scale rounded-2xl overflow-hidden border border-white/7 flex flex-col group hover:-translate-y-1 hover:border-violet-500/18 hover:shadow-lg hover:shadow-black/40 transition-all duration-300"
+      className="fade-scale card-glow rounded-2xl overflow-hidden border border-white/7 flex flex-col group"
       style={{ background: "#111827" }}
       data-testid={`card-project-${project.id}`}
     >
@@ -243,7 +243,7 @@ function ProjectCard({
       <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
 
       {/* Thumbnail */}
-      <div className="h-24 flex items-center justify-center relative overflow-hidden border-b border-white/5"
+      <div className="project-thumbnail h-24 flex items-center justify-center relative overflow-hidden border-b border-white/5"
         style={{ background: "rgba(139,92,246,0.04)" }}>
         <span className="text-5xl font-black text-white/6 select-none tabular-nums">
           {String(project.id).padStart(2, "0")}

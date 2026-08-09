@@ -10,6 +10,10 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import { supabase } from "@/lib/supabase";
+
+const BASE_PATH = import.meta.env.BASE_URL;
+const LOGO_URL = `${BASE_PATH}logo.png`;
+const PROFILE_PHOTO_URL = `${BASE_PATH}profile.jpg`;
 import { isAdminLoggedIn, logoutAdmin } from "@/lib/adminAuth";
 
 /* ── Notification sound (AudioContext, no external file) ── */
@@ -178,7 +182,7 @@ export default function AdminDashboard() {
           if ("Notification" in window && Notification.permission === "granted") {
             new Notification(`💬 Komentar baru dari ${newComment.username}`, {
               body: newComment.message.slice(0, 120),
-              icon: "/profile.jpg",
+              icon: PROFILE_PHOTO_URL,
               tag: `comment-${newComment.id}`,
             });
           }
@@ -323,7 +327,7 @@ export default function AdminDashboard() {
         style={SIDEBAR_BG}
       >
         <div className="p-5 border-b border-white/10 flex flex-col gap-2">
-          <img src="/logo.png" alt="Reyhan" className="h-10 w-auto object-contain self-start" style={{ imageRendering: "crisp-edges" }} />
+          <img src={LOGO_URL} alt="Reyhan" className="h-10 w-auto object-contain self-start" style={{ imageRendering: "crisp-edges" }} />
           <p className="text-white/30 text-xs">Admin Dashboard</p>
         </div>
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">

@@ -5,9 +5,10 @@ import { SiReact, SiTypescript, SiNodedotjs, SiNextdotjs, SiTailwindcss, SiSupab
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import GuessMyAge from "./GuessMyAge";
+import { useMagnetic } from "../hooks/useMagnetic";
 
 const CV_URL = "/cv.pdf";
-const PROFILE_PHOTO_URL = "/profile.jpg";
+const PROFILE_PHOTO_URL = `${import.meta.env.BASE_URL}profile.jpg`;
 
 const PHRASES = [
   "Frontend Developer",
@@ -26,6 +27,7 @@ const techSkills = [
 ];
 
 export default function HeroSection() {
+  const projectsButton = useMagnetic<HTMLButtonElement>(5);
   /* ── Typing animation ── */
   const [phraseIdx,  setPhraseIdx]  = useState(0);
   const [displayed,  setDisplayed]  = useState("");
@@ -115,7 +117,15 @@ export default function HeroSection() {
       >
         <div className="profile-glow w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95">
           {PROFILE_PHOTO_URL ? (
-            <img src={PROFILE_PHOTO_URL} alt="Reyhan Irza Alvano" className="w-full h-full object-cover rounded-full" />
+            <img
+              src={PROFILE_PHOTO_URL}
+              alt="Reyhan Irza Alvano"
+              width={128}
+              height={128}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-full object-cover rounded-full"
+            />
           ) : (
             <div className="w-full h-full rounded-full bg-gradient-to-br from-violet-600 to-violet-900 flex items-center justify-center">
               <span className="text-4xl md:text-5xl font-bold text-white select-none">R</span>
@@ -190,7 +200,10 @@ export default function HeroSection() {
       {/* ── CTA Buttons ── */}
       <div ref={btnsRef} className="fade-up flex flex-wrap justify-center gap-3 mt-8 px-6">
         <button
-          className="btn-neon px-6 py-3 rounded-xl text-sm flex items-center gap-2"
+          ref={projectsButton.ref}
+          onPointerMove={projectsButton.onPointerMove}
+          onPointerLeave={projectsButton.onPointerLeave}
+          className="btn-neon magnetic px-6 py-3 rounded-xl text-sm flex items-center gap-2"
           onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
           data-testid="button-view-projects"
         >

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
-const PHOTO = "https://i.imgur.com/3jKgiUW.jpeg";
+const PHOTO = `${import.meta.env.BASE_URL}profile.jpg`;
 
 const STATUS_MSGS = [
   "Initializing...",
@@ -26,6 +27,7 @@ export default function LoadingScreen({ onFinish }: Props) {
   const [showBar,  setShowBar]  = useState(false);
   const [progress, setProgress] = useState(0);
   const [phase,    setPhase]    = useState<"in" | "progress" | "out">("in");
+  const reducedMotion = useReducedMotion();
 
   const phaseRef = useRef(0);
   const [rs, setRs] = useState<RunState>({
@@ -35,6 +37,23 @@ export default function LoadingScreen({ onFinish }: Props) {
   });
 
   useEffect(() => {
+    if (reducedMotion) {
+      setShowFig(true);
+      setShowText(true);
+      setShowBar(true);
+      setProgress(100);
+      const finishTimer = setTimeout(() => {
+        setPhase("out");
+        setTimeout(onFinish, 50);
+      }, 150);
+      return () => clearTimeout(finishTimer);
+    }
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = PHOTO;
+    void image.decode?.();
+
     let raf: number;
     const tick = () => {
       phaseRef.current += 0.10;
@@ -57,17 +76,18 @@ export default function LoadingScreen({ onFinish }: Props) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [onFinish, reducedMotion]);
 
   useEffect(() => {
+    if (reducedMotion) return;
     const t1 = setTimeout(() => setShowFig(true),  100);
     const t2 = setTimeout(() => setShowText(true), 500);
     const t3 = setTimeout(() => { setShowBar(true); setPhase("progress"); }, 900);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, []);
+  }, [reducedMotion]);
 
   useEffect(() => {
-    if (phase !== "progress") return;
+    if (phase !== "progress" || reducedMotion) return;
     let p = 0;
     const iv = setInterval(() => {
       p += 2.2;
@@ -78,7 +98,7 @@ export default function LoadingScreen({ onFinish }: Props) {
       }
     }, 20);
     return () => clearInterval(iv);
-  }, [phase, onFinish]);
+  }, [phase, onFinish, reducedMotion]);
 
   const msgIndex  = Math.min(Math.floor(progress / 21), STATUS_MSGS.length - 1);
   const statusMsg = STATUS_MSGS[msgIndex];

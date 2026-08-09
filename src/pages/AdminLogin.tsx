@@ -3,6 +3,8 @@ import { useLocation } from "wouter";
 import { Eye, EyeOff, Lock, User, AlertCircle, ArrowRight } from "lucide-react";
 import { loginAdmin, isAdminLoggedIn } from "@/lib/adminAuth";
 
+const LOGO_URL = `${import.meta.env.BASE_URL}logo.png`;
+
 export default function AdminLogin() {
   const [, navigate] = useLocation();
 
@@ -70,7 +72,7 @@ export default function AdminLogin() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl border border-violet-500/20 bg-violet-500/8 flex items-center justify-center mx-auto mb-5">
-            <img src="/logo.png" alt="RW" className="h-9 w-9 object-contain" style={{ imageRendering: "crisp-edges" }} />
+            <img src={LOGO_URL} alt="RW" className="h-9 w-9 object-contain" style={{ imageRendering: "crisp-edges" }} />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Developer Access</h1>
           <p className="text-[#9CA3AF] text-sm mt-1.5">Sign in to manage your portfolio</p>

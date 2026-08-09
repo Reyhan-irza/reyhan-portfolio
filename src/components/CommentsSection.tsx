@@ -6,6 +6,8 @@ import {
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { supabase } from "@/lib/supabase";
 
+const PROFILE_PHOTO_URL = `${import.meta.env.BASE_URL}profile.jpg`;
+
 // Table: "comments"  — fields: id, username, message, pinned, created_at
 // Table: "replies"   — fields: id, comment_id, reply_text, admin_name, created_at
 interface Comment { id: number; username: string; message: string; pinned: boolean; created_at: string; }
@@ -288,7 +290,7 @@ export default function CommentsSection() {
                     {cReplies.map((r) => (
                       <div key={r.id} className="flex gap-2.5 bg-violet-500/5 border border-violet-500/15 rounded-xl p-3">
                         <div className="w-7 h-7 rounded-full overflow-hidden border border-violet-500/40 flex-shrink-0">
-                          <img src="/profile.jpg" alt="Developer" className="w-full h-full object-cover" />
+                          <img src={PROFILE_PHOTO_URL} alt="Developer" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">

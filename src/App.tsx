@@ -6,6 +6,7 @@ import Home from "@/pages/Home";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/not-found";
+import CustomCursor from "@/components/CustomCursor";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
+      <CustomCursor />
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>

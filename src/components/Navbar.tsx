@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
+import { useScrollDirection } from "../hooks/useScrollDirection";
 
 const navLinks = [
   { label: "Home",     href: "#home"     },
@@ -12,16 +13,12 @@ const navLinks = [
   { label: "Comments", href: "#comments" },
 ];
 
+const LOGO_URL = `${import.meta.env.BASE_URL}logo.png`;
+
 export default function Navbar() {
   const [isOpen,   setIsOpen]   = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const { direction, scrollY } = useScrollDirection();
   const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const el = menuRef.current;
@@ -43,8 +40,21 @@ export default function Navbar() {
     }, 50);
   };
 
+  const pageHeight = typeof document === "undefined"
+    ? 1
+    : Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const progress = Math.min((scrollY / pageHeight) * 100, 100);
+  const compact = direction === "down" && scrollY > 160;
+  const scrolled = scrollY > 30;
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+        scrolled ? "nav-blur py-3" : "bg-transparent py-5"
+      } ${compact ? "nav-compact" : ""}`}
+      aria-label="Primary navigation"
+    >
+      <div className="nav-progress" aria-hidden="true" style={{ width: `${progress}%` }} />
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
 
         {/* Logo */}
@@ -54,7 +64,7 @@ export default function Navbar() {
         >
           <div className="relative">
             <img
-              src="/logo.png"
+              src={LOGO_URL}
               alt="Reyhan"
               className="h-10 w-10 object-cover rounded-full transition-all duration-300 group-hover:scale-110"
               style={{
