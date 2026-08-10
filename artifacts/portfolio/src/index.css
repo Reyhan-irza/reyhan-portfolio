@@ -360,6 +360,106 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
 }
 
+/* ── Hero scroll choreography ──
+   Each layer has its own depth, so the hero recedes into the page instead of
+   disappearing as one block. --hero-progress is updated with rAF by HeroSection.
+*/
+.hero-scroll-layer {
+  --hero-depth-y: 0px;
+  --hero-scale-loss: 0;
+  --hero-opacity-loss: 0;
+  --hero-blur: 0px;
+  transform: translate3d(0, calc(var(--hero-depth-y) * var(--hero-progress)), 0)
+    scale(calc(1 - (var(--hero-scale-loss) * var(--hero-progress))));
+  opacity: calc(1 - (var(--hero-opacity-loss) * var(--hero-progress)));
+  filter: blur(calc(var(--hero-blur) * var(--hero-progress)));
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+}
+
+.hero-scroll-grid {
+  --hero-depth-y: 18px;
+  --hero-opacity-loss: 0.28;
+}
+
+.hero-scroll-glow {
+  --hero-depth-y: -22px;
+  --hero-scale-loss: 0.08;
+  --hero-opacity-loss: 0.5;
+  --hero-blur: 4px;
+}
+
+.hero-scroll-avatar {
+  --hero-depth-y: -14px;
+  --hero-scale-loss: 0.06;
+  --hero-opacity-loss: 0.18;
+  --hero-blur: 0.5px;
+}
+
+.hero-scroll-badge {
+  --hero-depth-y: -9px;
+  --hero-scale-loss: 0.025;
+  --hero-opacity-loss: 0.22;
+}
+
+.hero-scroll-headline {
+  --hero-depth-y: -5px;
+  --hero-scale-loss: 0.018;
+  --hero-opacity-loss: 0.24;
+}
+
+.hero-scroll-typing {
+  --hero-depth-y: -2px;
+  --hero-opacity-loss: 0.34;
+  --hero-blur: 0.35px;
+}
+
+.hero-scroll-description {
+  --hero-depth-y: 5px;
+  --hero-opacity-loss: 0.4;
+  --hero-blur: 0.45px;
+}
+
+.hero-scroll-marquee {
+  --hero-depth-y: 10px;
+  --hero-scale-loss: 0.025;
+  --hero-opacity-loss: 0.52;
+  --hero-blur: 0.8px;
+}
+
+.hero-scroll-actions {
+  --hero-depth-y: 15px;
+  --hero-scale-loss: 0.045;
+  --hero-opacity-loss: 0.42;
+  --hero-blur: 0.45px;
+}
+
+.hero-scroll-fun {
+  --hero-depth-y: 19px;
+  --hero-scale-loss: 0.05;
+  --hero-opacity-loss: 0.58;
+}
+
+.hero-scroll-indicator {
+  --hero-depth-y: 28px;
+  --hero-scale-loss: 0.08;
+  --hero-opacity-loss: 0.96;
+  --hero-blur: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-layer {
+    transform: none;
+    opacity: 1;
+    filter: none;
+    will-change: auto;
+  }
+
+  .hero-scroll-indicator {
+    opacity: 0.25;
+  }
+}
+
 /* ── Intro Animations ── */
 @keyframes slideInLeft {
   from { transform: translateX(-120px); opacity: 0; }
