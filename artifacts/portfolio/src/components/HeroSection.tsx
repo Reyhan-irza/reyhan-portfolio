@@ -210,9 +210,11 @@ export default function HeroSection() {
           {[...techSkills, ...techSkills].map(({ label, Icon, color }, i) => (
             <span
               key={i}
-              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/55 rounded-full border border-white/8 bg-white/3 hover:border-violet-500/30 hover:text-white/80 transition-colors duration-200 cursor-default mx-2"
+              className="hero-tech-item flex-shrink-0 flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white/55 rounded-full border border-white/8 bg-white/3 transition-all duration-300 cursor-default mx-2"
             >
-              <Icon className={`w-3.5 h-3.5 ${color}`} />
+              <span className="hero-tech-icon" aria-hidden="true">
+                <Icon className={`w-3.5 h-3.5 ${color}`} />
+              </span>
               {label}
             </span>
           ))}

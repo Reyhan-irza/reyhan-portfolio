@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
-const PHOTO = "https://i.imgur.com/3jKgiUW.jpeg";
+// Keep the loading portrait on the same local asset as the Hero.
+// External image hosts can be blocked by preview browsers or expire.
+const PHOTO = "/profile.jpg";
 
 const STATUS_MSGS = [
   "Initializing...",
