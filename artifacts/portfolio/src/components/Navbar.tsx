@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 
 const navLinks = [
   { label: "Home",     href: "#home"     },
@@ -40,7 +39,7 @@ export default function Navbar() {
     setTimeout(() => {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 50);
+    }, 160);
   };
 
   return (
@@ -84,32 +83,40 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <div className="md:hidden flex items-center">
           <button
-            className="relative w-9 h-9 flex items-center justify-center rounded-xl glass border border-white/10 text-white/70 hover:text-white hover:border-violet-500/40 transition-all duration-300 hover:scale-110 active:scale-95"
+            className={`mobile-menu-trigger ${isOpen ? "is-open" : ""}`}
             onClick={() => setIsOpen((p) => !p)}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
           >
-            <Menu className={`w-5 h-5 absolute transition-all duration-300 ${isOpen ? "opacity-0 rotate-90 scale-50" : "opacity-100 rotate-0 scale-100"}`} />
-            <X    className={`w-5 h-5 absolute transition-all duration-300 ${isOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-50"}`} />
+            <span className="mobile-menu-glyph" aria-hidden="true">
+              <span className="mobile-menu-line mobile-menu-line-top" />
+              <span className="mobile-menu-line mobile-menu-line-middle" />
+              <span className="mobile-menu-line mobile-menu-line-bottom" />
+            </span>
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div ref={menuRef} className="md:hidden overflow-hidden transition-all duration-400 ease-in-out" style={{ maxHeight: "0px", opacity: "0" }}>
-        <div className="glass border-t border-white/8 px-6 pt-3 pb-5 flex flex-col gap-1">
+      <div
+        ref={menuRef}
+        id="mobile-navigation"
+        aria-hidden={!isOpen}
+        className={`mobile-menu-shell md:hidden overflow-hidden ${isOpen ? "is-open" : ""}`}
+        style={{ maxHeight: "0px", opacity: "0" }}
+      >
+        <div className="mobile-menu-surface glass border-t border-white/8 px-6 pt-4 pb-6 flex flex-col gap-1">
           {navLinks.map((link, i) => (
             <button
               key={link.label}
               onClick={() => handleNav(link.href)}
-              className="text-left text-sm text-white/65 hover:text-violet-300 transition-all duration-200 py-2.5 px-3 rounded-lg hover:bg-white/5 flex items-center gap-3 group"
+              className={`mobile-menu-link text-left text-sm text-white/65 py-3 px-3 rounded-xl flex items-center gap-3 group ${isOpen ? "is-open" : ""}`}
               style={{
-                transform: isOpen ? "translateX(0)" : "translateX(-8px)",
-                opacity: isOpen ? 1 : 0,
-                transition: `color 200ms, background 200ms, transform 300ms ${i * 40}ms, opacity 300ms ${i * 40}ms`,
-              }}
+                "--menu-index": i,
+              } as CSSProperties}
             >
-              <span className="w-1 h-1 rounded-full bg-violet-500/50 group-hover:bg-violet-400 transition-colors" />
+              <span className="mobile-menu-dot w-1 h-1 rounded-full bg-violet-500/50" />
               {link.label}
             </button>
           ))}

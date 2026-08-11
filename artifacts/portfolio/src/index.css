@@ -885,6 +885,202 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* ── Premium mobile navigation ── */
+.mobile-menu-trigger {
+  position: relative;
+  display: inline-flex;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.05rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.025)),
+    rgba(17, 24, 39, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 280ms ease,
+    border-color 280ms ease,
+    background 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.mobile-menu-trigger::before {
+  content: "";
+  position: absolute;
+  inset: 0.28rem;
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  border-radius: 0.82rem;
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.mobile-menu-trigger:hover,
+.mobile-menu-trigger:focus-visible,
+.mobile-menu-trigger.is-open {
+  color: rgba(255, 255, 255, 0.96);
+  border-color: rgba(167, 139, 250, 0.42);
+  background:
+    linear-gradient(145deg, rgba(139, 92, 246, 0.16), rgba(255, 255, 255, 0.035)),
+    rgba(17, 24, 39, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 28px rgba(76, 29, 149, 0.2);
+}
+
+.mobile-menu-trigger:hover {
+  transform: translateY(-2px);
+}
+
+.mobile-menu-trigger:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.mobile-menu-trigger:focus-visible {
+  outline: 2px solid rgba(196, 181, 253, 0.8);
+  outline-offset: 3px;
+}
+
+.mobile-menu-trigger.is-open::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.mobile-menu-glyph {
+  position: relative;
+  display: block;
+  width: 1.45rem;
+  height: 1.15rem;
+}
+
+.mobile-menu-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform-origin: center;
+  transition:
+    transform 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms ease,
+    width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 280ms ease;
+}
+
+.mobile-menu-line-top { top: 0; }
+.mobile-menu-line-middle { top: 0.575rem; width: 72%; }
+.mobile-menu-line-bottom { bottom: 0; }
+
+.mobile-menu-trigger.is-open .mobile-menu-line-top {
+  top: 0.575rem;
+  transform: rotate(45deg);
+}
+
+.mobile-menu-trigger.is-open .mobile-menu-line-middle {
+  width: 0;
+  opacity: 0;
+  transform: translateX(0.3rem);
+}
+
+.mobile-menu-trigger.is-open .mobile-menu-line-bottom {
+  bottom: auto;
+  top: 0.575rem;
+  transform: rotate(-45deg);
+}
+
+.mobile-menu-shell {
+  transform: translateY(-0.75rem);
+  transform-origin: top center;
+  visibility: hidden;
+  transition:
+    max-height 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 520ms;
+  will-change: max-height, opacity, transform;
+}
+
+.mobile-menu-shell.is-open {
+  transform: translateY(0);
+  visibility: visible;
+  transition:
+    max-height 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms ease,
+    transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+.mobile-menu-surface {
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.mobile-menu-link {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateX(-0.75rem);
+  opacity: 0;
+}
+
+.mobile-menu-link.is-open {
+  transform: translateX(0);
+  opacity: 1;
+  transition-delay: calc(var(--menu-index) * 42ms);
+}
+
+.mobile-menu-shell:not(.is-open) .mobile-menu-link {
+  transition-delay: calc((7 - var(--menu-index)) * 20ms);
+}
+
+.mobile-menu-link:hover,
+.mobile-menu-link:focus-visible {
+  color: rgba(255, 255, 255, 0.96);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), rgba(255, 255, 255, 0.025));
+}
+
+.mobile-menu-link:focus-visible {
+  outline: 2px solid rgba(196, 181, 253, 0.68);
+  outline-offset: -2px;
+}
+
+.mobile-menu-dot {
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease;
+}
+
+.mobile-menu-link:hover .mobile-menu-dot,
+.mobile-menu-link:focus-visible .mobile-menu-dot {
+  background: rgba(196, 181, 253, 0.95);
+  transform: scale(1.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-trigger,
+  .mobile-menu-trigger::before,
+  .mobile-menu-line,
+  .mobile-menu-shell,
+  .mobile-menu-link,
+  .mobile-menu-dot {
+    transition: none;
+  }
+}
+
 /* ── Neon border (legacy compat) ── */
 .neon-border {
   position: relative;
