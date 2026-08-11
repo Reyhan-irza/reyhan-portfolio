@@ -106,17 +106,25 @@ export default function Navbar() {
         className={`mobile-menu-shell md:hidden overflow-hidden ${isOpen ? "is-open" : ""}`}
         style={{ maxHeight: "0px", opacity: "0" }}
       >
-        <div className="mobile-menu-surface glass border-t border-white/8 px-6 pt-4 pb-6 flex flex-col gap-1">
+        <div className="mobile-menu-surface glass px-5 pt-5 pb-5 flex flex-col gap-1">
+          <div className="mobile-menu-heading">
+            <span className="mobile-menu-heading-label">Navigation</span>
+            <span className="mobile-menu-heading-meta">Reyhan / 08</span>
+          </div>
+          <div className="mobile-menu-rule" aria-hidden="true" />
           {navLinks.map((link, i) => (
             <button
               key={link.label}
               onClick={() => handleNav(link.href)}
+              tabIndex={isOpen ? 0 : -1}
               className={`mobile-menu-link text-left text-sm text-white/65 py-3 px-3 rounded-xl flex items-center gap-3 group ${isOpen ? "is-open" : ""}`}
               style={{
                 "--menu-index": i,
               } as CSSProperties}
             >
-              <span className="mobile-menu-dot w-1 h-1 rounded-full bg-violet-500/50" />
+              <span className="mobile-menu-index" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               {link.label}
             </button>
           ))}
