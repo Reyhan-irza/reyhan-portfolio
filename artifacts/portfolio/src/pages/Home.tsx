@@ -21,12 +21,15 @@ import RoastButton from "@/components/RoastButton";
 import TerminalMode from "@/components/TerminalMode";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
+import { useLenis } from "../hooks/useLenis";
 
 const Divider = () => <div className="rgb-divider max-w-6xl mx-auto px-6" />;
 
 export default function Home() {
   const [loadingDone, setLoadingDone] = useState(false);
   const [introDone,   setIntroDone]   = useState(false);
+
+  useLenis();
 
   const footerRef   = useRef<HTMLDivElement>(null);
   const bottomFired = useRef(false);

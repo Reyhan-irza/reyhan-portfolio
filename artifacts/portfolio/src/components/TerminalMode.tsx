@@ -20,7 +20,7 @@ const COMMANDS: Record<string, () => string> = {
     `FRONTEND\n  React         ████████████  Expert\n  TypeScript    ██████████░░  Advanced\n  Next.js       █████████░░░  Advanced\n  TailwindCSS   ████████████  Expert\n\nBACKEND\n  Node.js       █████████░░░  Advanced\n  Express       █████████░░░  Advanced\n  PostgreSQL    ████████░░░░  Proficient\n\nTOOLS\n  Git           ████████████  Expert\n  Docker        ██████░░░░░░  Intermediate\n  Figma         ████████░░░░  Proficient`,
 
   projects: () =>
-    `Projects completed: 15+\n\n  [01] E-Commerce Platform       Live\n  [02] Task Management App       Live\n  [03] AI Chat Interface         Live\n  [04] Portfolio Generator       In Progress\n  [05] Social Media Dashboard    Completed\n\n  → See full list: scroll to #projects`,
+    `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
 
   roadmap: () =>
     `Future Roadmap:\n\n  [✓] 2026 — Portfolio Website\n  [○] 2027 — Freelance Projects\n  [○] 2028 — Launch Startup\n  [○] 2030 — Real Estate Investment\n  [○] 2035 — Financial Freedom`,

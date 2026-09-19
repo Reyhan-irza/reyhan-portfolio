@@ -1,307 +1,402 @@
-import { useState, useEffect, useRef } from "react";
-import { ExternalLink, Github, ArrowUpRight, X, Calendar, Zap, Target } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { PointerEvent } from "react";
+import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
     id: 1,
-    title: "E-Commerce Platform",
-    category: "Full-Stack",
-    status: "Completed",
-    desc: "Modern online store with cart, payment processing, and admin dashboard.",
-    tech: ["React", "Node.js", "PostgreSQL", "Stripe"],
-    demo: "#", github: "#",
-    challenge: "Integrating the Stripe payment gateway with proper handling for various payment failure edge cases.",
-    solution: "Implemented Stripe webhooks + idempotency keys to ensure transaction consistency.",
-    timeline: "6 weeks",
+    short: "TJKT",
+    title: "TJKT",
+    type: "Information / education",
+    description:
+      "Website informasi dan pengenalan Jurusan Teknik Jaringan Komputer dan Telekomunikasi SMKN 2 Lubuk Basung.",
+    live: "https://tjkt-tech.vercel.app",
+    github: "https://github.com/Reyhan-irza/TJKT",
+    tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
+    accent: "TJKT",
   },
   {
     id: 2,
-    title: "Task Management App",
-    category: "Full-Stack",
-    status: "Completed",
-    desc: "Task management app with drag-and-drop, real-time team collaboration, and notifications.",
-    tech: ["Next.js", "TypeScript", "Prisma", "WebSocket"],
-    demo: "#", github: "#",
-    challenge: "Real-time synchronization between users with conflict resolution during simultaneous edits.",
-    solution: "Simple Operational Transform algorithm + WebSocket with room-based broadcasting.",
-    timeline: "8 weeks",
+    short: "VR",
+    title: "VIREON Library",
+    type: "Digital workspace",
+    description:
+      "Ruang kerja digital untuk koleksi, anggota, peminjaman, dan laporan perpustakaan.",
+    live: "https://vireon-lib.vercel.app",
+    github: "https://github.com/Reyhan-irza/Library",
+    tech: ["React", "TypeScript", "Supabase", "GSAP"],
+    accent: "VIREON",
   },
   {
     id: 3,
-    title: "AI Chat Interface",
-    category: "Frontend",
-    status: "Completed",
-    desc: "AI-powered chat interface with multi-modal capabilities, chat history, and document processing.",
-    tech: ["React", "OpenAI API", "TailwindCSS", "Express"],
-    demo: "#", github: "#",
-    challenge: "Streaming OpenAI responses while keeping the UI responsive and smooth.",
-    solution: "Server-Sent Events (SSE) for streaming + optimistic UI updates with React state.",
-    timeline: "4 weeks",
+    short: "WA",
+    title: "Reyhan WhatsApp Portfolio",
+    type: "Personal portfolio",
+    description:
+      "Frontend portfolio personal yang modern dan interaktif.",
+    live: "https://reyhan-watsap-portfolio.vercel.app",
+    github: "https://github.com/Reyhan-irza/reyhan-portfolio",
+    tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
+    accent: "REYHAN",
   },
-  {
-    id: 4,
-    title: "Portfolio Generator",
-    category: "Tool",
-    status: "Completed",
-    desc: "Online tool for creating professional portfolios with various modern templates.",
-    tech: ["Vue.js", "Firebase", "Figma API", "PDF.js"],
-    demo: "#", github: "#",
-    challenge: "Generating pixel-perfect PDFs from complex HTML/CSS templates.",
-    solution: "Puppeteer headless browser for screenshot → PDF conversion with custom CSS media print.",
-    timeline: "5 weeks",
-  },
-  {
-    id: 5,
-    title: "Social Media Dashboard",
-    category: "Analytics",
-    status: "Completed",
-    desc: "Social media analytics dashboard with data visualization and content scheduling.",
-    tech: ["React", "Chart.js", "Python", "REST API"],
-    demo: "#", github: "#",
-    challenge: "Rate limiting across various social media APIs and caching data to prevent expiry.",
-    solution: "Redis-based caching with different TTLs per platform + queue-based API request throttling.",
-    timeline: "7 weeks",
-  },
-  {
-    id: 6,
-    title: "Mobile Banking UI",
-    category: "Mobile",
-    status: "Completed",
-    desc: "Modern mobile banking UI/UX design with smooth animations and intuitive UX.",
-    tech: ["React Native", "Figma", "Lottie", "Expo"],
-    demo: "#", github: "#",
-    challenge: "Ensuring Lottie animations don't drop frames on low-end Android devices.",
-    solution: "Conditional animation rendering based on device capability + static asset fallbacks.",
-    timeline: "3 weeks",
-  },
-];
+] as const;
 
-const categoryColor: Record<string, string> = {
-  "Full-Stack": "text-violet-400 bg-violet-500/8 border-violet-500/20",
-  "Frontend":   "text-blue-400 bg-blue-500/8 border-blue-500/20",
-  "Tool":       "text-emerald-400 bg-emerald-500/8 border-emerald-500/20",
-  "Analytics":  "text-amber-400 bg-amber-500/8 border-amber-500/20",
-  "Mobile":     "text-sky-400 bg-sky-500/8 border-sky-500/20",
-};
+type Project = (typeof projects)[number];
 
 export default function ProjectsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
-  const [modal, setModal] = useState<(typeof projects)[0] | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const markerRef = useRef<HTMLSpanElement>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
+  const [activeProject, setActiveProject] = useState(0);
+  const [modal, setModal] = useState<Project | null>(null);
 
-  const handleDetail = (project: (typeof projects)[0]) => {
-    setModal(project);
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const context = gsap.context(() => {
+      const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+
+      if (reducedMotion.matches) {
+        gsap.set(rows, { clearProps: "all" });
+        return;
+      }
+
+      rows.forEach((row) => {
+        const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+        const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+        if (!visual || !copy) return;
+
+        gsap.fromTo(
+          visual,
+          { clipPath: "inset(0 100% 0 0)" },
+          {
+            clipPath: "inset(0 0% 0 0)",
+            duration: 1.05,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 78%",
+              toggleActions: "play reverse play reverse",
+            },
+          },
+        );
+
+        gsap.fromTo(
+          copy,
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.78,
+            delay: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 72%",
+              toggleActions: "play reverse play reverse",
+            },
+          },
+        );
+      });
+
+      gsap.fromTo(
+        "[data-project-heading]",
+        { y: 34, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 76%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
+    }, section);
+
+    return () => context.revert();
+  }, []);
+
+  useEffect(() => {
+    if (!modal) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setModal(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [modal]);
+
+  useEffect(() => {
+    const marker = markerRef.current;
+    if (!marker) return;
+    const tween = gsap.to(marker, {
+      y: activeProject * 31,
+      duration: 0.32,
+      ease: "power3.out",
+      overwrite: true,
+    });
+
+    return () => {
+      tween.kill();
+    };
+  }, [activeProject]);
+
+  const markViewed = (project: Project) => {
     viewedRef.current.add(project.id);
-    if (!didAchieve.current && viewedRef.current.size >= projects.length) {
+    if (!didAchieve.current && viewedRef.current.size === projects.length) {
       didAchieve.current = true;
       unlockAchievement(ACHIEVEMENTS.PROJECT_READER);
     }
   };
 
-  useEffect(() => {
-    document.body.style.overflow = modal ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [modal]);
+  const openDetails = (project: Project) => {
+    markViewed(project);
+    setModal(project);
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty(
+      "--spot-x",
+      `${((event.clientX - bounds.left) / bounds.width) * 100}%`,
+    );
+    event.currentTarget.style.setProperty(
+      "--spot-y",
+      `${((event.clientY - bounds.top) / bounds.height) * 100}%`,
+    );
+  };
 
   return (
-    <section id="projects" className="relative py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div ref={headerRef} className="fade-up text-center mb-16">
-          <p className="text-violet-400 text-xs font-semibold uppercase tracking-widest mb-4">Selected Work</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-5">
-            My <span className="gradient-text">Projects</span>
-          </h2>
-          <div className="rgb-divider w-20 mx-auto mb-6" />
-          <p className="text-[#9CA3AF] max-w-xl mx-auto text-base">
-            A selection of projects I've built. Click Detail to explore the story behind each one.
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="projects-section relative overflow-hidden px-6 py-28 md:py-40"
+      data-testid="section-projects"
+    >
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <div
+          data-project-heading
+          className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
+        >
+          <div>
+            <p className="projects-kicker mb-5">Selected work / three builds</p>
+            <h2 className="projects-title max-w-4xl">
+              Built to be
+              <br />
+              <span className="text-[#e8836b]">used.</span>
+            </h2>
+          </div>
+          <p className="projects-intro text-sm md:mb-1 md:text-base">
+            Three real products, each with a different job to do. Follow the
+            thread from a school department introduction to a working library
+            system and a personal interface.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.id} project={p} delay={i * 70} onDetail={() => handleDetail(p)} />
-          ))}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
+          <aside className="hidden lg:block">
+            <div className="sticky top-32 flex items-start gap-5">
+              <div className="project-rail relative h-24 w-px">
+                <span
+                  ref={markerRef}
+                  className="project-rail-marker absolute -left-[3px] top-0 block h-6 w-[5px]"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="project-index text-xs text-[#94978f]">
+                <span className="text-[#e8e7dc]">0{activeProject + 1}</span>
+                <span className="mx-1 text-[#e8836b]">/</span>
+                0{projects.length}
+              </div>
+            </div>
+          </aside>
+
+          <div>
+            {projects.map((project, index) => (
+              <article
+                key={project.id}
+                data-project-row
+                tabIndex={0}
+                className="project-row"
+                onMouseEnter={() => setActiveProject(index)}
+                onFocus={() => setActiveProject(index)}
+                onTouchStart={() => setActiveProject(index)}
+                data-testid={`project-${project.id}`}
+                aria-labelledby={`project-title-${project.id}`}
+              >
+                <div
+                  data-project-visual
+                  className="project-visual"
+                  onPointerMove={handlePointerMove}
+                  data-testid={`project-visual-${project.id}`}
+                >
+                  <div className="project-visual-grid" aria-hidden="true" />
+                  <span className="project-stamp">Live build</span>
+                  <span className="project-number" aria-hidden="true">
+                    0{project.id}
+                  </span>
+                  <span className="project-wordmark" aria-hidden="true">
+                    {project.accent === "VIREON" ? (
+                      <>
+                        VI<em>RE</em>ON
+                      </>
+                    ) : project.accent === "REYHAN" ? (
+                      <>
+                        REY<em>HAN</em>
+                      </>
+                    ) : (
+                      <>
+                        T<em>JK</em>T
+                      </>
+                    )}
+                  </span>
+                </div>
+
+                <div data-project-copy>
+                  <p className="project-type">{project.type}</p>
+                  <h3 id={`project-title-${project.id}`} className="project-name">
+                    {project.title}
+                  </h3>
+                  <p className="project-copy">{project.description}</p>
+
+                  <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
+                    {project.tech.map((technology) => (
+                      <li key={technology} className="project-tech">
+                        {technology}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="project-actions">
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-link"
+                      data-testid={`link-live-${project.id}`}
+                    >
+                      Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </a>
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-link project-link--quiet"
+                      data-testid={`link-github-${project.id}`}
+                      aria-label={`Open ${project.title} GitHub repository`}
+                    >
+                      <Github className="h-4 w-4" aria-hidden="true" />
+                      <span className="sr-only">GitHub repository</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => openDetails(project)}
+                      className="project-link project-link--quiet"
+                      data-testid={`button-details-${project.id}`}
+                      aria-label={`Read more about ${project.title}`}
+                    >
+                      Note <span aria-hidden="true">+</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Modal */}
       {modal && (
         <div
-          className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-[#080a0b]/85 p-5 backdrop-blur-sm"
+          role="presentation"
           onClick={() => setModal(null)}
+          data-testid="project-detail-overlay"
         >
           <div
-            className="modal-enter border border-white/8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl shadow-black/60"
-            style={{ background: "#111827" }}
-            onClick={(e) => e.stopPropagation()}
+            className="project-detail-dialog modal-enter w-full max-w-xl p-6 md:p-9"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-detail-title"
+            onClick={(event) => event.stopPropagation()}
+            data-testid="project-detail-dialog"
           >
-            {/* Modal header */}
-            <div className="relative p-6 pb-5 border-b border-white/6">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-2.5 py-0.5 text-[10px] font-semibold rounded-full border ${categoryColor[modal.category] ?? "text-violet-400 bg-violet-500/8 border-violet-500/20"}`}>
-                      {modal.category}
-                    </span>
-                    <span className="text-white/30 text-[10px] uppercase tracking-wide">#{modal.id}</span>
-                  </div>
-                  <h3 className="text-white text-xl font-bold">{modal.title}</h3>
-                </div>
-                <button
-                  className="flex-shrink-0 w-8 h-8 rounded-xl border border-white/8 flex items-center justify-center text-white/40 hover:text-white hover:border-white/20 transition-all duration-200"
-                  onClick={() => setModal(null)}
-                >
-                  <X className="w-4 h-4" />
-                </button>
+            <div className="flex items-start justify-between gap-5">
+              <div>
+                <p className="project-detail-label">Project note / 0{modal.id}</p>
+                <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#e8e7dc] md:text-5xl">
+                  {modal.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/15 text-[#94978f] transition-colors hover:text-[#e8e7dc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8836b]"
+                onClick={() => setModal(null)}
+                aria-label="Close project note"
+                data-testid="button-close-project-detail"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div className="mt-8 border-t border-white/10 pt-6">
+              <p className="project-detail-label">What it is</p>
+              <p className="mt-3 text-base leading-7 text-[#b6b7ad]">{modal.description}</p>
+            </div>
+
+            <div className="mt-7">
+              <p className="project-detail-label">Built with</p>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                {modal.tech.map((technology) => (
+                  <span key={technology} className="text-sm text-[#e8e7dc]">
+                    {technology}
+                  </span>
+                ))}
               </div>
             </div>
 
-            <div className="p-6 space-y-5">
-              <p className="text-[#9CA3AF] text-sm leading-relaxed">{modal.desc}</p>
-
-              {/* Tech stack */}
-              <div>
-                <h4 className="text-white/35 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                  <Zap className="w-3 h-3" /> Tech Stack
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {modal.tech.map((t) => (
-                    <span key={t} className="px-3 py-1 text-xs rounded-full border border-white/8 text-white/60 font-medium"
-                      style={{ background: "rgba(255,255,255,0.03)" }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Challenge & Solution */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-xl p-4 border border-red-500/12 bg-red-500/4">
-                  <h4 className="text-red-400/80 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                    <Target className="w-3 h-3" /> Challenge
-                  </h4>
-                  <p className="text-[#9CA3AF] text-xs leading-relaxed">{modal.challenge}</p>
-                </div>
-                <div className="rounded-xl p-4 border border-emerald-500/12 bg-emerald-500/4">
-                  <h4 className="text-emerald-400/80 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                    <Zap className="w-3 h-3" /> Solution
-                  </h4>
-                  <p className="text-[#9CA3AF] text-xs leading-relaxed">{modal.solution}</p>
-                </div>
-              </div>
-
-              {/* Timeline */}
-              <div className="flex items-center gap-2 text-sm text-white/40">
-                <Calendar className="w-4 h-4 text-violet-400/60" />
-                <span>Timeline: <span className="text-violet-300/80 font-medium">{modal.timeline}</span></span>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3 pt-1">
-                <a
-                  href={modal.demo}
-                  className="btn-neon flex-1 py-3 rounded-xl text-sm font-semibold text-center flex items-center justify-center gap-2 transition-all duration-200"
-                >
-                  <ExternalLink className="w-4 h-4" /> Live Demo
-                </a>
-                <a
-                  href={modal.github}
-                  className="w-12 h-12 rounded-xl border border-white/8 flex items-center justify-center text-white/40 hover:text-white hover:border-white/20 transition-all duration-200"
-                  style={{ background: "rgba(255,255,255,0.03)" }}
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-              </div>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a
+                href={modal.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link"
+                data-testid="modal-link-live"
+              >
+                <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                Visit live site
+              </a>
+              <a
+                href={modal.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link project-link--quiet"
+                data-testid="modal-link-github"
+              >
+                <Github className="h-4 w-4" aria-hidden="true" />
+                GitHub
+              </a>
             </div>
           </div>
         </div>
       )}
     </section>
-  );
-}
-
-function ProjectCard({
-  project, delay, onDetail,
-}: {
-  project: (typeof projects)[0];
-  delay: number;
-  onDetail: () => void;
-}) {
-  const ref = useScrollAnim<HTMLDivElement>({ threshold: 0.12, delay });
-
-  return (
-    <div
-      ref={ref}
-      className="fade-scale rounded-2xl overflow-hidden border border-white/7 flex flex-col group hover:-translate-y-1 hover:border-violet-500/18 hover:shadow-lg hover:shadow-black/40 transition-all duration-300"
-      style={{ background: "#111827" }}
-      data-testid={`card-project-${project.id}`}
-    >
-      {/* Top accent */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
-
-      {/* Thumbnail */}
-      <div className="h-24 flex items-center justify-center relative overflow-hidden border-b border-white/5"
-        style={{ background: "rgba(139,92,246,0.04)" }}>
-        <span className="text-5xl font-black text-white/6 select-none tabular-nums">
-          {String(project.id).padStart(2, "0")}
-        </span>
-        <div className="absolute bottom-2 right-2 flex gap-1">
-          {project.tech.slice(0, 2).map((t) => (
-            <span key={t} className="px-1.5 py-0.5 text-[10px] rounded border border-white/8 text-white/35"
-              style={{ background: "rgba(255,255,255,0.03)" }}>
-              {t}
-            </span>
-          ))}
-        </div>
-        <span className={`absolute top-2 left-2 px-2 py-0.5 text-[10px] font-semibold rounded-full border ${categoryColor[project.category] ?? "text-violet-400 bg-violet-500/8 border-violet-500/20"}`}>
-          {project.category}
-        </span>
-      </div>
-
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-white font-semibold text-sm mb-1.5 group-hover:text-violet-300 transition-colors duration-200">
-          {project.title}
-        </h3>
-        <p className="text-[#9CA3AF] text-xs leading-relaxed flex-1 mb-4">{project.desc}</p>
-
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {project.tech.map((t) => (
-            <span key={t} className="px-2 py-0.5 text-xs rounded-full border border-white/7 text-white/45"
-              style={{ background: "rgba(255,255,255,0.025)" }}>
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex gap-2 mt-auto">
-          <a
-            href={project.demo}
-            className="btn-neon flex-1 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5"
-          >
-            <ExternalLink className="w-3 h-3" /> Demo
-          </a>
-          <button
-            onClick={onDetail}
-            className="flex-shrink-0 px-3 py-2 rounded-xl border border-white/8 text-white/45 hover:text-violet-300 hover:border-violet-500/30 transition-all duration-200 text-xs flex items-center gap-1"
-            style={{ background: "rgba(255,255,255,0.025)" }}
-            data-testid={`link-demo-${project.id}`}
-          >
-            <ArrowUpRight className="w-3 h-3" /> Detail
-          </button>
-          <a
-            href={project.github}
-            className="flex-shrink-0 w-9 h-9 rounded-xl border border-white/8 flex items-center justify-center text-white/40 hover:text-white hover:border-white/20 transition-all duration-200"
-            style={{ background: "rgba(255,255,255,0.025)" }}
-            data-testid={`link-github-${project.id}`}
-            aria-label="GitHub"
-          >
-            <Github className="w-4 h-4" />
-          </a>
-        </div>
-      </div>
-    </div>
   );
 }
