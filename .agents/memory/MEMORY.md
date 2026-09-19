@@ -1,0 +1,3 @@
+- [Package firewall maturity](package-firewall-maturity.md) — prefer an established dependency version when the newest release is inside the workspace's minimum-age window.
+- [Workspace package targeting](workspace-package-targeting.md) — target a package explicitly when adding dependencies in this pnpm workspace.
+- [Workspace production builds](workspace-production-builds.md) — recursive builds must tolerate missing runtime-only PORT and BASE_PATH values.
