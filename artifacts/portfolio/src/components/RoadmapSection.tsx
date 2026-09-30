@@ -32,7 +32,7 @@ export default function RoadmapSection() {
                 {status === "done" ? <Check className="h-3.5 w-3.5 text-[#b95843]" aria-hidden="true" /> : <Circle className="h-2.5 w-2.5" aria-hidden="true" />}
                 {status === "done" ? "Completed" : status === "active" ? "In view" : "Aspiration"}
               </span>
-            </article>
+            </li>
           ))}
         </ol>
       </div>

@@ -1701,6 +1701,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
   .portfolio-shell .skip-to-content,
   .portfolio-shell .editorial-nav-link,
   .portfolio-shell .editorial-nav-link::after {
