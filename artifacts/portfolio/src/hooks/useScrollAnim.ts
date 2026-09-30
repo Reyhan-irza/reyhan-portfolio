@@ -32,6 +32,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
       {
         reduced: "(prefers-reduced-motion: reduce)",
         compact: "(max-width: 767px)",
+        wide: "(min-width: 768px)",
       },
       (mediaContext) => {
         if (mediaContext.conditions?.reduced) {
