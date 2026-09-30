@@ -10,28 +10,45 @@ export default function HeroSection() {
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const context = gsap.context(() => {
-      gsap.from("[data-hero-item]", {
-        y: 22,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: "power3.out",
-      });
-      gsap.to("[data-hero-rule]", {
-        scaleX: 1,
-        transformOrigin: "left center",
-        duration: 1.1,
-        delay: 0.2,
-        ease: "power3.out",
-      });
-      gsap.to("[data-hero-mark]", {
-        yPercent: -14,
-        scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
-      });
-    }, section);
-    return () => context.revert();
+    if (!section) return;
+
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const context = gsap.context(() => {
+        const opening = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          delay: 0.08,
+        });
+        opening
+          .from("[data-hero-item]", {
+            y: 22,
+            autoAlpha: 0,
+            duration: 0.72,
+            stagger: 0.075,
+          })
+          .fromTo(
+            "[data-hero-rule]",
+            { scaleX: 0 },
+            { scaleX: 1, transformOrigin: "left center", duration: 0.9 },
+            0.12,
+          );
+
+        gsap.to("[data-hero-mark]", {
+          yPercent: -12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        });
+      }, section);
+      return () => context.revert();
+    });
+
+    return () => media.revert();
   }, []);
 
   const scrollTo = (id: string) => {

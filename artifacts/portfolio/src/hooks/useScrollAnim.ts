@@ -1,45 +1,55 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Options {
   threshold?: number;
   delay?: number;
 }
 
-/**
- * Attaches an IntersectionObserver to the returned ref.
- * Adds class "show" when the element enters the viewport,
- * removes it when it leaves — so animations replay on every scroll.
- */
+/** Scroll-triggered editorial reveal shared by section headings and groups. */
 export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
   { threshold = 0.2, delay = 0 }: Options = {}
 ) {
   const ref = useRef<T>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (timer.current) clearTimeout(timer.current);
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: reduce)", () => {
+      el.classList.add("show");
+      return () => el.classList.remove("show");
+    });
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      el.classList.remove("show");
+      const context = gsap.context(() => {
+        gsap.fromTo(
+          el,
+          { autoAlpha: 0, y: 22 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.68,
+            delay: Math.max(0, delay) / 1000,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: `top ${Math.round((1 - threshold) * 100)}%`,
+              toggleActions: "play none none reverse",
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      }, el);
+      return () => context.revert();
+    });
 
-        if (entry.isIntersecting) {
-          timer.current = setTimeout(
-            () => el.classList.add("show"),
-            delay
-          );
-        } else {
-          el.classList.remove("show");
-        }
-      },
-      { threshold }
-    );
-
-    observer.observe(el);
     return () => {
-      observer.disconnect();
-      if (timer.current) clearTimeout(timer.current);
+      media.revert();
     };
   }, [threshold, delay]);
 
