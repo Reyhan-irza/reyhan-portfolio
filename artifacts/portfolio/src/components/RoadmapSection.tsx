@@ -11,7 +11,7 @@ const roadmap = [
 
 export default function RoadmapSection() {
   const ref = useScrollAnim({ threshold: 0.2 });
-  const roadmapRef = useScrollAnim({ threshold: 0.1, stagger: 0.08, distance: 14 });
+  const roadmapRef = useScrollAnim<HTMLOListElement>({ threshold: 0.1, stagger: 0.08, distance: 14 });
 
   return (
     <section id="roadmap" className="relative px-6 py-24 md:py-32">
