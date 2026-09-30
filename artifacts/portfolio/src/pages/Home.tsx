@@ -1,6 +1,4 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MusicController from "@/components/MusicController";
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
@@ -21,15 +19,16 @@ import RoastButton from "@/components/RoastButton";
 import TerminalMode from "@/components/TerminalMode";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { useLenis } from "../hooks/useLenis";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const Divider = () => <div className="editorial-divider mx-auto max-w-6xl" aria-hidden="true" />;
 
 export default function Home() {
   useLenis();
 
+  const proofRef = useScrollAnim<HTMLDivElement>({ threshold: 0.12, stagger: 0.09, distance: 16 });
   const footerRef   = useRef<HTMLDivElement>(null);
   const bottomFired = useRef(false);
   const visitFired  = useRef(false);
@@ -68,18 +67,18 @@ export default function Home() {
       <main id="main-content" className="relative z-10">
         <HeroSection />
         <section id="proof" className="proof-strip px-6" aria-label="Portfolio record">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
-            <div className="proof-item">
+          <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
+            <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
               <strong>Three shipped builds</strong>
               <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
-            <div className="proof-item">
+            <div className="proof-item" data-motion-item>
               <span className="proof-index">02</span>
               <strong>React / TypeScript practice</strong>
               <span>Interfaces, connected flows and documented iteration.</span>
             </div>
-            <div className="proof-item">
+            <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>
               <strong>Recognition on record</strong>
               <span>Juara I, LKS IT Software Solution For Business.</span>

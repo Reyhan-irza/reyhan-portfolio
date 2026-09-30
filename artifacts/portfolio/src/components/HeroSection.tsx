@@ -1,9 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MessageSquare } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from "../lib/motion";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -13,40 +10,61 @@ export default function HeroSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        compact: "(max-width: 767px)",
+      },
+      (mediaContext) => {
+        if (mediaContext.conditions?.reduced) return;
+        const compact = Boolean(mediaContext.conditions?.compact);
+
       const context = gsap.context(() => {
         const opening = gsap.timeline({
           defaults: { ease: "power3.out" },
-          delay: 0.08,
+          delay: 0.06,
         });
         opening
-          .from("[data-hero-item]", {
-            y: 22,
-            autoAlpha: 0,
-            duration: 0.72,
-            stagger: 0.075,
+          .fromTo(
+            "[data-hero-item]",
+            { y: compact ? 12 : 18, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: compact ? 0.5 : 0.64,
+              stagger: compact ? 0.045 : 0.065,
+              clearProps: "transform,opacity",
+            },
           })
           .fromTo(
             "[data-hero-rule]",
             { scaleX: 0 },
-            { scaleX: 1, transformOrigin: "left center", duration: 0.9 },
-            0.12,
+            {
+              scaleX: 1,
+              transformOrigin: "left center",
+              duration: compact ? 0.58 : 0.78,
+              clearProps: "transform",
+            },
+            0.1,
           );
 
-        gsap.to("[data-hero-mark]", {
-          yPercent: -12,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-          },
-        });
+        if (!compact) {
+          gsap.to("[data-hero-mark]", {
+            yPercent: -6,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.75,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
       }, section);
       return () => context.revert();
-    });
+      },
+    );
 
     return () => media.revert();
   }, []);
@@ -70,7 +88,7 @@ export default function HeroSection() {
             <br />
              <span className="text-[#a43f2d]">Alwano.</span>
           </h1>
-          <div data-hero-rule className="mt-9 h-px w-full origin-left scale-x-0 bg-[rgba(27,28,24,.2)]" />
+          <div data-hero-rule className="mt-9 h-px w-full origin-left bg-[rgba(27,28,24,.2)]" />
           <div className="mt-8 grid gap-8 md:grid-cols-[1fr_18rem] md:items-start">
             <p data-hero-item className="max-w-xl text-xl leading-[1.3] tracking-[-.025em] text-[#4e5149] md:text-2xl">
               I learn by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
