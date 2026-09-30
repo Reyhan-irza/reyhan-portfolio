@@ -1,24 +1,32 @@
-import { useState, useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
-  { label: "Home",     href: "#home"     },
-  { label: "About",    href: "#about"    },
-  { label: "Journey",  href: "#journey"  },
-  { label: "News",     href: "#news"     },
+  { label: "About",    href: "#about" },
   { label: "Projects", href: "#projects" },
-  { label: "GitHub",   href: "#github"   },
-  { label: "Contact",  href: "#contact"  },
+  { label: "Journey",  href: "#journey" },
+  { label: "Award",    href: "#achievement" },
+  { label: "Plans",    href: "#roadmap" },
+  { label: "Updates",  href: "#news" },
+  { label: "Contact",  href: "#contact" },
   { label: "Comments", href: "#comments" },
 ];
 
 export default function Navbar() {
   const [isOpen,   setIsOpen]   = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeHref, setActiveHref] = useState("");
+  const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -34,60 +42,104 @@ export default function Navbar() {
     }
   }, [isOpen]);
 
-  const handleNav = (href: string) => {
-    setIsOpen(false);
-    setTimeout(() => {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 160);
-  };
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        menuTriggerRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const context = gsap.context(() => {
+      navLinks.forEach(({ href }) => {
+        const section = document.querySelector<HTMLElement>(href);
+        if (!section) return;
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 55%",
+          end: "bottom 45%",
+          onEnter: () => setActiveHref(href),
+          onEnterBack: () => setActiveHref(href),
+        });
+      });
+    }, nav);
+
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const intro = gsap.from("[data-nav-enter]", {
+        y: -9,
+        autoAlpha: 0,
+        duration: 0.42,
+        stagger: 0.045,
+        ease: "power2.out",
+        clearProps: "all",
+      });
+      return () => intro.kill();
+    });
+
+    return () => {
+      media.revert();
+      context.revert();
+    };
+  }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}>
+    <nav
+      ref={navRef}
+      aria-label="Primary navigation"
+      className={`editorial-nav fixed left-0 right-0 top-0 z-40 transition-all duration-300 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
+    >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-
-        {/* Logo */}
-        <button
-          onClick={() => handleNav("#home")}
-          className="group relative flex items-center gap-2 active:scale-95 transition-transform duration-150"
+        <a
+          href="#home"
+          data-nav-enter
+          aria-label="Reyhan, home"
+          className="group flex items-center gap-2 transition-opacity hover:opacity-75"
         >
           <div className="relative">
             <img
               src="/logo.png"
-              alt="Reyhan"
-              className="h-10 w-10 object-cover rounded-full transition-all duration-300 group-hover:scale-110"
-              style={{
-                filter: "drop-shadow(0 0 8px rgba(139,92,246,0.5))",
-              }}
+              alt=""
+              className="h-9 w-9 rounded-full border border-[rgba(27,28,24,.2)] object-cover"
             />
-            <div className="absolute inset-0 rounded-full bg-violet-500/10 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300 pointer-events-none" />
           </div>
-          <span className="text-sm font-semibold tracking-widest text-white/80 group-hover:text-violet-300 transition-colors duration-200 uppercase">
+          <span className="editorial-nav-brand text-xs font-semibold tracking-[.16em] uppercase">
             Reyhan
           </span>
-        </button>
+        </a>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden items-center gap-5 lg:flex" aria-label="Page sections">
           {navLinks.map((link) => (
-            <button
+            <a
               key={link.label}
-              onClick={() => handleNav(link.href)}
-              className="text-sm text-white/55 hover:text-violet-300 transition-all duration-200 hover:scale-105 active:scale-95"
+              href={link.href}
+              data-nav-enter
+              aria-current={activeHref === link.href ? "location" : undefined}
+              className="editorial-nav-link"
             >
               {link.label}
-            </button>
+            </a>
           ))}
         </div>
 
-        {/* Mobile hamburger */}
-        <div className="md:hidden flex items-center">
+        <div className="flex items-center lg:hidden">
           <button
+            ref={menuTriggerRef}
+            type="button"
             className={`mobile-menu-trigger ${isOpen ? "is-open" : ""}`}
             onClick={() => setIsOpen((p) => !p)}
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
+            data-nav-enter
           >
             <span className="mobile-menu-glyph" aria-hidden="true">
               <span className="mobile-menu-line mobile-menu-line-top" />
@@ -98,26 +150,27 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div
         ref={menuRef}
         id="mobile-navigation"
         aria-hidden={!isOpen}
-        className={`mobile-menu-shell md:hidden overflow-hidden ${isOpen ? "is-open" : ""}`}
+        className={`mobile-menu-shell lg:hidden overflow-hidden ${isOpen ? "is-open" : ""}`}
         style={{ maxHeight: "0px", opacity: "0" }}
       >
         <div className="mobile-menu-surface glass px-5 pt-5 pb-5 flex flex-col gap-1">
           <div className="mobile-menu-heading">
-            <span className="mobile-menu-heading-label">Navigation</span>
-            <span className="mobile-menu-heading-meta">Reyhan / 08</span>
+            <span className="mobile-menu-heading-label">On this page</span>
+            <span className="mobile-menu-heading-meta">Navigate</span>
           </div>
           <div className="mobile-menu-rule" aria-hidden="true" />
           {navLinks.map((link, i) => (
-            <button
+            <a
               key={link.label}
-              onClick={() => handleNav(link.href)}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
               tabIndex={isOpen ? 0 : -1}
-              className={`mobile-menu-link text-left text-sm text-white/65 py-3 px-3 rounded-xl flex items-center gap-3 group ${isOpen ? "is-open" : ""}`}
+              aria-current={activeHref === link.href ? "location" : undefined}
+              className={`mobile-menu-link text-left text-sm py-3 px-3 rounded-xl flex items-center gap-3 group ${isOpen ? "is-open" : ""}`}
               style={{
                 "--menu-index": i,
               } as CSSProperties}
@@ -126,7 +179,7 @@ export default function Navbar() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               {link.label}
-            </button>
+            </a>
           ))}
         </div>
       </div>

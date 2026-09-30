@@ -51,6 +51,9 @@ type Project = (typeof projects)[number];
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const [activeProject, setActiveProject] = useState(0);
@@ -60,71 +63,72 @@ export default function ProjectsSection() {
     const section = sectionRef.current;
     if (!section) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const context = gsap.context(() => {
-      const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const context = gsap.context(() => {
+        const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
 
-      if (reducedMotion.matches) {
-        gsap.set(rows, { clearProps: "all" });
-        return;
-      }
+        rows.forEach((row) => {
+          const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+          const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+          if (!visual || !copy) return;
 
-      rows.forEach((row) => {
-        const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-        const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-        if (!visual || !copy) return;
-
-        gsap.fromTo(
-          visual,
-          { clipPath: "inset(0 100% 0 0)" },
-          {
-            clipPath: "inset(0 0% 0 0)",
-            duration: 1.05,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: row,
-              start: "top 78%",
-              toggleActions: "play reverse play reverse",
+          gsap.fromTo(
+            visual,
+            { clipPath: "inset(0 100% 0 0)" },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              duration: 0.9,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: row,
+                start: "top 78%",
+                toggleActions: "play reverse play reverse",
+                invalidateOnRefresh: true,
+              },
             },
-          },
-        );
+          );
+
+          gsap.fromTo(
+            copy,
+            { y: 22, autoAlpha: 0 },
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 0.68,
+              delay: 0.1,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: row,
+                start: "top 72%",
+                toggleActions: "play reverse play reverse",
+                invalidateOnRefresh: true,
+              },
+            },
+          );
+        });
 
         gsap.fromTo(
-          copy,
-          { y: 28, opacity: 0 },
+          "[data-project-heading]",
+          { y: 24, autoAlpha: 0 },
           {
             y: 0,
-            opacity: 1,
-            duration: 0.78,
-            delay: 0.12,
+            autoAlpha: 1,
+            duration: 0.72,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: row,
-              start: "top 72%",
+              trigger: section,
+              start: "top 80%",
               toggleActions: "play reverse play reverse",
+              invalidateOnRefresh: true,
             },
           },
         );
-      });
+      }, section);
+      return () => context.revert();
+    });
 
-      gsap.fromTo(
-        "[data-project-heading]",
-        { y: 34, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 76%",
-            toggleActions: "play reverse play reverse",
-          },
-        },
-      );
-    }, section);
-
-    return () => context.revert();
+    return () => media.revert();
   }, []);
 
   useEffect(() => {
@@ -132,29 +136,61 @@ export default function ProjectsSection() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setModal(null);
+      if (event.key === "Escape") {
+        setModal(null);
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialogRef.current.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      openerRef.current?.focus();
     };
   }, [modal]);
 
   useEffect(() => {
     const marker = markerRef.current;
     if (!marker) return;
-    const tween = gsap.to(marker, {
-      y: activeProject * 31,
-      duration: 0.32,
-      ease: "power3.out",
-      overwrite: true,
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const tween = gsap.to(marker, {
+        y: activeProject * 31,
+        duration: 0.28,
+        ease: "power3.out",
+        overwrite: true,
+      });
+      return () => tween.kill();
     });
 
     return () => {
-      tween.kill();
+      media.revert();
     };
   }, [activeProject]);
 
@@ -166,7 +202,8 @@ export default function ProjectsSection() {
     }
   };
 
-  const openDetails = (project: Project) => {
+  const openDetails = (project: Project, trigger: HTMLButtonElement) => {
+    openerRef.current = trigger;
     markViewed(project);
     setModal(project);
   };
@@ -308,7 +345,7 @@ export default function ProjectsSection() {
                     </a>
                     <button
                       type="button"
-                      onClick={() => openDetails(project)}
+                      onClick={(event) => openDetails(project, event.currentTarget)}
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
                       aria-label={`Read more about ${project.title}`}
@@ -331,12 +368,15 @@ export default function ProjectsSection() {
           data-testid="project-detail-overlay"
         >
           <div
+            ref={dialogRef}
             className="project-detail-dialog modal-enter w-full max-w-xl p-6 md:p-9"
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
+            aria-describedby="project-detail-description"
             onClick={(event) => event.stopPropagation()}
             data-testid="project-detail-dialog"
+            tabIndex={-1}
           >
             <div className="flex items-start justify-between gap-5">
               <div>
@@ -346,6 +386,7 @@ export default function ProjectsSection() {
                 </h3>
               </div>
               <button
+                ref={closeButtonRef}
                 type="button"
                 className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/15 text-[#94978f] transition-colors hover:text-[#e8e7dc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8836b]"
                 onClick={() => setModal(null)}
@@ -358,7 +399,7 @@ export default function ProjectsSection() {
 
             <div className="mt-8 border-t border-white/10 pt-6">
               <p className="project-detail-label">What it is</p>
-              <p className="mt-3 text-base leading-7 text-[#b6b7ad]">{modal.description}</p>
+              <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#b6b7ad]">{modal.description}</p>
             </div>
 
             <div className="mt-7">
