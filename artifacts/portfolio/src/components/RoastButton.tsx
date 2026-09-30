@@ -40,7 +40,7 @@ export default function RoastButton() {
       {/* Floating button */}
       <button
         onClick={handleOpen}
-        className="fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-orange-500/30 bg-orange-500/10 text-orange-300 text-sm font-medium hover:bg-orange-500/20 hover:border-orange-500/50 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-orange-500/10"
+         className="fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-[#a43f2d]/35 bg-[#a43f2d]/10 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/20 hover:border-[#a43f2d] hover:scale-105 active:scale-95 transition-all duration-300"
         title="Roast This Website!"
       >
         <Flame className="w-4 h-4" />
@@ -50,39 +50,39 @@ export default function RoastButton() {
       {/* Modal */}
       {open && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setOpen(false)}>
-          <div className="modal-enter glass border border-orange-500/30 rounded-3xl p-7 max-w-md w-full relative shadow-2xl shadow-orange-500/15" onClick={(e) => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 text-white/30 hover:text-white transition-colors" onClick={() => setOpen(false)}>
+         <div className="modal-enter glass border border-[#a43f2d]/30 rounded-3xl p-7 max-w-md w-full relative" onClick={(e) => e.stopPropagation()}>
+             <button className="absolute top-4 right-4 text-[#6d6a62] hover:text-[#211f1b] transition-colors" onClick={() => setOpen(false)}>
               <X className="w-5 h-5" />
             </button>
 
             <div className="text-4xl mb-3">🔥</div>
-            <h3 className="text-lg font-bold text-orange-300 mb-1">Roast This Website!</h3>
-            <p className="text-white/40 text-xs mb-5">Peringatan: Konten mungkin terlalu akurat 😅</p>
+             <h3 className="text-lg font-bold text-[#a43f2d] mb-1">Roast This Website!</h3>
+             <p className="text-[#6d6a62] text-xs mb-5">Peringatan: Konten mungkin terlalu akurat</p>
 
-            <div className="glass border border-orange-500/20 rounded-xl p-5 min-h-[80px] flex items-center justify-center mb-5">
+             <div className="glass border border-[#a43f2d]/20 rounded-xl p-5 min-h-[80px] flex items-center justify-center mb-5">
               {loading ? (
                 <div className="flex gap-1">
                   {[0, 1, 2].map((i) => (
-                    <span key={i} className="w-2 h-2 rounded-full bg-orange-400 animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                   <span key={i} className="w-2 h-2 rounded-full bg-[#a43f2d] animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
               ) : (
-                <p className="text-white/80 text-sm leading-relaxed text-center">{roast}</p>
+                 <p className="text-[#211f1b] text-sm leading-relaxed text-center">{roast}</p>
               )}
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={getNewRoast}
-                className="flex-1 py-2.5 rounded-xl border border-orange-500/30 text-orange-300 text-sm font-medium hover:bg-orange-500/15 transition-all duration-200 flex items-center justify-center gap-2"
+                 className="flex-1 py-2.5 rounded-xl border border-[#a43f2d]/30 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/10 transition-all duration-200 flex items-center justify-center gap-2"
               >
                 <Flame className="w-4 h-4" /> Roast Lagi
               </button>
               <button
                 onClick={() => setOpen(false)}
-                className="flex-1 py-2.5 rounded-xl glass border border-white/10 text-white/60 text-sm font-medium hover:border-white/20 hover:text-white transition-all duration-200"
+                 className="flex-1 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] text-sm font-medium hover:border-[#a43f2d] hover:text-[#211f1b] transition-all duration-200"
               >
-                Cukup 😭
+                 Cukup
               </button>
             </div>
           </div>

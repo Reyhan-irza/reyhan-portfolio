@@ -39,17 +39,17 @@ export default function VisitorCounter() {
       className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
       aria-label="Visitor counts from the Supabase visitors table"
     >
-      <span className="flex items-center gap-1.5 text-[11px] text-white/45">
+       <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
         <Users className="h-3 w-3" aria-hidden="true" />
         {total.toLocaleString("id-ID")} recorded visits
       </span>
       {today !== null && (
-        <span className="flex items-center gap-1.5 text-[11px] text-white/45">
+         <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
           <Calendar className="h-3 w-3" aria-hidden="true" />
           {today.toLocaleString("id-ID")} today (UTC)
         </span>
       )}
-      <span className="font-mono text-[9px] uppercase tracking-[.12em] text-white/30">
+       <span className="font-mono text-[9px] uppercase tracking-[.12em] text-[#6d6a62]">
         Source: Supabase
       </span>
       </div>

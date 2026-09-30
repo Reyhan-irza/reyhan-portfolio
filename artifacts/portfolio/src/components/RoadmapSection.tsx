@@ -22,14 +22,14 @@ export default function RoadmapSection() {
         <ol className="mt-5 divide-y divide-[rgba(27,28,24,.16)] border-b border-[rgba(27,28,24,.16)]">
           {roadmap.map(({ year, title, desc, status, Icon }) => (
             <li key={year} className="grid gap-4 py-6 md:grid-cols-[6rem_1fr_1.2fr_auto] md:items-start md:gap-8">
-              <span className="font-mono text-sm tabular-nums text-[#b95843]">{year}</span>
+               <span className="font-mono text-sm tabular-nums text-[#a43f2d]">{year}</span>
               <div className="flex items-start gap-3">
                 <Icon className="mt-1 h-4 w-4 shrink-0 text-[#65675f]" aria-hidden="true" />
                 <h3 className="text-lg font-semibold tracking-[-.035em]">{title}</h3>
               </div>
               <p className="max-w-xl text-sm leading-relaxed text-[#65675f]">{desc}</p>
               <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#65675f] md:justify-self-end">
-                {status === "done" ? <Check className="h-3.5 w-3.5 text-[#b95843]" aria-hidden="true" /> : <Circle className="h-2.5 w-2.5" aria-hidden="true" />}
+                 {status === "done" ? <Check className="h-3.5 w-3.5 text-[#a43f2d]" aria-hidden="true" /> : <Circle className="h-2.5 w-2.5" aria-hidden="true" />}
                 {status === "done" ? "Completed" : status === "active" ? "In view" : "Aspiration"}
               </span>
             </li>

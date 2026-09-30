@@ -20,9 +20,9 @@ const songs: Song[] = [
     artist: "Avenged Sevenfold",
     trackId: "1BLfQ6dPXmuDrFmbdfW7Jl",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c4/21/00/c42100f9-f329-aad4-7535-9055429efc3f/mzi.tbskuyey.jpg/400x400bb.jpg",
-    color: "from-red-600/30 to-rose-700/20",
-    accent: "border-red-500/40",
-    accentRing: "ring-red-500/30",
+    color: "bg-[#e8e1d4]",
+    accent: "border-[#a43f2d]",
+    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 2,
@@ -30,9 +30,9 @@ const songs: Song[] = [
     artist: "Avenged Sevenfold",
     trackId: "2FML7gk7ac6quGFIjvkDb3",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/45/ab/b7/45abb7a5-6a53-8d8f-91b0-03d1ef93111e/dj.zzffiuki.jpg/400x400bb.jpg",
-    color: "from-orange-500/30 to-amber-600/20",
-    accent: "border-orange-500/40",
-    accentRing: "ring-orange-500/30",
+    color: "bg-[#e8e1d4]",
+    accent: "border-[#a43f2d]",
+    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 3,
@@ -40,9 +40,9 @@ const songs: Song[] = [
     artist: "SZA ft. Travis Scott",
     trackId: "6koKhrBBcExADvWuOgceNZ",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bd/3b/a9/bd3ba9fb-9609-144f-bcfe-ead67b5f6ab3/196589564931.jpg/400x400bb.jpg",
-    color: "from-violet-500/30 to-purple-600/20",
-    accent: "border-violet-500/40",
-    accentRing: "ring-violet-500/30",
+    color: "bg-[#e8e1d4]",
+    accent: "border-[#a43f2d]",
+    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 4,
@@ -50,9 +50,9 @@ const songs: Song[] = [
     artist: "SZA",
     trackId: "4iZ4pt7kvcaH6Yo8UoZ4s2",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/62/93/13/6293132e-20ff-67ab-3d1f-96bb6797a6ba/196589564955.jpg/400x400bb.jpg",
-    color: "from-pink-500/30 to-rose-600/20",
-    accent: "border-pink-500/40",
-    accentRing: "ring-pink-500/30",
+    color: "bg-[#e8e1d4]",
+    accent: "border-[#a43f2d]",
+    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 5,
@@ -60,9 +60,9 @@ const songs: Song[] = [
     artist: "SZA",
     trackId: "1bjeWoagtHmUKputLVyDxQ",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/97/bd/88/97bd8804-7d3e-e6c8-0532-ff22877b931c/196871766890.jpg/400x400bb.jpg",
-    color: "from-blue-500/30 to-cyan-600/20",
-    accent: "border-blue-500/40",
-    accentRing: "ring-blue-500/30",
+    color: "bg-[#e8e1d4]",
+    accent: "border-[#a43f2d]",
+    accentRing: "ring-[#a43f2d]/30",
   },
 ];
 
@@ -112,12 +112,12 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p className="text-pink-400 text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            Peak <span className="gradient-text">Song</span>
+          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+            Peak <span className="text-[#a43f2d]">Song</span>
           </h2>
           <div className="rgb-divider w-24 mx-auto mb-6" />
-          <p className="text-white/50 max-w-md mx-auto text-base">
+          <p className="text-[#6d6a62] max-w-md mx-auto text-base">
             Ts Song Still Banger,y&apos;all.
           </p>
         </div>
@@ -126,7 +126,7 @@ export default function MusicSection() {
         <div className="relative">
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-violet-500/40 transition-all duration-200 shadow-lg hidden md:flex"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-10 h-10 rounded-full glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-200 hidden md:flex"
             aria-label="Lagu sebelumnya"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -150,7 +150,7 @@ export default function MusicSection() {
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-violet-500/40 transition-all duration-200 shadow-lg hidden md:flex"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-10 h-10 rounded-full glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-200 hidden md:flex"
             aria-label="Lagu berikutnya"
           >
             <ChevronRight className="w-5 h-5" />
@@ -165,8 +165,8 @@ export default function MusicSection() {
               onClick={() => handleSelect(i)}
               className={`transition-all duration-300 rounded-full ${
                 activeIdx === i
-                  ? "w-6 h-2 bg-gradient-to-r from-violet-500 to-pink-500"
-                  : "w-2 h-2 bg-white/20 hover:bg-white/40"
+                  ? "w-6 h-2 bg-[#a43f2d]"
+                  : "w-2 h-2 bg-[#211f1b]/20 hover:bg-[#211f1b]/40"
               }`}
               aria-label={`Lagu ${i + 1}`}
             />
@@ -178,7 +178,7 @@ export default function MusicSection() {
           <SpotifyEmbed song={songs[activeIdx]} isPlaying={nowPlaying === activeIdx} resetKey={spotifyKey} />
         </div>
 
-        <p className="text-center text-white/20 text-xs mt-4">
+        <p className="text-center text-[#6d6a62] text-xs mt-4">
           Klik card untuk berganti lagu &bull; Music background otomatis pause saat Spotify aktif
         </p>
       </div>
@@ -203,13 +203,13 @@ function MusicCard({
     <button
       className={`music-card flex-shrink-0 snap-center w-52 md:w-60 rounded-2xl p-4 glass border transition-all duration-400 text-left cursor-pointer ${
         isActive
-          ? `${song.accent} ring-2 ${song.accentRing} scale-105 shadow-xl shadow-violet-500/20`
-          : "border-white/8 hover:border-white/20 hover:scale-102 hover:-translate-y-1"
+          ? `${song.accent} ring-2 ${song.accentRing} scale-105`
+          : "border-[rgba(33,31,27,.16)] hover:border-[#a43f2d] hover:scale-102 hover:-translate-y-1"
       }`}
       onClick={onClick}
     >
       {/* Cover art */}
-      <div className={`w-full aspect-square rounded-xl mb-4 bg-gradient-to-br ${song.color} overflow-hidden relative`}>
+       <div className={`w-full aspect-square rounded-xl mb-4 ${song.color} overflow-hidden relative`}>
         {song.coverUrl && !imgError ? (
           <>
             <img
@@ -219,12 +219,12 @@ function MusicCard({
               onError={() => setImgError(true)}
             />
             {isActive && (
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+               <div className="absolute inset-0 bg-[#211f1b]/15" />
             )}
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Music className="w-10 h-10 text-white/40" />
+            <Music className="w-10 h-10 text-[#6d6a62]" />
           </div>
         )}
 
@@ -241,13 +241,13 @@ function MusicCard({
 
       {isPlaying && (
         <div className="flex items-center gap-1.5 mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-green-400 text-[10px] font-semibold uppercase tracking-widest">Now Playing</span>
+           <span className="w-1.5 h-1.5 rounded-full bg-[#a43f2d] animate-pulse" />
+           <span className="text-[#a43f2d] text-[10px] font-semibold uppercase tracking-widest">Now Playing</span>
         </div>
       )}
 
-      <h3 className="text-white font-semibold text-sm leading-snug mb-1 truncate">{song.title}</h3>
-      <p className="text-white/40 text-xs truncate">{song.artist}</p>
+       <h3 className="text-[#211f1b] font-semibold text-sm leading-snug mb-1 truncate">{song.title}</h3>
+       <p className="text-[#6d6a62] text-xs truncate">{song.artist}</p>
     </button>
   );
 }
@@ -255,7 +255,7 @@ function MusicCard({
 function EqualizerBar({ delay }: { delay: string }) {
   return (
     <span
-      className="w-1 rounded-full bg-white"
+      className="w-1 rounded-full bg-[#a43f2d]"
       style={{
         height: "12px",
         animation: "equalizerBounce 0.6s ease-in-out infinite alternate",
@@ -270,16 +270,16 @@ function SpotifyEmbed({ song, isPlaying, resetKey }: { song: Song; isPlaying: bo
 
   return (
     <div
-      className={`transition-all duration-500 glass neon-border rounded-2xl overflow-hidden p-1 ${
-        isPlaying ? "ring-2 ring-violet-500/30" : ""
+       className={`transition-all duration-500 glass neon-border rounded-2xl overflow-hidden p-1 ${
+         isPlaying ? "ring-2 ring-[#a43f2d]/30" : ""
       }`}
     >
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-white/5">
-        <Music className="w-4 h-4 text-violet-400" />
-        <span className="text-white/50 text-xs">Spotify Player</span>
+      <div className="flex items-center gap-2 px-4 py-2 border-b border-[rgba(33,31,27,.16)]">
+         <Music className="w-4 h-4 text-[#a43f2d]" />
+         <span className="text-[#6d6a62] text-xs">Spotify Player</span>
         {isPlaying && (
-          <span className="ml-auto flex items-center gap-1.5 text-green-400 text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+           <span className="ml-auto flex items-center gap-1.5 text-[#a43f2d] text-xs">
+             <span className="w-1.5 h-1.5 rounded-full bg-[#a43f2d] animate-pulse" />
             Now Playing
           </span>
         )}

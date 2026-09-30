@@ -38,7 +38,7 @@ export default function JourneySection() {
         <div className="mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           {milestones.map(([year, title, desc, Icon]) => (
             <article key={year} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10">
-              <p className="font-mono text-xs uppercase tracking-[.16em] text-[#e8836b]">{year}</p>
+             <p className="font-mono text-xs uppercase tracking-[.16em] text-[#a43f2d]">{year}</p>
               <div className="flex items-start gap-3"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#1b1c18]" aria-hidden="true" /><h3 className="text-xl font-semibold tracking-[-.04em]">{title}</h3></div>
               <p className="max-w-lg text-sm leading-relaxed text-[#65675f]">{desc}</p>
             </article>

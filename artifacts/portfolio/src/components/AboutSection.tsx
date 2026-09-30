@@ -29,7 +29,7 @@ export default function AboutSection() {
           {notes.map(({ icon: Icon, label, text }, index) => (
             <article key={label} className="bg-[#f3f0e8] p-7 md:p-9">
               <div className="flex items-start justify-between gap-5">
-                <Icon className="h-5 w-5 text-[#e8836b]" aria-hidden="true" />
+                 <Icon className="h-5 w-5 text-[#a43f2d]" aria-hidden="true" />
                 <span className="font-mono text-[10px] text-[#77796e]">0{index + 1}</span>
               </div>
               <h3 className="mt-12 text-xl font-semibold tracking-[-.04em]">{label}</h3>

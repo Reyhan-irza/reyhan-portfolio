@@ -16,7 +16,7 @@ export default function AwardSection() {
       >
         <div className="flex flex-col justify-between gap-10">
           <p className="section-kicker">Recognition / 2025</p>
-          <div className="flex items-center gap-3 text-[#b95843]">
+           <div className="flex items-center gap-3 text-[#a43f2d]">
             <Award className="h-7 w-7" aria-hidden="true" />
             <span className="font-mono text-[11px] uppercase tracking-[.16em]">Juara I</span>
           </div>
@@ -30,7 +30,7 @@ export default function AwardSection() {
             LKS IT Software Solution For Business
           </h2>
           <p className="mt-5 flex items-center gap-2 text-base text-[#51534c] md:text-lg">
-            <MapPin className="h-4 w-4 shrink-0 text-[#b95843]" aria-hidden="true" />
+             <MapPin className="h-4 w-4 shrink-0 text-[#a43f2d]" aria-hidden="true" />
             Tingkat Kabupaten Agam
           </p>
 

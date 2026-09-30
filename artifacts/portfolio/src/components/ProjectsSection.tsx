@@ -238,7 +238,7 @@ export default function ProjectsSection() {
             <h2 className="projects-title max-w-4xl">
               Built to be
               <br />
-              <span className="text-[#e8836b]">used.</span>
+               <span className="text-[#a43f2d]">used.</span>
             </h2>
           </div>
           <p className="projects-intro text-sm md:mb-1 md:text-base">
@@ -260,7 +260,7 @@ export default function ProjectsSection() {
               </div>
               <div className="project-index text-xs text-[#94978f]">
                 <span className="text-[#e8e7dc]">0{activeProject + 1}</span>
-                <span className="mx-1 text-[#e8836b]">/</span>
+                 <span className="mx-1 text-[#a43f2d]">/</span>
                 0{projects.length}
               </div>
             </div>
@@ -362,7 +362,7 @@ export default function ProjectsSection() {
 
       {modal && (
         <div
-          className="fixed inset-0 z-[150] flex items-center justify-center bg-[#080a0b]/85 p-5 backdrop-blur-sm"
+           className="fixed inset-0 z-[150] flex items-center justify-center bg-[#211f1b]/35 p-5 backdrop-blur-sm"
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"
@@ -381,14 +381,14 @@ export default function ProjectsSection() {
             <div className="flex items-start justify-between gap-5">
               <div>
                 <p className="project-detail-label">Project note / 0{modal.id}</p>
-                <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#e8e7dc] md:text-5xl">
+                 <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
                   {modal.title}
                 </h3>
               </div>
               <button
                 ref={closeButtonRef}
                 type="button"
-                className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/15 text-[#94978f] transition-colors hover:text-[#e8e7dc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8836b]"
+                 className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
                 onClick={() => setModal(null)}
                 aria-label="Close project note"
                 data-testid="button-close-project-detail"
@@ -397,16 +397,16 @@ export default function ProjectsSection() {
               </button>
             </div>
 
-            <div className="mt-8 border-t border-white/10 pt-6">
+             <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
               <p className="project-detail-label">What it is</p>
-              <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#b6b7ad]">{modal.description}</p>
+               <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
             </div>
 
             <div className="mt-7">
               <p className="project-detail-label">Built with</p>
               <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                 {modal.tech.map((technology) => (
-                  <span key={technology} className="text-sm text-[#e8e7dc]">
+                   <span key={technology} className="text-sm text-[#211f1b]">
                     {technology}
                   </span>
                 ))}
