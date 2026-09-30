@@ -1,314 +1,89 @@
-import { useState, useEffect, useRef, useCallback, type CSSProperties } from "react";
-import { createPortal } from "react-dom";
-import { ChevronDown, MessageSquare, X, Sparkles, Music, Coffee, Home, Bug, Download, ArrowRight } from "lucide-react";
-import { SiReact, SiTypescript, SiNodedotjs, SiNextdotjs, SiTailwindcss, SiSupabase } from "react-icons/si";
-import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
-import GuessMyAge from "./GuessMyAge";
+import { useLayoutEffect, useRef } from "react";
+import { ArrowDown, ArrowUpRight, MessageSquare } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const CV_URL = "/cv.pdf";
-const PROFILE_PHOTO_URL = "/profile.jpg";
-
-const PHRASES = [
-  "Frontend Developer",
-  "Full-Stack Developer",
-  "Digital Builder",
-  "Future Real Estate Investor",
-];
-
-const techSkills = [
-  { label: "React",       Icon: SiReact,       color: "text-cyan-400"    },
-  { label: "TypeScript",  Icon: SiTypescript,  color: "text-blue-400"    },
-  { label: "Node.js",     Icon: SiNodedotjs,   color: "text-green-400"   },
-  { label: "Next.js",     Icon: SiNextdotjs,   color: "text-white/70"    },
-  { label: "TailwindCSS", Icon: SiTailwindcss, color: "text-sky-400"     },
-  { label: "Supabase",    Icon: SiSupabase,    color: "text-emerald-400" },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  /* ── Typing animation ── */
-  const [phraseIdx,  setPhraseIdx]  = useState(0);
-  const [displayed,  setDisplayed]  = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const context = gsap.context(() => {
+      gsap.from("[data-hero-item]", {
+        y: 22,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.08,
+        ease: "power3.out",
+      });
+      gsap.to("[data-hero-rule]", {
+        scaleX: 1,
+        transformOrigin: "left center",
+        duration: 1.1,
+        delay: 0.2,
+        ease: "power3.out",
+      });
+      gsap.to("[data-hero-mark]", {
+        yPercent: -14,
+        scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
+      });
+    }, section);
+    return () => context.revert();
+  }, []);
 
-  useEffect(() => {
-    const target = PHRASES[phraseIdx];
-    let timeout: ReturnType<typeof setTimeout>;
-    if (!isDeleting) {
-      if (displayed.length < target.length) {
-        timeout = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 65);
-      } else {
-        timeout = setTimeout(() => setIsDeleting(true), 2200);
-      }
-    } else {
-      if (displayed.length > 0) {
-        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 38);
-      } else {
-        setIsDeleting(false);
-        setPhraseIdx((i) => (i + 1) % PHRASES.length);
-      }
-    }
-    return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, phraseIdx]);
-
-  /* ── Easter egg ── */
-  const [clickCount, setClickCount] = useState(0);
-  const [showEaster, setShowEaster] = useState(false);
-  const [shaking,    setShaking]    = useState(false);
-  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleAvatarClick = useCallback(() => {
-    setClickCount((n) => {
-      const next = n + 1;
-      if (next >= 5) {
-        setShowEaster(true);
-        unlockAchievement(ACHIEVEMENTS.EASTER_EGG);
-        return 0;
-      }
-      setShaking(true);
-      setTimeout(() => setShaking(false), 500);
-      if (clickTimer.current) clearTimeout(clickTimer.current);
-      clickTimer.current = setTimeout(() => setClickCount(0), 3000);
-      return next;
+  const scrollTo = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
-  }, []);
-
-  /* ── Scroll-linked hero choreography ──
-   * The section stays in place while its individual layers recede at
-   * different rates. CSS consumes this variable, so scrolling never causes
-   * a React render per frame and reversing direction is naturally reversible.
-   */
-  const didFire = useRef(false);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame: number | null = null;
-
-    const updateProgress = () => {
-      frame = null;
-      if (reducedMotion.matches) {
-        hero.style.setProperty("--hero-progress", "0");
-        return;
-      }
-
-      const distanceIntoPage = Math.max(0, -hero.getBoundingClientRect().top);
-      const travelDistance = Math.max(1, hero.offsetHeight * 0.78);
-      const progress = Math.min(1, distanceIntoPage / travelDistance);
-      hero.style.setProperty("--hero-progress", progress.toFixed(4));
-    };
-
-    const onScroll = () => {
-      if (frame === null) frame = window.requestAnimationFrame(updateProgress);
-      if (!didFire.current && window.scrollY > 100) {
-        didFire.current = true;
-        unlockAchievement(ACHIEVEMENTS.FIRST_SCROLL);
-      }
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    const onMotionPreferenceChange = () => updateProgress();
-    reducedMotion.addEventListener("change", onMotionPreferenceChange);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      reducedMotion.removeEventListener("change", onMotionPreferenceChange);
-      if (frame !== null) window.cancelAnimationFrame(frame);
-    };
-  }, []);
+  };
 
   return (
-    <>
-    <section
-      ref={heroRef}
-      id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 overflow-x-hidden"
-      style={{ "--hero-progress": 0 } as CSSProperties}
-    >
-      {/* Subtle grid overlay */}
-      <div className="hero-grid hero-scroll-layer hero-scroll-grid absolute inset-0 pointer-events-none" />
-
-      {/* Soft center glow */}
-      <div
-        className="hero-scroll-layer hero-scroll-glow absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)", filter: "blur(40px)" }}
-      />
-
-      {/* ── Avatar ── */}
-      <div
-        className={`hero-scroll-layer hero-scroll-avatar relative mb-8 cursor-pointer select-none ${shaking ? "easter-shake" : ""}`}
-        onClick={handleAvatarClick}
-        title={clickCount > 0 ? `${5 - clickCount} more clicks...` : "Click me!"}
-      >
-        <div className="float-anim relative">
-          <div className="profile-glow w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95">
-            {PROFILE_PHOTO_URL ? (
-              <img src={PROFILE_PHOTO_URL} alt="Reyhan Irza Alvano" className="w-full h-full object-cover rounded-full" />
-            ) : (
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-violet-600 to-violet-900 flex items-center justify-center">
-                <span className="text-4xl md:text-5xl font-bold text-white select-none">R</span>
-              </div>
-            )}
+    <section ref={sectionRef} id="home" className="relative px-6 pb-24 pt-32 md:pb-36 md:pt-44">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_18rem] lg:items-end">
+        <div>
+          <div data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#77796e]">
+            <span className="h-2 w-2 rounded-full bg-[#c7dc62]" aria-hidden="true" />
+            Personal software-solution builder / Indonesia
           </div>
-          {/* Online indicator */}
-          <span className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-400 border-2 border-[#050816] rounded-full animate-pulse" />
-          {clickCount > 0 && (
-            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-violet-600 text-white text-xs flex items-center justify-center font-bold animate-bounce">
-              {clickCount}
-            </span>
-          )}
+          <h1 data-hero-item className="max-w-5xl text-[clamp(3.5rem,9vw,8.9rem)] font-semibold leading-[.86] tracking-[-.09em] text-[#1b1c18]">
+            Reyhan Irza
+            <br />
+            <span className="text-[#e8836b]">Alvano.</span>
+          </h1>
+          <div data-hero-rule className="mt-9 h-px w-full origin-left scale-x-0 bg-[rgba(27,28,24,.2)]" />
+          <div className="mt-8 grid gap-8 md:grid-cols-[1fr_18rem] md:items-start">
+            <p data-hero-item className="max-w-xl text-xl leading-[1.3] tracking-[-.025em] text-[#4e5149] md:text-2xl">
+              I learn by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
+            </p>
+            <div data-hero-item className="flex flex-col gap-3 text-sm leading-relaxed text-[#65675f]">
+              <p><span className="font-mono text-[10px] uppercase tracking-[.18em] text-[#e8836b]">Now</span><br />Developing web products with React, TypeScript and Supabase.</p>
+              <p><span className="font-mono text-[10px] uppercase tracking-[.18em] text-[#e8836b]">Based in</span><br />Lubuk Basung, West Sumatra.</p>
+            </div>
+          </div>
+          <div data-hero-item className="mt-10 flex flex-wrap gap-3">
+            <button type="button" onClick={() => scrollTo("#projects")} className="btn-neon inline-flex items-center gap-2 px-5 py-3 text-sm">
+              Read the work <ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => scrollTo("#contact")} className="inline-flex items-center gap-2 border border-[rgba(27,28,24,.22)] px-5 py-3 text-sm text-[#1b1c18] transition-colors hover:border-[#e8836b]">
+              Start a conversation <MessageSquare className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* ── Badge ── */}
-      <div className="hero-scroll-layer hero-scroll-badge mb-6">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide border border-violet-500/25 bg-violet-500/8 text-violet-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          Digital Builder
-        </span>
-      </div>
-
-      {/* ── Headline ── */}
-      <div className="hero-scroll-layer hero-scroll-headline text-center px-6 max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight" data-testid="text-hero-name">
-          <span className="text-white">Building Digital Products,</span>
-          <br />
-          <span className="text-white">Experiences </span>
-          <span className="gradient-text">&amp; Systems.</span>
-        </h1>
-      </div>
-
-      {/* ── Typing animation ── */}
-      <div className="hero-scroll-layer hero-scroll-typing mt-5 h-9 flex items-center justify-center px-6">
-        <span className="text-base md:text-lg font-medium text-violet-300/90">{displayed}</span>
-        <span className="typing-cursor" />
-      </div>
-
-      {/* ── Subheadline ── */}
-      <p
-        className="hero-scroll-layer hero-scroll-description text-[#9CA3AF] text-sm md:text-base leading-relaxed max-w-xl text-center px-6 mt-4"
-      >
-        Modern web experiences, automation solutions, and digital products
-        crafted with precision.
-      </p>
-
-      {/* ── Marquee ── */}
-      <div className="hero-scroll-layer hero-scroll-marquee marquee-container w-full mt-8 py-1.5">
-        <div
-          className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, #050816, transparent)" }}
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #050816, transparent)" }}
-        />
-        <div className="marquee-track">
-          {[...techSkills, ...techSkills].map(({ label, Icon, color }, i) => (
-            <span
-              key={i}
-              className="hero-tech-item flex-shrink-0 flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white/55 rounded-full border border-white/8 bg-white/3 transition-all duration-300 cursor-default mx-2"
-            >
-              <span className="hero-tech-icon" aria-hidden="true">
-                <Icon className={`w-3.5 h-3.5 ${color}`} />
-              </span>
-              {label}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── CTA Buttons ── */}
-      <div className="hero-scroll-layer hero-scroll-actions flex flex-wrap justify-center gap-3 mt-8 px-6">
-        <button
-          className="btn-neon px-6 py-3 rounded-xl text-sm flex items-center gap-2"
-          onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
-          data-testid="button-view-projects"
-        >
-          View Projects
-          <ArrowRight className="w-4 h-4" />
-        </button>
-        <button
-          className="px-6 py-3 rounded-xl text-sm font-semibold border border-white/10 text-white/75 hover:text-white hover:border-violet-500/35 hover:bg-violet-500/6 transition-all duration-200 flex items-center gap-2"
-          onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-          data-testid="button-contact"
-        >
-          <MessageSquare className="w-4 h-4" />
-          Contact Me
-        </button>
-        <a
-          href={CV_URL}
-          download="Reyhan-Irza-Alvano-CV.pdf"
-          className="px-6 py-3 rounded-xl text-sm font-semibold border border-white/8 text-white/55 hover:text-white/80 hover:border-white/20 hover:bg-white/4 transition-all duration-200 flex items-center gap-2"
-        >
-          <Download className="w-4 h-4" />
-          Download CV
-        </a>
-      </div>
-
-      {/* ── Fun row ── */}
-      <div className="hero-scroll-layer hero-scroll-fun flex justify-center mt-5">
-        <GuessMyAge />
-      </div>
-
-      {/* ── Scroll indicator ── */}
-      <div className="hero-scroll-layer hero-scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/25">
-        <span className="text-[10px] tracking-widest uppercase mb-1">Scroll</span>
-        <ChevronDown className="w-4 h-4 animate-bounce" />
+        <aside data-hero-item className="relative hidden min-h-64 border-l border-[rgba(27,28,24,.2)] pl-7 lg:block">
+          <div data-hero-mark className="absolute -left-3 top-6 h-6 w-6 rounded-full border-4 border-[#f3f0e8] bg-[#e8836b]" />
+          <p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#77796e]">A short record</p>
+          <p className="mt-10 max-w-[13rem] text-lg leading-tight tracking-[-.03em] text-[#1b1c18]">
+            From a first HTML page to shipped school, library and portfolio products.
+          </p>
+          <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-[.16em] text-[#65675f] hover:text-[#e8836b]">
+            GitHub evidence <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
+        </aside>
       </div>
     </section>
-
-    {/* ── Easter Egg Modal ── */}
-    {showEaster && createPortal(
-      <div
-        className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-        onClick={() => setShowEaster(false)}
-      >
-        <div
-          className="modal-enter border border-violet-500/25 rounded-2xl p-7 max-w-sm w-full text-center relative shadow-2xl shadow-violet-900/40"
-          style={{ background: "#111827" }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            className="absolute top-4 right-4 text-white/30 hover:text-white/70 transition-colors"
-            onClick={() => setShowEaster(false)}
-          >
-            <X className="w-4 h-4" />
-          </button>
-          <div className="w-12 h-12 rounded-xl bg-violet-500/12 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
-            <Sparkles className="w-6 h-6 text-violet-400" />
-          </div>
-          <h3 className="text-lg font-bold gradient-text mb-2">Developer Secret Found!</h3>
-          <p className="text-white/50 text-sm mb-5 leading-relaxed">
-            You found the hidden easter egg. You're clearly someone who's curious!
-          </p>
-          <div className="border border-white/6 rounded-xl p-4 text-left space-y-2.5 text-sm" style={{ background: "rgba(255,255,255,0.02)" }}>
-            <p className="text-white/60 flex items-center gap-2">
-              <Music className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" /> Fav music: Avenged Sevenfold &amp; SZA
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Coffee className="w-3.5 h-3.5 text-amber-400/70 flex-shrink-0" /> Coffee/day: minimum 3 cups
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Home className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" /> Biggest dream: Real Estate Investor
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Bug className="w-3.5 h-3.5 text-red-400/70 flex-shrink-0" /> Most hated bug: off-by-one error
-            </p>
-          </div>
-          <button
-            className="btn-neon mt-5 w-full py-2.5 rounded-xl text-sm"
-            onClick={() => setShowEaster(false)}
-          >
-            Close Secret
-          </button>
-        </div>
-      </div>,
-      document.body
-    )}
-    </>
   );
 }

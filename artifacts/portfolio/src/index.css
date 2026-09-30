@@ -53,47 +53,47 @@
 }
 
 :root {
-  --bg-base: #0b0d0f;
+  --bg-base: #f3f0e8;
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
   --opaque-button-border-intensity: -8;
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 210 13% 5%;
-  --foreground: 43 33% 94%;
-  --border: 210 10% 17%;
-  --card: 210 12% 9%;
-  --card-foreground: 43 33% 94%;
-  --card-border: 210 10% 17%;
-  --sidebar: 210 13% 7%;
-  --sidebar-foreground: 43 20% 86%;
-  --sidebar-border: 210 10% 17%;
-  --sidebar-primary: 73 72% 62%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 73 72% 62%;
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 73 72% 62%;
-  --popover: 210 12% 9%;
-  --popover-foreground: 43 33% 94%;
-  --popover-border: 210 10% 17%;
-  --primary: 73 72% 62%;
-  --primary-foreground: 72 20% 8%;
-  --secondary: 210 11% 14%;
-  --secondary-foreground: 43 20% 86%;
-  --muted: 210 11% 13%;
-  --muted-foreground: 210 8% 56%;
-  --accent: 73 72% 62%;
-  --accent-foreground: 72 20% 8%;
-  --destructive: 8 72% 59%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 210 10% 17%;
-  --ring: 73 72% 62%;
-  --chart-1: 73 72% 62%;
-  --chart-2: 8 72% 59%;
-  --chart-3: 190 45% 48%;
-  --chart-4: 43 65% 62%;
-  --chart-5: 210 8% 70%;
+  --background: 42 33% 93%;
+  --foreground: 60 7% 10%;
+  --border: 60 6% 78%;
+  --card: 42 30% 96%;
+  --card-foreground: 60 7% 10%;
+  --card-border: 60 6% 78%;
+  --sidebar: 42 24% 89%;
+  --sidebar-foreground: 60 7% 10%;
+  --sidebar-border: 60 6% 78%;
+  --sidebar-primary: 68 64% 54%;
+  --sidebar-primary-foreground: 60 7% 10%;
+  --sidebar-accent: 68 64% 54%;
+  --sidebar-accent-foreground: 60 7% 10%;
+  --sidebar-ring: 68 64% 54%;
+  --popover: 42 30% 96%;
+  --popover-foreground: 60 7% 10%;
+  --popover-border: 60 6% 78%;
+  --primary: 68 64% 54%;
+  --primary-foreground: 60 7% 10%;
+  --secondary: 42 20% 87%;
+  --secondary-foreground: 60 7% 10%;
+  --muted: 42 20% 87%;
+  --muted-foreground: 60 5% 40%;
+  --accent: 11 65% 62%;
+  --accent-foreground: 60 7% 10%;
+  --destructive: 8 72% 52%;
+  --destructive-foreground: 42 33% 93%;
+  --input: 60 6% 78%;
+  --ring: 68 64% 54%;
+  --chart-1: 68 64% 54%;
+  --chart-2: 11 65% 62%;
+  --chart-3: 190 38% 42%;
+  --chart-4: 43 65% 52%;
+  --chart-5: 60 5% 40%;
 
   --radius: 0.75rem;
   --shadow-2xs: 0px 2px 0px 0px rgba(0,0,0,0.3);
@@ -123,35 +123,35 @@
   --elevate-1: rgba(255,255,255, .03);
   --elevate-2: rgba(255,255,255, .07);
 
-  --background: 210 13% 5%;
-  --foreground: 43 33% 94%;
-  --border: 210 10% 17%;
-  --card: 210 12% 9%;
-  --card-foreground: 43 33% 94%;
-  --card-border: 210 10% 17%;
-  --sidebar: 210 13% 7%;
-  --sidebar-foreground: 43 20% 86%;
-  --sidebar-border: 210 10% 17%;
-  --sidebar-primary: 73 72% 62%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 73 72% 62%;
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 73 72% 62%;
-  --popover: 210 12% 9%;
-  --popover-foreground: 43 33% 94%;
-  --popover-border: 210 10% 17%;
-  --primary: 73 72% 62%;
-  --primary-foreground: 72 20% 8%;
-  --secondary: 210 11% 14%;
-  --secondary-foreground: 43 20% 86%;
-  --muted: 210 11% 13%;
-  --muted-foreground: 210 8% 56%;
-  --accent: 73 72% 62%;
-  --accent-foreground: 72 20% 8%;
-  --destructive: 8 72% 59%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 210 10% 17%;
-  --ring: 73 72% 62%;
+  --background: 42 33% 93%;
+  --foreground: 60 7% 10%;
+  --border: 60 6% 78%;
+  --card: 42 30% 96%;
+  --card-foreground: 60 7% 10%;
+  --card-border: 60 6% 78%;
+  --sidebar: 42 24% 89%;
+  --sidebar-foreground: 60 7% 10%;
+  --sidebar-border: 60 6% 78%;
+  --sidebar-primary: 68 64% 54%;
+  --sidebar-primary-foreground: 60 7% 10%;
+  --sidebar-accent: 68 64% 54%;
+  --sidebar-accent-foreground: 60 7% 10%;
+  --sidebar-ring: 68 64% 54%;
+  --popover: 42 30% 96%;
+  --popover-foreground: 60 7% 10%;
+  --popover-border: 60 6% 78%;
+  --primary: 68 64% 54%;
+  --primary-foreground: 60 7% 10%;
+  --secondary: 42 20% 87%;
+  --secondary-foreground: 60 7% 10%;
+  --muted: 42 20% 87%;
+  --muted-foreground: 60 5% 40%;
+  --accent: 11 65% 62%;
+  --accent-foreground: 60 7% 10%;
+  --destructive: 8 72% 52%;
+  --destructive-foreground: 42 33% 93%;
+  --input: 60 6% 78%;
+  --ring: 68 64% 54%;
   --chart-1: 73 72% 62%;
   --chart-2: 8 72% 59%;
   --chart-3: 190 45% 48%;
@@ -176,7 +176,8 @@
     @apply font-sans antialiased bg-background text-foreground;
     font-family: 'DM Sans', sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    background-color: #050816;
+    background-color: #f3f0e8;
+    color: #1b1c18;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', 'DM Sans', sans-serif;
@@ -185,6 +186,85 @@
   html {
     scroll-behavior: smooth;
   }
+}
+
+/* Portfolio direction: authored editorial / technical notebook. */
+.portfolio-shell {
+  --paper: #f3f0e8;
+  --paper-deep: #e8e4d8;
+  --ink: #1b1c18;
+  --muted-ink: #65675f;
+  --line: rgba(27, 28, 24, 0.16);
+  --acid: #c7dc62;
+  --coral: #e8836b;
+  color: var(--ink);
+  background: var(--paper);
+}
+.portfolio-shell .text-white { color: var(--ink) !important; }
+.portfolio-shell .text-white\/80 { color: rgba(27,28,24,.82) !important; }
+.portfolio-shell .text-white\/70 { color: rgba(27,28,24,.72) !important; }
+.portfolio-shell .text-white\/60 { color: rgba(27,28,24,.62) !important; }
+.portfolio-shell .text-white\/55,
+.portfolio-shell .text-white\/50,
+.portfolio-shell .text-white\/45,
+.portfolio-shell .text-white\/40,
+.portfolio-shell .text-white\/35,
+.portfolio-shell .text-white\/30 { color: var(--muted-ink) !important; }
+.portfolio-shell .glass,
+.portfolio-shell [style*="#111827"],
+.portfolio-shell [style*="#050816"] {
+  background: rgba(255,255,255,.34) !important;
+  border-color: var(--line) !important;
+  box-shadow: none !important;
+}
+.portfolio-shell .gradient-text {
+  background: none;
+  color: var(--coral);
+  -webkit-text-fill-color: currentColor;
+}
+.portfolio-shell .rgb-divider {
+  background: var(--line);
+}
+.portfolio-shell .btn-neon {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+  box-shadow: none;
+}
+.portfolio-shell .btn-neon:hover { background: var(--coral); border-color: var(--coral); }
+.portfolio-shell input,
+.portfolio-shell textarea,
+.portfolio-shell select {
+  background: rgba(255,255,255,.45) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+.portfolio-shell .aurora-bg { background: var(--paper); }
+.portfolio-shell .aurora-blob-1,
+.portfolio-shell .aurora-blob-2,
+.portfolio-shell .aurora-blob-3,
+.portfolio-shell .aurora-blob-4,
+.portfolio-shell .aurora-blob-5,
+.portfolio-shell .aurora-blob-6,
+.portfolio-shell .aurora-curtain { opacity: 0 !important; animation: none !important; }
+.portfolio-shell .hero-grid {
+  opacity: .55;
+  background-image: linear-gradient(rgba(27,28,24,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(27,28,24,.08) 1px, transparent 1px);
+}
+.portfolio-shell .profile-glow { border-color: var(--ink); }
+.portfolio-shell .profile-glow::before { background: var(--coral); }
+.portfolio-shell a:focus-visible,
+.portfolio-shell button:focus-visible,
+.portfolio-shell input:focus-visible,
+.portfolio-shell textarea:focus-visible,
+.portfolio-shell select:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-shell *,
+  .portfolio-shell *::before,
+  .portfolio-shell *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
 }
 
 /* ── Aurora Background ── */

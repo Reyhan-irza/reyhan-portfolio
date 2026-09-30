@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
-import IntroPage from "@/components/IntroPage";
+import { useEffect, useRef } from "react";
 import MusicController from "@/components/MusicController";
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import StatsSection from "@/components/StatsSection";
 import AboutSection from "@/components/AboutSection";
 import JourneySection from "@/components/JourneySection";
+import AwardSection from "@/components/AwardSection";
 import RoadmapSection from "@/components/RoadmapSection";
 import NewsSection from "@/components/NewsSection";
 import MusicSection from "@/components/MusicSection";
@@ -23,12 +21,9 @@ import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
 import { useLenis } from "../hooks/useLenis";
 
-const Divider = () => <div className="rgb-divider max-w-6xl mx-auto px-6" />;
+const Divider = () => <div className="editorial-divider max-w-6xl mx-auto" aria-hidden="true" />;
 
 export default function Home() {
-  const [loadingDone, setLoadingDone] = useState(false);
-  const [introDone,   setIntroDone]   = useState(false);
-
   useLenis();
 
   const footerRef   = useRef<HTMLDivElement>(null);
@@ -38,7 +33,7 @@ export default function Home() {
   /* Footer achievement */
   useEffect(() => {
     const el = footerRef.current;
-    if (!el || !introDone) return;
+    if (!el) return;
     const obs = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !bottomFired.current) {
         bottomFired.current = true;
@@ -47,11 +42,10 @@ export default function Home() {
     }, { threshold: 0.5 });
     obs.observe(el);
     return () => obs.disconnect();
-  }, [introDone]);
+  }, []);
 
   /* Music section achievement */
   useEffect(() => {
-    if (!introDone) return;
     const el = document.getElementById("music");
     if (!el) return;
     const obs = new IntersectionObserver(([e]) => {
@@ -59,38 +53,28 @@ export default function Home() {
     }, { threshold: 0.3 });
     obs.observe(el);
     return () => obs.disconnect();
-  }, [introDone]);
+  }, []);
 
   /* Record visitor to Supabase once per session */
   useEffect(() => {
-    if (introDone && !visitFired.current) {
+    if (!visitFired.current) {
       visitFired.current = true;
       recordVisit();
     }
-  }, [introDone]);
-
-  /* Enter from intro: start music */
-  const handleIntroEnter = () => {
-    setIntroDone(true);
-    window.dispatchEvent(new Event("music:play"));
-  };
+  }, []);
 
   return (
-    <>
-      {!loadingDone && <LoadingScreen onFinish={() => setLoadingDone(true)} />}
-      {loadingDone && !introDone && <IntroPage onEnter={handleIntroEnter} />}
-
-      <div className={`relative min-h-screen ${introDone ? "main-fade-in" : "opacity-0 pointer-events-none"}`}>
+    <div className="portfolio-shell relative min-h-[100dvh]">
         <AuroraBackground />
         <div className="relative z-10">
           <Navbar />
           <HeroSection />
           <Divider />
-          <StatsSection />
-          <Divider />
           <AboutSection />
           <Divider />
           <JourneySection />
+          <Divider />
+          <AwardSection />
           <Divider />
           <RoadmapSection />
           <Divider />
@@ -109,16 +93,10 @@ export default function Home() {
             <Footer />
           </div>
         </div>
-      </div>
-
-      {/*
-        ─── Global overlays OUTSIDE animated wrapper ───
-        transform on parent breaks `position: fixed` children.
-      */}
       <AchievementToast />
-      {introDone && <RoastButton />}
-      {introDone && <TerminalMode />}
-      {loadingDone && <MusicController />}
-    </>
+      <RoastButton />
+      <TerminalMode />
+      <MusicController />
+    </div>
   );
 }
