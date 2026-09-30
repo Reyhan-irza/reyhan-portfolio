@@ -106,6 +106,12 @@ export default function Home() {
             <NewsSection />
             <MusicSection />
             <CommentsSection />
+            <div className="secondary-archive-tools" aria-label="Portfolio extras">
+              <span className="secondary-archive-tools-label">Small extras</span>
+              <RoastButton />
+              <TerminalMode />
+              <MusicController />
+            </div>
           </div>
         </details>
       </main>
@@ -113,9 +119,6 @@ export default function Home() {
         <Footer />
         </div>
       <AchievementToast />
-      <RoastButton />
-      <TerminalMode />
-      <MusicController />
     </div>
   );
 }
