@@ -1,10 +1,17 @@
 import { Heart, Settings } from "lucide-react";
 import { SiReact, SiTailwindcss, SiTypescript } from "react-icons/si";
 import { useLocation } from "wouter";
+import { useScrollAnim } from "../hooks/useScrollAnim";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
 
 export default function Footer() {
+  const footerRef = useScrollAnim<HTMLElement>({
+    threshold: 0.12,
+    stagger: 0.06,
+    distance: 12,
+    scale: 0.995,
+  });
   const year = new Date().getFullYear();
   const [, navigate] = useLocation();
 
@@ -26,10 +33,10 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative pt-12 pb-8 px-6 border-t border-[rgba(33,31,27,.16)] overflow-hidden">
+    <footer ref={footerRef} className="relative pt-12 pb-8 px-6 border-t border-[rgba(33,31,27,.16)] overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+        <div data-motion-item className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
           <div>
             <button
               onClick={() => scroll("#home")}
@@ -56,15 +63,15 @@ export default function Footer() {
         </div>
 
         {/* Visitor stats */}
-        <div className="mb-5">
+        <div data-motion-item className="mb-5">
           <VisitorCounter />
         </div>
 
         {/* Divider */}
-        <div className="rgb-divider mb-5" />
+        <div data-motion-item className="rgb-divider mb-5" />
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[#6d6a62] text-xs text-center sm:text-left">
             &copy; {year}{" "}
              <span className="text-[#211f1b] font-medium">Reyhan Irza Alwano</span>.

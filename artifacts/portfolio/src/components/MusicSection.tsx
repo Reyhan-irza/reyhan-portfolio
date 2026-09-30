@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Music, ChevronLeft, ChevronRight } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
@@ -70,7 +70,7 @@ export default function MusicSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [nowPlaying, setNowPlaying] = useState<number | null>(null);
   const [spotifyKey, setSpotifyKey] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useScrollAnim<HTMLDivElement>({ threshold: 0.08, stagger: 0.06, refreshKey: songs.length });
   const headerRef = useScrollAnim({ threshold: 0.2 });
 
   // When background music resumes, stop Spotify by reloading the embed
@@ -92,7 +92,8 @@ export default function MusicSection() {
       const containerLeft = container.getBoundingClientRect().left;
       const cardLeft = card.getBoundingClientRect().left;
       const offset = cardLeft - containerLeft - (container.offsetWidth - card.offsetWidth) / 2;
-      container.scrollBy({ left: offset, behavior: "smooth" });
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      container.scrollBy({ left: offset, behavior: reduced ? "auto" : "smooth" });
     }
   };
 
@@ -112,12 +113,12 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
+          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             Peak <span className="text-[#a43f2d]">Song</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-6" />
-          <p className="text-[#6d6a62] max-w-md mx-auto text-base">
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-6" />
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
             Ts Song Still Banger,y&apos;all.
           </p>
         </div>
@@ -207,6 +208,7 @@ function MusicCard({
           : "border-[rgba(33,31,27,.16)] hover:border-[#a43f2d] hover:scale-102 hover:-translate-y-1"
       }`}
       onClick={onClick}
+      data-motion-item
     >
       {/* Cover art */}
        <div className={`w-full aspect-square rounded-xl mb-4 ${song.color} overflow-hidden relative`}>

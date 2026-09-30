@@ -108,6 +108,12 @@ export default function GitHubSection() {
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(false);
   const [stats,   setStats]   = useState<{ public_repos: number; followers: number; following: number } | null>(null);
+  const statsRef = useScrollAnim<HTMLDivElement>({
+    threshold: 0.18,
+    stagger: 0.08,
+    distance: 14,
+    refreshKey: stats ? "loaded" : "pending",
+  });
 
   useEffect(() => {
     let alive = true;
@@ -138,25 +144,25 @@ export default function GitHubSection() {
       <div className="max-w-6xl mx-auto">
 
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Open Source</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Open Source</p>
+          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             GitHub <span className="text-[#a43f2d]">Activity</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-          <p className="text-[#6d6a62] max-w-md mx-auto text-base">
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
             Repository terbaru dan aktivitas coding saya di GitHub.
           </p>
         </div>
 
         {/* Stats bar */}
         {stats && (
-          <div className="flex justify-center gap-6 md:gap-10 mb-10">
+          <div ref={statsRef} className="flex justify-center gap-6 md:gap-10 mb-10">
             {[
               { label: "Repositories", value: stats.public_repos },
               { label: "Followers",    value: stats.followers    },
               { label: "Following",    value: stats.following    },
             ].map(({ label, value }) => (
-              <div key={label} className="text-center">
+              <div key={label} data-motion-item className="text-center">
                 <p className="text-2xl font-black text-[#a43f2d] tabular-nums">{value}</p>
                 <p className="text-[#6d6a62] text-xs mt-0.5">{label}</p>
               </div>

@@ -10,24 +10,25 @@ const notes = [
 
 export default function AboutSection() {
   const headerRef = useScrollAnim({ threshold: 0.2 });
+  const notesRef = useScrollAnim({ threshold: 0.1, stagger: 0.09, distance: 16, scale: 0.996 });
   return (
     <section id="about" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
-          <div>
+          <div data-motion-item>
             <p className="section-kicker">01 / Working notes</p>
             <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">The work is the proof.</h2>
           </div>
-          <div>
+          <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
               I am a software-solution builder focused on the part between an idea and something a person can actually use. This portfolio keeps the claims close to the artifacts: what I made, which tools are named in the project, and where it can be opened.
             </p>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">The list below describes my current practice, not proficiency ratings.</p>
           </div>
         </div>
-        <div className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">
+        <div ref={notesRef} className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">
           {notes.map(({ icon: Icon, label, text }, index) => (
-            <article key={label} className="bg-[#f3f0e8] p-7 md:p-9">
+            <article key={label} className="bg-[#f3f0e8] p-7 md:p-9" data-motion-item data-motion-card>
               <div className="flex items-start justify-between gap-5">
                  <Icon className="h-5 w-5 text-[#a43f2d]" aria-hidden="true" />
                 <span className="font-mono text-[10px] text-[#77796e]">0{index + 1}</span>

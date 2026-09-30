@@ -61,69 +61,76 @@ export default function ProjectsSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      const context = gsap.context(() => {
-        const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        compact: "(max-width: 767px)",
+      },
+      (mediaContext) => {
+        if (mediaContext.conditions?.reduced) return;
+        const compact = Boolean(mediaContext.conditions?.compact);
+        const context = gsap.context(() => {
+          const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
 
-        rows.forEach((row) => {
-          const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-          const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-          if (!visual || !copy) return;
+          rows.forEach((row) => {
+            const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+            const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+            if (!visual || !copy) return;
 
-          gsap.fromTo(
-            visual,
-            { clipPath: "inset(0 100% 0 0)" },
-            {
-              clipPath: "inset(0 0% 0 0)",
-              duration: 0.9,
-              ease: "power3.out",
+            const entrance = gsap.timeline({
               scrollTrigger: {
                 trigger: row,
-                start: "top 78%",
-                toggleActions: "play reverse play reverse",
+                start: compact ? "top 86%" : "top 80%",
+                toggleActions: "play none play reverse",
                 invalidateOnRefresh: true,
               },
-            },
-          );
+            });
+
+            entrance
+              .fromTo(
+                visual,
+                { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
+                {
+                  x: 0,
+                  opacity: 1,
+                  scale: 1,
+                  duration: compact ? 0.48 : 0.62,
+                  ease: "power3.out",
+                },
+              )
+              .fromTo(
+                copy,
+                { y: compact ? 8 : 16, opacity: 0 },
+                {
+                  y: 0,
+                  opacity: 1,
+                  duration: compact ? 0.42 : 0.56,
+                  ease: "power3.out",
+                },
+                compact ? 0.06 : 0.1,
+              );
+          });
 
           gsap.fromTo(
-            copy,
-            { y: 22, autoAlpha: 0 },
+            "[data-project-heading]",
+            { y: compact ? 10 : 20, opacity: 0 },
             {
               y: 0,
-              autoAlpha: 1,
-              duration: 0.68,
-              delay: 0.1,
+              opacity: 1,
+              duration: compact ? 0.5 : 0.68,
               ease: "power3.out",
               scrollTrigger: {
-                trigger: row,
-                start: "top 72%",
-                toggleActions: "play reverse play reverse",
+                trigger: section,
+                start: "top 84%",
+                toggleActions: "play none play reverse",
                 invalidateOnRefresh: true,
               },
             },
           );
-        });
-
-        gsap.fromTo(
-          "[data-project-heading]",
-          { y: 24, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.72,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 80%",
-              toggleActions: "play reverse play reverse",
-              invalidateOnRefresh: true,
-            },
-          },
-        );
-      }, section);
-      return () => context.revert();
-    });
+        }, section);
+        return () => context.revert();
+      },
+    );
 
     return () => media.revert();
   }, []);

@@ -4,7 +4,7 @@ import { Award, Download, ExternalLink, MapPin } from "lucide-react";
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 
 export default function AwardSection() {
-  const ref = useScrollAnim({ threshold: 0.2 });
+  const ref = useScrollAnim({ threshold: 0.2, distance: 16, scale: 0.994 });
 
   return (
     <section
@@ -16,7 +16,7 @@ export default function AwardSection() {
         ref={ref}
         className="fade-up award-record mx-auto grid max-w-6xl gap-9 p-7 md:grid-cols-[minmax(10rem,.58fr)_1.42fr] md:gap-16 md:p-11"
       >
-        <div className="flex flex-col justify-between gap-10">
+        <div className="flex flex-col justify-between gap-10" data-motion-item>
           <p className="section-kicker">Recognition / 2025</p>
            <div className="flex items-center gap-3 text-[#a43f2d]">
             <Award className="h-7 w-7" aria-hidden="true" />
@@ -24,7 +24,7 @@ export default function AwardSection() {
           </div>
         </div>
 
-        <div>
+        <div data-motion-item>
           <h2
             id="award-title"
             className="max-w-3xl text-3xl font-semibold leading-[1.02] tracking-[-.055em] md:text-5xl"

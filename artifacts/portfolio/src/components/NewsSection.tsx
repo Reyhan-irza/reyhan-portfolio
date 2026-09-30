@@ -34,7 +34,7 @@ function NewsCard({ item }: { item: News }) {
   const tagStyle = CATEGORY_COLORS[item.category] ?? CATEGORY_COLORS.General;
 
   return (
-    <article className="glass border border-[rgba(33,31,27,.16)] rounded-2xl overflow-hidden hover:border-[#a43f2d] transition-all duration-300 group hover:-translate-y-1">
+    <article data-motion-item className="glass border border-[rgba(33,31,27,.16)] rounded-2xl overflow-hidden hover:border-[#a43f2d] transition-all duration-300 group hover:-translate-y-1">
       {item.thumbnail && (
         <div className="h-44 overflow-hidden">
           <img
@@ -81,10 +81,9 @@ function NewsCard({ item }: { item: News }) {
 
 export default function NewsSection() {
   const headerRef = useScrollAnim({ threshold: 0.15 });
-  const gridRef   = useScrollAnim({ threshold: 0.08, delay: 80 });
-
   const [news,    setNews]    = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
+  const gridRef   = useScrollAnim({ threshold: 0.08, delay: 80, refreshKey: `${loading}-${news.length}` });
 
   useEffect(() => {
     let alive = true;
@@ -109,14 +108,14 @@ export default function NewsSection() {
     <section id="news" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-14">
-           <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
+           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             What&apos;s New
           </p>
-           <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             News &amp; <span className="text-[#a43f2d]">Updates</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-           <p className="text-[#6d6a62] max-w-md mx-auto text-base">
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
+           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
             Kabar terbaru seputar project, update, dan hal-hal menarik lainnya.
           </p>
         </div>

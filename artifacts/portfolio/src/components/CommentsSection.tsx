@@ -71,6 +71,11 @@ export default function CommentsSection() {
   const [page,   setPage]   = useState(1);
 
   const listRef = useRef<HTMLDivElement>(null);
+  const listAnimRef = useScrollAnim<HTMLDivElement>({
+    threshold: 0.08,
+    stagger: 0.06,
+    refreshKey: `${comments.length}-${page}`,
+  });
 
   useEffect(() => {
     (async () => {
@@ -148,7 +153,10 @@ export default function CommentsSection() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
       setPage(1);
-      setTimeout(() => listRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+      setTimeout(() => {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      }, 150);
     }
     setSubmitting(false);
   };
@@ -161,14 +169,14 @@ export default function CommentsSection() {
 
         {/* HEADER */}
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             Yoo wassup y&apos;all
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             Absen-absen or <span className="text-[#a43f2d]">Something</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-          <p className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
         </div>
 
         {/* FORM */}
@@ -247,7 +255,13 @@ export default function CommentsSection() {
         )}
 
         {/* LIST */}
-        <div ref={listRef} className="flex flex-col gap-3">
+        <div
+          ref={(el) => {
+            listRef.current = el;
+            listAnimRef.current = el;
+          }}
+          className="flex flex-col gap-3"
+        >
           {dataLoading ? (
             <div className="flex justify-center py-16">
                <Loader2 className="w-5 h-5 text-[#a43f2d] animate-spin" />
@@ -263,7 +277,7 @@ export default function CommentsSection() {
           ) : paginated.map((c) => {
             const cReplies = getReplies(c.id);
             return (
-              <div key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
+              <div data-motion-item key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
                 {c.pinned && (
                   <div className="flex items-center gap-1.5 mb-2">
                     <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Pinned</span>
