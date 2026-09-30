@@ -11,15 +11,18 @@ export default function Footer() {
   const links = [
     { label: "Home",     href: "#home"     },
     { label: "About",    href: "#about"    },
+    { label: "Work",     href: "#projects" },
     { label: "Journey",  href: "#journey"  },
-    { label: "News",     href: "#news"     },
-    { label: "Projects", href: "#projects" },
+    { label: "Award",    href: "#achievement" },
     { label: "Contact",  href: "#contact"  },
   ];
 
   const scroll = (href: string) => {
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    }
   };
 
   return (
@@ -35,7 +38,7 @@ export default function Footer() {
               Reyhan.
             </button>
             <p className="text-[#6d6a62] text-sm max-w-xs leading-relaxed">
-              Full-Stack Developer building modern, premium digital products.
+               React / TypeScript builder documenting shipped education, library and portfolio work.
             </p>
           </div>
 
@@ -64,7 +67,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[#6d6a62] text-xs text-center sm:text-left">
             &copy; {year}{" "}
-            <span className="text-[#211f1b] font-medium">Reyhan Irza Alvano</span>.
+             <span className="text-[#211f1b] font-medium">Reyhan Irza Alwano</span>.
             All rights reserved.
           </p>
 
@@ -78,7 +81,7 @@ export default function Footer() {
               <SiTailwindcss className="w-3 h-3 text-[#6d6a62]" />
             </div>
 
-            <span className="text-[#6d6a62] text-[10px]">·</span>
+             <span className="text-[#6d6a62] text-[10px]">·</span>
             <GuessMyAge />
             <span className="text-[#6d6a62] text-[10px]">·</span>
 

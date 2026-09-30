@@ -40,7 +40,7 @@ export default function RoastButton() {
       {/* Floating button */}
       <button
         onClick={handleOpen}
-         className="fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-[#a43f2d]/35 bg-[#a43f2d]/10 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/20 hover:border-[#a43f2d] hover:scale-105 active:scale-95 transition-all duration-300"
+          className="portfolio-roast-trigger fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-[#a43f2d]/35 bg-[#a43f2d]/10 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/20 hover:border-[#a43f2d] hover:scale-105 active:scale-95 transition-all duration-300"
         title="Roast This Website!"
       >
         <Flame className="w-4 h-4" />
@@ -55,7 +55,7 @@ export default function RoastButton() {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="text-4xl mb-3">🔥</div>
+             <div className="mb-3 text-xs font-mono uppercase tracking-[.16em] text-[#a43f2d]">Side note</div>
              <h3 className="text-lg font-bold text-[#a43f2d] mb-1">Roast This Website!</h3>
              <p className="text-[#6d6a62] text-xs mb-5">Peringatan: Konten mungkin terlalu akurat</p>
 

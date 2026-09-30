@@ -14,10 +14,10 @@ const COMMANDS: Record<string, () => string> = {
     `Available commands:\n\n  whoami    Developer profile\n  skills    Tech stack & ratings\n  projects  Recent projects\n  roadmap   Future goals\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  Full-Stack Developer            │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA developer who builds premium digital\nexperiences and dreams of real estate.\n\nPassionate about clean code, beautiful\nUIs, and financial independence.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alwano              │\n│  React / TypeScript builder      │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA builder who learns by shipping real\ninterfaces, connected flows and notes.\n\nProjects, journey and evidence live\nthroughout this portfolio.`,
 
   skills: () =>
-    `FRONTEND\n  React         ████████████  Expert\n  TypeScript    ██████████░░  Advanced\n  Next.js       █████████░░░  Advanced\n  TailwindCSS   ████████████  Expert\n\nBACKEND\n  Node.js       █████████░░░  Advanced\n  Express       █████████░░░  Advanced\n  PostgreSQL    ████████░░░░  Proficient\n\nTOOLS\n  Git           ████████████  Expert\n  Docker        ██████░░░░░░  Intermediate\n  Figma         ████████░░░░  Proficient`,
+    `TOOLS NAMED IN THE SHIPPED WORK\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThis is a record of tools used across the\nprojects, not a proficiency rating.`,
 
   projects: () =>
     `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
@@ -118,7 +118,7 @@ export default function TerminalMode() {
       {/* Trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:border-[#a43f2d] hover:bg-[#a43f2d]/10 transition-all duration-200 hover:scale-105 active:scale-95"
+         className="portfolio-terminal-trigger fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:border-[#a43f2d] hover:bg-[#a43f2d]/10 transition-all duration-200 hover:scale-105 active:scale-95"
         title="Open Developer Terminal  [ > _ ]"
         aria-label="Open developer terminal"
       >

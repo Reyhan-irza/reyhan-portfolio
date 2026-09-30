@@ -95,7 +95,7 @@ export default function MusicController() {
   const BAR_HEIGHTS = [0.55, 0.9, 0.65, 1, 0.45, 0.8, 0.6];
 
   return (
-    <div className="fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-2">
+    <div className="portfolio-music-controller fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-2">
       {!minimized && (
         <div className="glass border border-[rgba(33,31,27,.16)] rounded-2xl p-4 w-56 animate-in fade-in slide-in-from-bottom-2 duration-300">
           {/* Header */}

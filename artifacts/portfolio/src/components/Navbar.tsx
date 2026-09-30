@@ -6,13 +6,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
   { label: "About",    href: "#about" },
-  { label: "Projects", href: "#projects" },
+  { label: "Work",     href: "#projects" },
   { label: "Journey",  href: "#journey" },
   { label: "Award",    href: "#achievement" },
-  { label: "Plans",    href: "#roadmap" },
-  { label: "Updates",  href: "#news" },
   { label: "Contact",  href: "#contact" },
-  { label: "Comments", href: "#comments" },
 ];
 
 export default function Navbar() {

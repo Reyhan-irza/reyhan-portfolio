@@ -1,7 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { Atom, BriefcaseBusiness, Code2, Leaf, Sparkles } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const milestones = [
   ["2022", "The beginning", "Started learning HTML, CSS, and JavaScript from scratch. Built a first webpage — a simple profile page.", Leaf],
@@ -14,18 +18,21 @@ const milestones = [
 export default function JourneySection() {
   const headerRef = useScrollAnim({ threshold: 0.2 });
   const didFire = useRef(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = document.getElementById("journey");
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !didFire.current) {
+    const context = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 72%",
+        onEnter: () => {
+          if (didFire.current) return;
         didFire.current = true;
         unlockAchievement(ACHIEVEMENTS.JOURNEY_READER);
-        observer.disconnect();
-      }
-    }, { threshold: 0.3 });
-    observer.observe(el);
-    return () => observer.disconnect();
+        },
+      });
+    }, el);
+    return () => context.revert();
   }, []);
 
   return (

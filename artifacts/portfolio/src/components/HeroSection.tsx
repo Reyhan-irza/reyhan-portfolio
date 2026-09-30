@@ -68,7 +68,7 @@ export default function HeroSection() {
           <h1 data-hero-item className="max-w-5xl text-[clamp(3.5rem,9vw,8.9rem)] font-semibold leading-[.86] tracking-[-.09em] text-[#1b1c18]">
             Reyhan Irza
             <br />
-             <span className="text-[#a43f2d]">Alvano.</span>
+             <span className="text-[#a43f2d]">Alwano.</span>
           </h1>
           <div data-hero-rule className="mt-9 h-px w-full origin-left scale-x-0 bg-[rgba(27,28,24,.2)]" />
           <div className="mt-8 grid gap-8 md:grid-cols-[1fr_18rem] md:items-start">

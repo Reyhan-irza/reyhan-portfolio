@@ -1809,6 +1809,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .portfolio-shell .btn-neon { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .portfolio-shell .btn-neon:hover { background: var(--accent-red); border-color: var(--accent-red); color: var(--paper); }
+.portfolio-shell .btn-neon::before { display: none; }
 .portfolio-shell .profile-glow::before { background: var(--accent-red); }
 .portfolio-shell .typing-cursor { background: var(--accent-red); }
 .portfolio-shell .timeline-line { background: var(--accent-red); }
@@ -1864,4 +1865,310 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .portfolio-shell .aurora-bg::after {
   display: none;
+}
+
+/* ── Portfolio home flow: paper dossier / ink / one brick-red signal ── */
+.portfolio-shell {
+  --paper: #f3efe6;
+  --paper-deep: #e7dfd1;
+  --ink: #211f1b;
+  --muted-ink: #6d6a62;
+  --line: rgba(33, 31, 27, 0.18);
+  --accent-red: #a43f2d;
+  background: var(--paper);
+}
+
+.portfolio-shell main {
+  overflow: clip;
+}
+
+.proof-strip {
+  background: var(--paper);
+}
+
+.proof-item {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  column-gap: 0.8rem;
+  row-gap: 0.18rem;
+  min-height: 7.5rem;
+  align-content: center;
+  padding: 1.35rem 1.1rem;
+  border-right: 1px solid var(--line);
+}
+
+.proof-item:last-child {
+  border-right: 0;
+}
+
+.proof-index {
+  grid-row: span 2;
+  color: var(--accent-red);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.proof-item strong {
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.proof-item span:last-child {
+  color: var(--muted-ink);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+/* The work section is a light case-study index, not a dark product dashboard. */
+.portfolio-shell .projects-section {
+  --project-ink: var(--ink);
+  --project-paper: var(--ink);
+  --project-muted: var(--muted-ink);
+  --project-acid: var(--accent-red);
+  --project-coral: var(--accent-red);
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+
+.portfolio-shell .projects-section::before {
+  display: none;
+}
+
+.portfolio-shell .project-row {
+  border-color: var(--line);
+}
+
+.portfolio-shell .project-visual {
+  min-height: 24rem;
+  background: var(--paper) !important;
+  border-color: var(--line);
+  box-shadow: 0 1rem 2.5rem rgba(33, 31, 27, 0.08);
+}
+
+.portfolio-shell .project-visual::after {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 4rem;
+  height: 4rem;
+  border-right: 1px solid var(--accent-red);
+  border-bottom: 1px solid var(--accent-red);
+  content: "";
+  opacity: 0.75;
+}
+
+.portfolio-shell .project-visual-grid {
+  display: none;
+}
+
+.portfolio-shell .project-number {
+  color: rgba(33, 31, 27, 0.09);
+}
+
+.portfolio-shell .project-wordmark {
+  color: var(--ink);
+}
+
+.portfolio-shell .project-stamp {
+  border-color: rgba(164, 63, 45, 0.4);
+}
+
+.portfolio-shell .project-copy,
+.portfolio-shell .projects-intro {
+  color: var(--muted-ink);
+}
+
+.portfolio-shell .project-tech-list {
+  border-color: var(--line);
+}
+
+.portfolio-shell .project-tech {
+  color: var(--muted-ink);
+}
+
+.portfolio-shell .project-link--quiet {
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.portfolio-shell .project-link--quiet:hover,
+.portfolio-shell .project-link--quiet:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.portfolio-shell .project-detail-dialog {
+  color: var(--ink);
+  background: var(--paper) !important;
+  border-color: var(--line) !important;
+  box-shadow: 0 1.5rem 4rem rgba(33, 31, 27, 0.18) !important;
+}
+
+.portfolio-shell .project-detail-dialog p,
+.portfolio-shell .project-detail-dialog span {
+  color: var(--muted-ink);
+}
+
+.portfolio-shell .project-detail-dialog h3 {
+  color: var(--ink) !important;
+}
+
+.portfolio-shell .project-detail-dialog .project-detail-label {
+  color: var(--accent-red);
+}
+
+.portfolio-shell .project-detail-dialog .project-link {
+  color: var(--paper);
+}
+
+.portfolio-shell .project-detail-dialog .project-link--quiet {
+  color: var(--ink);
+}
+
+/* Keep secondary legacy surfaces visually quiet without deleting their behavior. */
+.portfolio-shell #roadmap {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.portfolio-shell #github {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.portfolio-shell #github .glass {
+  box-shadow: none !important;
+}
+
+.portfolio-shell .section-kicker {
+  color: var(--accent-red);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.portfolio-shell #contact a {
+  border-radius: 0;
+  background: var(--paper);
+  box-shadow: none;
+}
+
+.portfolio-shell #contact a:hover {
+  box-shadow: 0 0.8rem 1.6rem rgba(33, 31, 27, 0.08);
+}
+
+.portfolio-shell #contact a > div:first-child {
+  border-radius: 0;
+  background: var(--paper-deep) !important;
+}
+
+.portfolio-shell .portfolio-music-controller,
+.portfolio-shell .portfolio-roast-trigger,
+.portfolio-shell .portfolio-terminal-trigger {
+  opacity: 0.58;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.portfolio-shell .portfolio-music-controller:hover,
+.portfolio-shell .portfolio-roast-trigger:hover,
+.portfolio-shell .portfolio-terminal-trigger:hover,
+.portfolio-shell .portfolio-roast-trigger:focus-visible,
+.portfolio-shell .portfolio-terminal-trigger:focus-visible {
+  opacity: 1;
+}
+
+.portfolio-shell .secondary-archive {
+  margin-inline: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.portfolio-shell .secondary-archive summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0.9rem 0;
+  color: var(--muted-ink);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.portfolio-shell .secondary-archive summary::-webkit-details-marker {
+  display: none;
+}
+
+.portfolio-shell .secondary-archive summary::after {
+  content: "+";
+  color: var(--accent-red);
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.portfolio-shell .secondary-archive[open] summary::after {
+  content: "−";
+}
+
+.portfolio-shell .secondary-archive summary:hover,
+.portfolio-shell .secondary-archive summary:focus-visible {
+  color: var(--ink);
+}
+
+.portfolio-shell .secondary-archive-content {
+  border-top: 1px solid var(--line);
+}
+
+.portfolio-shell .secondary-archive-content > section {
+  border-bottom: 1px solid var(--line);
+}
+
+.portfolio-shell .secondary-archive-content h2 {
+  color: var(--ink) !important;
+}
+
+.portfolio-shell .secondary-archive-content .glass {
+  box-shadow: none !important;
+}
+
+@media (max-width: 767px) {
+  .portfolio-shell .secondary-archive {
+    margin-inline: 1.5rem;
+  }
+
+  .portfolio-shell .secondary-archive summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .proof-item {
+    min-height: 5.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .proof-item:last-child {
+    border-bottom: 0;
+  }
+
+  .portfolio-shell .project-visual {
+    min-height: 18rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-shell .project-visual::after {
+    transition: none;
+  }
 }

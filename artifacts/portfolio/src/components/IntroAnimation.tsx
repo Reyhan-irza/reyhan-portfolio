@@ -51,7 +51,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           }`}
         >
           <p className="text-white/50 text-base md:text-lg font-light tracking-widest uppercase">
-            Reyhan Irza Alvano
+            Reyhan Irza Alwano
           </p>
         </div>
 

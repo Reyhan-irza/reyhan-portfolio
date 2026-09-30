@@ -52,13 +52,13 @@ export default function ContactSection() {
     <section id="contact" className="relative py-24 px-6">
       <div className="max-w-4xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-16">
-          <p className="text-[#a43f2d] text-xs font-semibold uppercase tracking-widest mb-4">Get In Touch</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-5">
-            Let's <span className="text-[#a43f2d]">Connect</span>
+           <p className="section-kicker mb-4">06 / Contact</p>
+           <h2 className="text-3xl font-semibold tracking-[-.06em] text-[#211f1b] md:text-6xl">
+             Open <span className="text-[#a43f2d]">line.</span>
           </h2>
-          <div className="rgb-divider w-20 mx-auto mb-6" />
-          <p className="text-[#6d6a62] max-w-md mx-auto text-base leading-relaxed">
-            Interested in collaborating? Reach out through any of the platforms below.
+           <div className="rgb-divider mx-auto mb-6 w-20" />
+           <p className="mx-auto max-w-md text-base leading-relaxed text-[#6d6a62]">
+             For a project, a question about the work, or a useful introduction, choose the channel that suits you.
           </p>
         </div>
 
