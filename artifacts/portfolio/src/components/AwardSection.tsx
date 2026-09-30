@@ -1,5 +1,7 @@
 import { useScrollAnim } from "../hooks/useScrollAnim";
-import { Award, MapPin } from "lucide-react";
+import { Award, Download, ExternalLink, MapPin } from "lucide-react";
+
+const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 
 export default function AwardSection() {
   const ref = useScrollAnim({ threshold: 0.2 });
@@ -52,6 +54,28 @@ export default function AwardSection() {
               <dd className="mt-1 text-sm font-medium">Cabang Dinas Pendidikan Wilayah I</dd>
             </div>
           </dl>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={certificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-view-certificate"
+              aria-label="Lihat Sertifikat (PDF, terbuka di tab baru)"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-[#211f1b] px-5 py-3 text-sm font-medium text-[#f3efe6] transition-colors hover:bg-[#a43f2d] sm:w-auto"
+            >
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              Lihat Sertifikat
+            </a>
+            <a
+              href={certificateUrl}
+              download="sertifikat-lks-it-software-solution-2025.pdf"
+              data-testid="link-download-certificate"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 border border-[rgba(33,31,27,.24)] px-5 py-3 text-sm font-medium text-[#211f1b] transition-colors hover:border-[#a43f2d] hover:text-[#a43f2d] sm:w-auto"
+            >
+              <Download className="h-4 w-4" aria-hidden="true" />
+              Unduh PDF
+            </a>
+          </div>
         </div>
       </div>
     </section>
