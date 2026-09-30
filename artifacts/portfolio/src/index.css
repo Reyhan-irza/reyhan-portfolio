@@ -1792,8 +1792,20 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .project-detail-dialog .text-\[\#e8e7dc\] { color: var(--ink) !important; }
 .portfolio-shell .project-detail-dialog .text-\[\#b6b7ad\] { color: var(--muted-ink) !important; }
 .portfolio-shell .project-detail-dialog [class*="border-white"] { border-color: var(--line) !important; }
+.portfolio-shell .projects-title { color: var(--ink); }
+.portfolio-shell .project-visual {
+  background: var(--paper) !important;
+}
+.portfolio-shell .project-number { color: rgba(27, 28, 24, .16); }
+.portfolio-shell .project-wordmark { color: var(--ink); }
+.portfolio-shell .project-visual-grid {
+  opacity: 0;
+  background-image: none;
+}
 .portfolio-shell .hero-grid {
-  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-image: none;
+  mask-image: none;
+  -webkit-mask-image: none;
 }
 .portfolio-shell .btn-neon { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .portfolio-shell .btn-neon:hover { background: var(--accent-red); border-color: var(--accent-red); color: var(--paper); }
@@ -1851,10 +1863,5 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   opacity: 1;
 }
 .portfolio-shell .aurora-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(33,31,27,.11) .55px, transparent .55px);
-  background-size: 6px 6px;
-  opacity: .22;
+  display: none;
 }
