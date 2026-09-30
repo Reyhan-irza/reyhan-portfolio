@@ -123,6 +123,7 @@ export default function TerminalMode() {
         aria-label="Open developer terminal"
       >
         <Terminal className="w-4.5 h-4.5" />
+        <span>Terminal</span>
       </button>
 
       {/* Modal */}

@@ -42,9 +42,10 @@ export default function RoastButton() {
         onClick={handleOpen}
           className="portfolio-roast-trigger fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-[#a43f2d]/35 bg-[#a43f2d]/10 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/20 hover:border-[#a43f2d] hover:scale-105 active:scale-95 transition-all duration-300"
         title="Roast This Website!"
+        aria-label="Get a light-hearted portfolio roast"
       >
         <Flame className="w-4 h-4" />
-        <span className="hidden sm:inline">Roast Me!</span>
+        <span>Roast Me!</span>
       </button>
 
       {/* Modal */}
