@@ -21,7 +21,7 @@ import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
 import { useLenis } from "../hooks/useLenis";
 
-const Divider = () => <div className="editorial-divider max-w-6xl mx-auto" aria-hidden="true" />;
+const Divider = () => <div className="editorial-divider mx-auto max-w-6xl" aria-hidden="true" />;
 
 export default function Home() {
   useLenis();
@@ -65,33 +65,28 @@ export default function Home() {
 
   return (
     <div className="portfolio-shell relative min-h-[100dvh]">
-        <AuroraBackground />
-        <div className="relative z-10">
-          <Navbar />
-          <HeroSection />
-          <Divider />
-          <AboutSection />
-          <Divider />
-          <JourneySection />
-          <Divider />
-          <AwardSection />
-          <Divider />
-          <RoadmapSection />
-          <Divider />
-          <NewsSection />
-          <Divider />
-          <MusicSection />
-          <Divider />
-          <ProjectsSection />
-          <Divider />
-          <GitHubSection />
-          <Divider />
-          <ContactSection />
-          <Divider />
-          <CommentsSection />
-          <div ref={footerRef}>
-            <Footer />
-          </div>
+      <AuroraBackground />
+      <a className="skip-to-content" href="#main-content">Skip to content</a>
+      <Navbar />
+      <main id="main-content" className="relative z-10">
+        <HeroSection />
+        <Divider />
+        <AboutSection />
+        <ProjectsSection />
+        <Divider />
+        <JourneySection />
+        <AwardSection />
+        <RoadmapSection />
+        <Divider />
+        <GitHubSection />
+        <NewsSection />
+        <MusicSection />
+        <Divider />
+        <ContactSection />
+        <CommentsSection />
+      </main>
+      <div className="relative z-10" ref={footerRef}>
+        <Footer />
         </div>
       <AchievementToast />
       <RoastButton />

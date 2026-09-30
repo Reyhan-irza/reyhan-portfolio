@@ -4,11 +4,11 @@ import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const milestones = [
-  ["2022", "The beginning", "Started learning HTML, CSS and JavaScript from scratch. A simple profile page made the idea of building feel tangible.", Leaf],
-  ["2023", "Falling for React", "Moved into React and TypeScript, learning component architecture, state management and the modern frontend ecosystem.", Atom],
-  ["2024", "Full-stack journey", "Explored Node.js, Express and PostgreSQL. Built a first full-stack REST API and end-to-end applications.", Code2],
-  ["2025", "Real projects", "Worked with first clients and learned about communication, deadlines and the importance of good UX.", BriefcaseBusiness],
-  ["2026", "Premium portfolio", "Built this personal platform as a record of the work, with an emphasis on interaction and craft.", Sparkles],
+  ["2022", "The beginning", "Started learning HTML, CSS, and JavaScript from scratch. Built a first webpage — a simple profile page.", Leaf],
+  ["2023", "Falling for React", "Fell in love with React and TypeScript. Began learning component architecture, state management, and the modern frontend ecosystem.", Atom],
+  ["2024", "Full-stack journey", "Explored backend development with Node.js, Express, and PostgreSQL. Built a first full-stack REST API and end-to-end applications.", Code2],
+  ["2025", "Real projects", "Worked on projects for first clients. Learned about communication, deadlines, and the importance of great UX.", BriefcaseBusiness],
+  ["2026", "Premium portfolio", "Built this premium personal brand platform: modern, interactive, and crafted with precision.", Sparkles],
 ] as const;
 
 export default function JourneySection() {
