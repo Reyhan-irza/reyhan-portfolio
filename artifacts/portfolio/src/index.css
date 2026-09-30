@@ -263,7 +263,12 @@
 @media (prefers-reduced-motion: reduce) {
   .portfolio-shell *,
   .portfolio-shell *::before,
-  .portfolio-shell *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
+  .portfolio-shell *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+    transition-delay: 0ms !important;
+  }
 }
 
 /* ── Aurora Background ── */
@@ -597,40 +602,40 @@
 
 /* ── Scroll Animations ── */
 .fade-up {
-  opacity: 0;
-  transform: translateY(40px);
+  opacity: 1;
+  transform: none;
   transition: none;
 }
 
 .fade-down {
-  opacity: 0;
-  transform: translateY(-40px);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-left {
-  opacity: 0;
-  transform: translateX(-40px);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-right {
-  opacity: 0;
-  transform: translateX(40px);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-in {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-scale {
-  opacity: 0;
-  transform: scale(0.96) translateY(16px);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }

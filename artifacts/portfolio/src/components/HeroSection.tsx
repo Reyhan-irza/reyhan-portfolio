@@ -35,7 +35,7 @@ export default function HeroSection() {
               stagger: compact ? 0.045 : 0.065,
               clearProps: "transform,opacity",
             },
-          })
+          )
           .fromTo(
             "[data-hero-rule]",
             { scaleX: 0 },
