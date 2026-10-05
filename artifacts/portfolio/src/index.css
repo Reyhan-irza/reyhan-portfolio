@@ -2219,6 +2219,14 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   --rv-muted: #8b93a3;
   --rv-blue: #667cff;
   --rv-violet: #8b6cff;
+  --paper: var(--rv-bg);
+  --paper-deep: var(--rv-surface-raised);
+  --ink: var(--rv-text);
+  --muted-ink: #9aa3b3;
+  --line: rgba(255,255,255,.12);
+  --accent-red: var(--rv-blue);
+  color: var(--rv-text);
+  background: var(--rv-bg);
 }
 
 .portfolio-shell::after {
@@ -2237,7 +2245,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .section-kicker,
 .portfolio-shell .proof-index { color: #8491ff; }
 .portfolio-shell .editorial-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), rgba(102,124,255,.22), transparent); }
-.portfolio-shell .proof-strip { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.portfolio-shell .proof-strip { padding-top: 2.5rem; padding-bottom: 2.5rem; background: var(--rv-bg); }
 .portfolio-shell .proof-item {
   display: flex; flex-direction: column; gap: .65rem; min-height: 8rem;
   padding: 1.4rem 1.8rem; border-right: 1px solid rgba(255,255,255,.09);
@@ -2330,6 +2338,12 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   --project-ink: #070a10; --project-paper: #f0f2f7; --project-muted: #9aa3b3;
   --project-acid: #8190ff; --project-coral: #a891ff;
   background-color: #070a10;
+}
+.portfolio-shell .project-visual { background: var(--rv-surface) !important; }
+.portfolio-shell .glass {
+  background: rgba(10,14,21,.82) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 1rem 2.5rem rgba(0,0,0,.22) !important;
 }
 .portfolio-shell .project-visual::before {
   background: radial-gradient(circle at var(--spot-x) var(--spot-y),rgba(102,124,255,.17),transparent 18rem),linear-gradient(135deg,rgba(255,255,255,.06),transparent 42%);
