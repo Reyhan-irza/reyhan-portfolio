@@ -55,7 +55,16 @@ export default function Navbar() {
     document.body.style.overflow = "hidden";
     window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: true }));
     window.addEventListener("keydown", keydown);
-    const focusFrame = window.requestAnimationFrame(() => focusables()[0]?.focus());
+    let focusFrame = 0;
+    const focusFirstAvailable = () => {
+      const first = focusables()[0];
+      if (!first) return;
+      first.focus();
+      if (document.activeElement !== first) {
+        focusFrame = window.requestAnimationFrame(focusFirstAvailable);
+      }
+    };
+    focusFrame = window.requestAnimationFrame(focusFirstAvailable);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
