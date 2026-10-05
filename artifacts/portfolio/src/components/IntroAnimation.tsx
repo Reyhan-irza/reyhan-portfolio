@@ -50,7 +50,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         Skip <X className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
       <div className="relative z-10 flex w-[min(88vw,28rem)] flex-col items-center px-6 text-center">
-        <img data-intro-mark src={`${import.meta.env.BASE_URL}rv-mark.png`} alt="RV geometric monogram" className="h-24 w-24 object-contain md:h-28 md:w-28" />
+        <img data-intro-mark src={`${import.meta.env.BASE_URL}rv-mark.webp`} alt="RV geometric monogram" className="h-24 w-24 object-contain md:h-28 md:w-28" />
         <div data-intro-rule className="my-6 h-px w-full origin-center bg-gradient-to-r from-transparent via-[#8491ff]/70 to-transparent" />
         <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
         <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
