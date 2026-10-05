@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import { Atom, BriefcaseBusiness, Code2, Leaf, Sparkles } from "lucide-react";
-import { gsap, ScrollTrigger } from "../lib/motion";
-import { useScrollAnim } from "../hooks/useScrollAnim";
-import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+import { gsap, ScrollTrigger } from "../portfolio-editorial/_shared/lib/motion";
+import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
+import { unlockAchievement, ACHIEVEMENTS } from "../portfolio-editorial/_shared/lib/achievement";
 
 const milestones = [
   ["2022", "The beginning", "Started learning HTML, CSS, and JavaScript from scratch. Built a first webpage — a simple profile page.", Leaf],

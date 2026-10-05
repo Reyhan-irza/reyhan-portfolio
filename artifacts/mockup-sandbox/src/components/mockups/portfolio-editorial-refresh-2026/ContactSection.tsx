@@ -1,6 +1,6 @@
 import { SiWhatsapp, SiInstagram, SiTiktok, SiGmail } from "react-icons/si";
 import { ArrowUpRight } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
 
 const contacts = [
   {

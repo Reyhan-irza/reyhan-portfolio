@@ -1,7 +1,7 @@
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
 import { Award, Download, ExternalLink, MapPin } from "lucide-react";
 
-const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
+const certificateUrl = "/__mockup/images/sertifikat-lks-it-software-solution-2025.pdf";
 
 export default function AwardSection() {
   const ref = useScrollAnim({ threshold: 0.2, distance: 16, scale: 0.994 });

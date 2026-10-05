@@ -1,9 +1,9 @@
 import { Heart, Settings } from "lucide-react";
 import { SiReact, SiTailwindcss, SiTypescript } from "react-icons/si";
 import { useLocation } from "wouter";
-import { useScrollAnim } from "../hooks/useScrollAnim";
-import VisitorCounter from "./VisitorCounter";
-import GuessMyAge from "./GuessMyAge";
+import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
+import VisitorCounter from "../portfolio-editorial/_shared/components/VisitorCounter";
+import GuessMyAge from "../portfolio-editorial/_shared/components/GuessMyAge";
 
 export default function Footer() {
   const footerRef = useScrollAnim<HTMLElement>({

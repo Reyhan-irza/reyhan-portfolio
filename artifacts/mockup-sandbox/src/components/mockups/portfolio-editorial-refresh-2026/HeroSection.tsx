@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../portfolio-editorial/_shared/lib/motion";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -106,7 +106,7 @@ export default function HeroSection() {
           <div className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
           <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
           <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
-            <img src={`${import.meta.env.BASE_URL}rv-mark.png`} alt="RV geometric monogram" className="h-full w-full object-contain" />
+            <img src="/__mockup/images/rv-mark.png" alt="RV geometric monogram" className="h-full w-full object-contain" />
           </div>
           <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>

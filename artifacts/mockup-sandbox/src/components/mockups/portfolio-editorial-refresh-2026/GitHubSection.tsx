@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Github, Star, GitFork, ExternalLink, Code2 } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
-import { SkeletonGitHubCard } from "./SkeletonCard";
+import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
+import { SkeletonGitHubCard } from "../portfolio-editorial/_shared/components/SkeletonCard";
 
 const GITHUB_USERNAME = "Reyhan-irza";
 
