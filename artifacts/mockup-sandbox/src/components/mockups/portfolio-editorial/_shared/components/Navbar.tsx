@@ -100,7 +100,7 @@ export default function Navbar() {
         >
           <div className="relative">
             <img
-              src={`${import.meta.env.BASE_URL}logo.png`}
+              src="/__mockup/images/logo.png"
               alt=""
               className="h-9 w-9 rounded-full border border-[rgba(27,28,24,.2)] object-cover"
             />

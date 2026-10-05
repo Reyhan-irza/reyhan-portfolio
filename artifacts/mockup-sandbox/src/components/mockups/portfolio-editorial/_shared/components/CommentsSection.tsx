@@ -302,7 +302,7 @@ export default function CommentsSection() {
                     {cReplies.map((r) => (
                       <div key={r.id} className="flex gap-2.5 bg-[#a43f2d]/5 border border-[#a43f2d]/15 rounded-xl p-3">
                         <div className="w-7 h-7 rounded-full overflow-hidden border border-[rgba(33,31,27,.16)] flex-shrink-0">
-                          <img src={`${import.meta.env.BASE_URL}profile.jpg`} alt="Developer" className="w-full h-full object-cover" />
+                          <img src="/__mockup/images/profile.jpg" alt="Developer" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">

@@ -13,7 +13,7 @@ export default function MusicController() {
   const [ready, setReady]       = useState(false);
 
   useEffect(() => {
-    const audio = new Audio(`${import.meta.env.BASE_URL}music.mp3`);
+    const audio = new Audio("/__mockup/images/music.mp3");
     audio.loop    = true;
     audio.volume  = 0.55;
     audio.preload = "none";
