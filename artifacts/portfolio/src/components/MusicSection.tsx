@@ -83,6 +83,33 @@ export default function MusicSection() {
     return () => window.removeEventListener("bgmusic:play", handler);
   }, []);
 
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    let frame = 0;
+
+    const syncActiveCard = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const containerBounds = container.getBoundingClientRect();
+        const containerCenter = containerBounds.left + containerBounds.width / 2;
+        const cards = Array.from(container.querySelectorAll<HTMLElement>(".music-card"));
+        const nearest = cards.reduce<{ index: number; distance: number } | null>((best, card, index) => {
+          const bounds = card.getBoundingClientRect();
+          const distance = Math.abs(bounds.left + bounds.width / 2 - containerCenter);
+          return !best || distance < best.distance ? { index, distance } : best;
+        }, null);
+        if (nearest) setActiveIdx(nearest.index);
+      });
+    };
+
+    container.addEventListener("scroll", syncActiveCard, { passive: true });
+    return () => {
+      container.removeEventListener("scroll", syncActiveCard);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   const scrollToCard = (idx: number) => {
     const container = scrollRef.current;
     if (!container) return;
@@ -135,8 +162,11 @@ export default function MusicSection() {
 
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory"
+            className="flex gap-4 overflow-x-auto overscroll-x-contain pb-4 snap-x snap-mandatory"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            role="region"
+            aria-label="Favorite songs"
+            tabIndex={0}
           >
             {songs.map((song, idx) => (
               <MusicCard
@@ -164,13 +194,17 @@ export default function MusicSection() {
             <button
               key={i}
               onClick={() => handleSelect(i)}
-              className={`transition-all duration-300 rounded-full ${
-                activeIdx === i
-                  ? "w-6 h-2 bg-[#a43f2d]"
-                  : "w-2 h-2 bg-[#211f1b]/20 hover:bg-[#211f1b]/40"
-              }`}
+              className="grid h-11 w-11 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff]"
               aria-label={`Lagu ${i + 1}`}
-            />
+              aria-pressed={activeIdx === i}
+            >
+              <span
+                aria-hidden="true"
+                className={`h-2 rounded-full bg-[#a43f2d] transition-[width,opacity] duration-300 motion-reduce:transition-none ${
+                  activeIdx === i ? "w-6 opacity-100" : "w-2 opacity-35"
+                }`}
+              />
+            </button>
           ))}
         </div>
 
@@ -209,6 +243,8 @@ function MusicCard({
       }`}
       onClick={onClick}
       data-motion-item
+      aria-label={`${isActive ? "Selected: " : ""}${song.title} by ${song.artist}. Select to play.`}
+      aria-pressed={isActive}
     >
       {/* Cover art */}
        <div className={`w-full aspect-square rounded-xl mb-4 ${song.color} overflow-hidden relative`}>
@@ -256,13 +292,14 @@ function MusicCard({
 
 function EqualizerBar({ delay }: { delay: string }) {
   return (
-    <span
+        <span
       className="w-1 rounded-full bg-[#a43f2d]"
       style={{
         height: "12px",
         animation: "equalizerBounce 0.6s ease-in-out infinite alternate",
         animationDelay: delay,
       }}
+          aria-hidden="true"
     />
   );
 }
