@@ -19,6 +19,7 @@ export default function HeroSection() {
       (context) => {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
+        const cleanups: Array<() => void> = [];
         const scope = gsap.context(() => {
           const opening = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.08 });
           opening
@@ -48,8 +49,31 @@ export default function HeroSection() {
             ease: "none",
             scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1 },
           });
+          if (!compact && window.matchMedia("(pointer: fine)").matches) {
+            section.querySelectorAll<HTMLElement>("[data-hero-magnetic]").forEach((button) => {
+              const moveX = gsap.quickTo(button, "x", { duration: 0.24, ease: "power3.out" });
+              const moveY = gsap.quickTo(button, "y", { duration: 0.24, ease: "power3.out" });
+              const onMove = (event: PointerEvent) => {
+                const bounds = button.getBoundingClientRect();
+                moveX((event.clientX - bounds.left - bounds.width / 2) * 0.07);
+                moveY((event.clientY - bounds.top - bounds.height / 2) * 0.07);
+              };
+              const reset = () => { moveX(0); moveY(0); };
+              button.addEventListener("pointermove", onMove);
+              button.addEventListener("pointerleave", reset);
+              button.addEventListener("blur", reset);
+              cleanups.push(() => {
+                button.removeEventListener("pointermove", onMove);
+                button.removeEventListener("pointerleave", reset);
+                button.removeEventListener("blur", reset);
+              });
+            });
+          }
         }, section);
-        return () => scope.revert();
+        return () => {
+          cleanups.forEach((cleanup) => cleanup());
+          scope.revert();
+        };
       },
     );
     return () => media.revert();
@@ -87,10 +111,10 @@ export default function HeroSection() {
             </p>
           </div>
           <div data-hero-item className="mt-9 flex flex-wrap items-center gap-3">
-            <button type="button" onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
+            <button type="button" data-hero-magnetic onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
               Explore selected work <ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
-            <button type="button" onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
+            <button type="button" data-hero-magnetic onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
               Say hello <MoveUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>

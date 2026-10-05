@@ -18,6 +18,8 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const menuTimelineRef = useRef<{ play: () => unknown; reverse: () => unknown } | null>(null);
+  const previouslyOpen = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 32);
@@ -29,7 +31,10 @@ export default function Navbar() {
   useEffect(() => {
     if (!isOpen) return;
     const panel = panelRef.current;
-    const focusables = () => panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+    const focusables = () => {
+      const inPanel = Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
+      return [...inPanel, ...(menuTriggerRef.current ? [menuTriggerRef.current] : [])];
+    };
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsOpen(false);
@@ -38,7 +43,7 @@ export default function Navbar() {
       if (event.key !== "Tab") return;
       const items = focusables();
       if (!items?.length) return;
-      if (event.shiftKey && document.activeElement === items[0]) {
+       if (event.shiftKey && document.activeElement === items[0]) {
         event.preventDefault();
         items[items.length - 1].focus();
       } else if (!event.shiftKey && document.activeElement === items[items.length - 1]) {
@@ -48,12 +53,20 @@ export default function Navbar() {
     };
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: true }));
     window.addEventListener("keydown", keydown);
-    window.setTimeout(() => focusables()?.[0]?.focus(), 80);
+    const focusFrame = window.requestAnimationFrame(() => focusables()[0]?.focus());
     return () => {
       document.body.style.overflow = previousOverflow;
+      window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
       window.removeEventListener("keydown", keydown);
+      window.cancelAnimationFrame(focusFrame);
     };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (previouslyOpen.current && !isOpen) menuTriggerRef.current?.focus();
+    previouslyOpen.current = isOpen;
   }, [isOpen]);
 
   useLayoutEffect(() => {
@@ -93,24 +106,42 @@ export default function Navbar() {
   useLayoutEffect(() => {
     const panel = panelRef.current;
     if (!panel) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const targets = panel.querySelectorAll<HTMLElement>("[data-menu-item]");
-    gsap.to(panel, {
-      xPercent: isOpen ? 0 : 105,
-      autoAlpha: isOpen ? 1 : 0,
-      duration: reduced ? 0.01 : isOpen ? 0.56 : 0.42,
-      ease: "power3.inOut",
-      overwrite: true,
-    });
-    gsap.to(targets, {
-      x: isOpen ? 0 : 14,
-      autoAlpha: isOpen ? 1 : 0,
-      duration: reduced ? 0.01 : 0.38,
-      stagger: isOpen ? 0.045 : 0.025,
-      delay: isOpen ? 0.12 : 0,
-      ease: "power2.out",
-      overwrite: true,
-    });
+    const media = gsap.matchMedia();
+    media.add(
+      { reduced: "(prefers-reduced-motion: reduce)" },
+      (context) => {
+        const reduced = Boolean(context.conditions?.reduced);
+        const scope = gsap.context(() => {
+          gsap.set(panel, { xPercent: 105, autoAlpha: 0 });
+          gsap.set(targets, { x: 14, autoAlpha: 0 });
+          menuTimelineRef.current = gsap.timeline({ paused: true })
+            .to(panel, {
+              xPercent: 0,
+              autoAlpha: 1,
+              duration: reduced ? 0.01 : 0.54,
+              ease: "power3.inOut",
+            })
+            .to(targets, {
+              x: 0,
+              autoAlpha: 1,
+              duration: reduced ? 0.01 : 0.34,
+              stagger: reduced ? 0 : 0.045,
+              ease: "power2.out",
+            }, reduced ? 0 : 0.15);
+        }, panel);
+        return () => {
+          menuTimelineRef.current = null;
+          scope.revert();
+        };
+      },
+    );
+    return () => media.revert();
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) menuTimelineRef.current?.play();
+    else menuTimelineRef.current?.reverse();
   }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
@@ -120,7 +151,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         aria-label="Primary navigation"
-        className={`editorial-nav fixed inset-x-0 top-0 z-40 transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
+            className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#home" data-nav-enter aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
@@ -157,6 +188,7 @@ export default function Navbar() {
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
+            aria-haspopup="dialog"
             data-testid="button-mobile-menu"
           >
             <span className="mobile-menu-glyph" aria-hidden="true">
@@ -178,13 +210,15 @@ export default function Navbar() {
       <aside
         ref={panelRef}
         id="mobile-navigation"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mobile-navigation-title"
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-y-0 right-0 z-[49] flex w-[min(88vw,410px)] flex-col border-l border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
-        style={{ transform: "translateX(105%)", visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >
-        <p className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>
+        <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>
         <div className="h-px bg-white/10" />
         <nav className="mt-5 flex flex-col">
           {navLinks.map((link, index) => (

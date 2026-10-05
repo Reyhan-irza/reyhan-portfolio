@@ -13,6 +13,13 @@ export function useLenis() {
     let lenis: Lenis | null = null;
     let ticker: ((time: number) => void) | null = null;
     let refreshFrame = 0;
+    let scrollLocked = false;
+
+    const handleScrollLock = (event: Event) => {
+      scrollLocked = (event as CustomEvent<boolean>).detail;
+      if (scrollLocked) lenis?.stop();
+      else lenis?.start();
+    };
 
     const scheduleRefresh = () => {
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
@@ -44,6 +51,7 @@ export function useLenis() {
         syncTouch: false,
       });
       lenis = instance;
+      if (scrollLocked) instance.stop();
       ticker = (time) => instance.raf(time * 1000);
 
       instance.on("scroll", updateScrollTriggers);
@@ -67,11 +75,13 @@ export function useLenis() {
 
     desktop.addEventListener("change", syncMotionMode);
     reducedMotion.addEventListener("change", syncMotionMode);
+    window.addEventListener("portfolio:scroll-lock", handleScrollLock);
     syncMotionMode();
 
     return () => {
       desktop.removeEventListener("change", syncMotionMode);
       reducedMotion.removeEventListener("change", syncMotionMode);
+      window.removeEventListener("portfolio:scroll-lock", handleScrollLock);
       resizeObserver?.disconnect();
       stop(false);
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);

@@ -110,6 +110,22 @@ export default function ProjectsSection() {
                 },
                 compact ? 0.06 : 0.1,
               );
+
+            const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
+            if (geometry) {
+              gsap.to(geometry, {
+                yPercent: compact ? -3 : -9,
+                xPercent: compact ? 0 : 2,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: compact ? 0.45 : 0.8,
+                  invalidateOnRefresh: true,
+                },
+              });
+            }
           });
 
           gsap.fromTo(

@@ -1,15 +1,14 @@
 import { useLayoutEffect, useRef } from "react";
-import { Atom, BriefcaseBusiness, Code2, Leaf, Sparkles } from "lucide-react";
+import { Award, Code2, FolderKanban, School } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const milestones = [
-  ["2022", "The beginning", "Started learning HTML, CSS, and JavaScript from scratch. Built a first webpage — a simple profile page.", Leaf],
-  ["2023", "Falling for React", "Fell in love with React and TypeScript. Began learning component architecture, state management, and the modern frontend ecosystem.", Atom],
-  ["2024", "Full-stack journey", "Explored backend development with Node.js, Express, and PostgreSQL. Built a first full-stack REST API and end-to-end applications.", Code2],
-  ["2025", "Real projects", "Worked on projects for first clients. Learned about communication, deadlines, and the importance of great UX.", BriefcaseBusiness],
-  ["2026", "Premium portfolio", "Built this premium personal brand platform: modern, interactive, and crafted with precision.", Sparkles],
+  ["STUDY", "SMK Negeri 2 Lubuk Basung", "TJKT — the education context behind this portfolio and its technical projects.", School],
+  ["PROJECTS", "Learning through builds", "Explore the TJKT information site, VIREON Library and Reyhan WhatsApp Portfolio. Each project has its own scope and links.", FolderKanban],
+  ["2025", "Juara I · Kabupaten Agam", "LKS IT Software Solution For Business. Recognition is shown separately from its certificate below.", Award],
+  ["ONGOING", "Keep the record honest", "More learning and work can be added here as it becomes real and verifiable.", Code2],
 ] as const;
 
 export default function JourneySection() {
@@ -73,14 +72,14 @@ export default function JourneySection() {
     <section id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-          <div data-motion-item><p className="section-kicker">The record / 2022—26</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Learning by making.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>A personal chronology of tools learned, projects attempted and lessons carried forward.</p>
+        <div data-motion-item><p className="section-kicker">Education / projects / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Only confirmed milestones are dated. The next entries belong to what happens next.</p>
         </div>
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           <span ref={progressRef} className="journey-timeline-progress" aria-hidden="true" />
           {milestones.map(([year, title, desc, Icon]) => (
-            <article key={year} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10" data-motion-item>
-             <p className="journey-year relative font-mono text-xs uppercase tracking-[.16em] text-[#a43f2d]">
+            <article key={title} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10" data-motion-item>
+             <p className="journey-year relative font-mono text-[10px] uppercase tracking-[.13em] text-[#a43f2d]">
                <span className="journey-node" data-journey-node aria-hidden="true" />
                {year}
              </p>

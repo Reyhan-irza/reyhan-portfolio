@@ -1,95 +1,60 @@
-import { useState, useEffect } from "react";
-import { Code2, User, Briefcase } from "lucide-react";
-import AuroraBackground from "./AuroraBackground";
+import { useLayoutEffect, useRef } from "react";
+import { X } from "lucide-react";
+import { gsap } from "../lib/motion";
 
 interface IntroAnimationProps {
   onFinish: () => void;
 }
 
 export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
-  const [phase, setPhase] = useState<"entering" | "showing" | "leaving">("entering");
+  const introRef = useRef<HTMLDivElement>(null);
+  const skipRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const t1 = setTimeout(() => setPhase("showing"), 100);
-    const t2 = setTimeout(() => setPhase("leaving"), 2600);
-    const t3 = setTimeout(() => onFinish(), 3200);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
+  useLayoutEffect(() => {
+    const element = introRef.current;
+    if (!element) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      onFinish();
+      return;
+    }
+    skipRef.current?.focus();
+    const context = gsap.context(() => {
+      const timeline = gsap.timeline({ delay: 0.08, onComplete: onFinish });
+      timeline
+        .fromTo("[data-intro-mark]", { scale: 0.88, opacity: 0, rotate: -6 }, { scale: 1, opacity: 1, rotate: 0, duration: 0.42, ease: "power3.out" })
+        .fromTo("[data-intro-rule]", { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: "power2.inOut" }, 0.16)
+        .fromTo("[data-intro-copy]", { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, stagger: 0.06, ease: "power2.out" }, 0.22)
+        .to(element, { opacity: 0, duration: 0.24, ease: "power1.out" }, 0.9);
+    }, element);
+    return () => context.revert();
   }, [onFinish]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-600 ${
-        phase === "leaving" ? "intro-fade-out" : ""
-      }`}
+      ref={introRef}
+      className="rv-intro fixed inset-0 z-[100] flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="intro-name"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") onFinish();
+        if (event.key === "Tab") {
+          event.preventDefault();
+          skipRef.current?.focus();
+        }
+      }}
     >
-      <AuroraBackground />
-
-      <div className="relative z-10 flex flex-col items-center gap-8 px-6">
-        {/* Welcome text */}
-        <div
-          className={`transition-all duration-800 ${
-            phase !== "entering"
-              ? "animate-slide-in-left opacity-100"
-              : "opacity-0 -translate-x-20"
-          }`}
-        >
-          <h1 className="text-4xl md:text-6xl font-bold text-white text-center leading-tight">
-            <span className="gradient-text">Welcome to</span>
-            <br />
-            <span className="text-white/90">My Portfolio</span>
-          </h1>
-        </div>
-
-        {/* Sub text */}
-        <div
-          className={`transition-all delay-300 duration-700 ${
-            phase !== "entering" ? "animate-fade-in opacity-100" : "opacity-0"
-          }`}
-        >
-          <p className="text-white/50 text-base md:text-lg font-light tracking-widest uppercase">
-            Reyhan Irza Alvano
-          </p>
-        </div>
-
-        {/* Icons */}
-        <div className="flex gap-8 mt-4">
-          <div
-            className={`${
-              phase !== "entering" ? "animate-drop-bounce" : "opacity-0"
-            } flex flex-col items-center gap-2`}
-          >
-            <div className="w-14 h-14 rounded-2xl glass flex items-center justify-center border border-violet-500/30">
-              <Code2 className="w-7 h-7 text-violet-400" />
-            </div>
-            <span className="text-white/40 text-xs font-light">Code</span>
-          </div>
-
-          <div
-            className={`${
-              phase !== "entering" ? "animate-drop-bounce-delay-1" : "opacity-0"
-            } flex flex-col items-center gap-2`}
-          >
-            <div className="w-14 h-14 rounded-2xl glass flex items-center justify-center border border-pink-500/30">
-              <User className="w-7 h-7 text-pink-400" />
-            </div>
-            <span className="text-white/40 text-xs font-light">Profile</span>
-          </div>
-
-          <div
-            className={`${
-              phase !== "entering" ? "animate-drop-bounce-delay-2" : "opacity-0"
-            } flex flex-col items-center gap-2`}
-          >
-            <div className="w-14 h-14 rounded-2xl glass flex items-center justify-center border border-blue-500/30">
-              <Briefcase className="w-7 h-7 text-blue-400" />
-            </div>
-            <span className="text-white/40 text-xs font-light">Work</span>
-          </div>
-        </div>
+      <div className="rv-intro-backdrop absolute inset-0" aria-hidden="true" />
+      <button ref={skipRef} type="button" className="rv-intro-skip absolute right-5 top-5 inline-flex min-h-11 items-center gap-2 px-3 text-xs text-white/65 hover:text-white" onClick={onFinish} aria-label="Skip introduction">
+        Skip <X className="h-3.5 w-3.5" aria-hidden="true" />
+      </button>
+      <div className="relative z-10 flex w-[min(88vw,28rem)] flex-col items-center px-6 text-center">
+        <img data-intro-mark src={`${import.meta.env.BASE_URL}rv-mark.png`} alt="RV geometric monogram" className="h-24 w-24 object-contain md:h-28 md:w-28" />
+        <div data-intro-rule className="my-6 h-px w-full origin-center bg-gradient-to-r from-transparent via-[#8491ff]/70 to-transparent" />
+        <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
+        <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
+        <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/48">Student Developer · SMK</p>
       </div>
     </div>
   );

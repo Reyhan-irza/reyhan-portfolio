@@ -11,7 +11,7 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Available commands:\n\n  whoami    Developer profile\n  skills    Tech stack & ratings\n  projects  Recent projects\n  roadmap   Future goals\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
+    `Available commands:\n\n  whoami    Developer profile\n  skills    Tools named in projects\n  projects  Selected project links\n  roadmap   Open intentions\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
     `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  React / TypeScript builder      │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA builder who learns by shipping real\ninterfaces, connected flows and notes.\n\nProjects, journey and evidence live\nthroughout this portfolio.`,
@@ -23,7 +23,7 @@ const COMMANDS: Record<string, () => string> = {
     `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
 
   roadmap: () =>
-    `Future Roadmap:\n\n  [✓] 2026 — Portfolio Website\n  [○] 2027 — Freelance Projects\n  [○] 2028 — Launch Startup\n  [○] 2030 — Real Estate Investment\n  [○] 2035 — Financial Freedom`,
+    `Open intentions:\n\n  Keep strengthening fundamentals\n  Make useful things\n  Document what is real\n\nThese are directions, not dated promises.`,
 
   future: () => COMMANDS.roadmap(),
 

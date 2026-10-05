@@ -7,73 +7,73 @@ export default function AwardSection() {
   const ref = useScrollAnim({ threshold: 0.2, distance: 16, scale: 0.994 });
 
   return (
-    <section
-      id="achievement"
-      aria-labelledby="award-title"
-      className="relative px-6 py-16 md:py-24"
-    >
+    <section id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
       <div
         ref={ref}
-        className="fade-up award-record mx-auto grid max-w-6xl gap-9 p-7 md:grid-cols-[minmax(10rem,.58fr)_1.42fr] md:gap-16 md:p-11"
+        className="fade-up award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
       >
-        <div className="flex flex-col justify-between gap-10" data-motion-item>
-          <p className="section-kicker">Recognition / 2025</p>
-           <div className="flex items-center gap-3 text-[#a43f2d]">
-            <Award className="h-7 w-7" aria-hidden="true" />
-            <span className="font-mono text-[11px] uppercase tracking-[.16em]">Juara I</span>
+        <div className="flex flex-col justify-between gap-8" data-motion-item>
+          <div>
+            <p className="section-kicker">Achievement / 2025</p>
+            <p className="mt-2 text-xs text-white/45">The result</p>
           </div>
+          <div className="flex items-center gap-4 border-y border-white/10 py-6">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#667cff]/35 bg-[#667cff]/10 text-[#aab4ff]">
+              <Award className="h-6 w-6" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[.15em] text-[#aab4ff]">Juara I</p>
+              <p className="mt-1 text-xs text-white/55">Kabupaten Agam · 2025</p>
+            </div>
+          </div>
+          <div>
+            <h2 id="award-title" className="text-[clamp(1.65rem,3.2vw,2.8rem)] font-semibold leading-[1.06] tracking-[-.055em] text-white">
+              LKS IT Software Solution For Business
+            </h2>
+            <p className="mt-4 flex items-center gap-2 text-sm text-[#c9d0dc]">
+              <MapPin className="h-4 w-4 shrink-0 text-[#8491ff]" aria-hidden="true" />
+              Kabupaten Agam
+            </p>
+          </div>
+          <p className="text-xs leading-relaxed text-white/45">Recognition is the achievement. The certificate beside it is the supporting document.</p>
         </div>
 
-        <div data-motion-item>
-          <h2
-            id="award-title"
-            className="max-w-3xl text-3xl font-semibold leading-[1.02] tracking-[-.055em] md:text-5xl"
-          >
-            LKS IT Software Solution For Business
-          </h2>
-          <p className="mt-5 flex items-center gap-2 text-base text-[#51534c] md:text-lg">
-             <MapPin className="h-4 w-4 shrink-0 text-[#a43f2d]" aria-hidden="true" />
-            Tingkat Kabupaten Agam
-          </p>
-
-          <dl className="mt-8 grid gap-x-8 gap-y-5 border-t border-[rgba(27,28,24,.18)] pt-6 sm:grid-cols-2">
+        <div data-motion-item className="min-w-0">
+          <div className="mb-4 flex items-end justify-between gap-4">
             <div>
-              <dt className="award-detail-label">Recipient</dt>
-              <dd className="mt-1 text-sm font-medium">Reyhan Irza Alvano</dd>
+              <p className="section-kicker">Certificate / proof</p>
+              <p className="mt-2 text-sm font-medium text-white">LKS IT Software Solution For Business · 2025</p>
             </div>
-            <div>
-              <dt className="award-detail-label">School</dt>
-              <dd className="mt-1 text-sm font-medium">SMK Negeri 2 Lubuk Basung</dd>
-            </div>
-            <div>
-              <dt className="award-detail-label">Issued</dt>
-              <dd className="mt-1 text-sm font-medium">Agam, July 2025</dd>
-            </div>
-            <div>
-              <dt className="award-detail-label">Issuing office</dt>
-              <dd className="mt-1 text-sm font-medium">Cabang Dinas Pendidikan Wilayah I</dd>
-            </div>
-          </dl>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">PDF document</span>
+          </div>
+          <div className="certificate-preview overflow-hidden border border-white/10 bg-[#0a0e15]">
+            <iframe
+              title="Preview of Reyhan Irza Alvano’s 2025 Kabupaten Agam LKS certificate"
+              src={`${certificateUrl}#view=FitH&toolbar=0&navpanes=0`}
+              loading="lazy"
+              className="h-[20rem] w-full bg-[#0a0e15] md:h-[24rem]"
+            />
+          </div>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <a
               href={certificateUrl}
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-view-certificate"
-              aria-label="Lihat Sertifikat (PDF, terbuka di tab baru)"
-              className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-[#211f1b] px-5 py-3 text-sm font-medium text-[#f3efe6] transition-colors hover:bg-[#a43f2d] sm:w-auto"
+              aria-label="View the 2025 certificate PDF in a new tab"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              Lihat Sertifikat
+              View certificate
             </a>
             <a
               href={certificateUrl}
               download="sertifikat-lks-it-software-solution-2025.pdf"
               data-testid="link-download-certificate"
-              className="inline-flex min-h-12 w-full items-center justify-center gap-2 border border-[rgba(33,31,27,.24)] px-5 py-3 text-sm font-medium text-[#211f1b] transition-colors hover:border-[#a43f2d] hover:text-[#a43f2d] sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
-              Unduh PDF
+              Download PDF
             </a>
           </div>
         </div>

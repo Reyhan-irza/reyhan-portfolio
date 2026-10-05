@@ -2,10 +2,10 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const notes = [
-  { icon: Layout, label: "Interfaces", text: "React and TypeScript interfaces with a strong sense of hierarchy, responsive behavior and readable states." },
-  { icon: Database, label: "Connected products", text: "Supabase-backed flows for collections, members, borrowing, reports, news and community comments." },
-  { icon: Workflow, label: "Motion with a job", text: "GSAP, ScrollTrigger and Lenis used to explain a page, not to decorate every surface." },
-  { icon: Code2, label: "Tools in the record", text: "React, TypeScript, Tailwind CSS, GSAP, ScrollTrigger, Lenis and Supabase appear across the shipped work below." },
+  { icon: Layout, label: "A student record", text: "I study TJKT at SMK Negeri 2 Lubuk Basung. This portfolio keeps the work and the learning visible, without presenting either as a finished story." },
+  { icon: Database, label: "Products with a purpose", text: "From a department introduction to a library workspace, the projects below show distinct problems, interfaces and connected flows." },
+  { icon: Workflow, label: "Build, inspect, refine", text: "I use the project itself as the evidence: its interface, linked build, repository and the details that can be checked." },
+  { icon: Code2, label: "A personal signature", text: "Vierlykirk is the creative signature. The RV geometry is the mark used to connect this portfolio and the work presented here." },
 ];
 
 export default function AboutSection() {
@@ -21,9 +21,9 @@ export default function AboutSection() {
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
-              I am a software-solution builder focused on the part between an idea and something a person can actually use. This portfolio keeps the claims close to the artifacts: what I made, which tools are named in the project, and where it can be opened.
+              I’m Reyhan Irza Alvano, a student at SMK Negeri 2 Lubuk Basung in TJKT. This is a personal record of projects I can point to, what I’m learning, and recognition supported by its certificate.
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">The list below describes my current practice, not proficiency ratings.</p>
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">The project pages carry the specifics. Vierlykirk is my signature; the RV mark is the visual thread.</p>
           </div>
         </div>
         <div ref={notesRef} className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">

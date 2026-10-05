@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-import MusicController from "@/components/MusicController";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -10,23 +9,23 @@ import RoadmapSection from "@/components/RoadmapSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import GitHubSection from "@/components/GitHubSection";
 import ContactSection from "@/components/ContactSection";
-import NewsSection from "@/components/NewsSection";
-import MusicSection from "@/components/MusicSection";
-import CommentsSection from "@/components/CommentsSection";
 import Footer from "@/components/Footer";
 import AchievementToast from "@/components/AchievementToast";
-import RoastButton from "@/components/RoastButton";
-import TerminalMode from "@/components/TerminalMode";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { useLenis } from "../hooks/useLenis";
 import { useScrollAnim } from "../hooks/useScrollAnim";
+import IntroAnimation from "@/components/IntroAnimation";
+
+const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
 
 const Divider = () => <div className="editorial-divider mx-auto max-w-6xl" aria-hidden="true" />;
 
 export default function Home() {
   useLenis();
+  const [introFinished, setIntroFinished] = useState(false);
+  const [archiveVisited, setArchiveVisited] = useState(false);
 
   const proofRef = useScrollAnim<HTMLDivElement>({ threshold: 0.12, stagger: 0.09, distance: 16 });
   const footerRef   = useRef<HTMLDivElement>(null);
@@ -70,7 +69,7 @@ export default function Home() {
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
-              <strong>Three shipped builds</strong>
+              <strong>Three live project records</strong>
               <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item" data-motion-item>
@@ -96,28 +95,28 @@ export default function Home() {
         <GitHubSection />
         <Divider />
         <ContactSection />
-        <details className="secondary-archive mx-auto max-w-6xl">
+        <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
+          if (event.currentTarget.open) setArchiveVisited(true);
+        }}>
           <summary data-testid="button-open-secondary-archive">
             <span>Secondary archive</span>
             <span>Updates · music · comments</span>
           </summary>
-          <div className="secondary-archive-content">
-            <NewsSection />
-            <MusicSection />
-            <CommentsSection />
-            <div className="secondary-archive-tools" aria-label="Portfolio extras">
-              <span className="secondary-archive-tools-label">Small extras</span>
-              <RoastButton />
-              <TerminalMode />
-              <MusicController />
-            </div>
-          </div>
+          {archiveVisited && (
+            <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading updates and community features">
+              <div className="h-2 w-28 animate-pulse bg-white/10" />
+              <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
+            </div>}>
+              <SecondaryArchive />
+            </Suspense>
+          )}
         </details>
       </main>
       <div className="relative z-10" ref={footerRef}>
         <Footer />
         </div>
       <AchievementToast />
+      {!introFinished && <IntroAnimation onFinish={() => setIntroFinished(true)} />}
     </div>
   );
 }
