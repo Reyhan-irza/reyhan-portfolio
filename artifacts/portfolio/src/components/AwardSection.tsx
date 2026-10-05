@@ -1,15 +1,54 @@
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import { useLayoutEffect, useRef } from "react";
 import { Award, Download, ExternalLink, MapPin } from "lucide-react";
+import { gsap } from "../lib/motion";
 
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
+const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-preview.webp`;
 
 export default function AwardSection() {
-  const ref = useScrollAnim({ threshold: 0.2, distance: 16, scale: 0.994 });
+  const previewRef = useRef<HTMLAnchorElement>(null);
+
+  useLayoutEffect(() => {
+    const preview = previewRef.current;
+    if (!preview) return;
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        compact: "(max-width: 767px)",
+        wide: "(min-width: 768px)",
+      },
+      (context) => {
+        if (context.conditions?.reduced) return;
+        const compact = Boolean(context.conditions?.compact);
+        const scope = gsap.context(() => {
+          gsap.fromTo(preview, {
+            clipPath: "inset(9% 7% 9% 7%)",
+            scale: 0.965,
+            yPercent: 7,
+          }, {
+            clipPath: "inset(0% 0% 0% 0%)",
+            scale: 1,
+            yPercent: -3,
+            ease: "none",
+            scrollTrigger: {
+              trigger: preview,
+              start: "top 94%",
+              end: "bottom 28%",
+              scrub: compact ? 0.3 : 0.62,
+              invalidateOnRefresh: true,
+            },
+          });
+        }, preview);
+        return () => scope.revert();
+      },
+    );
+    return () => media.revert();
+  }, []);
 
   return (
     <section id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
       <div
-        ref={ref}
         className="fade-up award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
       >
         <div className="flex flex-col justify-between gap-8" data-motion-item>
@@ -46,14 +85,24 @@ export default function AwardSection() {
             </div>
             <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">PDF document</span>
           </div>
-          <div className="certificate-preview overflow-hidden border border-white/10 bg-[#0a0e15]">
-            <iframe
-              title="Preview of Reyhan Irza Alvano’s 2025 Kabupaten Agam LKS certificate"
-              src={`${certificateUrl}#view=FitH&toolbar=0&navpanes=0`}
+          <a
+            ref={previewRef}
+            href={certificateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="certificate-preview group relative block aspect-[7/5] overflow-hidden border border-white/15 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8b9aff]"
+            data-testid="link-certificate-preview"
+            aria-label="Open the full 2025 LKS certificate PDF in a new tab"
+          >
+            <img
+              src={certificatePreviewUrl}
+              alt="Certificate showing Reyhan Irza Alvano as Juara I in IT Software Solution For Business at Kabupaten Agam in 2025."
               loading="lazy"
-              className="h-[20rem] w-full bg-[#0a0e15] md:h-[24rem]"
+              decoding="async"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.015] motion-reduce:transition-none"
             />
-          </div>
+          </a>
+          <p className="mt-2 text-[11px] text-white/45">Tap the certificate to open the original PDF.</p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <a
               href={certificateUrl}

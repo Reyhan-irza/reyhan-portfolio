@@ -230,7 +230,7 @@ export default function Navbar() {
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-y-0 right-0 z-[49] flex w-[min(88vw,410px)] flex-col border-l border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
-        style={{ transform: "translateX(105%)", visibility: "hidden" } as CSSProperties}
+        style={{ visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >
         <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>
