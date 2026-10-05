@@ -1,45 +1,48 @@
-import { Heart, Settings } from "lucide-react";
-import { Code2, Wind, Braces } from "lucide-react";
+import { Braces, Heart, Settings, Wind } from "lucide-react";
+import { useScrollAnim } from "../hooks/useScrollAnim";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
 
 export default function Footer() {
+  const footerRef = useScrollAnim<HTMLElement>({
+    threshold: 0.12,
+    stagger: 0.06,
+    distance: 12,
+    scale: 0.995,
+  });
   const year = new Date().getFullYear();
 
   const links = [
     { label: "Home",     href: "#home"     },
     { label: "About",    href: "#about"    },
+    { label: "Work",     href: "#projects" },
     { label: "Journey",  href: "#journey"  },
-    { label: "News",     href: "#news"     },
-    { label: "Projects", href: "#projects" },
+    { label: "Award",    href: "#achievement" },
     { label: "Contact",  href: "#contact"  },
   ];
 
   const scroll = (href: string) => {
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    }
   };
 
   return (
-    <footer className="relative pt-12 pb-8 px-6 border-t border-white/5 overflow-hidden">
-      {/* Subtle bottom glow */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-20 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.12), transparent 70%)", filter: "blur(40px)" }}
-      />
-
+    <footer ref={footerRef} className="relative pt-12 pb-8 px-6 border-t border-[rgba(33,31,27,.16)] overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+        <div data-motion-item className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
           <div>
             <button
               onClick={() => scroll("#home")}
-              className="text-2xl font-bold gradient-text mb-2 block hover:opacity-80 transition-opacity tracking-tight"
+              className="text-2xl font-bold text-[#a43f2d] mb-2 block hover:opacity-80 transition-opacity tracking-tight"
             >
               Reyhan.
             </button>
-            <p className="text-[#9CA3AF] text-sm max-w-xs leading-relaxed">
-              Full-Stack Developer building modern, premium digital products.
+            <p className="text-[#6d6a62] text-sm max-w-xs leading-relaxed">
+               React / TypeScript builder documenting shipped education, library and portfolio work.
             </p>
           </div>
 
@@ -48,7 +51,7 @@ export default function Footer() {
               <button
                 key={l.label}
                 onClick={() => scroll(l.href)}
-                className="text-white/35 text-sm hover:text-white/75 transition-colors duration-200"
+                className="text-[#6d6a62] text-sm hover:text-[#a43f2d] transition-colors duration-200"
               >
                 {l.label}
               </button>
@@ -57,38 +60,38 @@ export default function Footer() {
         </div>
 
         {/* Visitor stats */}
-        <div className="mb-5">
+        <div data-motion-item className="mb-5">
           <VisitorCounter />
         </div>
 
         {/* Divider */}
-        <div className="rgb-divider mb-5" />
+        <div data-motion-item className="rgb-divider mb-5" />
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/22 text-xs text-center sm:text-left">
+        <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-[#6d6a62] text-xs text-center sm:text-left">
             &copy; {year}{" "}
-            <span className="text-white/35 font-medium">Reyhan Irza Alvano</span>.
+             <span className="text-[#211f1b] font-medium">Reyhan Irza Alwano</span>.
             All rights reserved.
           </p>
 
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <div className="flex items-center gap-1.5 text-white/22 text-xs">
+            <div className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
               <span>Built with</span>
-              <Heart className="w-3 h-3 text-violet-500/50 fill-violet-500/30" />
+              <Heart className="w-3 h-3 text-[#a43f2d] fill-[#a43f2d]/20" />
               <span>using</span>
-              <Code2 className="w-3 h-3 text-cyan-400/50" />
-              <Braces className="w-3 h-3 text-blue-400/50" />
-              <Wind className="w-3 h-3 text-sky-400/50" />
+              <Braces className="w-3 h-3 text-[#6d6a62]" />
+              <span className="font-mono text-[9px] text-[#6d6a62]">TS</span>
+              <Wind className="w-3 h-3 text-[#6d6a62]" />
             </div>
 
-            <span className="text-white/12 text-[10px]">·</span>
+             <span className="text-[#6d6a62] text-[10px]">·</span>
             <GuessMyAge />
-            <span className="text-white/12 text-[10px]">·</span>
+            <span className="text-[#6d6a62] text-[10px]">·</span>
 
             <button
               onClick={() => {}}
-              className="flex items-center gap-1 text-white/15 text-[10px] hover:text-white/40 transition-colors duration-300 group"
+              className="flex items-center gap-1 text-[#6d6a62] text-[10px] hover:text-[#a43f2d] transition-colors duration-300 group"
               title="Developer Access"
             >
               <Settings className="w-2.5 h-2.5 group-hover:rotate-90 transition-transform duration-300" />

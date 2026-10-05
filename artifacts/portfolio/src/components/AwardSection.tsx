@@ -39,7 +39,7 @@ export default function AwardSection() {
           <dl className="mt-8 grid gap-x-8 gap-y-5 border-t border-[rgba(27,28,24,.18)] pt-6 sm:grid-cols-2">
             <div>
               <dt className="award-detail-label">Recipient</dt>
-              <dd className="mt-1 text-sm font-medium">Reyhan Irza Alwano</dd>
+              <dd className="mt-1 text-sm font-medium">Reyhan Irza Alvano</dd>
             </div>
             <div>
               <dt className="award-detail-label">School</dt>

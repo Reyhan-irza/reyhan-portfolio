@@ -1,18 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import gsap from "../lib/gsap";
-import { ScrollTrigger } from "../lib/gsap";
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap, ScrollTrigger } from "../lib/motion";
 
 const navLinks = [
   { label: "About",    href: "#about" },
-  { label: "Projects", href: "#projects" },
+  { label: "Work",     href: "#projects" },
   { label: "Journey",  href: "#journey" },
   { label: "Award",    href: "#achievement" },
-  { label: "Plans",    href: "#roadmap" },
-  { label: "Updates",  href: "#news" },
   { label: "Contact",  href: "#contact" },
-  { label: "Comments", href: "#comments" },
 ];
 
 export default function Navbar() {
@@ -106,7 +100,7 @@ export default function Navbar() {
         >
           <div className="relative">
             <img
-              src="/__mockup/images/logo.png"
+              src={`${import.meta.env.BASE_URL}logo.png`}
               alt=""
               className="h-9 w-9 rounded-full border border-[rgba(27,28,24,.2)] object-cover"
             />

@@ -74,7 +74,7 @@ export default function Footer() {
         <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[#6d6a62] text-xs text-center sm:text-left">
             &copy; {year}{" "}
-             <span className="text-[#211f1b] font-medium">Reyhan Irza Alwano</span>.
+              <span className="text-[#211f1b] font-medium">Reyhan Irza Alvano</span>.
             All rights reserved.
           </p>
 

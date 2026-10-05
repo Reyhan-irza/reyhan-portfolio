@@ -1,14 +1,14 @@
 import { useLayoutEffect, useRef } from "react";
-import { ArrowDown, ArrowUpRight, MessageSquare } from "lucide-react";
-import { gsap } from "../lib/motion";
+import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
+import { gsap, ScrollTrigger } from "../lib/motion";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const markRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
     const media = gsap.matchMedia();
     media.add(
       {
@@ -16,57 +16,42 @@ export default function HeroSection() {
         compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
       },
-      (mediaContext) => {
-        if (mediaContext.conditions?.reduced) return;
-        const compact = Boolean(mediaContext.conditions?.compact);
-
-      const context = gsap.context(() => {
-        const opening = gsap.timeline({
-          defaults: { ease: "power3.out" },
-          delay: 0.06,
-        });
-        opening
-          .fromTo(
-            "[data-hero-item]",
-            { y: compact ? 12 : 18, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: compact ? 0.5 : 0.64,
-              stagger: compact ? 0.045 : 0.065,
+      (context) => {
+        if (context.conditions?.reduced) return;
+        const compact = Boolean(context.conditions?.compact);
+        const scope = gsap.context(() => {
+          const opening = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.08 });
+          opening
+            .fromTo("[data-hero-item]", { y: compact ? 10 : 19, opacity: 0 }, {
+              y: 0, opacity: 1, duration: compact ? 0.48 : 0.7, stagger: compact ? 0.045 : 0.07,
               clearProps: "transform,opacity",
-            },
-          )
-          .fromTo(
-            "[data-hero-rule]",
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              transformOrigin: "left center",
-              duration: compact ? 0.58 : 0.78,
-              clearProps: "transform",
-            },
-            0.1,
-          );
-
-        if (!compact) {
-          gsap.to("[data-hero-mark]", {
-            yPercent: -6,
+            })
+            .fromTo("[data-hero-rule]", { scaleX: 0 }, {
+              scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
+            }, 0.12);
+          gsap.to("[data-hero-recede]", {
+            yPercent: compact ? -3 : -5,
+            opacity: 0.65,
             ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: 0.75,
-              invalidateOnRefresh: true,
-            },
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.65 },
           });
-        }
-      }, section);
-      return () => context.revert();
+          if (markRef.current && !compact) {
+            gsap.to(markRef.current, {
+              y: -10,
+              rotate: -2,
+              ease: "none",
+              scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.8 },
+            });
+          }
+          gsap.fromTo("[data-hero-orbit]", { rotate: -5 }, {
+            rotate: 5,
+            ease: "none",
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1 },
+          });
+        }, section);
+        return () => scope.revert();
       },
     );
-
     return () => media.revert();
   }, []);
 
@@ -77,49 +62,61 @@ export default function HeroSection() {
   };
 
   return (
-    <section ref={sectionRef} id="home" className="relative px-6 pb-24 pt-32 md:pb-36 md:pt-44">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_18rem] lg:items-end">
-        <div>
-          <div data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#77796e]">
-             <span className="h-2 w-2 rounded-full bg-[#a43f2d]" aria-hidden="true" />
-            Personal software-solution builder / Indonesia
-          </div>
-          <h1 data-hero-item className="max-w-5xl text-[clamp(3.5rem,9vw,8.9rem)] font-semibold leading-[.86] tracking-[-.09em] text-[#1b1c18]">
-            Reyhan Irza
+    <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
+      <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div data-hero-recede className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
+        <div className="relative z-10 pb-6">
+          <p data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
+            <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
+            Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
+          </p>
+          <h1 data-hero-item className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
+            REYHAN
             <br />
-             <span className="text-[#a43f2d]">Alwano.</span>
+            IRZA
+            <br />
+            <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
           </h1>
-          <div data-hero-rule className="mt-9 h-px w-full origin-left bg-[rgba(27,28,24,.2)]" />
-          <div className="mt-8 grid gap-8 md:grid-cols-[1fr_18rem] md:items-start">
-            <p data-hero-item className="max-w-xl text-xl leading-[1.3] tracking-[-.025em] text-[#4e5149] md:text-2xl">
-              I learn by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
+          <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
+          <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
+            <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
+              Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
             </p>
-             <div data-hero-item className="flex flex-col gap-3 text-sm leading-relaxed text-[#6d6a62]">
-               <p><span className="font-mono text-[10px] uppercase tracking-[.18em] text-[#a43f2d]">Now</span><br />Developing web products with React, TypeScript and Supabase.</p>
-               <p><span className="font-mono text-[10px] uppercase tracking-[.18em] text-[#a43f2d]">Based in</span><br />Lubuk Basung, West Sumatra.</p>
-            </div>
+            <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
+              React, TypeScript and connected web products. An honest record of the work in progress.
+            </p>
           </div>
-          <div data-hero-item className="mt-10 flex flex-wrap gap-3">
-            <button type="button" onClick={() => scrollTo("#projects")} className="btn-neon inline-flex items-center gap-2 px-5 py-3 text-sm">
-              Read the work <ArrowDown className="h-4 w-4" aria-hidden="true" />
+          <div data-hero-item className="mt-9 flex flex-wrap items-center gap-3">
+            <button type="button" onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
+              Explore selected work <ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
-             <button type="button" onClick={() => scrollTo("#contact")} className="inline-flex items-center gap-2 border border-[rgba(33,31,27,.22)] px-5 py-3 text-sm text-[#211f1b] transition-colors hover:border-[#a43f2d]">
-              Start a conversation <MessageSquare className="h-4 w-4" aria-hidden="true" />
+            <button type="button" onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
+              Say hello <MoveUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
+          <a data-hero-item href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.15em] text-white/40 transition-colors hover:text-[#9da9ff]">
+            Evidence on GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
         </div>
 
-        <aside data-hero-item className="relative hidden min-h-64 border-l border-[rgba(27,28,24,.2)] pl-7 lg:block">
-           <div data-hero-mark className="absolute -left-3 top-6 h-6 w-6 rounded-full border-4 border-[#f3efe6] bg-[#a43f2d]" />
-          <p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#77796e]">A short record</p>
-          <p className="mt-10 max-w-[13rem] text-lg leading-tight tracking-[-.03em] text-[#1b1c18]">
-            From a first HTML page to shipped school, library and portfolio products.
-          </p>
-           <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-[.16em] text-[#6d6a62] hover:text-[#a43f2d]">
-            GitHub evidence <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
+        <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
+          <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
+          <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
+          <div className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
+          <div className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
+          <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
+          <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
+            <img src="/rv-mark.png" alt="RV geometric monogram" className="h-full w-full object-contain" />
+          </div>
+          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
+          <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
+          <span className="hero-corner hero-corner-a" aria-hidden="true" />
+          <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
       </div>
+      <a href="#proof" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
+        Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
+      </a>
     </section>
   );
 }

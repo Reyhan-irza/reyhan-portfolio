@@ -176,7 +176,7 @@ export default function AdminDashboard() {
           knownCount.current = prev.length + 1;
           /* Browser notification */
           if ("Notification" in window && Notification.permission === "granted") {
-            new Notification(`💬 Komentar baru dari ${newComment.username}`, {
+            new Notification(`Komentar baru dari ${newComment.username}`, {
               body: newComment.message.slice(0, 120),
               icon: "/profile.jpg",
               tag: `comment-${newComment.id}`,
@@ -462,7 +462,7 @@ export default function AdminDashboard() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                               <span className="text-white font-semibold text-sm">{c.username}</span>
-                              {c.pinned && <span className="text-[9px] text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-500/20">📌 Pinned</span>}
+                              {c.pinned && <span className="text-[9px] text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-500/20">Pinned</span>}
                               {isNew && !c.pinned && <span className="text-[9px] text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-500/20">BARU</span>}
                               <span className="text-white/30 text-xs">{fmt(c.created_at)}</span>
                             </div>
@@ -635,7 +635,7 @@ export default function AdminDashboard() {
                             className="w-4 h-4 accent-violet-500" />
                           <span className="text-white/50 text-sm">Publish sekarang</span>
                         </label>
-                        {newsError && <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">⚠ {newsError}</p>}
+                        {newsError && <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{newsError}</p>}
                         <div className="flex gap-2">
                           <button type="submit" disabled={newsSubmitting}
                             className="btn-neon px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 disabled:opacity-60">
