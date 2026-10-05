@@ -1,5 +1,4 @@
-import { SiWhatsapp, SiInstagram, SiTiktok, SiGmail } from "react-icons/si";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Instagram, Mail, MessageCircle, Music2 } from "lucide-react";
 import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
 
 const contacts = [
@@ -8,7 +7,7 @@ const contacts = [
     label: "WhatsApp",
     handle: "ReyhanWhatsap",
     desc: "Drop me a message anytime",
-    icon: SiWhatsapp,
+    icon: MessageCircle,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
     href: "https://wa.me/62881385242876",
@@ -18,7 +17,7 @@ const contacts = [
     label: "Instagram",
     handle: "@irzalvano_",
     desc: "See my daily updates",
-    icon: SiInstagram,
+    icon: Instagram,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
     href: "https://www.instagram.com/irzalvano_?igsh=ZXRqM2lvY3EyY2Nj",
@@ -28,7 +27,7 @@ const contacts = [
     label: "TikTok",
     handle: "@rehanwatsav",
     desc: "Watch my short-form content",
-    icon: SiTiktok,
+    icon: Music2,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
     href: "https://www.tiktok.com/@rehanwatsav?_r=1&_t=ZS-95Kk0Lxdw5B",
@@ -38,7 +37,7 @@ const contacts = [
     label: "Email",
     handle: "irzanour@gmail.com",
     desc: "For professional inquiries",
-    icon: SiGmail,
+    icon: Mail,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
     href: "mailto:irzanour@gmail.com",

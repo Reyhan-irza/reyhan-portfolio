@@ -1,6 +1,4 @@
-import { Heart, Settings } from "lucide-react";
-import { SiReact, SiTailwindcss, SiTypescript } from "react-icons/si";
-import { useLocation } from "wouter";
+import { Atom, Code2, Heart, Settings, Wind } from "lucide-react";
 import { useScrollAnim } from "../portfolio-editorial/_shared/hooks/useScrollAnim";
 import VisitorCounter from "../portfolio-editorial/_shared/components/VisitorCounter";
 import GuessMyAge from "../portfolio-editorial/_shared/components/GuessMyAge";
@@ -13,7 +11,7 @@ export default function Footer() {
     scale: 0.995,
   });
   const year = new Date().getFullYear();
-  const [, navigate] = useLocation();
+  const navigate = (_path: string) => undefined;
 
   const links = [
     { label: "Home",     href: "#home"     },
@@ -83,9 +81,9 @@ export default function Footer() {
               <span>Built with</span>
               <Heart className="w-3 h-3 text-[#a43f2d] fill-[#a43f2d]/20" />
               <span>using</span>
-              <SiReact className="w-3 h-3 text-[#6d6a62]" />
-              <SiTypescript className="w-3 h-3 text-[#6d6a62]" />
-              <SiTailwindcss className="w-3 h-3 text-[#6d6a62]" />
+              <Atom className="w-3 h-3 text-[#6d6a62]" />
+              <Code2 className="w-3 h-3 text-[#6d6a62]" />
+              <Wind className="w-3 h-3 text-[#6d6a62]" />
             </div>
 
              <span className="text-[#6d6a62] text-[10px]">·</span>
