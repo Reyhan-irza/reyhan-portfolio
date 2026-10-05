@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
-import { gsap } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const projects = [
@@ -53,8 +53,17 @@ export default function ProjectsSection() {
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
+  const activeProjectRef = useRef(0);
   const [activeProject, setActiveProject] = useState(0);
+  const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
   const [modal, setModal] = useState<Project | null>(null);
+
+  const updateActiveProject = (index: number) => {
+    const next = Math.max(0, Math.min(projects.length - 1, index));
+    if (activeProjectRef.current === next) return;
+    activeProjectRef.current = next;
+    setActiveProject(next);
+  };
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -66,12 +75,122 @@ export default function ProjectsSection() {
         reduced: "(prefers-reduced-motion: reduce)",
         compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
+        desktop: "(min-width: 1024px)",
       },
       (mediaContext) => {
         if (mediaContext.conditions?.reduced) return;
         const compact = Boolean(mediaContext.conditions?.compact);
+        let resizeObserver: ResizeObserver | undefined;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+
+          const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
+          const track = section.querySelector<HTMLElement>("[data-project-track]");
+          const stage = section.querySelector<HTMLElement>("[data-project-stage]");
+
+          if (mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1) {
+            const setSlideWidth = () => {
+              track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
+            };
+            setSlideWidth();
+            setPinnedStoryActive(true);
+
+            const slideWidth = () => viewport.clientWidth;
+            const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const horizontalStory = gsap.to(track, {
+              x: () => -travelDistance(),
+              ease: "none",
+              scrollTrigger: {
+                id: "portfolio-project-story",
+                trigger: stage,
+                start: "top top+=96",
+                end: () => `+=${travelDistance() + window.innerWidth * 0.22}`,
+                pin: stage,
+                pinSpacing: true,
+                scrub: 0.8,
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
+                onEnter: () => setPinnedStoryActive(true),
+                onEnterBack: () => setPinnedStoryActive(true),
+                onUpdate: (self) => {
+                  const progressAcrossSlides = self.progress * (
+                    travelDistance() + window.innerWidth * 0.22
+                  );
+                  const nextIndex = Math.min(
+                    rows.length - 1,
+                    Math.floor(progressAcrossSlides / slideWidth()),
+                  );
+                  updateActiveProject(nextIndex);
+                },
+                onLeaveBack: () => {
+                  setPinnedStoryActive(false);
+                  updateActiveProject(0);
+                },
+              },
+            });
+
+            rows.forEach((row) => {
+              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+              const wordmark = row.querySelector<HTMLElement>(".project-wordmark");
+              if (!visual || !copy) return;
+
+              gsap.fromTo(visual, {
+                clipPath: "inset(7% 8% 7% 0%)",
+                scale: 0.94,
+              }, {
+                clipPath: "inset(0% 0% 0% 0%)",
+                scale: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  containerAnimation: horizontalStory,
+                  start: "left 86%",
+                  end: "left 28%",
+                  scrub: 0.55,
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              gsap.fromTo(copy, {
+                x: 34,
+                opacity: 0.18,
+              }, {
+                x: 0,
+                opacity: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  containerAnimation: horizontalStory,
+                  start: "left 82%",
+                  end: "left 30%",
+                  scrub: 0.45,
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              if (wordmark) {
+                gsap.fromTo(wordmark, { xPercent: 12 }, {
+                  xPercent: -9,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    containerAnimation: horizontalStory,
+                    start: "left right",
+                    end: "right left",
+                    scrub: 0.8,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+            });
+
+            resizeObserver = new ResizeObserver(() => {
+              setSlideWidth();
+              ScrollTrigger.refresh();
+            });
+            resizeObserver.observe(viewport);
+          }
 
           rows.forEach((row) => {
             const visual = row.querySelector<HTMLElement>("[data-project-visual]");
@@ -145,7 +264,11 @@ export default function ProjectsSection() {
             },
           );
         }, section);
-        return () => context.revert();
+        return () => {
+          resizeObserver?.disconnect();
+          setPinnedStoryActive(false);
+          context.revert();
+        };
       },
     );
 
@@ -269,7 +392,7 @@ export default function ProjectsSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
+        <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
             <div className="sticky top-32 flex items-start gap-5">
               <div className="project-rail relative h-24 w-px">
@@ -287,18 +410,22 @@ export default function ProjectsSection() {
             </div>
           </aside>
 
-          <div>
-            {projects.map((project, index) => (
-              <article
+          <div className="project-stage-content">
+            <div data-project-track-viewport className="project-track-viewport">
+              <div data-project-track className="project-track">
+                {projects.map((project, index) => (
+                  <article
                 key={project.id}
                 data-project-row
                 tabIndex={0}
                 className="project-row"
-                onMouseEnter={() => setActiveProject(index)}
-                onFocus={() => setActiveProject(index)}
-                onTouchStart={() => setActiveProject(index)}
+                onMouseEnter={() => updateActiveProject(index)}
+                onFocus={() => updateActiveProject(index)}
+                onTouchStart={() => updateActiveProject(index)}
                 data-testid={`project-${project.id}`}
                 aria-labelledby={`project-title-${project.id}`}
+                aria-hidden={pinnedStoryActive && activeProject !== index}
+                inert={pinnedStoryActive && activeProject !== index}
               >
                 <div
                   data-project-visual
@@ -375,8 +502,10 @@ export default function ProjectsSection() {
                     </button>
                   </div>
                 </div>
-              </article>
-            ))}
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
