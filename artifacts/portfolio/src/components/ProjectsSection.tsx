@@ -369,7 +369,7 @@ export default function ProjectsSection() {
     <section
       ref={sectionRef}
       id="projects"
-      className="projects-section relative overflow-hidden px-6 py-28 md:py-40"
+      className="projects-section relative px-6 py-28 md:py-40"
       data-testid="section-projects"
     >
       <div className="relative z-10 mx-auto max-w-6xl">
