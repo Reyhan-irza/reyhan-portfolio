@@ -3,3 +3,4 @@
 - [Workspace production builds](workspace-production-builds.md) — recursive builds must tolerate missing runtime-only PORT and BASE_PATH values.
 - [Portfolio browser QA](portfolio-browser-qa.md) — CDP keyboard events need native text fields, and Lenis scroll tests need geometry-based waits.
 - [GSAP media conditions](gsap-media-conditions.md) — include a matching wide-screen condition when callbacks should run on standard desktop.
+- [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
