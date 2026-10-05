@@ -31,23 +31,68 @@ export default function HeroSection() {
               scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
             }, 0.12);
           gsap.to("[data-hero-recede]", {
-            yPercent: compact ? -3 : -5,
-            opacity: 0.65,
+            yPercent: compact ? -5 : -12,
+            opacity: compact ? 0.58 : 0.28,
             ease: "none",
-            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.65 },
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.35 : 0.7,
+              invalidateOnRefresh: true,
+            },
           });
           if (markRef.current && !compact) {
             gsap.to(markRef.current, {
-              y: -10,
-              rotate: -2,
+              y: -28,
+              rotate: 5,
+              scale: 1.08,
               ease: "none",
-              scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.8 },
+              scrollTrigger: {
+                trigger: section,
+                start: "top top",
+                end: "bottom top",
+                scrub: 0.8,
+                invalidateOnRefresh: true,
+              },
             });
           }
           gsap.fromTo("[data-hero-orbit]", { rotate: -5 }, {
-            rotate: 5,
+            rotate: 24,
             ease: "none",
-            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1 },
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          });
+          gsap.fromTo("[data-hero-axis-x]", { scaleX: 0.12, opacity: 0.2 }, {
+            scaleX: 1,
+            opacity: 1,
+            transformOrigin: "center center",
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.3 : 0.65,
+              invalidateOnRefresh: true,
+            },
+          });
+          gsap.fromTo("[data-hero-axis-y]", { scaleY: 0.12, opacity: 0.2 }, {
+            scaleY: 1,
+            opacity: 1,
+            transformOrigin: "center center",
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.3 : 0.65,
+              invalidateOnRefresh: true,
+            },
           });
           if (!compact && window.matchMedia("(pointer: fine)").matches) {
             section.querySelectorAll<HTMLElement>("[data-hero-magnetic]").forEach((button) => {
@@ -126,8 +171,8 @@ export default function HeroSection() {
         <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
           <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
-          <div className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
-          <div className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
+          <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
+          <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
           <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
           <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
             <img src={`${import.meta.env.BASE_URL}rv-mark.webp`} alt="RV geometric monogram" fetchPriority="high" className="h-full w-full object-contain" />

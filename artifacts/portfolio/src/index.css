@@ -2645,6 +2645,23 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
     #05070b;
   background-size: 68px 68px, 68px 68px, auto, auto;
 }
+.rv-intro-stage { isolation: isolate; }
+.rv-intro-orbit {
+  border: 1px dashed rgba(149,163,255,.36);
+  border-radius: 50%;
+  box-shadow: 0 0 2.5rem rgba(102,124,255,.08);
+}
+.rv-intro-frame {
+  border: 1px solid rgba(149,163,255,.52);
+  clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
+  filter: drop-shadow(0 0 1rem rgba(102,124,255,.16));
+}
+.rv-intro-scan {
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg,transparent,rgba(169,180,255,.9),transparent);
+  box-shadow: 0 0 12px rgba(129,144,255,.8);
+}
 .rv-intro::after {
   content: "";
   position: absolute;
@@ -2664,4 +2681,5 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .rv-intro-skip:hover { border-color: rgba(129,144,255,.55); }
 @media (prefers-reduced-motion: reduce) {
   .rv-intro, .rv-intro * { animation: none !important; transition: none !important; }
+  .portfolio-shell .music-card [style*="equalizerBounce"] { animation: none !important; }
 }
