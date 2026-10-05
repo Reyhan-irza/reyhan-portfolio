@@ -162,7 +162,7 @@ export default function MusicSection() {
 
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto overscroll-x-contain pb-4 snap-x snap-mandatory"
+            className="flex gap-4 overflow-x-auto overscroll-x-contain px-[max(0px,calc((100%-13rem)/2))] pb-4 snap-x snap-mandatory md:px-[max(0px,calc((100%-15rem)/2))]"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             role="region"
             aria-label="Favorite songs"
