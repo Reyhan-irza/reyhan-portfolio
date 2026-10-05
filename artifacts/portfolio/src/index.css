@@ -2264,9 +2264,14 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .secondary-archive-tools { border-top: 1px solid rgba(255,255,255,.1); padding: 2rem 1.5rem 5rem; }
 .portfolio-shell .secondary-archive-tools-label { color: #8b93a3; font: 10px 'DM Mono', monospace; letter-spacing: .15em; text-transform: uppercase; }
 .portfolio-shell .editorial-nav.nav-blur { background: rgba(5,7,11,.86); border-bottom: 1px solid rgba(255,255,255,.07); backdrop-filter: blur(18px); }
-.portfolio-shell .mobile-menu-trigger {
+.portfolio-shell .editorial-nav .mobile-menu-trigger {
   display: flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center;
   border: 1px solid rgba(255,255,255,.17); color: #f5f7fa; background: rgba(10,14,21,.75);
+}
+.portfolio-shell .editorial-nav .mobile-menu-trigger:hover,
+.portfolio-shell .editorial-nav .mobile-menu-trigger:focus-visible,
+.portfolio-shell .editorial-nav .mobile-menu-trigger.is-open {
+  border-color: rgba(129,144,255,.55); color: #f5f7fa; background: rgba(16,22,33,.96);
 }
 @media (min-width: 1024px) {
   .portfolio-shell .editorial-nav .mobile-menu-trigger { display: none; }
