@@ -12,12 +12,14 @@ const milestones = [
 ] as const;
 
 export default function JourneySection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useScrollAnim({ threshold: 0.2 });
-  const milestonesRef = useScrollAnim({ threshold: 0.1, stagger: 0.08, distance: 14 });
+  const milestonesRef = useRef<HTMLDivElement>(null);
   const didFire = useRef(false);
   const progressRef = useRef<HTMLSpanElement>(null);
+
   useLayoutEffect(() => {
-    const el = document.getElementById("journey");
+    const el = sectionRef.current;
     if (!el) return;
     const media = gsap.matchMedia();
     media.add({
@@ -26,50 +28,100 @@ export default function JourneySection() {
       wide: "(min-width: 768px)",
     }, (mediaContext) => {
       const context = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 72%",
-        onEnter: () => {
-          if (didFire.current) return;
-        didFire.current = true;
-        unlockAchievement(ACHIEVEMENTS.JOURNEY_READER);
-        },
-      });
-      if (!mediaContext.conditions?.reduced && progressRef.current && milestonesRef.current) {
-        gsap.fromTo(progressRef.current, { scaleY: 0 }, {
-          scaleY: 1,
-          transformOrigin: "top center",
-          ease: "none",
-          scrollTrigger: {
-            trigger: milestonesRef.current,
-            start: "top 66%",
-            end: "bottom 56%",
-            scrub: 0.8,
-            invalidateOnRefresh: true,
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 72%",
+          onEnter: () => {
+            if (didFire.current) return;
+            didFire.current = true;
+            unlockAchievement(ACHIEVEMENTS.JOURNEY_READER);
           },
         });
-        gsap.utils.toArray<HTMLElement>("[data-journey-node]", milestonesRef.current).forEach((node) => {
-          gsap.to(node, {
-            scale: 1,
-            opacity: 1,
+
+        const milestones = milestonesRef.current;
+        if (!mediaContext.conditions?.reduced && progressRef.current && milestones) {
+          const compact = Boolean(mediaContext.conditions?.compact);
+
+          gsap.fromTo(progressRef.current, { scaleY: 0 }, {
+            scaleY: 1,
+            transformOrigin: "top center",
+            ease: "none",
             scrollTrigger: {
-              trigger: node.closest("article"),
-              start: "top 72%",
-              end: "top 54%",
-              scrub: true,
+              trigger: milestones,
+              start: "top 70%",
+              end: "bottom 38%",
+              scrub: compact ? 0.25 : 0.55,
               invalidateOnRefresh: true,
             },
           });
-        });
-      }
-    }, el);
+
+          gsap.utils.toArray<HTMLElement>("[data-journey-row]", milestones).forEach((row) => {
+            const year = row.querySelector<HTMLElement>("[data-journey-year]");
+            const heading = row.querySelector<HTMLElement>("[data-journey-heading]");
+            const copy = row.querySelector<HTMLElement>("[data-journey-copy]");
+            const node = row.querySelector<HTMLElement>("[data-journey-node]");
+            const timeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: row,
+                start: compact ? "top 88%" : "top 84%",
+                end: compact ? "top 48%" : "top 46%",
+                scrub: compact ? 0.2 : 0.42,
+                invalidateOnRefresh: true,
+              },
+            });
+
+            if (year) {
+              timeline.fromTo(year, {
+                x: compact ? -4 : -10,
+                opacity: 0.62,
+              }, {
+                x: 0,
+                opacity: 1,
+                ease: "none",
+              }, 0);
+            }
+            if (heading) {
+              timeline.fromTo(heading, {
+                x: compact ? 7 : 16,
+                opacity: 0.5,
+              }, {
+                x: 0,
+                opacity: 1,
+                ease: "none",
+              }, 0);
+            }
+            if (copy) {
+              timeline.fromTo(copy, {
+                y: compact ? 5 : 12,
+                opacity: 0.52,
+              }, {
+                y: 0,
+                opacity: 1,
+                ease: "none",
+              }, 0.04);
+            }
+            if (node) {
+              timeline.fromTo(node, {
+                scale: 0.62,
+                opacity: 0.2,
+                boxShadow: "0 0 0 rgba(132,145,255,0)",
+              }, {
+                scale: 1,
+                opacity: 1,
+                boxShadow: "0 0 14px rgba(132,145,255,.48)",
+                ease: "none",
+              }, 0);
+            }
+          });
+        }
+      }, el);
       return () => context.revert();
     });
     return () => media.revert();
   }, []);
 
   return (
-    <section id="journey" className="relative px-6 py-24 md:py-32">
+    <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
         <div data-motion-item><p className="section-kicker">Education / projects / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
@@ -78,13 +130,13 @@ export default function JourneySection() {
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           <span ref={progressRef} className="journey-timeline-progress" aria-hidden="true" />
           {milestones.map(([year, title, desc, Icon]) => (
-            <article key={title} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10" data-motion-item>
-             <p className="journey-year relative font-mono text-[10px] uppercase tracking-[.13em] text-[#a43f2d]">
+            <article key={title} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10" data-journey-row>
+             <p className="journey-year relative font-mono text-[10px] uppercase tracking-[.13em] text-[#a43f2d]" data-journey-year>
                <span className="journey-node" data-journey-node aria-hidden="true" />
                {year}
              </p>
-              <div className="flex items-start gap-3"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#1b1c18]" aria-hidden="true" /><h3 className="text-xl font-semibold tracking-[-.04em]">{title}</h3></div>
-              <p className="max-w-lg text-sm leading-relaxed text-[#65675f]">{desc}</p>
+              <div className="flex items-start gap-3" data-journey-heading><Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#1b1c18]" aria-hidden="true" /><h3 className="text-xl font-semibold tracking-[-.04em]">{title}</h3></div>
+              <p className="max-w-lg text-sm leading-relaxed text-[#65675f]" data-journey-copy>{desc}</p>
             </article>
           ))}
         </div>
