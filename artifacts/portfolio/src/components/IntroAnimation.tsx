@@ -25,7 +25,12 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         .fromTo("[data-intro-mark]", { scale: 0.88, opacity: 0, rotate: -6 }, { scale: 1, opacity: 1, rotate: 0, duration: 0.42, ease: "power3.out" })
         .fromTo("[data-intro-rule]", { scaleX: 0 }, { scaleX: 1, duration: 0.38, ease: "power2.inOut" }, 0.16)
         .fromTo("[data-intro-copy]", { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, stagger: 0.06, ease: "power2.out" }, 0.22)
-        .to(element, { opacity: 0, duration: 0.24, ease: "power1.out" }, 0.9);
+        .to(
+          ["[data-intro-mark]", "[data-intro-rule]", "[data-intro-copy]", ".rv-intro-skip"],
+          { autoAlpha: 0, duration: 0.12, ease: "power1.in" },
+          0.78,
+        )
+        .to(element, { opacity: 0, duration: 0.18, ease: "power1.out" }, 0.92);
     }, element);
     return () => context.revert();
   }, [onFinish]);
