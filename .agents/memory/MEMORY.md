@@ -2,6 +2,7 @@
 - [Workspace package targeting](workspace-package-targeting.md) — target a package explicitly when adding dependencies in this pnpm workspace.
 - [Workspace production builds](workspace-production-builds.md) — recursive builds must tolerate missing runtime-only PORT and BASE_PATH values.
 - [Portfolio browser QA](portfolio-browser-qa.md) — CDP keyboard events need native text fields, and Lenis scroll tests need geometry-based waits.
+- [Portfolio motion references](portfolio-motion-references.md) — adapt reference movement, never its identity; keep portfolio content, responsiveness, and reduced-motion support intact.
 - [GSAP media conditions](gsap-media-conditions.md) — include a matching wide-screen condition when callbacks should run on standard desktop.
 - [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
 - [GSAP transform ownership](gsap-transform-ownership.md) — avoid stacking CSS translation with GSAP percentage transforms on the same animated element.
