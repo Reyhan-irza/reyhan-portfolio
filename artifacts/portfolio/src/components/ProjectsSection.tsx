@@ -87,13 +87,15 @@ export default function ProjectsSection() {
           const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
           const track = section.querySelector<HTMLElement>("[data-project-track]");
           const stage = section.querySelector<HTMLElement>("[data-project-stage]");
+          const hasHorizontalStory = Boolean(
+            mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1,
+          );
 
-          if (mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1) {
+          if (hasHorizontalStory && viewport && track && stage) {
             const setSlideWidth = () => {
               track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
             };
             setSlideWidth();
-            setPinnedStoryActive(true);
 
             const slideWidth = () => viewport.clientWidth;
             const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
@@ -113,9 +115,7 @@ export default function ProjectsSection() {
                 onEnter: () => setPinnedStoryActive(true),
                 onEnterBack: () => setPinnedStoryActive(true),
                 onUpdate: (self) => {
-                  const progressAcrossSlides = self.progress * (
-                    travelDistance() + window.innerWidth * 0.22
-                  );
+                  const progressAcrossSlides = self.progress * travelDistance();
                   const nextIndex = Math.min(
                     rows.length - 1,
                     Math.floor(progressAcrossSlides / slideWidth()),
@@ -132,7 +132,7 @@ export default function ProjectsSection() {
             rows.forEach((row) => {
               const visual = row.querySelector<HTMLElement>("[data-project-visual]");
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-              const wordmark = row.querySelector<HTMLElement>(".project-wordmark");
+              const wordmark = row.querySelector<HTMLElement>("[data-project-wordmark-motion]");
               if (!visual || !copy) return;
 
               gsap.fromTo(visual, {
@@ -169,6 +169,23 @@ export default function ProjectsSection() {
                 },
               });
 
+              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
+              if (geometry) {
+                gsap.to(geometry, {
+                  yPercent: -5,
+                  xPercent: 3,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    containerAnimation: horizontalStory,
+                    start: "left right",
+                    end: "right left",
+                    scrub: 0.7,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+
               if (wordmark) {
                 gsap.fromTo(wordmark, { xPercent: 12 }, {
                   xPercent: -9,
@@ -192,60 +209,62 @@ export default function ProjectsSection() {
             resizeObserver.observe(viewport);
           }
 
-          rows.forEach((row) => {
-            const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-            const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-            if (!visual || !copy) return;
+          if (!hasHorizontalStory) {
+            rows.forEach((row) => {
+              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+              if (!visual || !copy) return;
 
-            const entrance = gsap.timeline({
-              scrollTrigger: {
-                trigger: row,
-                start: compact ? "top 86%" : "top 80%",
-                toggleActions: "play none play reverse",
-                invalidateOnRefresh: true,
-              },
-            });
-
-            entrance
-              .fromTo(
-                visual,
-                { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
-                {
-                  x: 0,
-                  opacity: 1,
-                  scale: 1,
-                  duration: compact ? 0.48 : 0.62,
-                  ease: "power3.out",
-                },
-              )
-              .fromTo(
-                copy,
-                { y: compact ? 8 : 16, opacity: 0 },
-                {
-                  y: 0,
-                  opacity: 1,
-                  duration: compact ? 0.42 : 0.56,
-                  ease: "power3.out",
-                },
-                compact ? 0.06 : 0.1,
-              );
-
-            const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
-            if (geometry) {
-              gsap.to(geometry, {
-                yPercent: compact ? -3 : -9,
-                xPercent: compact ? 0 : 2,
-                ease: "none",
+              const entrance = gsap.timeline({
                 scrollTrigger: {
                   trigger: row,
-                  start: "top bottom",
-                  end: "bottom top",
-                  scrub: compact ? 0.45 : 0.8,
+                  start: compact ? "top 86%" : "top 80%",
+                  toggleActions: "play none play reverse",
                   invalidateOnRefresh: true,
                 },
               });
-            }
-          });
+
+              entrance
+                .fromTo(
+                  visual,
+                  { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
+                  {
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: compact ? 0.48 : 0.62,
+                    ease: "power3.out",
+                  },
+                )
+                .fromTo(
+                  copy,
+                  { y: compact ? 8 : 16, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: compact ? 0.42 : 0.56,
+                    ease: "power3.out",
+                  },
+                  compact ? 0.06 : 0.1,
+                );
+
+              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
+              if (geometry) {
+                gsap.to(geometry, {
+                  yPercent: compact ? -3 : -9,
+                  xPercent: compact ? 0 : 2,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: compact ? 0.45 : 0.8,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+            });
+          }
 
           gsap.fromTo(
             "[data-project-heading]",
@@ -439,19 +458,21 @@ export default function ProjectsSection() {
                     0{project.id}
                   </span>
                   <span className="project-wordmark" aria-hidden="true">
-                    {project.accent === "VIREON" ? (
-                      <>
-                        VI<em>RE</em>ON
-                      </>
-                    ) : project.accent === "REYHAN" ? (
-                      <>
-                        REY<em>HAN</em>
-                      </>
-                    ) : (
-                      <>
-                        T<em>JK</em>T
-                      </>
-                    )}
+                    <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
+                      {project.accent === "VIREON" ? (
+                        <>
+                          VI<em>RE</em>ON
+                        </>
+                      ) : project.accent === "REYHAN" ? (
+                        <>
+                          REY<em>HAN</em>
+                        </>
+                      ) : (
+                        <>
+                          T<em>JK</em>T
+                        </>
+                      )}
+                    </span>
                   </span>
                 </div>
 
