@@ -1198,6 +1198,33 @@
   outline-offset: 4px;
 }
 
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .project-stage-content {
+    min-width: 0;
+  }
+
+  .project-track-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .project-track {
+    display: flex;
+    width: max-content;
+    align-items: stretch;
+    will-change: transform;
+  }
+
+  .project-row {
+    flex: 0 0 var(--project-slide-width, 100%);
+    width: var(--project-slide-width, 100%);
+    min-width: 0;
+    min-height: min(41rem, 78svh);
+    padding-block: clamp(2rem, 4.2vh, 3.25rem);
+    box-sizing: border-box;
+  }
+}
+
 .project-detail-dialog {
   background: #111416;
   border: 1px solid rgba(232,231,220,0.2);
