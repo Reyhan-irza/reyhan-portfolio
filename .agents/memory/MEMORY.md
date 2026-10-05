@@ -4,3 +4,4 @@
 - [Portfolio browser QA](portfolio-browser-qa.md) — CDP keyboard events need native text fields, and Lenis scroll tests need geometry-based waits.
 - [GSAP media conditions](gsap-media-conditions.md) — include a matching wide-screen condition when callbacks should run on standard desktop.
 - [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
+- [GSAP transform ownership](gsap-transform-ownership.md) — avoid stacking CSS translation with GSAP percentage transforms on the same animated element.
