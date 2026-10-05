@@ -109,7 +109,12 @@ export default function Navbar() {
     const targets = panel.querySelectorAll<HTMLElement>("[data-menu-item]");
     const media = gsap.matchMedia();
     media.add(
-      { reduced: "(prefers-reduced-motion: reduce)" },
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        motion: "(prefers-reduced-motion: no-preference)",
+        compact: "(max-width: 767px)",
+        wide: "(min-width: 768px)",
+      },
       (context) => {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
@@ -216,6 +221,7 @@ export default function Navbar() {
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-y-0 right-0 z-[49] flex w-[min(88vw,410px)] flex-col border-l border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
+        style={{ transform: "translateX(105%)", visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >
         <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>

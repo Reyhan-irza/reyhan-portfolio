@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -26,6 +26,7 @@ export default function Home() {
   useLenis();
   const [introFinished, setIntroFinished] = useState(false);
   const [archiveVisited, setArchiveVisited] = useState(false);
+  const finishIntro = useCallback(() => setIntroFinished(true), []);
 
   const proofRef = useScrollAnim<HTMLDivElement>({ threshold: 0.12, stagger: 0.09, distance: 16 });
   const footerRef   = useRef<HTMLDivElement>(null);
@@ -116,7 +117,7 @@ export default function Home() {
         <Footer />
         </div>
       <AchievementToast />
-      {!introFinished && <IntroAnimation onFinish={() => setIntroFinished(true)} />}
+      {!introFinished && <IntroAnimation onFinish={finishIntro} />}
     </div>
   );
 }
