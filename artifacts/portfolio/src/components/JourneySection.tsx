@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { Award, Code2, FolderKanban, School } from "lucide-react";
+import { Award, Code2, FolderKanban, School, Trophy } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
@@ -8,6 +8,7 @@ const milestones = [
   ["STUDY", "SMK Negeri 2 Lubuk Basung", "TJKT — the education context behind this portfolio and its technical projects.", School],
   ["PROJECTS", "Learning through builds", "Explore the TJKT information site, VIREON Library and Reyhan WhatsApp Portfolio. Each project has its own scope and links.", FolderKanban],
   ["2025", "Juara I · Kabupaten Agam", "LKS IT Software Solution For Business. Recognition is shown separately from its certificate below.", Award],
+  ["ACHIEVEMENT", "CTF Competition — 2nd place", "The result is recorded without a competition name, date, or score because those details are not verified here.", Trophy],
   ["ONGOING", "Keep the record honest", "More learning and work can be added here as it becomes real and verifiable.", Code2],
 ] as const;
 
@@ -129,16 +130,19 @@ export default function JourneySection() {
         </div>
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           <span ref={progressRef} className="journey-timeline-progress" aria-hidden="true" />
-          {milestones.map(([year, title, desc, Icon]) => (
-            <article key={title} className="grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10" data-journey-row>
-             <p className="journey-year relative font-mono text-[10px] uppercase tracking-[.13em] text-[#a43f2d]" data-journey-year>
+          {milestones.map(([year, title, desc, Icon]) => {
+            const isFeatured = year === "ACHIEVEMENT";
+            return (
+            <article key={title} className={`grid gap-5 py-7 md:grid-cols-[7rem_1fr_1.15fr] md:gap-10 ${isFeatured ? "border-l-2 border-[#667cff] bg-[#0a0e15] px-4" : ""}`} data-journey-row data-journey-highlight={isFeatured || undefined}>
+             <p className={`journey-year relative font-mono text-[10px] uppercase tracking-[.13em] ${isFeatured ? "text-[#aab4ff]" : "text-[#a43f2d]"}`} data-journey-year>
                <span className="journey-node" data-journey-node aria-hidden="true" />
                {year}
              </p>
-              <div className="flex items-start gap-3" data-journey-heading><Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#1b1c18]" aria-hidden="true" /><h3 className="text-xl font-semibold tracking-[-.04em]">{title}</h3></div>
-              <p className="max-w-lg text-sm leading-relaxed text-[#65675f]" data-journey-copy>{desc}</p>
+               <div className="flex items-start gap-3" data-journey-heading><Icon className={`mt-0.5 h-4 w-4 shrink-0 ${isFeatured ? "text-[#aab4ff]" : "text-[#1b1c18]"}`} aria-hidden="true" /><h3 className={`text-xl font-semibold tracking-[-.04em] ${isFeatured ? "text-white" : ""}`}>{title}</h3></div>
+               <p className={`max-w-lg text-sm leading-relaxed ${isFeatured ? "text-[#c9d0dc]" : "text-[#65675f]"}`} data-journey-copy>{desc}</p>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

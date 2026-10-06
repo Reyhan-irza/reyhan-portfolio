@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useSta
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import TechnologyBands from "@/components/TechnologyBands";
 import AboutSection from "@/components/AboutSection";
 import JourneySection from "@/components/JourneySection";
 import AwardSection from "@/components/AwardSection";
@@ -66,6 +67,7 @@ export default function Home() {
       <Navbar />
       <main id="main-content" className="relative z-10">
         <HeroSection />
+        <TechnologyBands />
         <section id="proof" className="proof-strip px-6" aria-label="Portfolio record">
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
@@ -81,7 +83,7 @@ export default function Home() {
             <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>
               <strong>Recognition on record</strong>
-              <span>Juara I, LKS IT Software Solution For Business.</span>
+              <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · Juara I.</span>
             </div>
           </div>
         </section>

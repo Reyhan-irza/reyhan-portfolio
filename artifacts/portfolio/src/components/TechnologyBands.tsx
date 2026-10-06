@@ -77,7 +77,7 @@ export default function TechnologyBands() {
   const [selected, setSelected] = useState<{ band: string; name: string } | null>(null);
 
   return (
-    <section className="technology-bands" aria-labelledby="technology-bands-title">
+    <section id="technology-bands" className="technology-bands" aria-labelledby="technology-bands-title">
       <div className="technology-bands__header">
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
