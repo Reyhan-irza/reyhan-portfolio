@@ -30,18 +30,43 @@ export default function HeroSection() {
             .fromTo("[data-hero-rule]", { scaleX: 0 }, {
               scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
             }, 0.12);
-          gsap.to("[data-hero-recede]", {
-            yPercent: compact ? -5 : -12,
-            opacity: compact ? 0.58 : 0.28,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.35 : 0.7,
-              invalidateOnRefresh: true,
-            },
-          });
+          const scrollRange = {
+            trigger: section,
+            start: "top top",
+            end: "bottom top",
+            scrub: compact ? 0.35 : 0.7,
+            invalidateOnRefresh: true,
+          };
+          const title = section.querySelector<HTMLElement>("[data-hero-title]");
+          const lead = section.querySelector<HTMLElement>("[data-hero-lead]");
+          const grid = section.querySelector<HTMLElement>(".hero-grid");
+
+          if (title) {
+            gsap.to(title, {
+              y: compact ? -10 : -30,
+              scale: compact ? 0.985 : 0.95,
+              opacity: 0.88,
+              transformOrigin: "left center",
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.3 : 0.62 },
+            });
+          }
+          if (lead) {
+            gsap.to(lead, {
+              y: compact ? -5 : -14,
+              opacity: 0.78,
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.25 : 0.5 },
+            });
+          }
+          if (grid) {
+            gsap.to(grid, {
+              yPercent: compact ? 5 : 15,
+              opacity: compact ? 0.28 : 0.62,
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.35 : 0.75 },
+            });
+          }
           if (markRef.current && !compact) {
             gsap.to(markRef.current, {
               y: -28,
@@ -133,13 +158,13 @@ export default function HeroSection() {
   return (
     <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
       <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div data-hero-recede className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
+      <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
           <p data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
             <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
-          <h1 data-hero-item className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
+          <h1 data-hero-item data-hero-title className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
             REYHAN
             <br />
             IRZA
@@ -148,7 +173,7 @@ export default function HeroSection() {
           </h1>
           <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
-            <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
+            <p data-hero-item data-hero-lead className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
               Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
             </p>
             <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
