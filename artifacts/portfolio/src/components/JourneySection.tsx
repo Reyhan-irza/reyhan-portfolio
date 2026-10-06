@@ -125,7 +125,7 @@ export default function JourneySection() {
     <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-        <div data-motion-item><p className="section-kicker">Education / projects / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
+        <div data-motion-item><p className="section-kicker">Project experience / education / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
           <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Dated milestones keep their verified dates. The CTF result is included without an event name, date, or score.</p>
         </div>
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
