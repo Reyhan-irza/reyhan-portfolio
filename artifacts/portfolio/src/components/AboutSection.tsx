@@ -2,7 +2,7 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const notes = [
-  { icon: Layout, label: "A student record", text: "I study TJKT at SMK Negeri 2 Lubuk Basung. This portfolio keeps the work and the learning visible, without presenting either as a finished story." },
+  { icon: Layout, label: "A student record", text: "I study TJKT at SMK Negeri 2 Lubuk Basung, learning across web software, systems and networking as I build." },
   { icon: Database, label: "Products with a purpose", text: "From a department introduction to a library workspace, the projects below show distinct problems, interfaces and connected flows." },
   { icon: Workflow, label: "Build, inspect, refine", text: "I use the project itself as the evidence: its interface, linked build, repository and the details that can be checked." },
   { icon: Code2, label: "A personal signature", text: "Vierlykirk is the creative signature. The RV geometry is the mark used to connect this portfolio and the work presented here." },
@@ -21,7 +21,7 @@ export default function AboutSection() {
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
-              I’m Reyhan Irza Alvano, a student at SMK Negeri 2 Lubuk Basung in TJKT. This is a personal record of projects I can point to, what I’m learning, and recognition supported by its certificate.
+              I’m Reyhan Irza Alvano, a student at SMK Negeri 2 Lubuk Basung in TJKT. I learn by building and experimenting across web software and technical systems, then keep the work and verified milestones visible here.
             </p>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">The project pages carry the specifics. Vierlykirk is my signature; the RV mark is the visual thread.</p>
           </div>
