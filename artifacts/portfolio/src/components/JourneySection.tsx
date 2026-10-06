@@ -6,7 +6,7 @@ import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const milestones = [
   ["STUDY", "SMK Negeri 2 Lubuk Basung", "TJKT — the education context behind this portfolio and its technical projects.", School],
-  ["PROJECTS", "Learning through builds", "Explore the TJKT information site, VIREON Library and Reyhan WhatsApp Portfolio. Each project has its own scope and links.", FolderKanban],
+  ["BUILD", "VIREON Library", "A school-context digital library project and a major build milestone. Its project record carries the details currently available.", FolderKanban],
   ["2025", "Juara I · Kabupaten Agam", "LKS IT Software Solution For Business. Recognition is shown separately from its certificate below.", Award],
   ["ACHIEVEMENT", "CTF Competition — 2nd place", "The result is recorded without a competition name, date, or score because those details are not verified here.", Trophy],
   ["ONGOING", "Keep the record honest", "More learning and work can be added here as it becomes real and verifiable.", Code2],
@@ -126,7 +126,7 @@ export default function JourneySection() {
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
         <div data-motion-item><p className="section-kicker">Education / projects / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Only confirmed milestones are dated. The next entries belong to what happens next.</p>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Dated milestones keep their verified dates. The CTF result is included without an event name, date, or score.</p>
         </div>
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           <span ref={progressRef} className="journey-timeline-progress" aria-hidden="true" />

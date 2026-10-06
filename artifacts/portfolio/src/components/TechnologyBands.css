@@ -292,7 +292,8 @@
 }
 
 .technology-band:focus-within .technology-band__track,
-.technology-band:hover .technology-band__track {
+.technology-band:hover .technology-band__track,
+.technology-band--selected .technology-band__track {
   animation-play-state: paused;
 }
 
@@ -383,8 +384,8 @@
 }
 
 @keyframes technology-band-reverse {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(50%, 0, 0); }
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
 }
 
 @media (max-width: 760px) {
@@ -464,10 +465,29 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .technology-band__viewport {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
   .technology-band__track {
+    width: 100%;
+    min-width: 0;
     animation: none !important;
     transform: none !important;
     will-change: auto;
+    flex-wrap: wrap;
+  }
+
+  .technology-band__item[aria-hidden="true"] {
+    display: none;
+  }
+
+  .technology-band__item {
+    flex: 1 1 9rem;
+    min-width: min(100%, 9rem);
+    min-height: 4.5rem;
   }
 
   .technology-band__item,
