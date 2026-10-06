@@ -15,6 +15,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("");
+  const isOpenRef = useRef(isOpen);
+  isOpenRef.current = isOpen;
   const navRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
@@ -26,6 +28,15 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const desktopLayout = window.matchMedia("(min-width: 1024px)");
+    const closeMobileMenu = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsOpen(false);
+    };
+    desktopLayout.addEventListener("change", closeMobileMenu);
+    return () => desktopLayout.removeEventListener("change", closeMobileMenu);
   }, []);
 
   useEffect(() => {
@@ -74,7 +85,13 @@ export default function Navbar() {
   }, [isOpen]);
 
   useEffect(() => {
-    if (previouslyOpen.current && !isOpen) menuTriggerRef.current?.focus();
+    if (previouslyOpen.current && !isOpen) {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        navRef.current?.querySelector<HTMLElement>(".editorial-nav-link")?.focus();
+      } else {
+        menuTriggerRef.current?.focus();
+      }
+    }
     previouslyOpen.current = isOpen;
   }, [isOpen]);
 
@@ -121,15 +138,13 @@ export default function Navbar() {
       {
         reduced: "(prefers-reduced-motion: reduce)",
         motion: "(prefers-reduced-motion: no-preference)",
-        compact: "(max-width: 767px)",
-        wide: "(min-width: 768px)",
       },
       (context) => {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
           gsap.set(panel, { xPercent: 105, autoAlpha: 0 });
           gsap.set(targets, { x: 14, autoAlpha: 0 });
-          menuTimelineRef.current = gsap.timeline({ paused: true })
+          const timeline = gsap.timeline({ paused: true })
             .to(panel, {
               xPercent: 0,
               autoAlpha: 1,
@@ -143,6 +158,8 @@ export default function Navbar() {
               stagger: reduced ? 0 : 0.045,
               ease: "power2.out",
             }, reduced ? 0 : 0.15);
+          menuTimelineRef.current = timeline;
+          if (isOpenRef.current) timeline.progress(1);
         }, panel);
         return () => {
           menuTimelineRef.current = null;
