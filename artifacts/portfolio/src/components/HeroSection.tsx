@@ -37,8 +37,8 @@ export default function HeroSection() {
             scrub: compact ? 0.35 : 0.7,
             invalidateOnRefresh: true,
           };
-          const title = section.querySelector<HTMLElement>("[data-hero-title]");
-          const lead = section.querySelector<HTMLElement>("[data-hero-lead]");
+          const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
+          const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
           const grid = section.querySelector<HTMLElement>(".hero-grid");
 
           if (title) {
@@ -164,18 +164,22 @@ export default function HeroSection() {
             <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
-          <h1 data-hero-item data-hero-title className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
-            REYHAN
-            <br />
-            IRZA
-            <br />
-            <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
-          </h1>
+          <div data-hero-title-depth>
+            <h1 data-hero-item className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
+              REYHAN
+              <br />
+              IRZA
+              <br />
+              <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
+            </h1>
+          </div>
           <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
-            <p data-hero-item data-hero-lead className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-              Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
-            </p>
+            <div data-hero-lead-depth>
+              <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
+                Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
+              </p>
+            </div>
             <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
               React, TypeScript and connected web products. An honest record of the work in progress.
             </p>
