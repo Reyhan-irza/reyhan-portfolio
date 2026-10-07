@@ -1,0 +1,437 @@
+# TASK: GLOBAL LOGO REPLACEMENT + RV INTRO ANIMATION
+
+Saya ingin melakukan penggantian IDENTITAS LOGO secara menyeluruh pada portfolio ini.
+
+JANGAN membuat logo baru menggunakan CSS/SVG/ikon generik.
+JANGAN mempertahankan logo lama.
+Gunakan ASSET LOGO RV BARU yang saya berikan sebagai sumber identitas utama.
+
+==================================================
+1. LOGO BARU
+==================================================
+
+Logo baru adalah monogram geometris "RV" dengan karakter:
+
+- dark premium
+- metallic silver/chrome
+- cool blue edge lighting
+- geometric/angular
+- futuristic tetapi tetap profesional
+- cocok dengan branding personal "Vierlykirk"
+- bukan gaming logo
+- bukan cyberpunk berlebihan
+
+Gunakan file:
+
+rv_logo_full_transparent.png
+
+sebagai MASTER LOGO.
+
+Logo ini harus menjadi satu-satunya logo utama website.
+
+Jika asset belum tersedia di project, gunakan asset yang saya upload dan tempatkan secara proper ke:
+
+/public/brand/rv-logo.png
+
+atau struktur asset yang paling sesuai dengan project.
+
+Jangan mengubah bentuk logo menggunakan CSS.
+Jangan redraw logo menggunakan SVG.
+Jangan mengganti logo dengan Lucide/Icon/teks "RV".
+
+==================================================
+2. GANTI SEMUA LOGO LAMA
+==================================================
+
+Lakukan audit seluruh repository.
+
+Cari semua penggunaan:
+
+- logo lama
+- logo SVG lama
+- logo text
+- favicon lama
+- brand mark lama
+- icon placeholder
+- logo di Navbar
+- logo di LoadingScreen
+- logo di Footer
+- logo di mobile navigation
+- logo di metadata
+- logo di authentication/admin jika ada
+- logo di achievement/toast jika ada
+- logo di halaman/project yang masih menggunakan branding lama
+
+GANTI seluruh penggunaan tersebut dengan RV logo baru.
+
+Jangan hanya mengganti Navbar.
+
+Pastikan tidak ada logo lama yang masih muncul setelah implementasi.
+
+==================================================
+3. AREA YANG WAJIB MENGGUNAKAN LOGO BARU
+==================================================
+
+Implementasikan RV logo baru pada:
+
+A. Navbar
+- desktop
+- mobile
+- sidebar/mobile menu
+- active/hover state tetap mempertahankan logo
+
+B. Loading / Intro Screen
+- gunakan logo RV sebagai visual utama
+- jangan tampilkan logo lama
+
+C. Footer
+- gunakan RV logo
+
+D. Favicon
+- gunakan versi logo RV yang paling cocok untuk ukuran kecil
+
+E. Open Graph
+- update og:image jika sebelumnya menggunakan branding/logo lama
+
+F. Twitter/X metadata
+- update image jika relevan
+
+G. PWA manifest jika tersedia
+- update icons
+
+H. Browser/theme metadata
+- sesuaikan dengan branding RV
+
+==================================================
+4. INTRO LOGO ANIMATION
+==================================================
+
+Gunakan:
+
+rv_01_top_left.png
+rv_02_lower_left.png
+rv_03_right_v.png
+rv_logo_full_transparent.png
+
+untuk membuat animasi intro.
+
+JANGAN membuat animasi hanya dengan fade-in biasa.
+
+Urutan:
+
+PHASE 1
+- background dark
+- logo belum terlihat
+- ambient blue/violet light sangat subtle
+
+PHASE 2
+- piece 01 masuk dari arah kiri/atas
+- piece 02 masuk dari bawah/kiri
+- piece 03 masuk dari kanan
+- masing-masing memiliki opacity + transform + slight rotation
+- gunakan GSAP
+
+PHASE 3
+- ketiga bagian bergerak menuju posisi final
+- gunakan easing yang smooth dan controlled
+- jangan gunakan bounce berlebihan
+
+PHASE 4
+- pieces terkunci menjadi satu komposisi RV
+- tampilkan rv_logo_full_transparent.png secara seamless
+- lakukan subtle light sweep / glow pass
+
+PHASE 5
+- tampilkan:
+
+REYHAN IRZA ALVANO
+STUDENT DEVELOPER
+
+dengan typography premium.
+
+PHASE 6
+- logo + identity melakukan transition menuju Hero website
+- jangan sekadar disappear/fade
+- gunakan scale/clip/translate atau masked transition yang terasa seperti satu continuous motion system
+
+==================================================
+5. GSAP REQUIREMENT
+==================================================
+
+Gunakan GSAP untuk animasi intro.
+
+Jika GSAP + ScrollTrigger sudah tersedia:
+gunakan existing dependency.
+
+Jika belum tersedia, install dependency yang diperlukan.
+
+Gunakan timeline yang jelas, contoh struktur:
+
+introTimeline
+  -> piece01
+  -> piece02
+  -> piece03
+  -> assembly
+  -> logo lock
+  -> identity reveal
+  -> transition to website
+
+Gunakan:
+
+gsap.timeline()
+gsap.fromTo()
+gsap.to()
+ease yang smooth
+onComplete untuk menandai loading selesai
+
+JANGAN membuat animation loop yang tidak diperlukan.
+
+==================================================
+6. RESPONSIVE
+==================================================
+
+Desktop:
+- logo lebih besar
+- movement lebih cinematic
+- spacing lebih luas
+- subtle pointer interaction jika sesuai
+
+Mobile:
+- logo lebih compact
+- jangan sampai pieces keluar viewport
+- kurangi distance movement
+- kurangi glow/filter berat
+- tetap gunakan urutan animasi yang sama
+
+Animasi harus bekerja pada:
+
+320px
+375px
+390px
+414px
+768px
+1024px
+1280px+
+==================================================
+7. PERFORMANCE
+==================================================
+
+Jangan menggunakan image processing berat saat runtime.
+
+Gunakan:
+
+transform
+opacity
+scale
+rotation
+clip-path jika diperlukan
+
+Hindari animasi:
+
+width
+height
+top
+left
+
+untuk elemen utama jika bisa diganti transform.
+
+Pastikan GSAP timeline di-cleanup saat component unmount.
+
+Hormati:
+
+prefers-reduced-motion
+
+Jika reduced motion aktif:
+- tampilkan logo final
+- skip animasi kompleks
+- tetap tampilkan identity dengan transition minimal
+
+==================================================
+8. DESIGN SYSTEM
+==================================================
+
+Logo harus menyatu dengan visual website.
+
+Gunakan warna utama:
+
+Background:
+#05070B
+
+Surface:
+#0A0E15
+
+Elevated:
+#101621
+
+Primary text:
+#F5F7FA
+
+Secondary:
+#C9D0DC
+
+Muted:
+#8B93A3
+
+Blue:
+#667CFF
+
+Violet:
+#8B6CFF
+
+Border:
+rgba(255,255,255,0.07)
+
+Jangan menambahkan warna random.
+
+Jangan menggunakan neon berlebihan.
+
+Logo harus tetap terlihat premium dan clean.
+
+==================================================
+9. LOGO DI WEBSITE
+==================================================
+
+Gunakan satu source of truth untuk logo.
+
+Buat reusable component jika belum ada:
+
+<BrandLogo />
+
+Component ini harus digunakan oleh:
+
+Navbar
+Mobile Navigation
+LoadingScreen
+Footer
+
+Jika ada kebutuhan variant ukuran:
+
+<BrandLogo size="sm" />
+<BrandLogo size="md" />
+<BrandLogo size="lg" />
+
+Tetapi asset tetap berasal dari logo RV yang sama.
+
+==================================================
+10. FAVICON
+==================================================
+
+Buat favicon berdasarkan RV logo baru.
+
+Jika perlu buat versi kecil:
+
+/public/favicon.png
+/public/favicon-32.png
+/public/favicon-192.png
+/public/favicon-512.png
+
+Jangan redraw logo.
+
+Gunakan asset RV sebagai sumber.
+
+Update index.html:
+
+<link rel="icon" ...>
+
+dan metadata lain yang relevan.
+
+==================================================
+11. AUDIT SETELAH IMPLEMENTASI
+==================================================
+
+Setelah selesai:
+
+1. Search repository untuk nama/logo asset lama.
+2. Search komponen yang masih menggunakan logo lama.
+3. Search index.html.
+4. Search manifest.
+5. Search Navbar.
+6. Search LoadingScreen.
+7. Search Footer.
+8. Search mobile navigation.
+9. Search seluruh public assets.
+
+Tidak boleh ada penggunaan logo lama yang masih aktif.
+
+==================================================
+12. JANGAN MERUSAK FITUR EXISTING
+==================================================
+
+Sangat penting:
+
+JANGAN menghapus atau merusak:
+
+- Home
+- About
+- History/Journey
+- Projects
+- Experience
+- Education
+- Certificates
+- Achievements
+- GitHub
+- News
+- Comments
+- Supabase
+- Visitor tracking
+- Admin
+- Music controller
+- Loading system
+- GSAP animations yang sudah ada
+- responsive navigation
+- mobile navigation
+- SEO
+- CV/Resume
+- existing project links
+
+Task ini adalah GLOBAL BRAND/LOGO REPLACEMENT + INTRO ANIMATION.
+
+Bukan rebuild website dari nol.
+
+==================================================
+13. ACCEPTANCE CRITERIA
+==================================================
+
+Implementasi dianggap berhasil hanya jika:
+
+[ ] Logo lama tidak muncul lagi.
+[ ] Navbar menggunakan RV logo baru.
+[ ] Mobile navigation menggunakan RV logo baru.
+[ ] LoadingScreen menggunakan RV logo baru.
+[ ] Footer menggunakan RV logo baru.
+[ ] Favicon menggunakan RV logo baru.
+[ ] Metadata/social branding menggunakan branding baru.
+[ ] Intro pieces muncul satu per satu.
+[ ] Pieces kemudian menyatu menjadi RV.
+[ ] Transition menuju Hero terasa seamless.
+[ ] GSAP digunakan untuk choreography intro.
+[ ] Mobile tetap smooth.
+[ ] Desktop tetap cinematic.
+[ ] prefers-reduced-motion didukung.
+[ ] Tidak ada fitur portfolio existing yang rusak.
+[ ] Tidak ada logo generik/placeholder.
+[ ] Tidak ada logo lama yang tersisa di UI.
+
+==================================================
+14. FINAL VERIFICATION
+==================================================
+
+Setelah implementasi:
+
+- jalankan project
+- build production
+- cek console
+- cek asset loading
+- cek mobile viewport
+- cek desktop viewport
+- cek intro animation
+- cek navbar
+- cek footer
+- cek favicon
+- cek semua route/page
+
+Jika ditemukan error, perbaiki langsung.
+
+Jangan berhenti setelah hanya mengedit satu file.
+
+Kerjakan sebagai GLOBAL LOGO REPLACEMENT + INTRO MOTION IMPLEMENTATION.
