@@ -245,25 +245,24 @@ export default function TechnologyBands() {
                     >
                       {band.technologies.map((technology) => {
                         const isPressed =
-                          copy === 0 &&
                           pressedTechnology?.bandId === band.id &&
                           pressedTechnology.name === technology;
 
                         return (
-                        <li
-                          className={`technology-band__item${isPressed ? " is-touch-active" : ""}`}
-                          key={`${copy}-${technology}`}
-                          onPointerDown={(event) => {
-                            if (event.pointerType === "touch" && copy === 0) {
-                              setPressedTechnology({ bandId: band.id, name: technology });
-                            }
-                          }}
-                          onPointerUp={() => setPressedTechnology(null)}
-                          onPointerCancel={() => setPressedTechnology(null)}
-                          onPointerLeave={() => setPressedTechnology(null)}
-                        >
-                          {technology}
-                        </li>
+                          <li
+                            className={`technology-band__item${isPressed ? " is-touch-active" : ""}`}
+                            key={`${copy}-${technology}`}
+                            onPointerDown={(event) => {
+                              if (event.pointerType === "touch") {
+                                setPressedTechnology({ bandId: band.id, name: technology });
+                              }
+                            }}
+                            onPointerUp={() => setPressedTechnology(null)}
+                            onPointerCancel={() => setPressedTechnology(null)}
+                            onPointerLeave={() => setPressedTechnology(null)}
+                          >
+                            {technology}
+                          </li>
                         );
                       })}
                     </ul>
