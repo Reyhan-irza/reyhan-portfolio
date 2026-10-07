@@ -1,0 +1,1164 @@
+# REBUILD "TOOLS IN MOTION" INTO A PREMIUM KINETIC TECHNOLOGY SYSTEM
+
+Saya ingin melakukan REWORK TOTAL pada section "Tools in motion" di portfolio.
+
+IMPLEMENTASI SAAT INI TERLIHAT SEPERTI:
+- skill grid
+- dashboard
+- icon catalog
+- template portfolio
+- kumpulan card teknologi
+
+Saya ingin mengubahnya menjadi sebuah PREMIUM KINETIC TECHNOLOGY SYSTEM yang terasa seperti bagian dari sebuah digital portfolio yang dirancang secara serius.
+
+JANGAN hanya memperbaiki spacing, warna, atau ukuran card.
+
+REWORK struktur visual section ini.
+
+==================================================
+1. CORE CONCEPT
+==================================================
+
+Ubah konsep:
+
+"Tools in motion"
+
+menjadi sebuah:
+
+KINETIC TECHNOLOGY SYSTEM
+
+Section harus terasa seperti technology signals / technical information yang bergerak melewati sebuah visual system.
+
+Teknologi BUKAN ditampilkan sebagai daftar skill.
+
+Teknologi harus menjadi bagian dari visual storytelling.
+
+Referensi rasa visual:
+
+- premium digital portfolio
+- editorial technology design
+- kinetic typography
+- motion graphics
+- technical system
+- sophisticated personal identity
+- cinematic but controlled
+- modern and intentional
+
+BUKAN:
+
+- skill card grid
+- dashboard
+- app settings screen
+- icon collection
+- generic developer portfolio
+- colorful technology wall
+- AI-generated template look
+
+==================================================
+2. IMPORTANT CATEGORY RULE
+==================================================
+
+Gunakan HANYA 3 kategori.
+
+01 / BUILD
+02 / SYSTEM
+03 / NETWORK
+
+JANGAN membuat kategori PLATFORM.
+
+JANGAN menambahkan kategori keempat.
+
+JANGAN memasukkan:
+- Platform
+- Infrastructure sebagai kategori terpisah
+- Cloud sebagai kategori terpisah
+- Database sebagai kategori terpisah
+
+Supabase, Vercel, Replit, dan teknologi platform lainnya TIDAK perlu ditampilkan di section ini.
+
+Teknologi tersebut tetap boleh muncul di:
+- Projects
+- project metadata
+- GitHub section
+- technical documentation
+jika memang sudah digunakan oleh portfolio.
+
+Section ini fokus pada:
+
+BUILD → SYSTEM → NETWORK
+
+==================================================
+3. CURRENT LAYOUT MUST BE REPLACED
+==================================================
+
+Hapus atau redesign total struktur lama yang berbentuk:
+
+- BUILD card
+- SYSTEM card
+- NETWORK card
+- PLATFORM card
+- large technology tiles
+- boxed logo cards
+- colorful logo grid
+- skill matrix
+- dashboard-like panels
+- "Select a mark to pause its flow"
+- rounded skill pills
+- excessive borders
+
+Jangan mempertahankan layout lama hanya untuk backward compatibility visual.
+
+Fungsionalitas section boleh dipertahankan,
+tetapi visual structure harus dibangun ulang.
+
+==================================================
+4. FINAL CONTENT STRUCTURE
+==================================================
+
+Gunakan struktur berikut:
+
+SECTION HEADER
+
+01 / SYSTEM
+
+TOOLS IN MOTION.
+
+Languages, systems and networks behind the work.
+
+Kemudian technology field.
+
+--------------------------------------------------
+BAND 01
+--------------------------------------------------
+
+BUILD
+
+React
+TypeScript
+JavaScript
+HTML
+CSS
+C#
+Node.js
+Git
+GitHub
+
+--------------------------------------------------
+BAND 02
+--------------------------------------------------
+
+SYSTEM
+
+Windows
+Linux
+Android
+Visual Studio
+VS Code
+Termux
+
+--------------------------------------------------
+BAND 03
+--------------------------------------------------
+
+NETWORK
+
+MikroTik
+Cisco
+Router
+Switch
+VLAN
+TCP/IP
+Network Infrastructure
+
+Jangan menambahkan PLATFORM.
+
+==================================================
+5. VISUAL LANGUAGE
+==================================================
+
+Gunakan visual language yang konsisten dengan portfolio:
+
+Premium Tech × Editorial × Geometric × Personal × Interactive
+
+Background:
+
+#05070B
+
+Surface:
+
+#0A0E15
+
+Elevated:
+
+#101621
+
+Primary text:
+
+#F5F7FA
+
+Secondary:
+
+#C9D0DC
+
+Muted:
+
+#8B93A3
+
+Primary accent:
+
+#667CFF
+
+Secondary accent:
+
+#8B6CFF
+
+Border:
+
+rgba(255,255,255,0.07)
+
+Jangan menggunakan random accent colors.
+
+Jangan membuat section penuh warna.
+
+==================================================
+6. NO CARD GRID
+==================================================
+
+JANGAN gunakan:
+
+.card
+.skill-card
+.logo-card
+rounded-card
+3-column-grid untuk technology items
+
+Setiap kategori harus berupa horizontal kinetic band.
+
+Teknologi hidup di dalam track.
+
+Contoh:
+
+BUILD
+
+REACT  •  TYPESCRIPT  •  JAVASCRIPT  •  HTML  •  CSS  •  C#  •  NODE.JS  •  GIT  •  GITHUB
+
+Kemudian track tersebut bergerak horizontal.
+
+==================================================
+7. TYPOGRAPHY
+==================================================
+
+Gunakan Manrope.
+
+Section title:
+
+TOOLS IN MOTION.
+
+Harus cukup besar untuk menjadi visual anchor,
+tetapi jangan memenuhi seluruh viewport.
+
+Gunakan typography hierarchy:
+
+01 / SYSTEM
+TOOLS IN MOTION.
+Languages, systems and networks behind the work.
+
+Kategori:
+
+BUILD
+SYSTEM
+NETWORK
+
+Gunakan uppercase + tracking untuk metadata.
+
+Gunakan sentence case untuk explanatory text.
+
+Jangan menggunakan typography terlalu dekoratif.
+
+==================================================
+8. TECHNOLOGY ITEM DESIGN
+==================================================
+
+Setiap technology item dapat terdiri dari:
+
+[logo monochrome] TECHNOLOGY NAME
+
+atau:
+
+TECHNOLOGY NAME
+
+•
+
+TECHNOLOGY NAME
+
+•
+
+TECHNOLOGY NAME
+
+Jika menggunakan logo:
+
+DEFAULT:
+- monochrome
+- silver/white
+- low contrast
+- consistent dimensions
+
+JANGAN menggunakan brand color asli untuk semua item.
+
+React tidak langsung biru terang.
+
+TypeScript tidak langsung biru terang.
+
+JavaScript tidak langsung kuning terang.
+
+MikroTik tidak langsung hijau terang.
+
+Cisco tidak langsung penuh warna.
+
+Semua harus terasa satu visual system.
+
+==================================================
+9. TECHNOLOGY LOGO BEHAVIOR
+==================================================
+
+DEFAULT:
+
+- grayscale / monochrome
+- opacity sekitar 0.65 - 0.85
+
+HOVER:
+
+- opacity meningkat
+- subtle scale 1.03 - 1.06
+- subtle brand-color tint
+- very subtle glow
+
+ACTIVE:
+
+- accent blue/violet
+- sedikit lebih terang
+- surrounding items sedikit menurun opacity
+
+Jangan membuat glow berlebihan.
+
+Jangan menggunakan transform berlebihan.
+
+==================================================
+10. KINETIC BANDS
+==================================================
+
+Buat 3 horizontal bands.
+
+BAND 01 / BUILD:
+
+arah:
+LEFT
+
+duration:
+30s
+
+BAND 02 / SYSTEM:
+
+arah:
+RIGHT
+
+duration:
+36s
+
+BAND 03 / NETWORK:
+
+arah:
+LEFT
+
+duration:
+42s
+
+Gunakan GSAP.
+
+Movement harus:
+
+- slow
+- elegant
+- continuous
+- linear
+- seamless
+- controlled
+
+JANGAN gunakan:
+
+- bounce
+- elastic
+- random jumps
+- aggressive rotation
+- excessive scale
+- fast movement
+
+==================================================
+11. GSAP IMPLEMENTATION
+==================================================
+
+Jika GSAP sudah tersedia,
+gunakan dependency yang sudah ada.
+
+Jika belum tersedia,
+install GSAP.
+
+Gunakan React-safe lifecycle.
+
+Gunakan:
+
+useLayoutEffect
+gsap.context()
+ScrollTrigger
+cleanup / revert
+
+Setiap band harus mempunyai animation instance sendiri.
+
+Contoh struktur konseptual:
+
+BUILD TRACK
+  -> gsap horizontal loop
+
+SYSTEM TRACK
+  -> gsap horizontal loop
+
+NETWORK TRACK
+  -> gsap horizontal loop
+
+Jangan membuat satu timeline raksasa yang sulit dipelihara.
+
+==================================================
+12. INFINITE MARQUEE
+==================================================
+
+Implementasikan true seamless infinite marquee.
+
+Track harus digandakan secara internal bila diperlukan:
+
+[items][items]
+
+Tujuan:
+
+- tidak ada blank gap
+- tidak ada jump
+- tidak ada snap
+- tidak ada visible reset
+- tidak ada pause saat looping
+
+Gunakan GSAP transform / xPercent.
+
+Hindari:
+
+left
+right
+
+untuk continuous movement.
+
+Gunakan:
+
+x
+xPercent
+transform
+
+==================================================
+13. SCROLL VELOCITY RESPONSE
+==================================================
+
+Gunakan ScrollTrigger untuk membaca scroll velocity.
+
+Normal:
+
+movement = 1.0
+
+Saat user scroll cepat:
+
+movement multiplier sekitar:
+
+1.35 - 2.0
+
+Setelah scroll berhenti:
+
+kembali perlahan ke:
+
+1.0
+
+Gunakan smoothing.
+
+JANGAN membuat track menjadi liar.
+
+Gunakan quickTo / gsap.to atau pendekatan setara
+agar velocity change tetap halus.
+
+Scroll harus terasa mempengaruhi system,
+bukan merusaknya.
+
+==================================================
+14. SCROLL-ENTER ANIMATION
+==================================================
+
+Jangan memakai:
+
+fade-up
+fade-up
+fade-up
+
+untuk semua elemen.
+
+Ketika section memasuki viewport:
+
+SECTION HEADER:
+- subtle horizontal movement
+- opacity transition
+- slight letter spacing adjustment
+
+BUILD TRACK:
+- masuk dari sisi viewport
+- kemudian menjadi continuous
+
+SYSTEM TRACK:
+- masuk dari arah berlawanan
+
+NETWORK TRACK:
+- masuk dari arah pertama
+
+Gunakan ScrollTrigger.
+
+==================================================
+15. SCROLL REVERSIBILITY
+==================================================
+
+Animasi section harus terasa reversible.
+
+Ketika scroll DOWN:
+
+section secara bertahap masuk,
+bands aktif,
+motion meningkat.
+
+Ketika scroll UP:
+
+progress kembali,
+movement/entrance state dapat berbalik secara natural.
+
+Jangan membuat section hanya memiliki:
+
+"play once"
+
+animation.
+
+Gunakan scrub apabila diperlukan.
+
+Namun continuous marquee tetap harus berjalan secara independent setelah active.
+
+==================================================
+16. HORIZONTAL DEPTH
+==================================================
+
+Jangan membuat semua band terlihat identik.
+
+Gunakan subtle hierarchy:
+
+BUILD:
+opacity 1
+
+SYSTEM:
+opacity 0.78
+
+NETWORK:
+opacity 0.62
+
+Tambahkan subtle vertical offset:
+
+BUILD:
+y: 0
+
+SYSTEM:
+y: 8-10px
+
+NETWORK:
+y: -5px
+
+Gunakan depth secara halus.
+
+Jangan membuat setiap band miring / berputar.
+
+==================================================
+17. CATEGORY LABELS
+==================================================
+
+Kategori tidak boleh menjadi card.
+
+Gunakan editorial label.
+
+Contoh:
+
+01
+BUILD
+
+02
+SYSTEM
+
+03
+NETWORK
+
+Gunakan small metadata typography.
+
+Tambahkan separator seperti:
+
+/
+•
++
+—
+RV
+
+Contoh:
+
+01 / BUILD
+
+atau:
+
+RV / BUILD 01
+
+Tetap minimal.
+
+==================================================
+18. RV BRAND LANGUAGE
+==================================================
+
+Gunakan branding RV secara subtle.
+
+Jangan meletakkan logo RV besar di tengah section.
+
+Gunakan:
+
+- tiny RV marker
+- angular divider
+- geometric line
+- technical corner
+- subtle diagonal line
+- blue/violet accent light
+
+Contoh:
+
+RV / TECH 01
+
+atau:
+
+RV SYSTEM / 01
+
+Jangan menjadikan setiap elemen bertuliskan RV.
+
+Branding harus terasa integrated,
+bukan ditempel.
+
+==================================================
+19. BACKGROUND SYSTEM
+==================================================
+
+Section harus mempunyai background yang hidup,
+tetapi sangat halus.
+
+Gunakan:
+
+#05070B
+
+Tambahkan:
+
+- ultra subtle grid
+- faint horizontal rules
+- subtle noise/grain
+- soft blue ambient light
+- subtle violet ambient light
+- angular RV-inspired geometry
+
+Semua background effect harus low contrast.
+
+Jangan menggunakan:
+
+- huge gradient blobs
+- intense neon clouds
+- excessive blur
+- excessive glassmorphism
+- floating 3D objects
+- random decorative icons
+
+==================================================
+20. EDITORIAL DIVIDERS
+==================================================
+
+Gunakan thin lines.
+
+Bukan card border.
+
+Contoh:
+
+────────────────────────
+
+01 / BUILD
+
+────────────────────────
+
+BUILD track
+
+────────────────────────
+
+02 / SYSTEM
+
+────────────────────────
+
+SYSTEM track
+
+────────────────────────
+
+03 / NETWORK
+
+────────────────────────
+
+NETWORK track
+
+────────────────────────
+
+Gunakan opacity rendah.
+
+Dividers harus membantu hierarchy.
+
+==================================================
+21. DESKTOP INTERACTION
+==================================================
+
+Desktop harus terasa interactive.
+
+Saat pointer masuk ke technology item:
+
+- item scale sekitar 1.03 - 1.06
+- opacity meningkat
+- logo lebih visible
+- subtle color reveal
+- neighboring items slightly reduce opacity
+- pointer response smooth
+
+Saat pointer keluar:
+
+semua kembali normal dengan interpolation halus.
+
+Jangan gunakan:
+
+- giant custom cursor
+- cursor follower besar
+- magnet effect berlebihan
+
+==================================================
+22. MOBILE INTERACTION
+==================================================
+
+Mobile tidak boleh bergantung pada hover.
+
+Technology bands tetap bergerak.
+
+Saat user melakukan touch:
+
+- subtle movement response
+- tap dapat highlight item
+- item dapat sedikit scale
+- state kembali normal dengan smooth transition
+
+Pastikan section wrapper:
+
+overflow-x: clip;
+
+atau solusi yang aman terhadap browser target.
+
+JANGAN menyebabkan horizontal page scroll.
+
+==================================================
+23. TOUCH / MOBILE MOTION
+==================================================
+
+Mobile movement harus lebih lambat.
+
+BUILD:
+36s
+
+SYSTEM:
+42s
+
+NETWORK:
+48s
+
+Movement tetap continuous.
+
+Tidak ada stutter.
+
+Tidak ada layout shift.
+
+Tidak ada horizontal scrollbar.
+
+==================================================
+24. RESPONSIVE TYPOGRAPHY
+==================================================
+
+Desktop:
+
+section title besar
+
+Mobile:
+
+gunakan responsive sizing.
+
+Gunakan:
+
+clamp()
+
+bukan ukuran fixed yang terlalu besar.
+
+Contoh:
+
+section title:
+clamp(2.4rem, 7vw, 6rem)
+
+sesuaikan dengan layout actual.
+
+Kategori:
+
+12-14px
+
+Technology names:
+
+16-26px
+
+sesuaikan responsive.
+
+==================================================
+25. RESPONSIVE LAYOUT
+==================================================
+
+Desktop:
+- 3 kinetic bands
+- large whitespace
+- stronger typography
+- multiple depth layers
+
+Tablet:
+- 3 bands
+- reduced spacing
+
+Mobile:
+- 3 bands
+- compact typography
+- smaller logos
+- slower movement
+- no horizontal overflow
+
+WAJIB TEST:
+
+320px
+360px
+375px
+390px
+393px
+414px
+768px
+1024px
+1280px
+1440px
+1920px
+
+==================================================
+26. PERFORMANCE
+==================================================
+
+Continuous animation hanya menggunakan GPU-friendly properties:
+
+transform
+opacity
+
+Hindari animating:
+
+width
+height
+top
+left
+
+untuk movement utama.
+
+Jangan gunakan filter blur besar pada banyak element.
+
+Jika ada glow:
+
+gunakan pseudo-element / low-cost effect.
+
+GSAP harus cleanup ketika React component unmount.
+
+Gunakan gsap.context() bila relevan.
+
+==================================================
+27. REDUCED MOTION
+==================================================
+
+Respect:
+
+prefers-reduced-motion: reduce
+
+Jika aktif:
+
+- matikan continuous marquee
+- matikan velocity boost
+- matikan unnecessary parallax
+- tampilkan technology tracks secara statis
+- pertahankan hierarchy visual
+- jangan membuat halaman kosong
+
+==================================================
+28. ACCESSIBILITY
+==================================================
+
+Pastikan:
+
+- semantic HTML
+- technology items tidak menjadi button jika tidak memiliki action
+- focus state terlihat jika interactive
+- contrast cukup
+- aria-label jika icon membutuhkan label
+- keyboard navigation tetap masuk akal
+- animation tidak mengganggu content accessibility
+
+==================================================
+29. DO NOT FABRICATE TECHNOLOGIES
+==================================================
+
+Jangan menambahkan teknologi yang belum ada di project hanya agar track terlihat penuh.
+
+Gunakan daftar yang diberikan.
+
+Bila sebuah logo asset tidak tersedia,
+lebih baik gunakan typography daripada membuat logo palsu.
+
+==================================================
+30. DO NOT BREAK EXISTING FEATURES
+==================================================
+
+Jangan menghapus atau merusak:
+
+- Home
+- About
+- History / Journey
+- Projects
+- Experience
+- Education
+- Certificates
+- Achievements
+- GitHub
+- News
+- Comments
+- Supabase
+- Visitor tracking
+- Admin
+- MusicController
+- LoadingScreen
+- Navbar
+- Mobile Navigation
+- CV / Resume
+- SEO
+- existing animations
+
+Task ini fokus pada:
+
+TOOLS IN MOTION
+
+Jangan melakukan redesign section lain
+kecuali perubahan kecil benar-benar diperlukan untuk integrasi.
+
+==================================================
+31. REMOVE OLD TECHNOLOGY SECTION REFERENCES
+==================================================
+
+Search repository untuk implementasi lama.
+
+Cari:
+
+Tools in motion
+BUILD
+SYSTEM
+NETWORK
+PLATFORM
+skill cards
+technology cards
+technology grid
+logo tiles
+Select a mark to pause its flow
+
+Hapus implementation lama yang tidak digunakan.
+
+Pastikan tidak ada duplicate section.
+
+Pastikan Home hanya merender implementation baru.
+
+==================================================
+32. CODE QUALITY
+==================================================
+
+Jaga component architecture.
+
+Bila section saat ini:
+
+src/components/ToolsInMotion.tsx
+
+atau nama sejenis,
+boleh direfactor.
+
+Pisahkan jika perlu:
+
+KineticTechSection.tsx
+
+KineticBand.tsx
+
+TechnologyItem.tsx
+
+atau struktur yang paling maintainable.
+
+Data technology sebaiknya didefinisikan sebagai array/object
+agar tidak hardcoded berulang kali di JSX.
+
+Contoh struktur:
+
+const bands = [
+  {
+    id: "build",
+    number: "01",
+    label: "BUILD",
+    direction: "left",
+    duration: 30,
+    items: [...]
+  },
+  {
+    id: "system",
+    number: "02",
+    label: "SYSTEM",
+    direction: "right",
+    duration: 36,
+    items: [...]
+  },
+  {
+    id: "network",
+    number: "03",
+    label: "NETWORK",
+    direction: "left",
+    duration: 42,
+    items: [...]
+  }
+];
+
+Sesuaikan dengan architecture project.
+
+==================================================
+33. VISUAL ACCEPTANCE TEST
+==================================================
+
+Setelah implementasi,
+section harus memenuhi semua ini:
+
+[ ] Skill card grid lama sudah hilang.
+[ ] Tidak ada PLATFORM category.
+[ ] Tidak ada colorful technology tile wall.
+[ ] Tidak terlihat seperti dashboard.
+[ ] Tidak ada rounded card untuk setiap skill.
+[ ] Hanya ada BUILD / SYSTEM / NETWORK.
+[ ] Technology tampil sebagai kinetic horizontal bands.
+[ ] BUILD bergerak ke kiri.
+[ ] SYSTEM bergerak ke kanan.
+[ ] NETWORK bergerak ke kiri.
+[ ] Semua movement seamless.
+[ ] Tidak ada visible reset.
+[ ] GSAP digunakan.
+[ ] Scroll velocity memberikan response subtle.
+[ ] Section entrance menggunakan motion yang lebih sophisticated.
+[ ] Animasi tidak hanya fade-up.
+[ ] Desktop pointer interaction bekerja.
+[ ] Mobile touch interaction bekerja.
+[ ] Tidak ada horizontal page overflow.
+[ ] Technology logos konsisten secara visual.
+[ ] Default logos monochrome.
+[ ] Brand color hanya muncul pada interaction.
+[ ] Typography terlihat editorial.
+[ ] RV branding terasa tetapi tidak berlebihan.
+[ ] Background terasa hidup tetapi tetap subtle.
+[ ] Section tetap bagus walaupun animasi dihentikan.
+[ ] prefers-reduced-motion didukung.
+[ ] Tidak ada technology yang difabrikasi.
+[ ] Existing portfolio features tetap berfungsi.
+[ ] Tidak ada console error.
+[ ] Production build berhasil.
+
+==================================================
+34. FINAL QUALITY BAR
+==================================================
+
+Jangan berhenti ketika section:
+
+"secara teknis sudah jalan."
+
+Section harus mencapai kualitas visual:
+
+premium
+intentional
+balanced
+cinematic
+editorial
+interactive
+
+Ketika seseorang melihat section ini,
+reaksi yang diharapkan bukan:
+
+"Oh, ini daftar skill."
+
+Tetapi:
+
+"Ini bagian dari visual identity portfolio yang bergerak."
+
+Prioritas:
+
+1. composition
+2. typography
+3. motion quality
+4. spacing
+5. interaction
+6. consistency
+7. performance
+
+Jangan menambahkan efek hanya demi terlihat ramai.
+
+Setiap motion harus memiliki tujuan visual.
+
+==================================================
+35. FINAL VERIFICATION
+==================================================
+
+Setelah selesai:
+
+1. Jalankan development server.
+2. Buka preview.
+3. Test desktop.
+4. Test mobile.
+5. Scroll down menuju section.
+6. Scroll kembali ke atas.
+7. Test fast scroll.
+8. Test slow scroll.
+9. Test pointer hover.
+10. Test tap mobile.
+11. Test reduced-motion.
+12. Pastikan tidak ada horizontal overflow.
+13. Pastikan tidak ada console error.
+14. Jalankan production build.
+15. Perbaiki semua warning/error yang berhubungan dengan implementasi.
+
+Jangan berhenti hanya karena development server berhasil.
+
+Periksa hasil visual secara langsung.
+
+TARGET AKHIR:
+Premium Kinetic Technology System
+dengan hanya tiga kategori:
+
+BUILD
+SYSTEM
+NETWORK
