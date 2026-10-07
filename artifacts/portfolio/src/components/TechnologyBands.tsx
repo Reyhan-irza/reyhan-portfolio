@@ -1,6 +1,88 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { Cable, Layers3, Network, Router, Terminal, Waypoints } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { DiVisualstudio } from "react-icons/di";
+import { FaWindows } from "react-icons/fa6";
+import {
+  SiAndroid,
+  SiCisco,
+  SiCss,
+  SiDebian,
+  SiDotnet,
+  SiGit,
+  SiGithub,
+  SiHtml5,
+  SiJavascript,
+  SiKalilinux,
+  SiLinux,
+  SiMikrotik,
+  SiNodedotjs,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+} from "react-icons/si";
+import type { IconType } from "react-icons";
+import { VscVscode } from "react-icons/vsc";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import "./TechnologyBands.css";
+
+type BrandLogo = { Icon: IconType; color: string };
+type ConceptIcon = { Icon: LucideIcon; color: string };
+
+const brandLogos: Record<string, BrandLogo> = {
+  React: { Icon: SiReact, color: "#61DAFB" },
+  TypeScript: { Icon: SiTypescript, color: "#3178C6" },
+  JavaScript: { Icon: SiJavascript, color: "#F7DF1E" },
+  HTML: { Icon: SiHtml5, color: "#E34F26" },
+  CSS: { Icon: SiCss, color: "#1572B6" },
+  "C#": { Icon: SiDotnet, color: "#512BD4" },
+  "Node.js": { Icon: SiNodedotjs, color: "#5FA04E" },
+  Git: { Icon: SiGit, color: "#F05032" },
+  GitHub: { Icon: SiGithub, color: "#F5F7FA" },
+  Tailwind: { Icon: SiTailwindcss, color: "#06B6D4" },
+  Windows: { Icon: FaWindows, color: "#0078D4" },
+  Linux: { Icon: SiLinux, color: "#FCC624" },
+  Android: { Icon: SiAndroid, color: "#3DDC84" },
+  "Visual Studio": { Icon: DiVisualstudio, color: "#5C2D91" },
+  "VS Code": { Icon: VscVscode, color: "#007ACC" },
+  "Kali Linux": { Icon: SiKalilinux, color: "#557C94" },
+  Debian: { Icon: SiDebian, color: "#A81D33" },
+  MikroTik: { Icon: SiMikrotik, color: "#E8EDF4" },
+  Cisco: { Icon: SiCisco, color: "#049FD9" },
+};
+
+const conceptIcons: Record<string, ConceptIcon> = {
+  Termux: { Icon: Terminal, color: "#C9D0DC" },
+  Router: { Icon: Router, color: "#D2D8E2" },
+  Switch: { Icon: Network, color: "#D2D8E2" },
+  VLAN: { Icon: Layers3, color: "#C4B5FD" },
+  "TCP/IP": { Icon: Cable, color: "#D2D8E2" },
+  "Network Infrastructure": { Icon: Waypoints, color: "#D2D8E2" },
+};
+
+function TechnologyLogo({ name }: { name: string }) {
+  const brand = brandLogos[name];
+  if (brand) {
+    const Icon = brand.Icon;
+    return (
+      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: brand.color }}>
+        <Icon aria-hidden="true" focusable="false" />
+      </span>
+    );
+  }
+
+  const concept = conceptIcons[name];
+  if (concept) {
+    const Icon = concept.Icon;
+    return (
+      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: concept.color }}>
+        <Icon aria-hidden="true" focusable="false" strokeWidth={1.8} />
+      </span>
+    );
+  }
+
+  throw new Error(`Missing technology logo for ${name}`);
+}
 
 type TechnologyBand = {
   id: string;
@@ -20,7 +102,7 @@ const bands: readonly TechnologyBand[] = [
     direction: "left",
     duration: 30,
     mobileDuration: 36,
-    technologies: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "C#", "Node.js", "Git", "GitHub"],
+    technologies: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "C#", "Node.js", "Git", "GitHub", "Tailwind"],
   },
   {
     id: "system",
@@ -29,7 +111,7 @@ const bands: readonly TechnologyBand[] = [
     direction: "right",
     duration: 36,
     mobileDuration: 42,
-    technologies: ["Windows", "Linux", "Android", "Visual Studio", "VS Code", "Termux"],
+    technologies: ["Windows", "Linux", "Android", "Visual Studio", "VS Code", "Termux", "Kali Linux", "Debian"],
   },
   {
     id: "network",
@@ -99,7 +181,6 @@ export default function TechnologyBands() {
           });
 
           const header = section.querySelector<HTMLElement>("[data-section-header]");
-          const title = section.querySelector<HTMLElement>("[data-section-title]");
           if (header) {
             gsap.fromTo(
               header,
@@ -117,23 +198,6 @@ export default function TechnologyBands() {
               },
             );
           }
-          if (title) {
-            gsap.fromTo(
-              title,
-              { letterSpacing: "-.08em" },
-              {
-                letterSpacing: "-.055em",
-                ease: "none",
-                scrollTrigger: {
-                  trigger: section,
-                  start: "top 78%",
-                  end: "top 36%",
-                  scrub: 0.65,
-                },
-              },
-            );
-          }
-
           section.querySelectorAll<HTMLElement>("[data-band-entry]").forEach((entry) => {
             const band = entry.closest<HTMLElement>("[data-band-id]");
             if (!band) return;
@@ -199,6 +263,9 @@ export default function TechnologyBands() {
       className="technology-bands"
       aria-labelledby="technology-bands-title"
     >
+      <h2 className="technology-bands__accessible-title" id="technology-bands-title">
+        Technology logos by category
+      </h2>
       <header className="technology-bands__header" data-section-header>
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
@@ -206,9 +273,6 @@ export default function TechnologyBands() {
             <span aria-hidden="true">/</span>
             <span>SYSTEM</span>
           </p>
-          <h2 id="technology-bands-title" data-section-title>
-            TOOLS IN MOTION<span aria-hidden="true">.</span>
-          </h2>
         </div>
         <p className="technology-bands__intro">
           Languages, systems and networks behind the work.
@@ -261,7 +325,7 @@ export default function TechnologyBands() {
                             onPointerCancel={() => setPressedTechnology(null)}
                             onPointerLeave={() => setPressedTechnology(null)}
                           >
-                            {technology}
+                            <TechnologyLogo name={technology} />
                           </li>
                         );
                       })}
