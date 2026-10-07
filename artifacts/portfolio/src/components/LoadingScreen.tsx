@@ -52,11 +52,11 @@ export default function LoadingScreen({ onFinish }: Props) {
       {/* Aurora glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
         <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[60%] rounded-[60%_40%_55%_45%]"
-          style={{ background: "radial-gradient(ellipse at 40% 40%, rgba(220,226,236,0.12) 0%, rgba(166,174,187,0.06) 40%, transparent 70%)", filter: "blur(60px)", animation: "aurora-1 14s ease-in-out infinite" }} />
+          style={{ background: "radial-gradient(ellipse at 40% 40%, rgba(139,92,246,0.22) 0%, rgba(109,40,217,0.10) 40%, transparent 70%)", filter: "blur(60px)", animation: "aurora-1 14s ease-in-out infinite" }} />
         <div className="absolute top-[-5%] right-[-10%] w-[60%] h-[55%] rounded-[45%_55%_40%_60%]"
-          style={{ background: "radial-gradient(ellipse at 60% 40%, rgba(201,209,220,0.1) 0%, rgba(147,156,170,0.05) 40%, transparent 70%)", filter: "blur(70px)", animation: "aurora-2 18s ease-in-out infinite" }} />
+          style={{ background: "radial-gradient(ellipse at 60% 40%, rgba(79,70,229,0.16) 0%, rgba(59,130,246,0.08) 40%, transparent 70%)", filter: "blur(70px)", animation: "aurora-2 18s ease-in-out infinite" }} />
         <div className="absolute top-[10%] left-[20%] w-[60%] h-[35%] rounded-[50%]"
-          style={{ background: "radial-gradient(ellipse at 50% 30%, rgba(183,191,203,0.08) 0%, rgba(132,141,154,0.04) 50%, transparent 75%)", filter: "blur(80px)", animation: "aurora-3 22s ease-in-out infinite" }} />
+          style={{ background: "radial-gradient(ellipse at 50% 30%, rgba(6,182,212,0.10) 0%, rgba(14,165,233,0.05) 50%, transparent 75%)", filter: "blur(80px)", animation: "aurora-3 22s ease-in-out infinite" }} />
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-6">
@@ -67,7 +67,7 @@ export default function LoadingScreen({ onFinish }: Props) {
           transform:  showLogo ? "translateY(0)" : "translateY(28px)",
           transition: "opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1)",
         }}>
-          <BrandLogo size="lg" alt="RV monogram logo" />
+          <BrandLogo size="lg" alt="Reyhan Irza Alvano RV logo" />
         </div>
 
         {/* Text */}
@@ -86,7 +86,7 @@ export default function LoadingScreen({ onFinish }: Props) {
             transform:  showText ? "translateX(0)" : "translateX(32px)",
             transition: "opacity 0.5s 0.08s cubic-bezier(0.22,1,0.36,1), transform 0.5s 0.08s cubic-bezier(0.22,1,0.36,1)",
           }}>
-            <span className="text-2xl font-bold text-white/75 select-none tracking-tight">
+            <span className="text-2xl font-bold gradient-text select-none tracking-tight">
               my portfolio.
             </span>
           </div>
@@ -105,7 +105,7 @@ export default function LoadingScreen({ onFinish }: Props) {
               className="h-full rounded-full"
               style={{
                 width: `${progress}%`,
-                background: "linear-gradient(90deg, #707987, #d5dbe4, #8b93a3)",
+                background: "linear-gradient(90deg, #7C3AED, #8B5CF6, #A78BFA)",
                 transition: "width 0.06s linear",
               }}
             />

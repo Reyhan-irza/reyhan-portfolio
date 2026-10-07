@@ -16,10 +16,12 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const pieces = Array.from(element.querySelectorAll<HTMLImageElement>("[data-intro-piece]"));
     const finalLogo = element.querySelector<HTMLElement>("[data-intro-final]");
     const sweep = element.querySelector<HTMLElement>("[data-intro-sweep]");
+    const identity = Array.from(element.querySelectorAll<HTMLElement>("[data-intro-copy]"));
+    const identityGroup = element.querySelector<HTMLElement>("[data-intro-identity]");
     const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
     const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
     const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
-    if (!finalLogo || !sweep || !orbit || !frame || !scan || pieces.length !== 3) return;
+    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || pieces.length !== 3) return;
 
     element.focus({ preventScroll: true });
     const media = gsap.matchMedia();
@@ -37,11 +39,13 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
         gsap.set(finalLogo, { autoAlpha: 0, scale: 0.97 });
         gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
+        gsap.set(identity, { autoAlpha: 0, y: 14, filter: "blur(4px)" });
         gsap.set([orbit, frame], { autoAlpha: 0, scale: 0.92 });
         gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
 
         if (isReduced) {
           gsap.set(finalLogo, { autoAlpha: 1, scale: 1 });
+          gsap.set(identity, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
           const reducedTimeline = gsap.timeline({ onComplete: onFinish });
           reducedTimeline.to(element, {
             autoAlpha: 0,
@@ -124,6 +128,15 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           }, 2.48)
           .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
           .to(scan, { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }, 2.2)
+          .to(identity, {
+            autoAlpha: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.44,
+            stagger: 0.08,
+            ease: "power3.out",
+          }, 2.72)
+          .to(identityGroup, { y: -18, scale: 0.97, duration: 0.55, ease: "power2.inOut" }, 3.82)
           .to(element, {
             clipPath: "inset(0% 0% 100% 0%)",
             duration: 0.62,
@@ -145,7 +158,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       tabIndex={-1}
       role="dialog"
       aria-modal="true"
-      aria-label="Brand mark introduction"
+      aria-labelledby="intro-name"
       onKeyDown={(event) => {
         if (event.key === "Escape") onFinish();
         if (event.key === "Tab") {
@@ -208,6 +221,11 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
               />
             </div>
           </div>
+        </div>
+        <div data-intro-identity className="rv-intro-identity">
+          <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
+          <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
+          <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/60">Student Developer · SMK</p>
         </div>
       </div>
     </div>
