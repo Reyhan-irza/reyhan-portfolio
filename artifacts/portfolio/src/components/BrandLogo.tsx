@@ -28,8 +28,8 @@ export default function BrandLogo({
     <img
       src={BRAND_LOGO_SRC}
       alt={alt}
-      width={1254}
-      height={1254}
+      width={640}
+      height={640}
       className={`block shrink-0 object-contain ${sizeClasses[size]} ${className}`.trim()}
       decoding="async"
       draggable={false}

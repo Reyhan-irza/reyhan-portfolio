@@ -36,7 +36,6 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         const isReduced = Boolean(context.conditions?.reduced);
         const compact = window.matchMedia("(max-width: 640px)").matches;
         const distance = Math.min(compact ? 76 : 142, Math.max(compact ? 36 : 76, element.clientWidth * 0.16));
-        const decorations = [orbit, frame, scan].filter((item): item is HTMLElement => Boolean(item));
 
         gsap.set(element, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
         gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
