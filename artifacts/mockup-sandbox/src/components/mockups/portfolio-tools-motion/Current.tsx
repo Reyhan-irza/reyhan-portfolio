@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Cable, Layers3, Network, Router, Terminal, Waypoints, type LucideIcon } from "lucide-react";
-import { FaMicrosoft, FaWindows } from "react-icons/fa6";
+import { DiVisualstudio } from "react-icons/di";
+import { FaWindows } from "react-icons/fa6";
 import {
   SiAndroid,
   SiCisco,
@@ -40,7 +41,7 @@ const brandLogos: Record<string, BrandLogo> = {
   Windows: { Icon: FaWindows, color: "#0078D4" },
   Linux: { Icon: SiLinux, color: "#FCC624" },
   Android: { Icon: SiAndroid, color: "#3DDC84" },
-  "Visual Studio": { Icon: FaMicrosoft, color: "#7A4BC2" },
+  "Visual Studio": { Icon: DiVisualstudio, color: "#5C2D91" },
   "VS Code": { Icon: VscVscode, color: "#007ACC" },
   "Kali Linux": { Icon: SiKalilinux, color: "#557C94" },
   Debian: { Icon: SiDebian, color: "#A81D33" },

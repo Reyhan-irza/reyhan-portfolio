@@ -270,21 +270,14 @@
   }
 
   .technology-band__item {
-    font-size: 1rem;
-  }
-
-  .technology-band__item::after {
-    margin-inline-start: 1.2rem;
+    width: 1.85rem;
+    height: 1.85rem;
   }
 }
 
 @media (max-width: 420px) {
   .technology-bands {
     padding-inline: .85rem;
-  }
-
-  .technology-bands__heading h2 {
-    font-size: clamp(2.15rem, 10vw, 2.8rem);
   }
 
   .technology-band {
@@ -318,6 +311,7 @@
     width: 100%;
     min-width: 0;
     transform: none !important;
+    animation: none !important;
     will-change: auto;
   }
 
@@ -336,14 +330,9 @@
   }
 
   .technology-band__item {
+    width: 1.9rem;
+    height: 1.9rem;
     max-width: 100%;
-    color: var(--tb-secondary);
-    font-size: clamp(.86rem, 3.4vw, 1rem);
-    white-space: normal;
     transition: none;
-  }
-
-  .technology-band__item::after {
-    margin-inline-start: .9rem;
   }
 }
