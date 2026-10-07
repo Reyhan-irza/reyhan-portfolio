@@ -3,6 +3,7 @@
 - [Workspace production builds](workspace-production-builds.md) — recursive builds must tolerate missing runtime-only PORT and BASE_PATH values.
 - [Portfolio browser QA](portfolio-browser-qa.md) — CDP keyboard events need native text fields, and Lenis scroll tests need geometry-based waits.
 - [Portfolio motion references](portfolio-motion-references.md) — adapt reference movement, never its identity; keep portfolio content, responsiveness, and reduced-motion support intact.
+- [RV portfolio identity](rv-portfolio-identity.md) — use the supplied RV master mark as the only logo source; do not redraw it or restore legacy marks.
 - [GSAP media conditions](gsap-media-conditions.md) — cover every intended mode; unused viewport queries can reset persistent animations during resize.
 - [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
 - [GSAP transform ownership](gsap-transform-ownership.md) — avoid stacking CSS translation with GSAP percentage transforms on the same animated element.
