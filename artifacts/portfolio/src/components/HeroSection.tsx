@@ -171,7 +171,7 @@ export default function HeroSection() {
               <br />
               IRZA
               <br />
-              <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
+              <span className="hero-name-accent">ALVANO<span className="text-[#aab3c5]">.</span></span>
             </h1>
           </div>
           <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
@@ -207,7 +207,7 @@ export default function HeroSection() {
           <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
-              alt="Metallic silver RV monogram with cool-blue edge lighting"
+              alt="Metallic silver RV monogram"
               fetchPriority="high"
               className="h-full w-full"
             />
