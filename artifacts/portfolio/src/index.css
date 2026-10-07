@@ -2682,9 +2682,9 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   isolation: isolate;
 }
 .rv-intro-content {
-  --rv-intro-mark-width: min(52vw, clamp(170px, 48vw, 220px));
-  --rv-intro-mark-half-height: clamp(52px, 15.2vw, 70px);
-  --rv-intro-stage-size: clamp(248px, 73vw, 335px);
+  --rv-intro-mark-width: min(52vw, clamp(180px, 51.5vw, 220px));
+  --rv-intro-mark-half-height: clamp(51px, 15.7vw, 68px);
+  --rv-intro-stage-size: clamp(248px, 76vw, 335px);
   position: absolute;
   top: 46%;
   left: 50%;
@@ -2741,7 +2741,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   grid-area: 1 / 1;
   place-self: center;
   width: var(--rv-intro-mark-width);
-  aspect-ratio: 592 / 371;
+  aspect-ratio: 568 / 347;
   background: linear-gradient(
     108deg,
     transparent 29%,
@@ -2761,7 +2761,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .rv-intro-identity {
   position: absolute;
-  top: calc(50% + var(--rv-intro-mark-half-height) + 30px);
+  top: calc(50% + var(--rv-intro-mark-half-height) + 20px);
   inset-inline: 0;
   transform-origin: center top;
 }
@@ -2808,9 +2808,9 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 @media (max-width: 640px) {
   .rv-intro-content {
-    --rv-intro-mark-width: min(52vw, clamp(170px, 48vw, 220px));
-    --rv-intro-mark-half-height: clamp(52px, 15.2vw, 70px);
-    --rv-intro-stage-size: clamp(248px, 73vw, 335px);
+    --rv-intro-mark-width: min(52vw, clamp(180px, 51.5vw, 220px));
+    --rv-intro-mark-half-height: clamp(51px, 15.7vw, 68px);
+    --rv-intro-stage-size: clamp(248px, 76vw, 335px);
   }
   .rv-intro-piece--one { top: 16%; left: 6%; }
   .rv-intro-piece--two { top: 42%; left: 19%; }
@@ -2828,14 +2828,14 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 @media (min-width: 641px) and (max-width: 1023px) {
   .rv-intro-content {
     --rv-intro-mark-width: clamp(190px, 30vw, 260px);
-    --rv-intro-mark-half-height: clamp(60px, 9.48vw, 82px);
+    --rv-intro-mark-half-height: clamp(59px, 9.16vw, 80px);
     --rv-intro-stage-size: clamp(289px, 45.6vw, 395px);
   }
 }
 @media (min-width: 1024px) {
   .rv-intro-content {
     --rv-intro-mark-width: clamp(220px, 20vw, 320px);
-    --rv-intro-mark-half-height: clamp(70px, 6.32vw, 101px);
+    --rv-intro-mark-half-height: clamp(67px, 6.11vw, 98px);
     --rv-intro-stage-size: clamp(334px, 30.4vw, 486px);
   }
 }
