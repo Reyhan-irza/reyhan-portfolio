@@ -255,7 +255,7 @@
 
   .technology-band {
     min-height: 6.6rem;
-    grid-template-columns: 5.65rem minmax(0, 1fr);
+    grid-template-columns: 6.25rem minmax(0, 1fr);
   }
 
   .technology-band__label {
@@ -291,7 +291,7 @@
   }
 
   .technology-band {
-    grid-template-columns: 5.25rem minmax(0, 1fr);
+    grid-template-columns: 6.2rem minmax(0, 1fr);
   }
 }
 
