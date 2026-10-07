@@ -22,7 +22,8 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
     const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
     const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
-    if (!finalLogo || !sweep) return;
+    const rule = element.querySelector<HTMLElement>("[data-intro-rule]");
+    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || !rule || pieces.length !== 3) return;
 
     skipRef.current?.focus();
     const media = gsap.matchMedia();
@@ -42,7 +43,9 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         gsap.set(finalLogo, { autoAlpha: 0, scale: 0.97 });
         gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
         gsap.set(identity, { autoAlpha: 0, y: 14, filter: "blur(4px)" });
-        gsap.set(decorations, { autoAlpha: 0, scale: 0.92 });
+        gsap.set([orbit, frame], { autoAlpha: 0, scale: 0.92 });
+        gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
+        gsap.set(rule, { scaleX: 0, transformOrigin: "center center" });
 
         if (isReduced) {
           gsap.set(finalLogo, { autoAlpha: 1, scale: 1 });
@@ -128,6 +131,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             ease: "power2.inOut",
           }, 2.48)
           .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
+          .to(rule, { scaleX: 1, duration: 0.42, ease: "power2.inOut" }, 2.35)
           .to(identity, {
             autoAlpha: 1,
             y: 0,
