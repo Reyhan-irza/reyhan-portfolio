@@ -10,6 +10,6 @@ export const modules: ModuleMap = {
   "./components/mockups/portfolio-editorial-refresh-2026/JourneySection.tsx": () => import("../components/mockups/portfolio-editorial-refresh-2026/JourneySection.tsx"),
   "./components/mockups/portfolio-editorial-refresh-2026/Navbar.tsx": () => import("../components/mockups/portfolio-editorial-refresh-2026/Navbar.tsx"),
   "./components/mockups/portfolio-editorial-refresh-2026/Refresh.tsx": () => import("../components/mockups/portfolio-editorial-refresh-2026/Refresh.tsx"),
-  "./components/mockups/portfolio-redesign/CurrentPortfolioSections.tsx": () => import("../components/mockups/portfolio-redesign/CurrentPortfolioSections.tsx"),
-  "./components/mockups/portfolio-tools-motion/Current.tsx": () => import("../components/mockups/portfolio-tools-motion/Current.tsx")
+  "./components/mockups/portfolio-tools-motion/Current.tsx": () => import("../components/mockups/portfolio-tools-motion/Current.tsx"),
+  "./components/mockups/portfolio-redesign/CurrentPortfolioSections.tsx": () => import("../components/mockups/portfolio-redesign/CurrentPortfolioSections.tsx")
 };
