@@ -173,7 +173,11 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       <div className="rv-intro-content z-10 text-center">
         <div className="rv-intro-stage grid place-items-center" aria-hidden="true">
           <span data-intro-orbit className="rv-intro-orbit absolute inset-[8%]" />
-          <span data-intro-frame className="rv-intro-frame absolute inset-0" />
+          <span data-intro-frame className="rv-intro-frame absolute inset-0" aria-hidden="true">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+              <polygon points="50,1 99,50 50,99 1,50" />
+            </svg>
+          </span>
           <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
           <div className="rv-intro-assembly">
             <img
