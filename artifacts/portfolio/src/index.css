@@ -2814,7 +2814,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   color: rgba(235,239,247,.9);
   opacity: .96;
 }
-.rv-intro-skip:focus-visible {
+.portfolio-shell .rv-intro-skip:focus-visible {
   outline: 1px solid rgba(205,214,226,.42);
   outline-offset: 2px;
 }
