@@ -23,7 +23,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
     if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || pieces.length !== 3) return;
 
-    skipRef.current?.focus();
+    element.focus({ preventScroll: true });
     const media = gsap.matchMedia();
     media.add(
       {
@@ -155,6 +155,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     <div
       ref={introRef}
       className="rv-intro fixed inset-0 z-[100] flex items-center justify-center"
+      tabIndex={-1}
       role="dialog"
       aria-modal="true"
       aria-labelledby="intro-name"

@@ -2667,6 +2667,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   min-height: 100vh;
   min-height: 100svh;
 }
+.rv-intro:focus { outline: none; }
 .rv-intro-backdrop {
   background:
     radial-gradient(ellipse at 50% 46%, rgba(102,124,255,.12), transparent 26rem),
