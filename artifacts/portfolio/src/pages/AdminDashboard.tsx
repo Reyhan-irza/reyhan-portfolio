@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { supabase } from "@/lib/supabase";
 import { isAdminLoggedIn, logoutAdmin } from "@/lib/adminAuth";
+import BrandLogo from "@/components/BrandLogo";
 
 /* ── Notification sound (AudioContext, no external file) ── */
 function playNotifSound() {
@@ -323,7 +324,7 @@ export default function AdminDashboard() {
         style={SIDEBAR_BG}
       >
         <div className="p-5 border-b border-white/10 flex flex-col gap-2">
-          <img src="/logo.png" alt="Reyhan" className="h-10 w-auto object-contain self-start" style={{ imageRendering: "crisp-edges" }} />
+          <BrandLogo size="sm" alt="" className="self-start" />
           <p className="text-white/30 text-xs">Admin Dashboard</p>
         </div>
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
+import BrandLogo from "./BrandLogo";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -186,7 +187,7 @@ export default function Navbar() {
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#home" data-nav-enter aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
-            <img src={`${import.meta.env.BASE_URL}rv-mark.webp`} alt="" className="h-10 w-10 object-contain" />
+            <BrandLogo size="sm" alt="" />
             <span className="flex flex-col leading-tight">
               <span className="text-[11px] font-bold uppercase tracking-[.15em] text-white">Reyhan Irza Alvano</span>
               <span className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/45">Student Developer</span>
@@ -275,7 +276,7 @@ export default function Navbar() {
             <p className="text-xs text-white/70">Reyhan Irza Alvano</p>
             <p className="mt-1 font-mono text-[9px] uppercase tracking-[.17em] text-white/35">Vierlykirk / Indonesia</p>
           </div>
-          <img src={`${import.meta.env.BASE_URL}rv-mark.webp`} alt="" className="h-12 w-12 object-contain opacity-80" />
+          <BrandLogo size="md" alt="" className="opacity-80" />
         </div>
       </aside>
     </>

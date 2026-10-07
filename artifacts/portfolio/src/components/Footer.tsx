@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
+import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
   const footerRef = useScrollAnim<HTMLElement>({
@@ -40,11 +41,13 @@ export default function Footer() {
           <div>
             <button
               onClick={() => scroll("#home")}
-              className="text-2xl font-bold text-[#a43f2d] mb-2 block hover:opacity-80 transition-opacity tracking-tight"
+              className="mb-3 flex items-center gap-3 text-lg font-bold tracking-tight text-[#f5f7fa] transition-opacity hover:opacity-80"
+              aria-label="Return to the home section"
             >
-              Reyhan.
+              <BrandLogo size="md" alt="" />
+              <span>Reyhan Irza Alvano</span>
             </button>
-            <p className="text-[#6d6a62] text-sm max-w-xs leading-relaxed">
+            <p className="max-w-xs text-sm leading-relaxed text-[#8b93a3]">
                React / TypeScript builder documenting shipped education, library and portfolio work.
             </p>
           </div>
@@ -54,7 +57,7 @@ export default function Footer() {
               <button
                 key={l.label}
                 onClick={() => scroll(l.href)}
-                className="text-[#6d6a62] text-sm hover:text-[#a43f2d] transition-colors duration-200"
+                className="text-sm text-[#8b93a3] transition-colors duration-200 hover:text-[#667cff]"
               >
                 {l.label}
               </button>
@@ -72,29 +75,29 @@ export default function Footer() {
 
         {/* Bottom row */}
         <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[#6d6a62] text-xs text-center sm:text-left">
+          <p className="text-center text-xs text-[#8b93a3] sm:text-left">
             &copy; {year}{" "}
-              <span className="text-[#211f1b] font-medium">Reyhan Irza Alvano</span>.
+              <span className="font-medium text-[#f5f7fa]">Reyhan Irza Alvano</span>.
             All rights reserved.
           </p>
 
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <div className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
+            <div className="flex items-center gap-1.5 text-xs text-[#8b93a3]">
               <span>Built with</span>
-              <Heart className="w-3 h-3 text-[#a43f2d] fill-[#a43f2d]/20" />
+              <Heart className="h-3 w-3 text-[#667cff] fill-[#667cff]/20" />
               <span>using</span>
-              <SiReact className="w-3 h-3 text-[#6d6a62]" />
-              <SiTypescript className="w-3 h-3 text-[#6d6a62]" />
-              <SiTailwindcss className="w-3 h-3 text-[#6d6a62]" />
+              <SiReact className="h-3 w-3 text-[#8b93a3]" />
+              <SiTypescript className="h-3 w-3 text-[#8b93a3]" />
+              <SiTailwindcss className="h-3 w-3 text-[#8b93a3]" />
             </div>
 
-             <span className="text-[#6d6a62] text-[10px]">·</span>
+             <span className="text-[10px] text-[#8b93a3]">·</span>
             <GuessMyAge />
-            <span className="text-[#6d6a62] text-[10px]">·</span>
+            <span className="text-[10px] text-[#8b93a3]">·</span>
 
             <button
               onClick={() => navigate("/admin")}
-              className="flex items-center gap-1 text-[#6d6a62] text-[10px] hover:text-[#a43f2d] transition-colors duration-300 group"
+              className="group flex items-center gap-1 text-[10px] text-[#8b93a3] transition-colors duration-300 hover:text-[#667cff]"
               title="Developer Access"
             >
               <Settings className="w-2.5 h-2.5 group-hover:rotate-90 transition-transform duration-300" />

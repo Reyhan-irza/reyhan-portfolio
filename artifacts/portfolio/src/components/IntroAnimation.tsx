@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { gsap } from "../lib/motion";
+import BrandLogo, { BRAND_LOGO_SRC } from "./BrandLogo";
 
 interface IntroAnimationProps {
   onFinish: () => void;
@@ -13,73 +14,141 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
   useLayoutEffect(() => {
     const element = introRef.current;
     if (!element) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      onFinish();
-      return;
-    }
+    const pieces = Array.from(element.querySelectorAll<HTMLImageElement>("[data-intro-piece]"));
+    const finalLogo = element.querySelector<HTMLElement>("[data-intro-final]");
+    const sweep = element.querySelector<HTMLElement>("[data-intro-sweep]");
+    const identity = Array.from(element.querySelectorAll<HTMLElement>("[data-intro-copy]"));
+    const identityGroup = element.querySelector<HTMLElement>("[data-intro-identity]");
+    const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
+    const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
+    const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
+    if (!finalLogo || !sweep) return;
+
     skipRef.current?.focus();
-    const context = gsap.context(() => {
-      const timeline = gsap.timeline({
-        delay: 0.12,
-        onComplete: onFinish,
-        defaults: { overwrite: "auto" },
-      });
-      timeline
-        .fromTo("[data-intro-orbit]", { autoAlpha: 0, scale: 0.78, rotation: -22 }, {
-          autoAlpha: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 0.72,
-          ease: "power3.out",
-        })
-        .fromTo("[data-intro-frame]", { autoAlpha: 0, scale: 0.82, rotation: 45 }, {
-          autoAlpha: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 0.72,
-          ease: "power2.out",
-        }, 0.12)
-        .fromTo("[data-intro-mark]", {
-          clipPath: "inset(42% 42% 42% 42%)",
-          scale: 0.9,
-          opacity: 0,
-          rotation: -3,
-        }, {
-          clipPath: "inset(0% 0% 0% 0%)",
-          scale: 1,
-          opacity: 1,
-          rotation: 0,
-          duration: 0.86,
-          ease: "power3.inOut",
-        }, 0.24)
-        .fromTo("[data-intro-scan]", { scaleX: 0, autoAlpha: 0 }, {
-          scaleX: 1,
-          autoAlpha: 1,
-          duration: 0.55,
-          ease: "power3.inOut",
-        }, 0.48)
-        .fromTo("[data-intro-rule]", { scaleX: 0 }, {
-          scaleX: 1,
-          duration: 0.52,
-          ease: "power2.inOut",
-        }, 0.86)
-        .fromTo("[data-intro-copy]", { y: 14, opacity: 0, filter: "blur(4px)" }, {
-          y: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 0.5,
-          stagger: 0.075,
-          ease: "power3.out",
-        }, 0.98)
-        .to(
-          ["[data-intro-mark]", "[data-intro-frame]", "[data-intro-orbit]", "[data-intro-scan]", "[data-intro-rule]", "[data-intro-copy]", ".rv-intro-skip"],
-          { autoAlpha: 0, y: -10, scale: 0.985, duration: 0.28, ease: "power2.inOut" },
-          1.9,
-        )
-        .to(element, { autoAlpha: 0, duration: 0.34, ease: "power2.inOut" }, 2.04);
-    }, element);
-    return () => context.revert();
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        standard: "(prefers-reduced-motion: no-preference)",
+      },
+      (context) => {
+        const isReduced = Boolean(context.conditions?.reduced);
+        const compact = window.matchMedia("(max-width: 640px)").matches;
+        const distance = Math.min(compact ? 76 : 142, Math.max(compact ? 36 : 76, element.clientWidth * 0.16));
+        const decorations = [orbit, frame, scan].filter((item): item is HTMLElement => Boolean(item));
+
+        gsap.set(element, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
+        gsap.set(finalLogo, { autoAlpha: 0, scale: 0.97 });
+        gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
+        gsap.set(identity, { autoAlpha: 0, y: 14, filter: "blur(4px)" });
+        gsap.set(decorations, { autoAlpha: 0, scale: 0.92 });
+
+        if (isReduced) {
+          gsap.set(finalLogo, { autoAlpha: 1, scale: 1 });
+          gsap.set(identity, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
+          const reducedTimeline = gsap.timeline({ onComplete: onFinish });
+          reducedTimeline.to(element, {
+            autoAlpha: 0,
+            delay: 0.9,
+            duration: 0.16,
+            ease: "none",
+          });
+          return () => reducedTimeline.kill();
+        }
+
+        const timeline = gsap.timeline({
+          delay: 0.12,
+          onComplete: onFinish,
+          defaults: { overwrite: "auto" },
+        });
+
+        timeline
+          .to(orbit, { autoAlpha: 1, scale: 1, duration: 0.62, ease: "power3.out" }, 0)
+          .to(frame, { autoAlpha: 1, scale: 1, duration: 0.66, ease: "power2.out" }, 0.1)
+          .fromTo(pieces[0], {
+            x: -distance,
+            y: -distance * 0.58,
+            rotation: -16,
+            scale: 0.82,
+            autoAlpha: 0,
+          }, {
+            x: 0,
+            y: 0,
+            rotation: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.7,
+            ease: "power3.out",
+          }, 0.24)
+          .fromTo(pieces[1], {
+            x: -distance * 0.76,
+            y: distance * 0.62,
+            rotation: 15,
+            scale: 0.84,
+            autoAlpha: 0,
+          }, {
+            x: 0,
+            y: 0,
+            rotation: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.7,
+            ease: "power3.out",
+          }, 0.56)
+          .fromTo(pieces[2], {
+            x: distance,
+            y: -distance * 0.2,
+            rotation: 17,
+            scale: 0.82,
+            autoAlpha: 0,
+          }, {
+            x: 0,
+            y: 0,
+            rotation: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.72,
+            ease: "power3.out",
+          }, 0.88)
+          .to(scan, { autoAlpha: 0.8, scaleX: 1, duration: 0.42, ease: "power2.inOut" }, 1.22)
+          .to(pieces, { scale: 0.985, duration: 0.22, ease: "power2.inOut" }, 1.72)
+          .to(pieces, { scale: 1, duration: 0.2, ease: "power3.out" }, 1.94)
+          .to(pieces, { autoAlpha: 0, duration: 0.2, ease: "power2.inOut" }, 2.2)
+          .to(finalLogo, {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.34,
+            ease: "power2.out",
+          }, 2.2)
+          .fromTo(sweep, { xPercent: -130, autoAlpha: 0 }, {
+            xPercent: 130,
+            autoAlpha: 1,
+            duration: 0.56,
+            ease: "power2.inOut",
+          }, 2.48)
+          .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
+          .to(identity, {
+            autoAlpha: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.44,
+            stagger: 0.08,
+            ease: "power3.out",
+          }, 2.72)
+          .to(identityGroup, { y: -18, scale: 0.97, duration: 0.55, ease: "power2.inOut" }, 3.82)
+          .to(element, {
+            clipPath: "inset(0% 0% 100% 0%)",
+            duration: 0.62,
+            ease: "power3.inOut",
+          }, 3.82)
+          .to(element, { autoAlpha: 0, duration: 0.02 }, 4.42);
+
+        return () => timeline.kill();
+      },
+    );
+
+    return () => media.revert();
   }, [onFinish]);
 
   return (
@@ -101,17 +170,52 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       <button ref={skipRef} type="button" className="rv-intro-skip absolute right-5 top-5 inline-flex min-h-11 items-center gap-2 px-3 text-xs text-white/65 hover:text-white" onClick={onFinish} aria-label="Skip introduction">
         Skip <X className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
-      <div className="relative z-10 flex w-[min(88vw,28rem)] flex-col items-center px-6 text-center">
-        <div className="rv-intro-stage relative mb-2 grid h-36 w-36 place-items-center md:h-40 md:w-40" aria-hidden="true">
+      <div className="rv-intro-content relative z-10 flex w-[min(88vw,32rem)] flex-col items-center px-6 text-center">
+        <div className="rv-intro-stage relative mb-2 grid place-items-center" aria-hidden="true">
           <span data-intro-orbit className="rv-intro-orbit absolute inset-[3%]" />
           <span data-intro-frame className="rv-intro-frame absolute inset-[15%]" />
           <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
-          <img data-intro-mark src={`${import.meta.env.BASE_URL}rv-mark.webp`} alt="" className="relative z-10 h-24 w-24 object-contain md:h-28 md:w-28" />
+          <div className="rv-intro-assembly">
+            <img
+              data-intro-piece
+              className="rv-intro-piece rv-intro-piece--one"
+              src={`${import.meta.env.BASE_URL}brand/rv-piece-01.webp`}
+              alt=""
+              draggable={false}
+            />
+            <img
+              data-intro-piece
+              className="rv-intro-piece rv-intro-piece--two"
+              src={`${import.meta.env.BASE_URL}brand/rv-piece-02.webp`}
+              alt=""
+              draggable={false}
+            />
+            <img
+              data-intro-piece
+              className="rv-intro-piece rv-intro-piece--three"
+              src={`${import.meta.env.BASE_URL}brand/rv-piece-03.webp`}
+              alt=""
+              draggable={false}
+            />
+            <div data-intro-final className="rv-intro-final">
+              <BrandLogo size="custom" alt="" className="rv-intro-final-mark" />
+              <span
+                data-intro-sweep
+                className="rv-intro-light-sweep"
+                style={{
+                  maskImage: `url("${BRAND_LOGO_SRC}")`,
+                  WebkitMaskImage: `url("${BRAND_LOGO_SRC}")`,
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <div data-intro-rule className="my-6 h-px w-full origin-center bg-gradient-to-r from-transparent via-[#8491ff]/70 to-transparent" />
-        <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
-        <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
-        <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/48">Student Developer · SMK</p>
+        <div data-intro-rule className="rv-intro-rule my-5 h-px w-full origin-center" />
+        <div data-intro-identity className="rv-intro-identity">
+          <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
+          <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
+          <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/60">Student Developer · SMK</p>
+        </div>
       </div>
     </div>
   );
