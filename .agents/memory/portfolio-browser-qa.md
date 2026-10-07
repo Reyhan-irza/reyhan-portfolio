@@ -1,12 +1,14 @@
 ---
 name: Portfolio browser QA
-description: Pitfalls when testing native keyboard behavior and smooth scrolling in the portfolio preview.
+description: Pitfalls when testing keyboard, pointer, marquee, and smooth-scroll behavior in the portfolio preview.
 ---
 
 For CDP-based interaction checks, include `text` and `unmodifiedText` on native Enter events; send Space with key value `" "` and code `Space`. In pages using Lenis or smooth scrolling, avoid chaining scroll interactions behind fixed short sleeps. Wait for target geometry to settle or reset scrolling to instant between checks.
 
 For the intro modal, focus the dialog container on mount rather than Skip. Keep Skip reachable by Tab with a restrained but visible keyboard focus outline.
 
-**Why:** Missing CDP text fields made native `<details>` activation appear inert. Chained smooth-scroll actions kept the animation in flight and caused later focus and keyboard checks to produce false negatives. Focusing Skip on intro mount also made its focus ring dominate the composition without improving keyboard access.
+For hover checks, explicitly emulate a mouse-capable pointer in headless Chromium; default headless mode may report no hover/fine pointer despite accepting CDP mouse input. Moving marquees can also make saved hit-test coordinates stale.
 
-**How to apply:** Isolate native keyboard checks and assert that the target section is visible rather than requiring an exact scroll offset. For the intro, verify initial dialog focus, Tab focus on Skip with a restrained but visible outline, and Escape dismissal.
+**Why:** Missing CDP text fields made native `<details>` activation appear inert. Chained smooth-scroll actions kept the animation in flight and caused later focus and keyboard checks to produce false negatives. Focusing Skip on intro mount also made its focus ring dominate the composition without improving keyboard access. Headless pointer media and moving track geometry caused false-negative hover checks.
+
+**How to apply:** Isolate native keyboard checks and assert that the target section is visible rather than requiring an exact scroll offset. For the intro, verify initial dialog focus, Tab focus on Skip with a restrained but visible outline, and Escape dismissal. Emulate a fine hover pointer for desktop styles; use reduced motion or fresh element geometry for marquee hit tests.
