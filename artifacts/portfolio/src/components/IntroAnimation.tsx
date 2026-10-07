@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
-import { X } from "lucide-react";
 import { gsap } from "../lib/motion";
-import BrandLogo, { BRAND_LOGO_SRC } from "./BrandLogo";
+import { BRAND_LOGO_INTRO_SRC } from "./BrandLogo";
 
 interface IntroAnimationProps {
   onFinish: () => void;
@@ -22,8 +21,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
     const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
     const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
-    const rule = element.querySelector<HTMLElement>("[data-intro-rule]");
-    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || !rule || pieces.length !== 3) return;
+    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || pieces.length !== 3) return;
 
     skipRef.current?.focus();
     const media = gsap.matchMedia();
@@ -44,7 +42,6 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         gsap.set(identity, { autoAlpha: 0, y: 14, filter: "blur(4px)" });
         gsap.set([orbit, frame], { autoAlpha: 0, scale: 0.92 });
         gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
-        gsap.set(rule, { scaleX: 0, transformOrigin: "center center" });
 
         if (isReduced) {
           gsap.set(finalLogo, { autoAlpha: 1, scale: 1 });
@@ -130,7 +127,6 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             ease: "power2.inOut",
           }, 2.48)
           .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
-          .to(rule, { scaleX: 1, duration: 0.42, ease: "power2.inOut" }, 2.35)
           .to(identity, {
             autoAlpha: 1,
             y: 0,
@@ -170,13 +166,13 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       }}
     >
       <div className="rv-intro-backdrop absolute inset-0" aria-hidden="true" />
-      <button ref={skipRef} type="button" className="rv-intro-skip absolute right-5 top-5 inline-flex min-h-11 items-center gap-2 px-3 text-xs text-white/65 hover:text-white" onClick={onFinish} aria-label="Skip introduction">
-        Skip <X className="h-3.5 w-3.5" aria-hidden="true" />
+      <button ref={skipRef} type="button" className="rv-intro-skip absolute inline-flex min-h-11 items-center" onClick={onFinish} aria-label="Skip introduction">
+        Skip
       </button>
-      <div className="rv-intro-content relative z-10 flex w-[min(88vw,32rem)] flex-col items-center px-6 text-center">
-        <div className="rv-intro-stage relative mb-2 grid place-items-center" aria-hidden="true">
-          <span data-intro-orbit className="rv-intro-orbit absolute inset-[3%]" />
-          <span data-intro-frame className="rv-intro-frame absolute inset-[15%]" />
+      <div className="rv-intro-content z-10 text-center">
+        <div className="rv-intro-stage grid place-items-center" aria-hidden="true">
+          <span data-intro-orbit className="rv-intro-orbit absolute inset-[7%]" />
+          <span data-intro-frame className="rv-intro-frame absolute inset-0" />
           <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
           <div className="rv-intro-assembly">
             <img
@@ -201,19 +197,25 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
               draggable={false}
             />
             <div data-intro-final className="rv-intro-final">
-              <BrandLogo size="custom" alt="" className="rv-intro-final-mark" />
+              <img
+                className="rv-intro-final-mark"
+                src={BRAND_LOGO_INTRO_SRC}
+                width={592}
+                height={371}
+                alt=""
+                draggable={false}
+              />
               <span
                 data-intro-sweep
                 className="rv-intro-light-sweep"
                 style={{
-                  maskImage: `url("${BRAND_LOGO_SRC}")`,
-                  WebkitMaskImage: `url("${BRAND_LOGO_SRC}")`,
+                  maskImage: `url("${BRAND_LOGO_INTRO_SRC}")`,
+                  WebkitMaskImage: `url("${BRAND_LOGO_INTRO_SRC}")`,
                 }}
               />
             </div>
           </div>
         </div>
-        <div data-intro-rule className="rv-intro-rule my-5 h-px w-full origin-center" />
         <div data-intro-identity className="rv-intro-identity">
           <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
           <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>

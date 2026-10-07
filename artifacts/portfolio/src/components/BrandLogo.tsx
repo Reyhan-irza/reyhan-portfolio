@@ -16,6 +16,7 @@ const sizeClasses: Record<BrandLogoSize, string> = {
 };
 
 export const BRAND_LOGO_SRC = `${import.meta.env.BASE_URL}brand/rv-logo.webp`;
+export const BRAND_LOGO_INTRO_SRC = `${import.meta.env.BASE_URL}brand/rv-logo-intro.webp`;
 
 export default function BrandLogo({
   size = "md",
