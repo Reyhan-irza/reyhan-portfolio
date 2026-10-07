@@ -127,6 +127,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             ease: "power2.inOut",
           }, 2.48)
           .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
+          .to(scan, { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }, 2.2)
           .to(identity, {
             autoAlpha: 1,
             y: 0,
@@ -171,7 +172,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       </button>
       <div className="rv-intro-content z-10 text-center">
         <div className="rv-intro-stage grid place-items-center" aria-hidden="true">
-          <span data-intro-orbit className="rv-intro-orbit absolute inset-[7%]" />
+          <span data-intro-orbit className="rv-intro-orbit absolute inset-[8%]" />
           <span data-intro-frame className="rv-intro-frame absolute inset-0" />
           <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
           <div className="rv-intro-assembly">
@@ -200,8 +201,8 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
               <img
                 className="rv-intro-final-mark"
                 src={BRAND_LOGO_INTRO_SRC}
-                width={592}
-                height={371}
+                width={568}
+                height={347}
                 alt=""
                 draggable={false}
               />
