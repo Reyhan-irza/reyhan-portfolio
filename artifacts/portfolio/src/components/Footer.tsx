@@ -41,11 +41,10 @@ export default function Footer() {
           <div>
             <button
               onClick={() => scroll("#home")}
-              className="mb-3 flex items-center gap-3 text-lg font-bold tracking-tight text-[#f5f7fa] transition-opacity hover:opacity-80"
+              className="mb-3 inline-flex items-center transition-opacity hover:opacity-80"
               aria-label="Return to the home section"
             >
               <BrandLogo size="md" alt="" />
-              <span>Reyhan Irza Alvano</span>
             </button>
             <p className="max-w-xs text-sm leading-relaxed text-[#8b93a3]">
                React / TypeScript builder documenting shipped education, library and portfolio work.
@@ -76,9 +75,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-center text-xs text-[#8b93a3] sm:text-left">
-            &copy; {year}{" "}
-              <span className="font-medium text-[#f5f7fa]">Reyhan Irza Alvano</span>.
-            All rights reserved.
+            &copy; {year} · All rights reserved.
           </p>
 
           <div className="flex items-center gap-3 flex-wrap justify-center">

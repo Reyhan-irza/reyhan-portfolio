@@ -86,7 +86,7 @@ export default function LoadingScreen({ onFinish }: Props) {
             transform:  showText ? "translateX(0)" : "translateX(32px)",
             transition: "opacity 0.5s 0.08s cubic-bezier(0.22,1,0.36,1), transform 0.5s 0.08s cubic-bezier(0.22,1,0.36,1)",
           }}>
-            <span className="text-2xl font-bold gradient-text select-none tracking-tight">
+            <span className="text-2xl font-bold text-white/75 select-none tracking-tight">
               my portfolio.
             </span>
           </div>
@@ -105,7 +105,7 @@ export default function LoadingScreen({ onFinish }: Props) {
               className="h-full rounded-full"
               style={{
                 width: `${progress}%`,
-                background: "linear-gradient(90deg, #7C3AED, #8B5CF6, #A78BFA)",
+                background: "linear-gradient(90deg, #707987, #d5dbe4, #8b93a3)",
                 transition: "width 0.06s linear",
               }}
             />

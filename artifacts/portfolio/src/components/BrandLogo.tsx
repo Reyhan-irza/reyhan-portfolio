@@ -20,7 +20,7 @@ export const BRAND_LOGO_INTRO_SRC = `${import.meta.env.BASE_URL}brand/rv-logo-in
 
 export default function BrandLogo({
   size = "md",
-  alt = "Reyhan Irza Alvano RV logo",
+  alt = "RV monogram logo",
   className = "",
   fetchPriority,
   loading,
@@ -31,7 +31,7 @@ export default function BrandLogo({
       alt={alt}
       width={640}
       height={640}
-      className={`block shrink-0 object-contain ${sizeClasses[size]} ${className}`.trim()}
+      className={`brand-logo-monochrome block shrink-0 object-contain ${sizeClasses[size]} ${className}`.trim()}
       decoding="async"
       draggable={false}
       fetchPriority={fetchPriority}
