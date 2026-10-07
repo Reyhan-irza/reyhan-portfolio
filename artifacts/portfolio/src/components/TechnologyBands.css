@@ -41,9 +41,9 @@
 
 .technology-bands__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 27rem);
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
   align-items: end;
-  gap: clamp(1.5rem, 5vw, 5rem);
+  gap: clamp(1.5rem, 4vw, 4rem);
   margin-bottom: clamp(2.8rem, 6vw, 5rem);
 }
 
