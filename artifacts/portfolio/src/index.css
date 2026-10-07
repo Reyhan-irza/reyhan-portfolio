@@ -2747,7 +2747,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
     108deg,
     transparent 29%,
     rgba(245,247,250,.76) 47%,
-    rgba(195,203,214,.52) 53%,
+    rgba(102,124,255,.58) 53%,
     transparent 69%
   );
   -webkit-mask-position: center;
@@ -2760,14 +2760,20 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   pointer-events: none;
   will-change: transform, opacity;
 }
+.rv-intro-identity {
+  position: absolute;
+  top: calc(50% + var(--rv-intro-mark-half-height) + 20px);
+  inset-inline: 0;
+  transform-origin: center top;
+}
 .rv-intro-orbit {
-  border: 1px dashed rgba(215,222,232,.18);
+  border: 1px dashed rgba(149,163,255,.24);
   border-radius: 50%;
-  box-shadow: 0 0 2rem rgba(215,222,232,.035);
+  box-shadow: 0 0 2rem rgba(102,124,255,.05);
 }
 .rv-intro-frame {
   pointer-events: none;
-  filter: drop-shadow(0 0 .7rem rgba(215,222,232,.07));
+  filter: drop-shadow(0 0 .7rem rgba(102,124,255,.1));
 }
 .rv-intro-frame svg {
   display: block;
@@ -2777,15 +2783,15 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .rv-intro-frame polygon {
   fill: none;
-  stroke: rgba(215,222,232,.28);
+  stroke: rgba(149,163,255,.34);
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
 }
 .rv-intro-scan {
   height: 1px;
   transform-origin: left center;
-  background: linear-gradient(90deg,transparent,rgba(230,234,240,.85),transparent);
-  box-shadow: 0 0 12px rgba(215,222,232,.5);
+  background: linear-gradient(90deg,transparent,rgba(169,180,255,.9),transparent);
+  box-shadow: 0 0 12px rgba(129,144,255,.8);
 }
 .rv-intro-skip {
   z-index: 2;
