@@ -51,7 +51,7 @@ body {
   display: flex;
   align-items: center;
   gap: .58rem;
-  margin: 0 0 1.15rem;
+  margin: 0 0 .25rem;
   color: var(--tb-muted);
   font: .67rem/1.4 "DM Mono", monospace;
   letter-spacing: .18em;
@@ -71,18 +71,14 @@ body {
   color: var(--tb-blue);
 }
 
-.technology-bands h2 {
-  margin: 0;
-  color: var(--tb-text);
-  font-size: clamp(2.4rem, 5vw, 4.8rem);
-  font-weight: 700;
-  letter-spacing: -.08em;
-  line-height: .96;
+.technology-bands__accessible-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-}
-
-.technology-bands h2 > span {
-  color: var(--tb-blue);
+  clip-path: inset(50%);
 }
 
 .technology-bands__intro {
@@ -145,6 +141,24 @@ body {
   align-items: center;
 }
 
+.technology-band--left .technology-band__track {
+  animation: technology-marquee-left var(--band-duration) linear infinite;
+}
+
+.technology-band--right .technology-band__track {
+  animation: technology-marquee-right var(--band-duration) linear infinite;
+}
+
+@keyframes technology-marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes technology-marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
 .technology-band__sequence {
   display: flex;
   flex: 0 0 auto;
@@ -161,26 +175,38 @@ body {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  color: var(--tb-secondary);
-  font-size: clamp(1rem, 1.52vw, 1.55rem);
-  font-weight: 550;
-  letter-spacing: .015em;
-  line-height: 1.3;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: .82;
-  transition: color .24s ease, opacity .24s ease, transform .24s cubic-bezier(.22,1,.36,1), text-shadow .24s ease;
+  justify-content: center;
+  width: clamp(1.9rem, 3.25vw, 2.75rem);
+  height: clamp(1.9rem, 3.25vw, 2.75rem);
+  opacity: .9;
+  transition: opacity .24s ease, transform .32s cubic-bezier(.22,1,.36,1), filter .24s ease;
 }
 
-.technology-band__item::after {
-  margin-inline-start: clamp(1.1rem, 2.6vw, 2.8rem);
-  color: rgba(129,144,255,.44);
-  content: "·";
-  font-size: .82em;
+.technology-band__mark {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.technology-band__mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .technology-band--system .technology-band__viewport { opacity: .78; }
-.technology-band--network .technology-band__viewport { opacity: .62; }
+.technology-band--network .technology-band__viewport { opacity: .84; }
+
+@media (hover: hover) and (pointer: fine) {
+  .technology-band__track:hover .technology-band__item { opacity: .42; }
+  .technology-band__track .technology-band__item:hover {
+    filter: drop-shadow(0 0 9px rgba(231,238,250,.24));
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
 
 @media (max-width: 760px) {
   .technology-bands { padding-inline: 1.1rem; }
@@ -189,13 +215,12 @@ body {
   .technology-band__label { gap: .3rem; }
   .technology-band__number, .technology-band__slash { font-size: .54rem; }
   .technology-band__name { font-size: .66rem; letter-spacing: .055em; }
-  .technology-band__item { font-size: 1rem; }
-  .technology-band__item::after { margin-inline-start: 1.2rem; }
+  .technology-band__track { animation-duration: var(--band-mobile-duration); }
+  .technology-band__item { width: 1.85rem; height: 1.85rem; }
 }
 
 @media (max-width: 420px) {
   .technology-bands { padding-inline: .85rem; }
-  .technology-bands h2 { font-size: clamp(2.15rem, 10vw, 2.8rem); }
   .technology-band { grid-template-columns: 6.2rem minmax(0, 1fr); }
 }
 
@@ -206,9 +231,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .technology-band { min-height: 0; align-items: start; padding-block: 1.35rem; transform: none; }
   .technology-band__viewport { overflow: visible; mask-image: none; }
-  .technology-band__track { display: block; width: 100%; min-width: 0; transform: none !important; }
+  .technology-band__track { display: block; width: 100%; min-width: 0; transform: none !important; animation: none !important; }
   .technology-band__sequence { display: flex; width: 100%; min-width: 0; flex-wrap: wrap; justify-content: flex-start; gap: .7rem .15rem; padding: 0; }
   .technology-band__sequence[aria-hidden="true"] { display: none; }
-  .technology-band__item { max-width: 100%; color: var(--tb-secondary); font-size: clamp(.86rem, 3.4vw, 1rem); white-space: normal; transition: none; }
-  .technology-band__item::after { margin-inline-start: .9rem; }
+  .technology-band__item { width: 1.9rem; height: 1.9rem; max-width: 100%; transition: none; }
 }
