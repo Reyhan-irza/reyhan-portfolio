@@ -75,10 +75,11 @@
 .technology-bands__heading h2 {
   margin: 0;
   color: var(--tb-text);
-  font-size: clamp(2.4rem, 6.35vw, 5.7rem);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
   font-weight: 700;
   letter-spacing: -.08em;
   line-height: .96;
+  white-space: nowrap;
 }
 
 .technology-bands__heading h2 > span {
@@ -292,6 +293,12 @@
 
   .technology-band {
     grid-template-columns: 6.2rem minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 761px) and (max-width: 900px) {
+  .technology-band {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
   }
 }
 
