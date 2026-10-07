@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import "./TechnologyBands.css";
 
@@ -49,6 +49,7 @@ type AnimatedTrack = {
 
 export default function TechnologyBands() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [pressedTechnology, setPressedTechnology] = useState<{ bandId: string; name: string } | null>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -242,11 +243,29 @@ export default function TechnologyBands() {
                       aria-hidden={copy === 1}
                       key={copy}
                     >
-                      {band.technologies.map((technology) => (
-                        <li className="technology-band__item" key={`${copy}-${technology}`}>
+                      {band.technologies.map((technology) => {
+                        const isPressed =
+                          copy === 0 &&
+                          pressedTechnology?.bandId === band.id &&
+                          pressedTechnology.name === technology;
+
+                        return (
+                        <li
+                          className={`technology-band__item${isPressed ? " is-touch-active" : ""}`}
+                          key={`${copy}-${technology}`}
+                          onPointerDown={(event) => {
+                            if (event.pointerType === "touch" && copy === 0) {
+                              setPressedTechnology({ bandId: band.id, name: technology });
+                            }
+                          }}
+                          onPointerUp={() => setPressedTechnology(null)}
+                          onPointerCancel={() => setPressedTechnology(null)}
+                          onPointerLeave={() => setPressedTechnology(null)}
+                        >
                           {technology}
                         </li>
-                      ))}
+                        );
+                      })}
                     </ul>
                   ))}
                 </div>

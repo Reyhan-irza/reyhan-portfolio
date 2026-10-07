@@ -232,6 +232,12 @@
   opacity: 1;
 }
 
+.technology-band__item.is-touch-active {
+  color: #c3caff;
+  transform: scale(1.035);
+  opacity: 1;
+}
+
 @media (max-width: 760px) {
   .technology-bands {
     padding-inline: 1.1rem;
