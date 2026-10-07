@@ -171,7 +171,7 @@ export default function HeroSection() {
               <br />
               IRZA
               <br />
-              <span className="hero-name-accent">ALVANO<span className="text-[#aab3c5]">.</span></span>
+              <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
             </h1>
           </div>
           <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
@@ -200,19 +200,20 @@ export default function HeroSection() {
 
         <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
-          <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-white/[.12]" />
+          <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
           <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
           <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
           <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
           <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
-              alt="Metallic silver RV monogram"
+              alt="Metallic silver RV monogram with cool-blue edge lighting"
               fetchPriority="high"
               className="h-full w-full"
             />
           </div>
           <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
+          <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
           <span className="hero-corner hero-corner-a" aria-hidden="true" />
           <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
