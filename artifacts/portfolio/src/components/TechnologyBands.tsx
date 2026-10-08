@@ -150,6 +150,7 @@ export default function TechnologyBands() {
           if (match.conditions?.reducedMotion) return;
 
           const compact = Boolean(match.conditions?.compact);
+          const revealDistance = () => gsap.utils.clamp(16, 42, section.clientWidth * 0.035);
           const animatedTracks: AnimatedTrack[] = [];
           let resetSpeed: gsap.core.Tween | undefined;
 
@@ -184,7 +185,7 @@ export default function TechnologyBands() {
           if (header) {
             gsap.fromTo(
               header,
-              { x: -24, autoAlpha: 0 },
+              { x: () => -gsap.utils.clamp(16, 24, section.clientWidth * 0.02), autoAlpha: 0 },
               {
                 x: 0,
                 autoAlpha: 1,
@@ -194,6 +195,7 @@ export default function TechnologyBands() {
                   start: "top 86%",
                   end: "top 34%",
                   scrub: 0.65,
+                  invalidateOnRefresh: true,
                 },
               },
             );
@@ -201,10 +203,10 @@ export default function TechnologyBands() {
           section.querySelectorAll<HTMLElement>("[data-band-entry]").forEach((entry) => {
             const band = entry.closest<HTMLElement>("[data-band-id]");
             if (!band) return;
-            const offset = band.dataset.direction === "right" ? 42 : -42;
+            const direction = band.dataset.direction === "right" ? 1 : -1;
             gsap.fromTo(
               entry,
-              { x: offset, autoAlpha: 0 },
+              { x: () => direction * revealDistance(), autoAlpha: 0 },
               {
                 x: 0,
                 autoAlpha: 1,
@@ -214,6 +216,7 @@ export default function TechnologyBands() {
                   start: "top 92%",
                   end: "top 48%",
                   scrub: 0.7,
+                  invalidateOnRefresh: true,
                 },
               },
             );
@@ -224,6 +227,10 @@ export default function TechnologyBands() {
             start: "top bottom",
             end: "bottom top",
             onToggle: (self) => {
+              if (!self.isActive) {
+                resetSpeed?.kill();
+                resetSpeed = undefined;
+              }
               animatedTracks.forEach(({ tween, setSpeed }) => {
                 tween.paused(!self.isActive);
                 if (!self.isActive) setSpeed(1);
@@ -231,10 +238,11 @@ export default function TechnologyBands() {
             },
             onUpdate: (self) => {
               const velocity = Math.abs(self.getVelocity());
+              if (velocity < 24) return;
               const multiplier = gsap.utils.clamp(1, 1.78, 1 + (velocity / 3000) * 0.78);
               animatedTracks.forEach(({ setSpeed }) => setSpeed(multiplier));
               resetSpeed?.kill();
-              resetSpeed = gsap.delayedCall(0.16, () => {
+              resetSpeed = gsap.delayedCall(0.18, () => {
                 animatedTracks.forEach(({ setSpeed }) => setSpeed(1));
               });
             },
