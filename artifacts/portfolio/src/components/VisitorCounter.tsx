@@ -37,7 +37,7 @@ export default function VisitorCounter() {
   return (
     <div
       className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
-      aria-label="Visitor counts from the Supabase visitors table"
+      aria-label="Portfolio visitor counts"
     >
        <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
         <Users className="h-3 w-3" aria-hidden="true" />
@@ -50,7 +50,7 @@ export default function VisitorCounter() {
         </span>
       )}
        <span className="font-mono text-[9px] uppercase tracking-[.12em] text-[#6d6a62]">
-        Source: Supabase
+         Totals
       </span>
       </div>
   );

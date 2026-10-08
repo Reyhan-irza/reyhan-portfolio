@@ -29,7 +29,6 @@ export default function RoadmapSection() {
               <p className="max-w-xl text-sm leading-relaxed text-[#65675f]">{desc}</p>
               <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.14em] text-[#65675f] md:justify-self-end">
                   <Circle className="h-2.5 w-2.5" aria-hidden="true" />
-                  Next
               </span>
             </li>
           ))}
