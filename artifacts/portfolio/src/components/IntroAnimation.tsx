@@ -223,7 +223,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           </div>
         </div>
         <div data-intro-identity className="rv-intro-identity">
-          <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal record</p>
+          <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal portfolio</p>
           <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
           <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/60">Student Developer · SMK</p>
         </div>

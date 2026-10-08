@@ -5,11 +5,11 @@ import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const milestones = [
-  ["STUDY", "SMK Negeri 2 Lubuk Basung", "TJKT — the education context behind this portfolio and its technical projects.", School],
-  ["BUILD", "VIREON Library", "A school-context digital library project and a major build milestone. Its project record carries the details currently available.", FolderKanban],
-  ["2025", "Juara I · Kabupaten Agam", "LKS IT Software Solution For Business. Recognition is shown separately from its certificate below.", Award],
-  ["ACHIEVEMENT", "CTF Competition — 2nd place", "The result is recorded without a competition name, date, or score because those details are not verified here.", Trophy],
-  ["ONGOING", "Keep the record honest", "More learning and work can be added here as it becomes real and verifiable.", Code2],
+  ["STUDY", "SMK Negeri 2 Lubuk Basung", "I study TJKT here, learning networking, systems, and technical fundamentals alongside web development.", School],
+  ["BUILD", "VIREON Library", "I built VIREON as a digital library for my school and learned a lot while turning the idea into a working system.", FolderKanban],
+  ["2025", "Juara I · Kabupaten Agam", "I placed 1st in LKS IT Software Solution For Business.", Award],
+  ["ACHIEVEMENT", "CTF Competition", "I finished 2nd.", Trophy],
+  ["ONGOING", "Keep learning", "I’m still building my skills and figuring out what I want to make next.", Code2],
 ] as const;
 
 export default function JourneySection() {
@@ -125,8 +125,8 @@ export default function JourneySection() {
     <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-        <div data-motion-item><p className="section-kicker">Project experience / education / recognition</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">A record, still in motion.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Dated milestones keep their verified dates. The CTF result is included without an event name, date, or score.</p>
+        <div data-motion-item><p className="section-kicker">Education / projects / competitions</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">What I’ve done so far.</h2></div>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>I’m still early in the journey, but a few projects and achievements have already shaped how I learn.</p>
         </div>
         <div ref={milestonesRef} className="journey-timeline relative mt-10 divide-y divide-[rgba(27,28,24,.16)]">
           <span ref={progressRef} className="journey-timeline-progress" aria-hidden="true" />

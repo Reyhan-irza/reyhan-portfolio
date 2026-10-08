@@ -36,11 +36,15 @@ function formatDate(dateStr: string) {
   const d = new Date(dateStr);
   const diff = Date.now() - d.getTime();
   const days = Math.floor(diff / 86_400_000);
-  if (days < 1) return "hari ini";
-  if (days === 1) return "kemarin";
-  if (days < 30) return `${days} hari lalu`;
-  if (days < 365) return `${Math.floor(days / 30)} bulan lalu`;
-  return `${Math.floor(days / 365)} tahun lalu`;
+  if (days < 1) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
+  if (days < 365) {
+    const months = Math.floor(days / 30);
+    return `${months} ${months === 1 ? "month" : "months"} ago`;
+  }
+  const years = Math.floor(days / 365);
+  return `${years} ${years === 1 ? "year" : "years"} ago`;
 }
 
 function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
@@ -66,7 +70,7 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
       </div>
 
       <p className="text-[#6d6a62] text-xs leading-relaxed flex-1 line-clamp-2">
-        {repo.description || "Tidak ada deskripsi."}
+        {repo.description || "No description available."}
       </p>
 
       {repo.topics.length > 0 && (
@@ -144,13 +148,13 @@ export default function GitHubSection() {
       <div className="max-w-6xl mx-auto">
 
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Open Source</p>
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Code / projects</p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            GitHub <span className="text-[#a43f2d]">Activity</span>
+            GitHub
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Repository terbaru dan aktivitas coding saya di GitHub.
+            Some of the repositories and experiments I’ve been working on.
           </p>
         </div>
 
@@ -188,7 +192,7 @@ export default function GitHubSection() {
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-6 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-300 hover:-translate-y-0.5 text-sm font-medium"
           >
-            <Github className="w-4 h-4" /> Lihat semua di GitHub
+            <Github className="w-4 h-4" /> View all on GitHub
           </a>
         </div>
       </div>

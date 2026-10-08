@@ -272,14 +272,14 @@ export default function TechnologyBands() {
       aria-labelledby="technology-bands-title"
     >
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
-        Technology logos by category
+        Technologies I use
       </h2>
       <header className="technology-bands__header" data-section-header>
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
             <span>01</span>
             <span aria-hidden="true">/</span>
-            <span>SYSTEM</span>
+            <span>TOOLS IN MOTION</span>
           </p>
         </div>
         <p className="technology-bands__intro">

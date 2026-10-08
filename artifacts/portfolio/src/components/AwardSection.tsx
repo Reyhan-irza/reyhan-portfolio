@@ -54,7 +54,7 @@ export default function AwardSection() {
         <div className="flex flex-col justify-between gap-8" data-motion-item>
           <div>
             <p className="section-kicker">Achievement / 2025</p>
-            <p className="mt-2 text-xs text-white/45">The result</p>
+            <p className="mt-2 text-xs text-white/45">Competition result</p>
           </div>
           <div className="flex items-center gap-4 border-y border-white/10 py-6">
             <span className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#667cff]/35 bg-[#667cff]/10 text-[#aab4ff]">
@@ -74,13 +74,13 @@ export default function AwardSection() {
               Kabupaten Agam
             </p>
           </div>
-          <p className="text-xs leading-relaxed text-white/45">Recognition is the achievement. The certificate beside it is the supporting document.</p>
+          <p className="text-xs leading-relaxed text-white/45">Certificate from the 2025 LKS IT Software Solution For Business competition.</p>
         </div>
 
         <div data-motion-item className="min-w-0">
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
-              <p className="section-kicker">Certificate / proof</p>
+              <p className="section-kicker">Certificate / 2025</p>
               <p className="mt-2 text-sm font-medium text-white">LKS IT Software Solution For Business · 2025</p>
             </div>
             <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">PDF document</span>
@@ -102,7 +102,7 @@ export default function AwardSection() {
               className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.015] motion-reduce:transition-none"
             />
           </a>
-          <p className="mt-2 text-[11px] text-white/45">Tap the certificate to open the original PDF.</p>
+          <p className="mt-2 text-[11px] text-white/45">Open the certificate to view the original PDF.</p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <a
               href={certificateUrl}

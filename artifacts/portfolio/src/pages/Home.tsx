@@ -68,21 +68,21 @@ export default function Home() {
       <main id="main-content" className="relative z-10">
         <HeroSection />
         <TechnologyBands />
-        <section id="proof" className="proof-strip px-6" aria-label="Portfolio record">
+        <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
-              <strong>Three live project records</strong>
+              <strong>Three projects I’ve built</strong>
               <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">02</span>
               <strong>React / TypeScript practice</strong>
-              <span>Interfaces, connected flows and documented iteration.</span>
+              <span>Web projects and experiments built as I learn.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>
-              <strong>Recognition on record</strong>
+              <strong>Competition results</strong>
               <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · Juara I.</span>
             </div>
           </div>

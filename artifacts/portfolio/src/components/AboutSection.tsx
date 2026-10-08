@@ -2,10 +2,10 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const notes = [
-  { icon: Layout, label: "A student record", text: "I study TJKT at SMK Negeri 2 Lubuk Basung, learning across web software, systems and networking as I build." },
-  { icon: Database, label: "Products with a purpose", text: "From a department introduction to a library workspace, the projects below show distinct problems, interfaces and connected flows." },
-  { icon: Workflow, label: "Build, inspect, refine", text: "I use the project itself as the evidence: its interface, linked build, repository and the details that can be checked." },
-  { icon: Code2, label: "A personal signature", text: "Vierlykirk is the creative signature. The RV geometry is the mark used to connect this portfolio and the work presented here." },
+  { icon: Layout, label: "Where I’m starting from", text: "I study TJKT at SMK Negeri 2 Lubuk Basung, where I’m learning about networking, systems, and web development." },
+  { icon: Database, label: "What I like building", text: "I started with school projects and gradually moved into department websites, digital libraries, and personal web projects. I like making things that have an actual use, even when they start as a simple idea." },
+  { icon: Workflow, label: "Build it. See what breaks. Fix it.", text: "I learn a lot from the parts that don’t work the first time. Building a project, finding the problem, and figuring out how to fix it usually teaches me more than just reading about it." },
+  { icon: Code2, label: "Why Vierlykirk?", text: "Vierlykirk is the name I use for my creative work. The RV mark became the visual identity behind this portfolio and the projects I put here." },
 ];
 
 export default function AboutSection() {
@@ -16,14 +16,14 @@ export default function AboutSection() {
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div data-motion-item>
-            <p className="section-kicker">01 / Working notes</p>
-            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">The work is the proof.</h2>
+            <p className="section-kicker">01 / About</p>
+            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Still learning. Still building.</h2>
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
-              I’m Reyhan Irza Alvano, a student at SMK Negeri 2 Lubuk Basung in TJKT. I learn by building and experimenting across web software and technical systems, then keep the work and verified milestones visible here.
+              I’m Reyhan, a student at SMK Negeri 2 Lubuk Basung studying TJKT. I learn by building things, testing ideas, breaking them, fixing them, and trying again.
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">The project pages carry the specifics. Vierlykirk is my signature; the RV mark is the visual thread.</p>
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">Most of what you see here came from that process.</p>
           </div>
         </div>
         <div ref={notesRef} className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">

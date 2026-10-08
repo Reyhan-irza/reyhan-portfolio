@@ -48,7 +48,7 @@ export default function Footer() {
               <span>Reyhan Irza Alvano</span>
             </button>
             <p className="max-w-xs text-sm leading-relaxed text-[#8b93a3]">
-               React / TypeScript builder documenting shipped education, library and portfolio work.
+               Student developer building with React, TypeScript, and whatever I’m currently learning.
             </p>
           </div>
 

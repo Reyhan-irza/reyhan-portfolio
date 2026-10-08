@@ -178,23 +178,23 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
+                I’m a student developer who learns by building. I make websites, digital tools, and small experiments, then improve them as I go.
               </p>
             </div>
             <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
-              React, TypeScript and connected web products. An honest record of the work in progress.
+              I mostly work with React and TypeScript while learning more about systems, networking, and how things work behind the interface.
             </p>
           </div>
           <div data-hero-item className="mt-9 flex flex-wrap items-center gap-3">
             <button type="button" data-hero-magnetic onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
-              Explore selected work <ArrowDown className="h-4 w-4" aria-hidden="true" />
+              Explore my work <ArrowDown className="h-4 w-4" aria-hidden="true" />
             </button>
             <button type="button" data-hero-magnetic onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
               Say hello <MoveUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
           <a data-hero-item href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.15em] text-white/40 transition-colors hover:text-[#9da9ff]">
-            Evidence on GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
         </div>
 

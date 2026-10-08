@@ -11,19 +11,19 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Available commands:\n\n  whoami    Developer profile\n  skills    Tools named in projects\n  projects  Selected project links\n  roadmap   Open intentions\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
+    `Available commands:\n\n  whoami    About me\n  skills    Tools in my projects\n  projects  Selected projects\n  roadmap   What I’m working on\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  React / TypeScript builder      │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA builder who learns by shipping real\ninterfaces, connected flows and notes.\n\nProjects, journey and evidence live\nthroughout this portfolio.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Student Developer              │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nI learn by building websites and small\ndigital tools, then improving them as\nI learn more about systems and\nnetworking.\n\nYou can find my projects throughout\nthis portfolio.`,
 
   skills: () =>
-    `TOOLS NAMED IN THE SHIPPED WORK\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThis is a record of tools used across the\nprojects, not a proficiency rating.`,
+    `TOOLS IN MY PROJECTS\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThese tools show up in different\nprojects. I’m still learning as I build.`,
 
   projects: () =>
     `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
 
   roadmap: () =>
-    `Open intentions:\n\n  Keep strengthening fundamentals\n  Make useful things\n  Document what is real\n\nThese are directions, not dated promises.`,
+    `What I’m working on:\n\n  Keep learning\n  Build useful things\n  See where it goes\n\nI don’t have everything planned out yet.\nI’m figuring it out as I go.`,
 
   future: () => COMMANDS.roadmap(),
 
@@ -38,7 +38,7 @@ const COMMANDS: Record<string, () => string> = {
 
   pwd: () => `/home/reyhan/portfolio`,
 
-  date: () => new Date().toLocaleString("id-ID", { dateStyle: "full", timeStyle: "medium" }),
+  date: () => new Date().toLocaleString("en-ID", { dateStyle: "full", timeStyle: "medium" }),
 
   clear: () => "__clear__",
   exit:  () => "__exit__",
@@ -52,7 +52,7 @@ export default function TerminalMode() {
   const [history, setHistory] = useState<HistoryItem[]>([
     {
       type: "output",
-      text: `Reyhan's Developer Terminal  v1.0.0\n────────────────────────────────────\nType 'help' to see available commands.\n`,
+      text: `Reyhan's Portfolio Terminal  v1.0.0\n────────────────────────────────────\nType 'help' to see available commands.\n`,
       id: 0,
     },
   ]);
@@ -119,7 +119,7 @@ export default function TerminalMode() {
       <button
         onClick={() => setOpen(true)}
          className="portfolio-terminal-trigger fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:border-[#a43f2d] hover:bg-[#a43f2d]/10 transition-all duration-200 hover:scale-105 active:scale-95"
-        title="Open Developer Terminal  [ > _ ]"
+        title="Open developer terminal"
         aria-label="Open developer terminal"
       >
         <Terminal className="w-4.5 h-4.5" />
