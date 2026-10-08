@@ -1596,10 +1596,6 @@
   color: var(--ink);
 }
 
-.portfolio-shell .editorial-nav img {
-  filter: grayscale(1) contrast(1.08);
-}
-
 .portfolio-shell .editorial-nav-link {
   position: relative;
   padding-block: 0.5rem;
