@@ -36,11 +36,15 @@ function formatDate(dateStr: string) {
   const d = new Date(dateStr);
   const diff = Date.now() - d.getTime();
   const days = Math.floor(diff / 86_400_000);
-  if (days < 1) return "hari ini";
-  if (days === 1) return "kemarin";
-  if (days < 30) return `${days} hari lalu`;
-  if (days < 365) return `${Math.floor(days / 30)} bulan lalu`;
-  return `${Math.floor(days / 365)} tahun lalu`;
+  if (days < 1) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
+  if (days < 365) {
+    const months = Math.floor(days / 30);
+    return `${months} ${months === 1 ? "month" : "months"} ago`;
+  }
+  const years = Math.floor(days / 365);
+  return `${years} ${years === 1 ? "year" : "years"} ago`;
 }
 
 function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
@@ -66,7 +70,7 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
       </div>
 
       <p className="text-[#6d6a62] text-xs leading-relaxed flex-1 line-clamp-2">
-        {repo.description || "Tidak ada deskripsi."}
+        {repo.description || "No description available."}
       </p>
 
       {repo.topics.length > 0 && (
