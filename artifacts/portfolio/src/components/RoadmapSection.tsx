@@ -16,7 +16,7 @@ export default function RoadmapSection() {
       <div className="mx-auto max-w-6xl">
         <div ref={ref} className="fade-up grid gap-8 border-b border-[rgba(27,28,24,.16)] pb-10 md:grid-cols-[1fr_1fr]">
           <div data-motion-item><p className="section-kicker">What I’m working on</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Learning as I go.</h2></div>
-          <p className="max-w-md text-base leading-relaxed text-[#65675f]" data-motion-item>I’m still early in the journey, and I’m figuring out what to focus on as I go.</p>
+          <p className="max-w-md text-base leading-relaxed text-[#65675f]" data-motion-item>I’m keeping my plans simple and leaving room to learn as I go.</p>
         </div>
         <ol ref={roadmapRef} className="mt-5 divide-y divide-[rgba(27,28,24,.16)] border-b border-[rgba(27,28,24,.16)]">
           {roadmap.map(({ label, title, desc, Icon }) => (

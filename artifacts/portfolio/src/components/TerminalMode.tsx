@@ -14,7 +14,7 @@ const COMMANDS: Record<string, () => string> = {
     `Available commands:\n\n  whoami    About me\n  skills    Tools in my projects\n  projects  Selected projects\n  roadmap   What I’m working on\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  Student Developer               │\n│  Lubuk Basung, Indonesia          │\n└─────────────────────────────────┘\n\nI learn by building websites and small\ndigital tools, then improving them as\nI learn more about systems and\nnetworking.\n\nYou can find my projects throughout\nthis portfolio.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Student Developer              │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nI learn by building websites and small\ndigital tools, then improving them as\nI learn more about systems and\nnetworking.\n\nYou can find my projects throughout\nthis portfolio.`,
 
   skills: () =>
     `TOOLS IN MY PROJECTS\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThese tools show up in different\nprojects. I’m still learning as I build.`,

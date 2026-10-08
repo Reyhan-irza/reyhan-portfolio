@@ -178,7 +178,7 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                I’m a student developer who learns by building. I make websites and small digital systems, then keep improving them as I learn.
+                I’m a student developer who learns by building. I make websites, digital tools, and small experiments, then improve them as I go.
               </p>
             </div>
             <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">

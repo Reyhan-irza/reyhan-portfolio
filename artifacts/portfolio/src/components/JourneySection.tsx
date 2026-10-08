@@ -8,7 +8,7 @@ const milestones = [
   ["STUDY", "SMK Negeri 2 Lubuk Basung", "I study TJKT here, learning networking, systems, and technical fundamentals alongside web development.", School],
   ["BUILD", "VIREON Library", "I built VIREON as a digital library for my school and learned a lot while turning the idea into a working system.", FolderKanban],
   ["2025", "Juara I · Kabupaten Agam", "I placed 1st in LKS IT Software Solution For Business.", Award],
-  ["CTF", "CTF Competition — 2nd place", "I finished in 2nd place.", Trophy],
+  ["CTF", "CTF Competition", "I finished 2nd.", Trophy],
   ["ONGOING", "Keep learning", "I’m still building my skills and figuring out what I want to make next.", Code2],
 ] as const;
 
