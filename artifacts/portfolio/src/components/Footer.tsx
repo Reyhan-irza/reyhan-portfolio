@@ -1,47 +1,54 @@
 import { Heart, Settings } from "lucide-react";
 import { SiReact, SiTailwindcss, SiTypescript } from "react-icons/si";
 import { useLocation } from "wouter";
+import { useScrollAnim } from "../hooks/useScrollAnim";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
+import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
+  const footerRef = useScrollAnim<HTMLElement>({
+    threshold: 0.12,
+    stagger: 0.06,
+    distance: 12,
+    scale: 0.995,
+  });
   const year = new Date().getFullYear();
   const [, navigate] = useLocation();
 
   const links = [
     { label: "Home",     href: "#home"     },
     { label: "About",    href: "#about"    },
+    { label: "Work",     href: "#projects" },
     { label: "Journey",  href: "#journey"  },
-    { label: "News",     href: "#news"     },
-    { label: "Projects", href: "#projects" },
+    { label: "Award",    href: "#achievement" },
     { label: "Contact",  href: "#contact"  },
   ];
 
   const scroll = (href: string) => {
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    }
   };
 
   return (
-    <footer className="relative pt-12 pb-8 px-6 border-t border-white/5 overflow-hidden">
-      {/* Subtle bottom glow */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-20 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.12), transparent 70%)", filter: "blur(40px)" }}
-      />
-
+    <footer ref={footerRef} className="relative pt-12 pb-8 px-6 border-t border-[rgba(33,31,27,.16)] overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+        <div data-motion-item className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
           <div>
             <button
               onClick={() => scroll("#home")}
-              className="text-2xl font-bold gradient-text mb-2 block hover:opacity-80 transition-opacity tracking-tight"
+              className="mb-3 flex items-center gap-3 text-lg font-bold tracking-tight text-[#f5f7fa] transition-opacity hover:opacity-80"
+              aria-label="Return to the home section"
             >
-              Reyhan.
+              <BrandLogo size="md" alt="" />
+              <span>Reyhan Irza Alvano</span>
             </button>
-            <p className="text-[#9CA3AF] text-sm max-w-xs leading-relaxed">
-              Full-Stack Developer building modern, premium digital products.
+            <p className="max-w-xs text-sm leading-relaxed text-[#8b93a3]">
+               React / TypeScript builder documenting shipped education, library and portfolio work.
             </p>
           </div>
 
@@ -50,7 +57,7 @@ export default function Footer() {
               <button
                 key={l.label}
                 onClick={() => scroll(l.href)}
-                className="text-white/35 text-sm hover:text-white/75 transition-colors duration-200"
+                className="text-sm text-[#8b93a3] transition-colors duration-200 hover:text-[#667cff]"
               >
                 {l.label}
               </button>
@@ -59,38 +66,38 @@ export default function Footer() {
         </div>
 
         {/* Visitor stats */}
-        <div className="mb-5">
+        <div data-motion-item className="mb-5">
           <VisitorCounter />
         </div>
 
         {/* Divider */}
-        <div className="rgb-divider mb-5" />
+        <div data-motion-item className="rgb-divider mb-5" />
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/22 text-xs text-center sm:text-left">
+        <div data-motion-item className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-center text-xs text-[#8b93a3] sm:text-left">
             &copy; {year}{" "}
-            <span className="text-white/35 font-medium">Reyhan Irza Alvano</span>.
+              <span className="font-medium text-[#f5f7fa]">Reyhan Irza Alvano</span>.
             All rights reserved.
           </p>
 
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <div className="flex items-center gap-1.5 text-white/22 text-xs">
+            <div className="flex items-center gap-1.5 text-xs text-[#8b93a3]">
               <span>Built with</span>
-              <Heart className="w-3 h-3 text-violet-500/50 fill-violet-500/30" />
+              <Heart className="h-3 w-3 text-[#667cff] fill-[#667cff]/20" />
               <span>using</span>
-              <SiReact className="w-3 h-3 text-cyan-400/50" />
-              <SiTypescript className="w-3 h-3 text-blue-400/50" />
-              <SiTailwindcss className="w-3 h-3 text-sky-400/50" />
+              <SiReact className="h-3 w-3 text-[#8b93a3]" />
+              <SiTypescript className="h-3 w-3 text-[#8b93a3]" />
+              <SiTailwindcss className="h-3 w-3 text-[#8b93a3]" />
             </div>
 
-            <span className="text-white/12 text-[10px]">·</span>
+             <span className="text-[10px] text-[#8b93a3]">·</span>
             <GuessMyAge />
-            <span className="text-white/12 text-[10px]">·</span>
+            <span className="text-[10px] text-[#8b93a3]">·</span>
 
             <button
               onClick={() => navigate("/admin")}
-              className="flex items-center gap-1 text-white/15 text-[10px] hover:text-white/40 transition-colors duration-300 group"
+              className="group flex items-center gap-1 text-[10px] text-[#8b93a3] transition-colors duration-300 hover:text-[#667cff]"
               title="Developer Access"
             >
               <Settings className="w-2.5 h-2.5 group-hover:rotate-90 transition-transform duration-300" />

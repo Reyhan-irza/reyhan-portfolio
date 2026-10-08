@@ -11,19 +11,19 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Available commands:\n\n  whoami    Developer profile\n  skills    Tech stack & ratings\n  projects  Recent projects\n  roadmap   Future goals\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
+    `Available commands:\n\n  whoami    Developer profile\n  skills    Tools named in projects\n  projects  Selected project links\n  roadmap   Open intentions\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  Full-Stack Developer            │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA developer who builds premium digital\nexperiences and dreams of real estate.\n\nPassionate about clean code, beautiful\nUIs, and financial independence.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano              │\n│  React / TypeScript builder      │\n│  Indonesia                       │\n└─────────────────────────────────┘\n\nA builder who learns by shipping real\ninterfaces, connected flows and notes.\n\nProjects, journey and evidence live\nthroughout this portfolio.`,
 
   skills: () =>
-    `FRONTEND\n  React         ████████████  Expert\n  TypeScript    ██████████░░  Advanced\n  Next.js       █████████░░░  Advanced\n  TailwindCSS   ████████████  Expert\n\nBACKEND\n  Node.js       █████████░░░  Advanced\n  Express       █████████░░░  Advanced\n  PostgreSQL    ████████░░░░  Proficient\n\nTOOLS\n  Git           ████████████  Expert\n  Docker        ██████░░░░░░  Intermediate\n  Figma         ████████░░░░  Proficient`,
+    `TOOLS NAMED IN THE SHIPPED WORK\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThis is a record of tools used across the\nprojects, not a proficiency rating.`,
 
   projects: () =>
     `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
 
   roadmap: () =>
-    `Future Roadmap:\n\n  [✓] 2026 — Portfolio Website\n  [○] 2027 — Freelance Projects\n  [○] 2028 — Launch Startup\n  [○] 2030 — Real Estate Investment\n  [○] 2035 — Financial Freedom`,
+    `Open intentions:\n\n  Keep strengthening fundamentals\n  Make useful things\n  Document what is real\n\nThese are directions, not dated promises.`,
 
   future: () => COMMANDS.roadmap(),
 
@@ -118,11 +118,12 @@ export default function TerminalMode() {
       {/* Trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-violet-500/25 flex items-center justify-center text-violet-400/70 hover:text-violet-300 hover:border-violet-500/50 hover:bg-violet-500/10 transition-all duration-200 hover:scale-105 active:scale-95 shadow-md"
+         className="portfolio-terminal-trigger fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:border-[#a43f2d] hover:bg-[#a43f2d]/10 transition-all duration-200 hover:scale-105 active:scale-95"
         title="Open Developer Terminal  [ > _ ]"
         aria-label="Open developer terminal"
       >
         <Terminal className="w-4.5 h-4.5" />
+        <span>Terminal</span>
       </button>
 
       {/* Modal */}
@@ -132,29 +133,29 @@ export default function TerminalMode() {
           onClick={() => setOpen(false)}
         >
           <div
-            className="modal-enter w-full sm:max-w-2xl h-[70vh] sm:h-[75vh] flex flex-col rounded-none sm:rounded-2xl overflow-hidden border border-white/8 shadow-2xl"
-            style={{ background: "hsl(220 18% 5%)" }}
+            className="modal-enter w-full sm:max-w-2xl h-[70vh] sm:h-[75vh] flex flex-col rounded-none sm:rounded-2xl overflow-hidden border border-[rgba(33,31,27,.16)]"
+            style={{ background: "#f3efe6" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Title bar */}
             <div
-              className="flex items-center gap-2 px-4 py-2.5 border-b border-white/8 flex-shrink-0"
-              style={{ background: "hsl(220 18% 7%)" }}
+              className="flex items-center gap-2 px-4 py-2.5 border-b border-[rgba(33,31,27,.16)] flex-shrink-0"
+              style={{ background: "#e8e1d4" }}
             >
               <div className="flex gap-1.5">
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-3 h-3 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors"
+                   className="w-3 h-3 rounded-full bg-[#a43f2d] hover:bg-[#843322] transition-colors"
                 />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/30" />
-                <div className="w-3 h-3 rounded-full bg-green-500/30" />
+                 <div className="w-3 h-3 rounded-full bg-[#6d6a62]/35" />
+                 <div className="w-3 h-3 rounded-full bg-[#6d6a62]/35" />
               </div>
-              <span className="flex-1 text-center text-white/25 text-xs font-mono tracking-wide">
+               <span className="flex-1 text-center text-[#6d6a62] text-xs font-mono tracking-wide">
                 reyhan@portfolio — bash
               </span>
               <button
                 onClick={() => setOpen(false)}
-                className="text-white/25 hover:text-white/60 transition-colors"
+                 className="text-[#6d6a62] hover:text-[#211f1b] transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -165,13 +166,13 @@ export default function TerminalMode() {
               {history.map((item) =>
                 item.type === "input" ? (
                   <div key={item.id} className="flex gap-2 mt-2">
-                    <span className="text-violet-400 select-none flex-shrink-0">{PROMPT}</span>
-                    <span className="text-white/90">{item.text}</span>
+                     <span className="text-[#a43f2d] select-none flex-shrink-0">{PROMPT}</span>
+                     <span className="text-[#211f1b]">{item.text}</span>
                   </div>
                 ) : (
                   <pre
                     key={item.id}
-                    className="text-white/55 whitespace-pre-wrap font-mono text-[12px] leading-relaxed ml-0"
+                     className="text-[#6d6a62] whitespace-pre-wrap font-mono text-[12px] leading-relaxed ml-0"
                   >
                     {item.text}
                   </pre>
@@ -183,10 +184,10 @@ export default function TerminalMode() {
             {/* Input */}
             <form
               onSubmit={submit}
-              className="flex items-center gap-2 px-4 py-3 border-t border-white/8 flex-shrink-0"
-              style={{ background: "hsl(220 18% 7%)" }}
+               className="flex items-center gap-2 px-4 py-3 border-t border-[rgba(33,31,27,.16)] flex-shrink-0"
+               style={{ background: "#e8e1d4" }}
             >
-              <span className="text-violet-400 font-mono text-[12px] select-none flex-shrink-0">
+               <span className="text-[#a43f2d] font-mono text-[12px] select-none flex-shrink-0">
                 {PROMPT}
               </span>
               <input
@@ -194,13 +195,13 @@ export default function TerminalMode() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKey}
-                className="flex-1 bg-transparent text-white/90 font-mono text-[12px] outline-none caret-violet-400 placeholder-white/20"
+                 className="flex-1 bg-transparent text-[#211f1b] font-mono text-[12px] outline-none caret-[#a43f2d] placeholder-[#6d6a62]"
                 placeholder="type a command…"
                 autoComplete="off"
                 spellCheck={false}
                 aria-label="Terminal input"
               />
-              <span className="w-px h-3.5 bg-violet-400 animate-pulse" />
+               <span className="w-px h-3.5 bg-[#a43f2d] animate-pulse" />
             </form>
           </div>
         </div>

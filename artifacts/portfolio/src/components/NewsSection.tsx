@@ -16,10 +16,10 @@ interface News {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Update:  "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  Project: "text-violet-400 bg-violet-500/10 border-violet-500/20",
-  General: "text-white/50 bg-white/5 border-white/10",
-  Info:    "text-green-400 bg-green-500/10 border-green-500/20",
+  Update:  "text-[#a43f2d] bg-[#a43f2d]/10 border-[#a43f2d]/20",
+  Project: "text-[#a43f2d] bg-[#a43f2d]/10 border-[#a43f2d]/20",
+  General: "text-[#6d6a62] bg-[#211f1b]/5 border-[#211f1b]/10",
+  Info:    "text-[#a43f2d] bg-[#a43f2d]/10 border-[#a43f2d]/20",
 };
 
 function fmtDate(d: string) {
@@ -34,7 +34,7 @@ function NewsCard({ item }: { item: News }) {
   const tagStyle = CATEGORY_COLORS[item.category] ?? CATEGORY_COLORS.General;
 
   return (
-    <article className="glass border border-white/8 rounded-2xl overflow-hidden hover:border-violet-500/25 transition-all duration-300 group hover:-translate-y-1">
+    <article data-motion-item className="glass border border-[rgba(33,31,27,.16)] rounded-2xl overflow-hidden hover:border-[#a43f2d] transition-all duration-300 group hover:-translate-y-1">
       {item.thumbnail && (
         <div className="h-44 overflow-hidden">
           <img
@@ -51,24 +51,24 @@ function NewsCard({ item }: { item: News }) {
             <Tag className="w-2.5 h-2.5" />
             {item.category}
           </span>
-          <span className="text-white/25 text-xs flex items-center gap-1">
+           <span className="text-[#6d6a62] text-xs flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             {fmtDate(item.created_at)}
           </span>
         </div>
 
-        <h3 className="text-white font-bold text-base mb-2 leading-snug group-hover:text-violet-200 transition-colors">
+         <h3 className="text-[#211f1b] font-bold text-base mb-2 leading-snug group-hover:text-[#a43f2d] transition-colors">
           {item.title}
         </h3>
 
-        <p className="text-white/50 text-sm leading-relaxed">
+         <p className="text-[#6d6a62] text-sm leading-relaxed">
           {isLong && !expanded ? item.content.slice(0, 180) + "..." : item.content}
         </p>
 
         {isLong && (
           <button
             onClick={() => setExpanded((e) => !e)}
-            className="mt-2 text-violet-400 text-xs hover:text-violet-300 flex items-center gap-1 transition-colors"
+             className="mt-2 text-[#a43f2d] text-xs hover:text-[#843322] flex items-center gap-1 transition-colors"
           >
             {expanded ? "Sembunyikan" : "Baca Selengkapnya"}
             <ArrowRight className={`w-3 h-3 transition-transform ${expanded ? "rotate-90" : ""}`} />
@@ -81,10 +81,9 @@ function NewsCard({ item }: { item: News }) {
 
 export default function NewsSection() {
   const headerRef = useScrollAnim({ threshold: 0.15 });
-  const gridRef   = useScrollAnim({ threshold: 0.08, delay: 80 });
-
   const [news,    setNews]    = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
+  const gridRef   = useScrollAnim({ threshold: 0.08, delay: 80, refreshKey: `${loading}-${news.length}` });
 
   useEffect(() => {
     let alive = true;
@@ -109,14 +108,14 @@ export default function NewsSection() {
     <section id="news" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p className="text-violet-400 text-sm font-semibold uppercase tracking-widest mb-3">
+           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             What&apos;s New
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            News &amp; <span className="gradient-text">Updates</span>
+           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+            News &amp; <span className="text-[#a43f2d]">Updates</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-          <p className="text-white/45 max-w-md mx-auto text-base">
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
+           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
             Kabar terbaru seputar project, update, dan hal-hal menarik lainnya.
           </p>
         </div>
@@ -129,7 +128,7 @@ export default function NewsSection() {
         </div>
 
         <div className="mt-6 flex items-center justify-center">
-          <span className="flex items-center gap-1.5 text-white/20 text-xs">
+             <span className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
             <Newspaper className="w-3 h-3" /> {news.length} artikel dipublish
           </span>
         </div>

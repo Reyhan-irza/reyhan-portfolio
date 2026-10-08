@@ -1,124 +1,125 @@
-import { useState, useEffect, useRef } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
-import IntroPage from "@/components/IntroPage";
-import MusicController from "@/components/MusicController";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import StatsSection from "@/components/StatsSection";
+import TechnologyBands from "@/components/TechnologyBands";
 import AboutSection from "@/components/AboutSection";
 import JourneySection from "@/components/JourneySection";
+import AwardSection from "@/components/AwardSection";
 import RoadmapSection from "@/components/RoadmapSection";
-import NewsSection from "@/components/NewsSection";
-import MusicSection from "@/components/MusicSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import GitHubSection from "@/components/GitHubSection";
 import ContactSection from "@/components/ContactSection";
-import CommentsSection from "@/components/CommentsSection";
 import Footer from "@/components/Footer";
 import AchievementToast from "@/components/AchievementToast";
-import RoastButton from "@/components/RoastButton";
-import TerminalMode from "@/components/TerminalMode";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { useLenis } from "../hooks/useLenis";
+import { useScrollAnim } from "../hooks/useScrollAnim";
+import IntroAnimation from "@/components/IntroAnimation";
 
-const Divider = () => <div className="rgb-divider max-w-6xl mx-auto px-6" />;
+const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
+
+const Divider = () => <div className="editorial-divider mx-auto max-w-6xl" aria-hidden="true" />;
 
 export default function Home() {
-  const [loadingDone, setLoadingDone] = useState(false);
-  const [introDone,   setIntroDone]   = useState(false);
-
   useLenis();
+  const [introFinished, setIntroFinished] = useState(false);
+  const [archiveVisited, setArchiveVisited] = useState(false);
+  const finishIntro = useCallback(() => setIntroFinished(true), []);
 
+  const proofRef = useScrollAnim<HTMLDivElement>({ threshold: 0.12, stagger: 0.09, distance: 16 });
   const footerRef   = useRef<HTMLDivElement>(null);
   const bottomFired = useRef(false);
   const visitFired  = useRef(false);
 
-  /* Footer achievement */
-  useEffect(() => {
+  /* Keep the existing bottom-of-page achievement, but let GSAP own the trigger. */
+  useLayoutEffect(() => {
     const el = footerRef.current;
-    if (!el || !introDone) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !bottomFired.current) {
-        bottomFired.current = true;
-        unlockAchievement(ACHIEVEMENTS.SCROLL_BOTTOM);
-      }
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [introDone]);
-
-  /* Music section achievement */
-  useEffect(() => {
-    if (!introDone) return;
-    const el = document.getElementById("music");
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { unlockAchievement(ACHIEVEMENTS.MUSIC_LOVER); obs.disconnect(); }
-    }, { threshold: 0.3 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [introDone]);
+    const context = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 82%",
+        onEnter: () => {
+          if (bottomFired.current) return;
+          bottomFired.current = true;
+          unlockAchievement(ACHIEVEMENTS.SCROLL_BOTTOM);
+        },
+      });
+    }, el);
+    return () => context.revert();
+  }, []);
 
   /* Record visitor to Supabase once per session */
   useEffect(() => {
-    if (introDone && !visitFired.current) {
+    if (!visitFired.current) {
       visitFired.current = true;
       recordVisit();
     }
-  }, [introDone]);
-
-  /* Enter from intro: start music */
-  const handleIntroEnter = () => {
-    setIntroDone(true);
-    window.dispatchEvent(new Event("music:play"));
-  };
+  }, []);
 
   return (
-    <>
-      {!loadingDone && <LoadingScreen onFinish={() => setLoadingDone(true)} />}
-      {loadingDone && !introDone && <IntroPage onEnter={handleIntroEnter} />}
-
-      <div className={`relative min-h-screen ${introDone ? "main-fade-in" : "opacity-0 pointer-events-none"}`}>
-        <AuroraBackground />
-        <div className="relative z-10">
-          <Navbar />
-          <HeroSection />
-          <Divider />
-          <StatsSection />
-          <Divider />
-          <AboutSection />
-          <Divider />
-          <JourneySection />
-          <Divider />
-          <RoadmapSection />
-          <Divider />
-          <NewsSection />
-          <Divider />
-          <MusicSection />
-          <Divider />
-          <ProjectsSection />
-          <Divider />
-          <GitHubSection />
-          <Divider />
-          <ContactSection />
-          <Divider />
-          <CommentsSection />
-          <div ref={footerRef}>
-            <Footer />
+    <div className="portfolio-shell relative min-h-[100dvh]">
+      <AuroraBackground />
+      <a className="skip-to-content" href="#main-content">Skip to content</a>
+      <Navbar />
+      <main id="main-content" className="relative z-10">
+        <HeroSection />
+        <TechnologyBands />
+        <section id="proof" className="proof-strip px-6" aria-label="Portfolio record">
+          <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
+            <div className="proof-item" data-motion-item>
+              <span className="proof-index">01</span>
+              <strong>Three live project records</strong>
+              <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
+            </div>
+            <div className="proof-item" data-motion-item>
+              <span className="proof-index">02</span>
+              <strong>React / TypeScript practice</strong>
+              <span>Interfaces, connected flows and documented iteration.</span>
+            </div>
+            <div className="proof-item" data-motion-item>
+              <span className="proof-index">03</span>
+              <strong>Recognition on record</strong>
+              <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · Juara I.</span>
+            </div>
           </div>
+        </section>
+        <Divider />
+        <AboutSection />
+        <ProjectsSection />
+        <Divider />
+        <JourneySection />
+        <AwardSection />
+        <RoadmapSection />
+        <Divider />
+        <GitHubSection />
+        <Divider />
+        <ContactSection />
+        <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
+          if (event.currentTarget.open) setArchiveVisited(true);
+        }}>
+          <summary data-testid="button-open-secondary-archive">
+            <span>Secondary archive</span>
+            <span>Updates · music · comments</span>
+          </summary>
+          {archiveVisited && (
+            <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading updates and community features">
+              <div className="h-2 w-28 animate-pulse bg-white/10" />
+              <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
+            </div>}>
+              <SecondaryArchive />
+            </Suspense>
+          )}
+        </details>
+      </main>
+      <div className="relative z-10" ref={footerRef}>
+        <Footer />
         </div>
-      </div>
-
-      {/*
-        ─── Global overlays OUTSIDE animated wrapper ───
-        transform on parent breaks `position: fixed` children.
-      */}
       <AchievementToast />
-      {introDone && <RoastButton />}
-      {introDone && <TerminalMode />}
-      {loadingDone && <MusicController />}
-    </>
+      {!introFinished && <IntroAnimation onFinish={finishIntro} />}
+    </div>
   );
 }

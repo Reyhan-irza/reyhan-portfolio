@@ -2,51 +2,32 @@ import { useEffect, useState } from "react";
 import { Users, Calendar } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
-const KEY_SESSION = "pf_session";
-
-function getLocalData() {
-  try {
-    const sessionKey = sessionStorage.getItem(KEY_SESSION);
-    if (!sessionKey) {
-      sessionStorage.setItem(KEY_SESSION, "1");
-    }
-    const bracket = Math.floor(Date.now() / 30000);
-    const online  = (bracket % 4) + 1;
-    return { isNewSession: !sessionKey, online };
-  } catch {
-    return { isNewSession: false, online: 1 };
-  }
-}
-
 export default function VisitorCounter() {
-  const [total,  setTotal]  = useState<number | null>(null);
-  const [today,  setToday]  = useState<number | null>(null);
-  const [online, setOnline] = useState(1);
+  const [total, setTotal] = useState<number | null>(null);
+  const [today, setToday] = useState<number | null>(null);
 
   useEffect(() => {
-    const { online: onlineCount } = getLocalData();
-    setOnline(onlineCount);
-
     (async () => {
       try {
-        // Total visitors
-        const { count: totalCount } = await supabase
+        const { count: totalCount, error: totalError } = await supabase
           .from("visitors")
           .select("id", { count: "exact", head: true });
+        if (totalError) throw totalError;
 
-        // Today's visitors (UTC date)
         const todayStart = new Date();
         todayStart.setUTCHours(0, 0, 0, 0);
 
-        const { count: todayCount } = await supabase
+        const { count: todayCount, error: todayError } = await supabase
           .from("visitors")
           .select("id", { count: "exact", head: true })
           .gte("created_at", todayStart.toISOString());
+        if (todayError) throw todayError;
 
-        if (totalCount !== null) setTotal(totalCount);
-        if (todayCount !== null) setToday(todayCount);
+        setTotal(totalCount);
+        setToday(todayCount);
       } catch {
-        // Supabase not configured — stay hidden
+        setTotal(null);
+        setToday(null);
       }
     })();
   }, []);
@@ -54,21 +35,23 @@ export default function VisitorCounter() {
   if (total === null) return null;
 
   return (
-    <div className="flex items-center gap-4 flex-wrap justify-center">
-      <div className="flex items-center gap-1.5 text-[11px] text-white/30">
-        <Users className="w-3 h-3" />
-        <span>{total.toLocaleString("id-ID")} kunjungan</span>
+    <div
+      className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+      aria-label="Visitor counts from the Supabase visitors table"
+    >
+       <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
+        <Users className="h-3 w-3" aria-hidden="true" />
+        {total.toLocaleString("id-ID")} recorded visits
+      </span>
+      {today !== null && (
+         <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
+          <Calendar className="h-3 w-3" aria-hidden="true" />
+          {today.toLocaleString("id-ID")} today (UTC)
+        </span>
+      )}
+       <span className="font-mono text-[9px] uppercase tracking-[.12em] text-[#6d6a62]">
+        Source: Supabase
+      </span>
       </div>
-      <span className="text-white/15 text-[10px]">·</span>
-      <div className="flex items-center gap-1.5 text-[11px] text-white/30">
-        <Calendar className="w-3 h-3" />
-        <span>{today ?? 0} hari ini</span>
-      </div>
-      <span className="text-white/15 text-[10px]">·</span>
-      <div className="flex items-center gap-1.5 text-[11px] text-green-400/45">
-        <span className="w-1.5 h-1.5 rounded-full bg-green-400/60 animate-pulse" />
-        <span>{online} online</span>
-      </div>
-    </div>
   );
 }

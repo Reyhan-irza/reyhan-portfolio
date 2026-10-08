@@ -9,8 +9,8 @@ const contacts = [
     handle: "ReyhanWhatsap",
     desc: "Drop me a message anytime",
     icon: SiWhatsapp,
-    color: "text-emerald-400",
-    borderHover: "hover:border-emerald-500/30",
+    color: "text-[#a43f2d]",
+    borderHover: "hover:border-[#a43f2d]",
     href: "https://wa.me/62881385242876",
   },
   {
@@ -19,8 +19,8 @@ const contacts = [
     handle: "@irzalvano_",
     desc: "See my daily updates",
     icon: SiInstagram,
-    color: "text-pink-400",
-    borderHover: "hover:border-pink-500/30",
+    color: "text-[#a43f2d]",
+    borderHover: "hover:border-[#a43f2d]",
     href: "https://www.instagram.com/irzalvano_?igsh=ZXRqM2lvY3EyY2Nj",
   },
   {
@@ -29,8 +29,8 @@ const contacts = [
     handle: "@rehanwatsav",
     desc: "Watch my short-form content",
     icon: SiTiktok,
-    color: "text-sky-400",
-    borderHover: "hover:border-sky-500/30",
+    color: "text-[#a43f2d]",
+    borderHover: "hover:border-[#a43f2d]",
     href: "https://www.tiktok.com/@rehanwatsav?_r=1&_t=ZS-95Kk0Lxdw5B",
   },
   {
@@ -39,8 +39,8 @@ const contacts = [
     handle: "irzanour@gmail.com",
     desc: "For professional inquiries",
     icon: SiGmail,
-    color: "text-red-400",
-    borderHover: "hover:border-red-500/30",
+    color: "text-[#a43f2d]",
+    borderHover: "hover:border-[#a43f2d]",
     href: "mailto:irzanour@gmail.com",
   },
 ];
@@ -52,13 +52,13 @@ export default function ContactSection() {
     <section id="contact" className="relative py-24 px-6">
       <div className="max-w-4xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-16">
-          <p className="text-violet-400 text-xs font-semibold uppercase tracking-widest mb-4">Get In Touch</p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-5">
-            Let's <span className="gradient-text">Connect</span>
+           <p data-motion-item className="section-kicker mb-4">06 / Contact</p>
+           <h2 data-motion-item className="text-3xl font-semibold tracking-[-.06em] text-[#211f1b] md:text-6xl">
+             Open <span className="text-[#a43f2d]">line.</span>
           </h2>
-          <div className="rgb-divider w-20 mx-auto mb-6" />
-          <p className="text-[#9CA3AF] max-w-md mx-auto text-base leading-relaxed">
-            Interested in collaborating? Reach out through any of the platforms below.
+           <div data-motion-item className="rgb-divider mx-auto mb-6 w-20" />
+           <p data-motion-item className="mx-auto max-w-md text-base leading-relaxed text-[#6d6a62]">
+             For a project, a question about the work, or a useful introduction, choose the channel that suits you.
           </p>
         </div>
 
@@ -71,11 +71,11 @@ export default function ContactSection() {
         {/* Availability badge */}
         <div className="mt-10 flex justify-center">
           <div
-            className="flex items-center gap-3 px-5 py-3 rounded-full border border-emerald-500/15"
-            style={{ background: "rgba(16, 185, 129, 0.04)" }}
+             className="flex items-center gap-3 px-5 py-3 rounded-full border border-[rgba(33,31,27,.18)]"
+             style={{ background: "rgba(164, 63, 45, 0.05)" }}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-white/60 text-sm font-medium">
+             <span className="w-2 h-2 rounded-full bg-[#a43f2d] animate-pulse" />
+             <span className="text-[#6d6a62] text-sm font-medium">
               Available for freelance &amp; collaboration
             </span>
           </div>
@@ -95,18 +95,17 @@ function ContactCard({ contact, delay }: { contact: (typeof contacts)[0]; delay:
       href={contact.href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`fade-up flex items-center gap-4 p-5 rounded-2xl border border-white/7 ${contact.borderHover} hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 transition-all duration-300 cursor-pointer group`}
-      style={{ background: "#111827" }}
+       className={`fade-up flex items-center gap-4 p-5 rounded-2xl border border-[rgba(33,31,27,.16)] ${contact.borderHover} hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 cursor-pointer group`}
       data-testid={`link-contact-${contact.id}`}
     >
-      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border border-white/7 group-hover:scale-105 transition-transform duration-300"
-        style={{ background: "rgba(255,255,255,0.03)" }}>
+       <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border border-[rgba(33,31,27,.16)] group-hover:scale-105 transition-transform duration-300"
+         style={{ background: "rgba(33,31,27,0.04)" }}>
         <Icon className={`w-5 h-5 ${contact.color}`} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-white/35 text-[10px] font-medium uppercase tracking-wide mb-0.5">{contact.label}</p>
-        <p className="text-white font-semibold text-sm truncate">{contact.handle}</p>
-        <p className="text-[#9CA3AF] text-xs mt-0.5">{contact.desc}</p>
+         <p className="text-[#6d6a62] text-[10px] font-medium uppercase tracking-wide mb-0.5">{contact.label}</p>
+         <p className="text-[#211f1b] font-semibold text-sm truncate">{contact.handle}</p>
+         <p className="text-[#6d6a62] text-xs mt-0.5">{contact.desc}</p>
       </div>
       <ArrowUpRight className={`w-4 h-4 flex-shrink-0 ${contact.color} opacity-30 group-hover:opacity-80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200`} />
     </a>

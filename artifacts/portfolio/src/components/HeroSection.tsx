@@ -1,314 +1,226 @@
-import { useState, useEffect, useRef, useCallback, type CSSProperties } from "react";
-import { createPortal } from "react-dom";
-import { ChevronDown, MessageSquare, X, Sparkles, Music, Coffee, Home, Bug, Download, ArrowRight } from "lucide-react";
-import { SiReact, SiTypescript, SiNodedotjs, SiNextdotjs, SiTailwindcss, SiSupabase } from "react-icons/si";
-import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
-import GuessMyAge from "./GuessMyAge";
-
-const CV_URL = "/cv.pdf";
-const PROFILE_PHOTO_URL = "/profile.jpg";
-
-const PHRASES = [
-  "Frontend Developer",
-  "Full-Stack Developer",
-  "Digital Builder",
-  "Future Real Estate Investor",
-];
-
-const techSkills = [
-  { label: "React",       Icon: SiReact,       color: "text-cyan-400"    },
-  { label: "TypeScript",  Icon: SiTypescript,  color: "text-blue-400"    },
-  { label: "Node.js",     Icon: SiNodedotjs,   color: "text-green-400"   },
-  { label: "Next.js",     Icon: SiNextdotjs,   color: "text-white/70"    },
-  { label: "TailwindCSS", Icon: SiTailwindcss, color: "text-sky-400"     },
-  { label: "Supabase",    Icon: SiSupabase,    color: "text-emerald-400" },
-];
+import { useLayoutEffect, useRef } from "react";
+import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
+import { gsap, ScrollTrigger } from "../lib/motion";
+import BrandLogo from "./BrandLogo";
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const markRef = useRef<HTMLDivElement>(null);
 
-  /* ── Typing animation ── */
-  const [phraseIdx,  setPhraseIdx]  = useState(0);
-  const [displayed,  setDisplayed]  = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        compact: "(max-width: 767px)",
+        wide: "(min-width: 768px)",
+      },
+      (context) => {
+        if (context.conditions?.reduced) return;
+        const compact = Boolean(context.conditions?.compact);
+        const cleanups: Array<() => void> = [];
+        const scope = gsap.context(() => {
+          const opening = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.08 });
+          opening
+            .fromTo("[data-hero-item]", { y: compact ? 10 : 19, opacity: 0 }, {
+              y: 0, opacity: 1, duration: compact ? 0.48 : 0.7, stagger: compact ? 0.045 : 0.07,
+              clearProps: "transform,opacity",
+            })
+            .fromTo("[data-hero-rule]", { scaleX: 0 }, {
+              scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
+            }, 0.12);
+          const scrollRange = {
+            trigger: section,
+            start: "top top",
+            end: "bottom top",
+            scrub: compact ? 0.35 : 0.7,
+            invalidateOnRefresh: true,
+          };
+          const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
+          const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
+          const grid = section.querySelector<HTMLElement>(".hero-grid");
 
-  useEffect(() => {
-    const target = PHRASES[phraseIdx];
-    let timeout: ReturnType<typeof setTimeout>;
-    if (!isDeleting) {
-      if (displayed.length < target.length) {
-        timeout = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 65);
-      } else {
-        timeout = setTimeout(() => setIsDeleting(true), 2200);
-      }
-    } else {
-      if (displayed.length > 0) {
-        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 38);
-      } else {
-        setIsDeleting(false);
-        setPhraseIdx((i) => (i + 1) % PHRASES.length);
-      }
-    }
-    return () => clearTimeout(timeout);
-  }, [displayed, isDeleting, phraseIdx]);
+          if (title) {
+            gsap.to(title, {
+              y: compact ? -10 : -30,
+              scale: compact ? 0.985 : 0.95,
+              opacity: 0.88,
+              transformOrigin: "left center",
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.3 : 0.62 },
+            });
+          }
+          if (lead) {
+            gsap.to(lead, {
+              y: compact ? -5 : -14,
+              opacity: 0.78,
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.25 : 0.5 },
+            });
+          }
+          if (grid) {
+            gsap.to(grid, {
+              yPercent: compact ? 5 : 15,
+              opacity: compact ? 0.28 : 0.62,
+              ease: "none",
+              scrollTrigger: { ...scrollRange, scrub: compact ? 0.35 : 0.75 },
+            });
+          }
+          if (markRef.current && !compact) {
+            gsap.to(markRef.current, {
+              y: -28,
+              rotate: 5,
+              scale: 1.08,
+              ease: "none",
+              scrollTrigger: {
+                trigger: section,
+                start: "top top",
+                end: "bottom top",
+                scrub: 0.8,
+                invalidateOnRefresh: true,
+              },
+            });
+          }
+          gsap.fromTo("[data-hero-orbit]", { rotate: -5 }, {
+            rotate: 24,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          });
+          gsap.fromTo("[data-hero-axis-x]", { scaleX: 0.12, opacity: 0.2 }, {
+            scaleX: 1,
+            opacity: 1,
+            transformOrigin: "center center",
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.3 : 0.65,
+              invalidateOnRefresh: true,
+            },
+          });
+          gsap.fromTo("[data-hero-axis-y]", { scaleY: 0.12, opacity: 0.2 }, {
+            scaleY: 1,
+            opacity: 1,
+            transformOrigin: "center center",
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.3 : 0.65,
+              invalidateOnRefresh: true,
+            },
+          });
+          if (!compact && window.matchMedia("(pointer: fine)").matches) {
+            section.querySelectorAll<HTMLElement>("[data-hero-magnetic]").forEach((button) => {
+              const moveX = gsap.quickTo(button, "x", { duration: 0.24, ease: "power3.out" });
+              const moveY = gsap.quickTo(button, "y", { duration: 0.24, ease: "power3.out" });
+              const onMove = (event: PointerEvent) => {
+                const bounds = button.getBoundingClientRect();
+                moveX((event.clientX - bounds.left - bounds.width / 2) * 0.07);
+                moveY((event.clientY - bounds.top - bounds.height / 2) * 0.07);
+              };
+              const reset = () => { moveX(0); moveY(0); };
+              button.addEventListener("pointermove", onMove);
+              button.addEventListener("pointerleave", reset);
+              button.addEventListener("blur", reset);
+              cleanups.push(() => {
+                button.removeEventListener("pointermove", onMove);
+                button.removeEventListener("pointerleave", reset);
+                button.removeEventListener("blur", reset);
+              });
+            });
+          }
+        }, section);
+        return () => {
+          cleanups.forEach((cleanup) => cleanup());
+          scope.revert();
+        };
+      },
+    );
+    return () => media.revert();
+  }, []);
 
-  /* ── Easter egg ── */
-  const [clickCount, setClickCount] = useState(0);
-  const [showEaster, setShowEaster] = useState(false);
-  const [shaking,    setShaking]    = useState(false);
-  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleAvatarClick = useCallback(() => {
-    setClickCount((n) => {
-      const next = n + 1;
-      if (next >= 5) {
-        setShowEaster(true);
-        unlockAchievement(ACHIEVEMENTS.EASTER_EGG);
-        return 0;
-      }
-      setShaking(true);
-      setTimeout(() => setShaking(false), 500);
-      if (clickTimer.current) clearTimeout(clickTimer.current);
-      clickTimer.current = setTimeout(() => setClickCount(0), 3000);
-      return next;
+  const scrollTo = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
-  }, []);
-
-  /* ── Scroll-linked hero choreography ──
-   * The section stays in place while its individual layers recede at
-   * different rates. CSS consumes this variable, so scrolling never causes
-   * a React render per frame and reversing direction is naturally reversible.
-   */
-  const didFire = useRef(false);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame: number | null = null;
-
-    const updateProgress = () => {
-      frame = null;
-      if (reducedMotion.matches) {
-        hero.style.setProperty("--hero-progress", "0");
-        return;
-      }
-
-      const distanceIntoPage = Math.max(0, -hero.getBoundingClientRect().top);
-      const travelDistance = Math.max(1, hero.offsetHeight * 0.78);
-      const progress = Math.min(1, distanceIntoPage / travelDistance);
-      hero.style.setProperty("--hero-progress", progress.toFixed(4));
-    };
-
-    const onScroll = () => {
-      if (frame === null) frame = window.requestAnimationFrame(updateProgress);
-      if (!didFire.current && window.scrollY > 100) {
-        didFire.current = true;
-        unlockAchievement(ACHIEVEMENTS.FIRST_SCROLL);
-      }
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    const onMotionPreferenceChange = () => updateProgress();
-    reducedMotion.addEventListener("change", onMotionPreferenceChange);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      reducedMotion.removeEventListener("change", onMotionPreferenceChange);
-      if (frame !== null) window.cancelAnimationFrame(frame);
-    };
-  }, []);
+  };
 
   return (
-    <>
-    <section
-      ref={heroRef}
-      id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 overflow-x-hidden"
-      style={{ "--hero-progress": 0 } as CSSProperties}
-    >
-      {/* Subtle grid overlay */}
-      <div className="hero-grid hero-scroll-layer hero-scroll-grid absolute inset-0 pointer-events-none" />
-
-      {/* Soft center glow */}
-      <div
-        className="hero-scroll-layer hero-scroll-glow absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)", filter: "blur(40px)" }}
-      />
-
-      {/* ── Avatar ── */}
-      <div
-        className={`hero-scroll-layer hero-scroll-avatar relative mb-8 cursor-pointer select-none ${shaking ? "easter-shake" : ""}`}
-        onClick={handleAvatarClick}
-        title={clickCount > 0 ? `${5 - clickCount} more clicks...` : "Click me!"}
-      >
-        <div className="float-anim relative">
-          <div className="profile-glow w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden transition-transform duration-300 hover:scale-105 active:scale-95">
-            {PROFILE_PHOTO_URL ? (
-              <img src={PROFILE_PHOTO_URL} alt="Reyhan Irza Alvano" className="w-full h-full object-cover rounded-full" />
-            ) : (
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-violet-600 to-violet-900 flex items-center justify-center">
-                <span className="text-4xl md:text-5xl font-bold text-white select-none">R</span>
-              </div>
-            )}
-          </div>
-          {/* Online indicator */}
-          <span className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-400 border-2 border-[#050816] rounded-full animate-pulse" />
-          {clickCount > 0 && (
-            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-violet-600 text-white text-xs flex items-center justify-center font-bold animate-bounce">
-              {clickCount}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* ── Badge ── */}
-      <div className="hero-scroll-layer hero-scroll-badge mb-6">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide border border-violet-500/25 bg-violet-500/8 text-violet-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          Digital Builder
-        </span>
-      </div>
-
-      {/* ── Headline ── */}
-      <div className="hero-scroll-layer hero-scroll-headline text-center px-6 max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight" data-testid="text-hero-name">
-          <span className="text-white">Building Digital Products,</span>
-          <br />
-          <span className="text-white">Experiences </span>
-          <span className="gradient-text">&amp; Systems.</span>
-        </h1>
-      </div>
-
-      {/* ── Typing animation ── */}
-      <div className="hero-scroll-layer hero-scroll-typing mt-5 h-9 flex items-center justify-center px-6">
-        <span className="text-base md:text-lg font-medium text-violet-300/90">{displayed}</span>
-        <span className="typing-cursor" />
-      </div>
-
-      {/* ── Subheadline ── */}
-      <p
-        className="hero-scroll-layer hero-scroll-description text-[#9CA3AF] text-sm md:text-base leading-relaxed max-w-xl text-center px-6 mt-4"
-      >
-        Modern web experiences, automation solutions, and digital products
-        crafted with precision.
-      </p>
-
-      {/* ── Marquee ── */}
-      <div className="hero-scroll-layer hero-scroll-marquee marquee-container w-full mt-8 py-1.5">
-        <div
-          className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, #050816, transparent)" }}
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #050816, transparent)" }}
-        />
-        <div className="marquee-track">
-          {[...techSkills, ...techSkills].map(({ label, Icon, color }, i) => (
-            <span
-              key={i}
-              className="hero-tech-item flex-shrink-0 flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white/55 rounded-full border border-white/8 bg-white/3 transition-all duration-300 cursor-default mx-2"
-            >
-              <span className="hero-tech-icon" aria-hidden="true">
-                <Icon className={`w-3.5 h-3.5 ${color}`} />
-              </span>
-              {label}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── CTA Buttons ── */}
-      <div className="hero-scroll-layer hero-scroll-actions flex flex-wrap justify-center gap-3 mt-8 px-6">
-        <button
-          className="btn-neon px-6 py-3 rounded-xl text-sm flex items-center gap-2"
-          onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
-          data-testid="button-view-projects"
-        >
-          View Projects
-          <ArrowRight className="w-4 h-4" />
-        </button>
-        <button
-          className="px-6 py-3 rounded-xl text-sm font-semibold border border-white/10 text-white/75 hover:text-white hover:border-violet-500/35 hover:bg-violet-500/6 transition-all duration-200 flex items-center gap-2"
-          onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-          data-testid="button-contact"
-        >
-          <MessageSquare className="w-4 h-4" />
-          Contact Me
-        </button>
-        <a
-          href={CV_URL}
-          download="Reyhan-Irza-Alvano-CV.pdf"
-          className="px-6 py-3 rounded-xl text-sm font-semibold border border-white/8 text-white/55 hover:text-white/80 hover:border-white/20 hover:bg-white/4 transition-all duration-200 flex items-center gap-2"
-        >
-          <Download className="w-4 h-4" />
-          Download CV
-        </a>
-      </div>
-
-      {/* ── Fun row ── */}
-      <div className="hero-scroll-layer hero-scroll-fun flex justify-center mt-5">
-        <GuessMyAge />
-      </div>
-
-      {/* ── Scroll indicator ── */}
-      <div className="hero-scroll-layer hero-scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/25">
-        <span className="text-[10px] tracking-widest uppercase mb-1">Scroll</span>
-        <ChevronDown className="w-4 h-4 animate-bounce" />
-      </div>
-    </section>
-
-    {/* ── Easter Egg Modal ── */}
-    {showEaster && createPortal(
-      <div
-        className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-        onClick={() => setShowEaster(false)}
-      >
-        <div
-          className="modal-enter border border-violet-500/25 rounded-2xl p-7 max-w-sm w-full text-center relative shadow-2xl shadow-violet-900/40"
-          style={{ background: "#111827" }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            className="absolute top-4 right-4 text-white/30 hover:text-white/70 transition-colors"
-            onClick={() => setShowEaster(false)}
-          >
-            <X className="w-4 h-4" />
-          </button>
-          <div className="w-12 h-12 rounded-xl bg-violet-500/12 border border-violet-500/20 flex items-center justify-center mx-auto mb-4">
-            <Sparkles className="w-6 h-6 text-violet-400" />
-          </div>
-          <h3 className="text-lg font-bold gradient-text mb-2">Developer Secret Found!</h3>
-          <p className="text-white/50 text-sm mb-5 leading-relaxed">
-            You found the hidden easter egg. You're clearly someone who's curious!
+    <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
+      <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
+        <div className="relative z-10 pb-6">
+          <p data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
+            <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
+            Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
-          <div className="border border-white/6 rounded-xl p-4 text-left space-y-2.5 text-sm" style={{ background: "rgba(255,255,255,0.02)" }}>
-            <p className="text-white/60 flex items-center gap-2">
-              <Music className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" /> Fav music: Avenged Sevenfold &amp; SZA
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Coffee className="w-3.5 h-3.5 text-amber-400/70 flex-shrink-0" /> Coffee/day: minimum 3 cups
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Home className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" /> Biggest dream: Real Estate Investor
-            </p>
-            <p className="text-white/60 flex items-center gap-2">
-              <Bug className="w-3.5 h-3.5 text-red-400/70 flex-shrink-0" /> Most hated bug: off-by-one error
+          <div data-hero-title-depth>
+            <h1 data-hero-item className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
+              REYHAN
+              <br />
+              IRZA
+              <br />
+              <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
+            </h1>
+          </div>
+          <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
+          <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
+            <div data-hero-lead-depth>
+              <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
+                Learning by making things real: interfaces people can open, systems people can use, and notes that show what changed along the way.
+              </p>
+            </div>
+            <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
+              React, TypeScript and connected web products. An honest record of the work in progress.
             </p>
           </div>
-          <button
-            className="btn-neon mt-5 w-full py-2.5 rounded-xl text-sm"
-            onClick={() => setShowEaster(false)}
-          >
-            Close Secret
-          </button>
+          <div data-hero-item className="mt-9 flex flex-wrap items-center gap-3">
+            <button type="button" data-hero-magnetic onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
+              Explore selected work <ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <button type="button" data-hero-magnetic onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
+              Say hello <MoveUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          </div>
+          <a data-hero-item href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.15em] text-white/40 transition-colors hover:text-[#9da9ff]">
+            Evidence on GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
         </div>
-      </div>,
-      document.body
-    )}
-    </>
+
+        <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
+          <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
+          <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
+          <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
+          <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
+          <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
+          <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
+            <BrandLogo
+              size="custom"
+              alt="Metallic silver RV monogram with cool-blue edge lighting"
+              fetchPriority="high"
+              className="h-full w-full"
+            />
+          </div>
+          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
+          <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
+          <span className="hero-corner hero-corner-a" aria-hidden="true" />
+          <span className="hero-corner hero-corner-b" aria-hidden="true" />
+        </aside>
+      </div>
+      <a href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
+        Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
+      </a>
+    </section>
   );
 }

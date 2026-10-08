@@ -1,8 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-
-// Keep the loading portrait on the same local asset as the Hero.
-// External image hosts can be blocked by preview browsers or expire.
-const PHOTO = "/profile.jpg";
+import { useState, useEffect } from "react";
+import BrandLogo from "./BrandLogo";
 
 const STATUS_MSGS = [
   "Initializing...",
@@ -14,55 +11,15 @@ const STATUS_MSGS = [
 
 interface Props { onFinish: () => void }
 
-interface RunState {
-  lAX: number; lAY: number;
-  rAX: number; rAY: number;
-  lLX: number; lLY: number;
-  rLX: number; rLY: number;
-  vB: number;
-}
-
 export default function LoadingScreen({ onFinish }: Props) {
-  const [showFig,  setShowFig]  = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
   const [showText, setShowText] = useState(false);
   const [showBar,  setShowBar]  = useState(false);
   const [progress, setProgress] = useState(0);
   const [phase,    setPhase]    = useState<"in" | "progress" | "out">("in");
 
-  const phaseRef = useRef(0);
-  const [rs, setRs] = useState<RunState>({
-    lAX: 36, lAY: 68, rAX: 64, rAY: 68,
-    lLX: 44, lLY: 106, rLX: 56, rLY: 106,
-    vB: 0,
-  });
-
   useEffect(() => {
-    let raf: number;
-    const tick = () => {
-      phaseRef.current += 0.10;
-      const t  = phaseRef.current;
-      const s  = Math.sin(t);
-      const legA = s * 0.48;
-      const armA = -s * 0.42;
-      const ARM  = 20, LEG = 28;
-      const lAX = 36 + ARM * Math.sin(armA);
-      const lAY = 50 + ARM * Math.cos(armA);
-      const rAX = 64 + ARM * Math.sin(-armA);
-      const rAY = 50 + ARM * Math.cos(-armA);
-      const lLX = 44 + LEG * Math.sin(legA);
-      const lLY = 78 + LEG * Math.cos(legA);
-      const rLX = 56 + LEG * Math.sin(-legA);
-      const rLY = 78 + LEG * Math.cos(-legA);
-      const vB  = -Math.abs(Math.cos(t)) * 2.5;
-      setRs({ lAX, lAY, rAX, rAY, lLX, lLY, rLX, rLY, vB });
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setShowFig(true),  100);
+    const t1 = setTimeout(() => setShowLogo(true), 100);
     const t2 = setTimeout(() => setShowText(true), 500);
     const t3 = setTimeout(() => { setShowBar(true); setPhase("progress"); }, 900);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
@@ -104,30 +61,13 @@ export default function LoadingScreen({ onFinish }: Props) {
 
       <div className="relative z-10 flex flex-col items-center gap-6">
 
-        {/* Running stick figure */}
+        {/* The same RV master mark is used across every loading surface. */}
         <div style={{
-          opacity:    showFig ? 1 : 0,
-          transform:  showFig ? "translateY(0)" : "translateY(28px)",
+          opacity:    showLogo ? 1 : 0,
+          transform:  showLogo ? "translateY(0)" : "translateY(28px)",
           transition: "opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1)",
         }}>
-          <svg viewBox="0 0 100 125" width="80" height="100" aria-label="Loading" style={{ overflow: "visible" }}>
-            <defs>
-              <clipPath id="ls-head">
-                <circle cx="50" cy="20" r="18" />
-              </clipPath>
-            </defs>
-            <g transform={`translate(0, ${rs.vB})`}>
-              <circle cx="50" cy="20" r="20" fill="none" stroke="rgba(139,92,246,0.3)" strokeWidth="1.5" />
-              <image href={PHOTO} x="32" y="2" width="36" height="36"
-                clipPath="url(#ls-head)" preserveAspectRatio="xMidYMid slice" />
-              <line x1="50" y1="38" x2="50" y2="78" stroke="rgba(255,255,255,0.65)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="36" y1="50" x2="64" y2="50" stroke="rgba(255,255,255,0.4)" strokeWidth="1.8" strokeLinecap="round" />
-              <line x1="36" y1="50" x2={rs.lAX} y2={rs.lAY} stroke="rgba(255,255,255,0.65)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="64" y1="50" x2={rs.rAX} y2={rs.rAY} stroke="rgba(255,255,255,0.65)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="44" y1="78" x2={rs.lLX} y2={rs.lLY} stroke="rgba(255,255,255,0.65)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="56" y1="78" x2={rs.rLX} y2={rs.rLY} stroke="rgba(255,255,255,0.65)" strokeWidth="2.5" strokeLinecap="round" />
-            </g>
-          </svg>
+          <BrandLogo size="lg" alt="Reyhan Irza Alvano RV logo" />
         </div>
 
         {/* Text */}

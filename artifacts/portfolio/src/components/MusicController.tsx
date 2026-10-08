@@ -95,17 +95,17 @@ export default function MusicController() {
   const BAR_HEIGHTS = [0.55, 0.9, 0.65, 1, 0.45, 0.8, 0.6];
 
   return (
-    <div className="fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-2">
+    <div className="portfolio-music-controller fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-2">
       {!minimized && (
-        <div className="glass border border-white/10 rounded-2xl p-4 w-56 shadow-2xl shadow-black/50 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="glass border border-[rgba(33,31,27,.16)] rounded-2xl p-4 w-56 animate-in fade-in slide-in-from-bottom-2 duration-300">
           {/* Header */}
           <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/15 border border-violet-500/25 flex items-center justify-center flex-shrink-0">
-              <Music className={`w-4 h-4 text-violet-400 ${playing ? "animate-pulse" : ""}`} />
+           <div className="w-8 h-8 rounded-lg bg-[#a43f2d]/10 border border-[#a43f2d]/20 flex items-center justify-center flex-shrink-0">
+             <Music className={`w-4 h-4 text-[#a43f2d] ${playing ? "animate-pulse" : ""}`} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white/80 text-xs font-semibold">Background Music</p>
-              <p className={`text-[10px] ${playing ? "text-violet-400" : "text-white/30"}`}>
+              <p className="text-[#211f1b] text-xs font-semibold">Background Music</p>
+               <p className={`text-[10px] ${playing ? "text-[#a43f2d]" : "text-[#6d6a62]"}`}>
                 {playing ? "● Playing..." : "Paused"}
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function MusicController() {
             {BAR_HEIGHTS.map((h, i) => (
               <div
                 key={i}
-                className="flex-1 rounded-full bg-gradient-to-t from-violet-500 to-pink-400"
+                 className="flex-1 rounded-full bg-[#a43f2d]"
                 style={{
                   height: "100%",
                   transformOrigin: "bottom",
@@ -135,7 +135,7 @@ export default function MusicController() {
           <div className="flex items-center gap-2">
             <button
               onClick={togglePlay}
-              className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-violet-300 hover:bg-violet-500/35 transition-colors flex-shrink-0"
+               className="w-8 h-8 rounded-lg bg-[#a43f2d]/10 border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:bg-[#a43f2d]/20 transition-colors flex-shrink-0"
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
@@ -143,7 +143,7 @@ export default function MusicController() {
 
             <button
               onClick={toggleMute}
-              className="w-8 h-8 rounded-lg glass border border-white/10 flex items-center justify-center text-white/45 hover:text-white/80 transition-colors flex-shrink-0"
+               className="w-8 h-8 rounded-lg glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] transition-colors flex-shrink-0"
               aria-label={muted ? "Unmute" : "Mute"}
             >
               {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
@@ -154,7 +154,7 @@ export default function MusicController() {
               min={0} max={1} step={0.05}
               value={muted ? 0 : volume}
               onChange={(e) => handleVolume(Number(e.target.value))}
-              className="flex-1 h-1 rounded-full accent-violet-500 cursor-pointer"
+               className="flex-1 h-1 rounded-full accent-[#a43f2d] cursor-pointer"
               aria-label="Volume"
             />
           </div>
@@ -165,7 +165,7 @@ export default function MusicController() {
       <button
         onClick={() => setMin((p) => !p)}
         className={`w-10 h-10 rounded-xl glass border flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg
-          ${playing ? "border-violet-500/40 text-violet-400" : "border-white/10 text-white/45 hover:text-white/80"}`}
+           ${playing ? "border-[#a43f2d]/40 text-[#a43f2d]" : "border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b]"}`}
         aria-label={minimized ? "Open music player" : "Minimize music player"}
       >
         {minimized

@@ -48,19 +48,19 @@ export default function IntroPage({ onEnter }: Props) {
         {/* Badge */}
         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/6 text-violet-300 text-xs tracking-widest uppercase mb-8 intro-badge">
           <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          <span>Digital Builder · 2026</span>
+          <span>Student Developer · SMK</span>
         </div>
 
         {/* Headline */}
         <h1 className="text-5xl md:text-7xl font-bold mb-5 leading-[1.08] tracking-tight intro-title">
-          <span className="text-white">Building Digital</span>
+          <span className="text-white">A record of</span>
           <br />
-          <span className="gradient-text">Products &amp; Systems.</span>
+          <span className="gradient-text">projects &amp; learning.</span>
         </h1>
 
         {/* Subline */}
         <p className="text-[#9CA3AF] text-base md:text-lg mb-12 leading-relaxed intro-sub max-w-xl">
-          Modern web experiences, automation solutions, and digital products crafted with precision.
+          Real projects, learning in progress, and recognition that can be checked.
         </p>
 
         {/* Enter button */}

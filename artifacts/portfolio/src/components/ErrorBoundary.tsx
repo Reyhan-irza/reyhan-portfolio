@@ -31,7 +31,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           textAlign: "center",
         }}>
           <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "#f87171" }}>
-            Oops, ada yang error 😢
+            Terjadi kendala saat membuka halaman ini.
           </h2>
           <p style={{ color: "#9ca3af", maxWidth: "400px", lineHeight: 1.6 }}>
             {this.state.message || "Terjadi kesalahan yang tidak terduga."}

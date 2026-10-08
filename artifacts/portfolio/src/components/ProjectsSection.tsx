@@ -1,11 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -51,80 +48,250 @@ type Project = (typeof projects)[number];
 export default function ProjectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
+  const activeProjectRef = useRef(0);
   const [activeProject, setActiveProject] = useState(0);
+  const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
   const [modal, setModal] = useState<Project | null>(null);
+
+  const updateActiveProject = (index: number) => {
+    const next = Math.max(0, Math.min(projects.length - 1, index));
+    if (activeProjectRef.current === next) return;
+    activeProjectRef.current = next;
+    setActiveProject(next);
+  };
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const context = gsap.context(() => {
-      const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        reduced: "(prefers-reduced-motion: reduce)",
+        compact: "(max-width: 767px)",
+        wide: "(min-width: 768px)",
+        desktop: "(min-width: 1024px)",
+      },
+      (mediaContext) => {
+        if (mediaContext.conditions?.reduced) return;
+        const compact = Boolean(mediaContext.conditions?.compact);
+        let resizeObserver: ResizeObserver | undefined;
+        const context = gsap.context(() => {
+          const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
 
-      if (reducedMotion.matches) {
-        gsap.set(rows, { clearProps: "all" });
-        return;
-      }
+          const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
+          const track = section.querySelector<HTMLElement>("[data-project-track]");
+          const stage = section.querySelector<HTMLElement>("[data-project-stage]");
+          const hasHorizontalStory = Boolean(
+            mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1,
+          );
 
-      rows.forEach((row) => {
-        const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-        const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-        if (!visual || !copy) return;
+          if (hasHorizontalStory && viewport && track && stage) {
+            const setSlideWidth = () => {
+              track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
+            };
+            setSlideWidth();
 
-        gsap.fromTo(
-          visual,
-          { clipPath: "inset(0 100% 0 0)" },
-          {
-            clipPath: "inset(0 0% 0 0)",
-            duration: 1.05,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: row,
-              start: "top 78%",
-              toggleActions: "play reverse play reverse",
+            const slideWidth = () => viewport.clientWidth;
+            const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const horizontalStory = gsap.to(track, {
+              x: () => -travelDistance(),
+              ease: "none",
+              scrollTrigger: {
+                id: "portfolio-project-story",
+                trigger: stage,
+                start: "top top+=96",
+                end: () => `+=${travelDistance() + window.innerWidth * 0.22}`,
+                pin: stage,
+                pinSpacing: true,
+                scrub: 0.8,
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
+                onEnter: () => setPinnedStoryActive(true),
+                onEnterBack: () => setPinnedStoryActive(true),
+                onUpdate: (self) => {
+                  const progressAcrossSlides = self.progress * travelDistance();
+                  const nextIndex = Math.min(
+                    rows.length - 1,
+                    Math.floor(progressAcrossSlides / slideWidth()),
+                  );
+                  updateActiveProject(nextIndex);
+                },
+                onLeaveBack: () => {
+                  setPinnedStoryActive(false);
+                  updateActiveProject(0);
+                },
+              },
+            });
+
+            rows.forEach((row) => {
+              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+              const wordmark = row.querySelector<HTMLElement>("[data-project-wordmark-motion]");
+              if (!visual || !copy) return;
+
+              gsap.fromTo(visual, {
+                clipPath: "inset(7% 8% 7% 0%)",
+                scale: 0.94,
+              }, {
+                clipPath: "inset(0% 0% 0% 0%)",
+                scale: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  containerAnimation: horizontalStory,
+                  start: "left 86%",
+                  end: "left 28%",
+                  scrub: 0.55,
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              gsap.fromTo(copy, {
+                x: 34,
+                opacity: 0.18,
+              }, {
+                x: 0,
+                opacity: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  containerAnimation: horizontalStory,
+                  start: "left 82%",
+                  end: "left 30%",
+                  scrub: 0.45,
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
+              if (geometry) {
+                gsap.to(geometry, {
+                  yPercent: -5,
+                  xPercent: 3,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    containerAnimation: horizontalStory,
+                    start: "left right",
+                    end: "right left",
+                    scrub: 0.7,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+
+              if (wordmark) {
+                gsap.fromTo(wordmark, { xPercent: 12 }, {
+                  xPercent: -9,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    containerAnimation: horizontalStory,
+                    start: "left right",
+                    end: "right left",
+                    scrub: 0.8,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+            });
+
+            resizeObserver = new ResizeObserver(() => {
+              setSlideWidth();
+              ScrollTrigger.refresh();
+            });
+            resizeObserver.observe(viewport);
+          }
+
+          if (!hasHorizontalStory) {
+            rows.forEach((row) => {
+              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+              if (!visual || !copy) return;
+
+              const entrance = gsap.timeline({
+                scrollTrigger: {
+                  trigger: row,
+                  start: compact ? "top 86%" : "top 80%",
+                  toggleActions: "play none play reverse",
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              entrance
+                .fromTo(
+                  visual,
+                  { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
+                  {
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: compact ? 0.48 : 0.62,
+                    ease: "power3.out",
+                  },
+                )
+                .fromTo(
+                  copy,
+                  { y: compact ? 8 : 16, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: compact ? 0.42 : 0.56,
+                    ease: "power3.out",
+                  },
+                  compact ? 0.06 : 0.1,
+                );
+
+              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
+              if (geometry) {
+                gsap.to(geometry, {
+                  yPercent: compact ? -3 : -9,
+                  xPercent: compact ? 0 : 2,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: row,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: compact ? 0.45 : 0.8,
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+            });
+          }
+
+          gsap.fromTo(
+            "[data-project-heading]",
+            { y: compact ? 10 : 20, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: compact ? 0.5 : 0.68,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 84%",
+                toggleActions: "play none play reverse",
+                invalidateOnRefresh: true,
+              },
             },
-          },
-        );
+          );
+        }, section);
+        return () => {
+          resizeObserver?.disconnect();
+          setPinnedStoryActive(false);
+          context.revert();
+        };
+      },
+    );
 
-        gsap.fromTo(
-          copy,
-          { y: 28, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.78,
-            delay: 0.12,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: row,
-              start: "top 72%",
-              toggleActions: "play reverse play reverse",
-            },
-          },
-        );
-      });
-
-      gsap.fromTo(
-        "[data-project-heading]",
-        { y: 34, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 76%",
-            toggleActions: "play reverse play reverse",
-          },
-        },
-      );
-    }, section);
-
-    return () => context.revert();
+    return () => media.revert();
   }, []);
 
   useEffect(() => {
@@ -132,29 +299,61 @@ export default function ProjectsSection() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setModal(null);
+      if (event.key === "Escape") {
+        setModal(null);
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialogRef.current.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      openerRef.current?.focus();
     };
   }, [modal]);
 
   useEffect(() => {
     const marker = markerRef.current;
     if (!marker) return;
-    const tween = gsap.to(marker, {
-      y: activeProject * 31,
-      duration: 0.32,
-      ease: "power3.out",
-      overwrite: true,
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const tween = gsap.to(marker, {
+        y: activeProject * 31,
+        duration: 0.28,
+        ease: "power3.out",
+        overwrite: true,
+      });
+      return () => tween.kill();
     });
 
     return () => {
-      tween.kill();
+      media.revert();
     };
   }, [activeProject]);
 
@@ -166,7 +365,8 @@ export default function ProjectsSection() {
     }
   };
 
-  const openDetails = (project: Project) => {
+  const openDetails = (project: Project, trigger: HTMLButtonElement) => {
+    openerRef.current = trigger;
     markViewed(project);
     setModal(project);
   };
@@ -188,7 +388,7 @@ export default function ProjectsSection() {
     <section
       ref={sectionRef}
       id="projects"
-      className="projects-section relative overflow-hidden px-6 py-28 md:py-40"
+      className="projects-section relative px-6 py-28 md:py-40"
       data-testid="section-projects"
     >
       <div className="relative z-10 mx-auto max-w-6xl">
@@ -201,7 +401,7 @@ export default function ProjectsSection() {
             <h2 className="projects-title max-w-4xl">
               Built to be
               <br />
-              <span className="text-[#e8836b]">used.</span>
+               <span className="text-[#a43f2d]">used.</span>
             </h2>
           </div>
           <p className="projects-intro text-sm md:mb-1 md:text-base">
@@ -211,7 +411,7 @@ export default function ProjectsSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
+        <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
             <div className="sticky top-32 flex items-start gap-5">
               <div className="project-rail relative h-24 w-px">
@@ -223,24 +423,28 @@ export default function ProjectsSection() {
               </div>
               <div className="project-index text-xs text-[#94978f]">
                 <span className="text-[#e8e7dc]">0{activeProject + 1}</span>
-                <span className="mx-1 text-[#e8836b]">/</span>
+                 <span className="mx-1 text-[#a43f2d]">/</span>
                 0{projects.length}
               </div>
             </div>
           </aside>
 
-          <div>
-            {projects.map((project, index) => (
-              <article
+          <div className="project-stage-content">
+            <div data-project-track-viewport className="project-track-viewport">
+              <div data-project-track className="project-track">
+                {projects.map((project, index) => (
+                  <article
                 key={project.id}
                 data-project-row
                 tabIndex={0}
                 className="project-row"
-                onMouseEnter={() => setActiveProject(index)}
-                onFocus={() => setActiveProject(index)}
-                onTouchStart={() => setActiveProject(index)}
+                onMouseEnter={() => updateActiveProject(index)}
+                onFocus={() => updateActiveProject(index)}
+                onTouchStart={() => updateActiveProject(index)}
                 data-testid={`project-${project.id}`}
                 aria-labelledby={`project-title-${project.id}`}
+                aria-hidden={pinnedStoryActive && activeProject !== index}
+                inert={pinnedStoryActive && activeProject !== index}
               >
                 <div
                   data-project-visual
@@ -254,19 +458,21 @@ export default function ProjectsSection() {
                     0{project.id}
                   </span>
                   <span className="project-wordmark" aria-hidden="true">
-                    {project.accent === "VIREON" ? (
-                      <>
-                        VI<em>RE</em>ON
-                      </>
-                    ) : project.accent === "REYHAN" ? (
-                      <>
-                        REY<em>HAN</em>
-                      </>
-                    ) : (
-                      <>
-                        T<em>JK</em>T
-                      </>
-                    )}
+                    <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
+                      {project.accent === "VIREON" ? (
+                        <>
+                          VI<em>RE</em>ON
+                        </>
+                      ) : project.accent === "REYHAN" ? (
+                        <>
+                          REY<em>HAN</em>
+                        </>
+                      ) : (
+                        <>
+                          T<em>JK</em>T
+                        </>
+                      )}
+                    </span>
                   </span>
                 </div>
 
@@ -308,7 +514,7 @@ export default function ProjectsSection() {
                     </a>
                     <button
                       type="button"
-                      onClick={() => openDetails(project)}
+                      onClick={(event) => openDetails(project, event.currentTarget)}
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
                       aria-label={`Read more about ${project.title}`}
@@ -317,37 +523,43 @@ export default function ProjectsSection() {
                     </button>
                   </div>
                 </div>
-              </article>
-            ))}
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {modal && (
         <div
-          className="fixed inset-0 z-[150] flex items-center justify-center bg-[#080a0b]/85 p-5 backdrop-blur-sm"
+           className="fixed inset-0 z-[150] flex items-center justify-center bg-[#211f1b]/35 p-5 backdrop-blur-sm"
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"
         >
           <div
+            ref={dialogRef}
             className="project-detail-dialog modal-enter w-full max-w-xl p-6 md:p-9"
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
+            aria-describedby="project-detail-description"
             onClick={(event) => event.stopPropagation()}
             data-testid="project-detail-dialog"
+            tabIndex={-1}
           >
             <div className="flex items-start justify-between gap-5">
               <div>
                 <p className="project-detail-label">Project note / 0{modal.id}</p>
-                <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#e8e7dc] md:text-5xl">
+                 <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
                   {modal.title}
                 </h3>
               </div>
               <button
+                ref={closeButtonRef}
                 type="button"
-                className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/15 text-[#94978f] transition-colors hover:text-[#e8e7dc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#e8836b]"
+                 className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
                 onClick={() => setModal(null)}
                 aria-label="Close project note"
                 data-testid="button-close-project-detail"
@@ -356,16 +568,16 @@ export default function ProjectsSection() {
               </button>
             </div>
 
-            <div className="mt-8 border-t border-white/10 pt-6">
+             <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
               <p className="project-detail-label">What it is</p>
-              <p className="mt-3 text-base leading-7 text-[#b6b7ad]">{modal.description}</p>
+               <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
             </div>
 
             <div className="mt-7">
               <p className="project-detail-label">Built with</p>
               <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                 {modal.tech.map((technology) => (
-                  <span key={technology} className="text-sm text-[#e8e7dc]">
+                   <span key={technology} className="text-sm text-[#211f1b]">
                     {technology}
                   </span>
                 ))}

@@ -48,20 +48,20 @@ export default function AchievementToast() {
         return (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl glass border border-white/10 bg-white/4 shadow-lg transition-all duration-500 ${
+             className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] shadow-lg transition-all duration-500 ${
               t.leaving ? "opacity-0 translate-x-full" : "opacity-100 translate-x-0"
             }`}
             style={{ animation: t.leaving ? "none" : "achievementIn 0.4s cubic-bezier(0.22,1,0.36,1)" }}
           >
-            <div className="w-8 h-8 rounded-lg bg-violet-500/15 border border-violet-500/25 flex items-center justify-center flex-shrink-0">
-              <IconComp className="w-4 h-4 text-violet-400" />
+             <div className="w-8 h-8 rounded-lg bg-[#a43f2d]/10 border border-[#a43f2d]/20 flex items-center justify-center flex-shrink-0">
+               <IconComp className="w-4 h-4 text-[#a43f2d]" />
             </div>
             <div className="min-w-0">
-              <p className="text-violet-300/80 text-[9px] font-semibold uppercase tracking-widest mb-0.5">
+               <p className="text-[#a43f2d] text-[9px] font-semibold uppercase tracking-widest mb-0.5">
                 Achievement
               </p>
-              <p className="text-white text-xs font-medium leading-tight">{t.title}</p>
-              <p className="text-white/40 text-[10px] truncate">{t.desc}</p>
+               <p className="text-[#211f1b] text-xs font-medium leading-tight">{t.title}</p>
+               <p className="text-[#6d6a62] text-[10px] truncate">{t.desc}</p>
             </div>
           </div>
         );

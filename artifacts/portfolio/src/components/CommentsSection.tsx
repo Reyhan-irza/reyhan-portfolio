@@ -24,13 +24,13 @@ function CommentText({ text }: { text: string }) {
   const isLong = text.length > 200;
   return (
     <div>
-      <p className="text-white/60 text-sm leading-relaxed whitespace-pre-wrap break-words">
+      <p className="text-[#6d6a62] text-sm leading-relaxed whitespace-pre-wrap break-words">
         {isLong && !expanded ? text.slice(0, 200) + "..." : text}
       </p>
       {isLong && (
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="text-violet-400 text-xs mt-1.5 hover:text-violet-300 transition-colors"
+          className="text-[#a43f2d] text-xs mt-1.5 hover:text-[#843322] transition-colors"
         >
           {expanded ? "Sembunyikan ▲" : "Baca Selengkapnya ▼"}
         </button>
@@ -71,6 +71,11 @@ export default function CommentsSection() {
   const [page,   setPage]   = useState(1);
 
   const listRef = useRef<HTMLDivElement>(null);
+  const listAnimRef = useScrollAnim<HTMLDivElement>({
+    threshold: 0.08,
+    stagger: 0.06,
+    refreshKey: `${comments.length}-${page}`,
+  });
 
   useEffect(() => {
     (async () => {
@@ -148,7 +153,10 @@ export default function CommentsSection() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
       setPage(1);
-      setTimeout(() => listRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+      setTimeout(() => {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      }, 150);
     }
     setSubmitting(false);
   };
@@ -161,27 +169,27 @@ export default function CommentsSection() {
 
         {/* HEADER */}
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p className="text-violet-400 text-sm font-semibold uppercase tracking-widest mb-3">
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             Yoo wassup y&apos;all
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            Absen-absen or <span className="gradient-text">Something</span>
+          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+            Absen-absen or <span className="text-[#a43f2d]">Something</span>
           </h2>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-          <p className="text-white/50 max-w-md mx-auto text-base">Pesan moral</p>
+          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
         </div>
 
         {/* FORM */}
         <div ref={formRef} className="fade-up glass neon-border rounded-2xl p-6 mb-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-white/50 text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
+              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6d6a62]" />
                 <input
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (error) setError(""); }}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-white/10 bg-white/5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-violet-500/40 transition-all"
+                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
                   placeholder="Nama kamu..."
                   maxLength={50}
                   disabled={submitting}
@@ -190,24 +198,24 @@ export default function CommentsSection() {
             </div>
 
             <div>
-              <label className="block text-white/50 text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
+              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
               <div className="relative">
-                <MessageSquare className="absolute left-3.5 top-3.5 w-4 h-4 text-white/30" />
+                <MessageSquare className="absolute left-3.5 top-3.5 w-4 h-4 text-[#6d6a62]" />
                 <textarea
                   value={message}
                   onChange={(e) => { setMessage(e.target.value); if (error) setError(""); }}
                   rows={3}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-white/10 bg-white/5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-violet-500/40 transition-all resize-none"
+                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all resize-none"
                   placeholder="Tulis pesan kamu..."
                   maxLength={500}
                   disabled={submitting}
                 />
               </div>
-              <p className="text-right text-white/20 text-[10px] mt-1">{message.length}/500</p>
+              <p className="text-right text-[#6d6a62] text-[10px] mt-1">{message.length}/500</p>
             </div>
 
-            {error   && <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">⚠ {error}</p>}
-            {success && <p className="text-green-400 text-xs bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">✓ Komentar berhasil dikirim!</p>}
+            {error   && <p role="alert" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">{error}</p>}
+            {success && <p role="status" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">Komentar berhasil dikirim.</p>}
 
             <button
               type="submit"
@@ -224,59 +232,65 @@ export default function CommentsSection() {
         {comments.length > 0 && (
           <div className="flex flex-col sm:flex-row gap-3 mb-5">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6d6a62]" />
               <input
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                 placeholder="Cari nama atau isi komentar..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl glass border border-white/10 bg-white/5 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-violet-500/40 transition-all"
+                 className="w-full pl-10 pr-4 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
               />
             </div>
-            <div className="flex items-center gap-2 glass border border-white/10 rounded-xl px-3.5 py-2.5">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-white/40" />
+            <div className="flex items-center gap-2 glass border border-[rgba(33,31,27,.16)] rounded-xl px-3.5 py-2.5">
+               <SlidersHorizontal className="w-3.5 h-3.5 text-[#6d6a62]" />
               <select
                 value={sort}
                 onChange={(e) => { setSort(e.target.value as "newest" | "oldest"); setPage(1); }}
-                className="bg-transparent text-white/70 text-sm focus:outline-none cursor-pointer"
+                 className="bg-transparent text-[#211f1b] text-sm focus:outline-none cursor-pointer"
               >
-                <option value="newest" className="bg-[#0d1117]">Terbaru</option>
-                <option value="oldest" className="bg-[#0d1117]">Terlama</option>
+                 <option value="newest" className="bg-[#f3efe6]">Terbaru</option>
+                 <option value="oldest" className="bg-[#f3efe6]">Terlama</option>
               </select>
             </div>
           </div>
         )}
 
         {/* LIST */}
-        <div ref={listRef} className="flex flex-col gap-3">
+        <div
+          ref={(el) => {
+            listRef.current = el;
+            listAnimRef.current = el;
+          }}
+          className="flex flex-col gap-3"
+        >
           {dataLoading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="w-5 h-5 text-violet-400 animate-spin" />
+               <Loader2 className="w-5 h-5 text-[#a43f2d] animate-spin" />
             </div>
           ) : dataError ? (
-            <div className="text-center py-12 text-red-400/70 text-sm">
-              ⚠ Gagal memuat komentar. Periksa koneksi dan coba refresh.
+             <div className="text-center py-12 text-[#a43f2d] text-sm">
+              Gagal memuat komentar. Periksa koneksi dan coba refresh.
             </div>
           ) : paginated.length === 0 ? (
-            <div className="text-center py-12 text-white/30 text-sm">
+             <div className="text-center py-12 text-[#6d6a62] text-sm">
               {search ? "Tidak ada komentar yang cocok." : "Belum ada komentar. Jadilah yang pertama!"}
             </div>
           ) : paginated.map((c) => {
             const cReplies = getReplies(c.id);
             return (
-              <div key={c.id} className={`glass border rounded-xl p-4 hover:border-white/12 transition-colors ${c.pinned ? "border-violet-500/30" : "border-white/8"}`}>
+              <div data-motion-item key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
                 {c.pinned && (
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-[9px] text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-500/20 uppercase font-bold tracking-wider">📌 Pinned</span>
+                    <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Pinned</span>
                   </div>
                 )}
                 <div className="flex gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500/50 to-pink-500/50 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-sm uppercase">{c.username.charAt(0)}</span>
+                  <div className="w-9 h-9 rounded-full bg-[#e8e1d4] border border-[rgba(33,31,27,.16)] flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#211f1b] font-bold text-sm uppercase">{c.username.charAt(0)}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex gap-2 items-center mb-1.5 flex-wrap">
-                      <span className="text-white font-semibold text-sm">{c.username}</span>
-                      <span className="text-white/30 text-xs">{formatTime(c.created_at)}</span>
+                      <span className="text-[#211f1b] font-semibold text-sm">{c.username}</span>
+                      <span className="text-[#6d6a62] text-xs">{formatTime(c.created_at)}</span>
                     </div>
                     <CommentText text={c.message} />
                   </div>
@@ -286,19 +300,19 @@ export default function CommentsSection() {
                 {cReplies.length > 0 && (
                   <div className="mt-3 ml-12 space-y-2">
                     {cReplies.map((r) => (
-                      <div key={r.id} className="flex gap-2.5 bg-violet-500/5 border border-violet-500/15 rounded-xl p-3">
-                        <div className="w-7 h-7 rounded-full overflow-hidden border border-violet-500/40 flex-shrink-0">
+                      <div key={r.id} className="flex gap-2.5 bg-[#a43f2d]/5 border border-[#a43f2d]/15 rounded-xl p-3">
+                        <div className="w-7 h-7 rounded-full overflow-hidden border border-[rgba(33,31,27,.16)] flex-shrink-0">
                           <img src="/profile.jpg" alt="Developer" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className="text-violet-300 font-semibold text-xs">{r.admin_name || "Developer"}</span>
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-[9px] font-bold text-violet-300 uppercase tracking-wider">
+                            <span className="text-[#a43f2d] font-semibold text-xs">{r.admin_name || "Developer"}</span>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#a43f2d]/10 border border-[#a43f2d]/20 text-[9px] font-bold text-[#a43f2d] uppercase tracking-wider">
                               <BadgeCheck className="w-2.5 h-2.5" /> DEVELOPER
                             </span>
-                            <span className="text-white/25 text-[10px]">{formatTime(r.created_at)}</span>
+                            <span className="text-[#6d6a62] text-[10px]">{formatTime(r.created_at)}</span>
                           </div>
-                          <p className="text-white/65 text-sm leading-relaxed">{r.reply_text}</p>
+                          <p className="text-[#6d6a62] text-sm leading-relaxed">{r.reply_text}</p>
                         </div>
                       </div>
                     ))}
@@ -315,15 +329,15 @@ export default function CommentsSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="w-9 h-9 rounded-xl glass border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-violet-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-white/40 text-sm tabular-nums">{page} / {totalPages}</span>
+            <span className="text-[#6d6a62] text-sm tabular-nums">{page} / {totalPages}</span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="w-9 h-9 rounded-xl glass border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-violet-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -331,7 +345,7 @@ export default function CommentsSection() {
         )}
 
         {comments.length > 0 && (
-          <p className="text-center text-white/20 text-xs mt-4">
+          <p className="text-center text-[#6d6a62] text-xs mt-4">
             {filtered.length} komentar{search && ` ditemukan dari ${comments.length} total`}
           </p>
         )}
