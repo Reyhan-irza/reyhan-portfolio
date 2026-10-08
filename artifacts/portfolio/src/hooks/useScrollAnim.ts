@@ -45,6 +45,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
           const compact = Boolean(mediaContext.conditions?.compact);
           const motionDistance = compact ? Math.min(distance, 10) : distance;
           const targets = Array.from(el.querySelectorAll<HTMLElement>("[data-motion-item]"));
+          const itemDepth = [0.78, 1, 0.86] as const;
           const timeline = gsap.timeline({
             delay: Math.max(0, delay) / 1000,
             scrollTrigger: {
@@ -76,7 +77,10 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
               targets,
               {
                 opacity: 0,
-                y: compact ? Math.min(motionDistance * 0.6, 6) : Math.min(motionDistance * 0.7, 14),
+                y: (index) => Math.min(
+                  motionDistance * itemDepth[index % itemDepth.length] * 0.7,
+                  compact ? 6 : 14,
+                ),
               },
               {
                 opacity: 1,
