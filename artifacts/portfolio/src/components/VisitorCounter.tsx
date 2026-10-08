@@ -41,7 +41,7 @@ export default function VisitorCounter() {
     >
        <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
         <Users className="h-3 w-3" aria-hidden="true" />
-        {total.toLocaleString("id-ID")} recorded visits
+        {total.toLocaleString("id-ID")} visits
       </span>
       {today !== null && (
          <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">

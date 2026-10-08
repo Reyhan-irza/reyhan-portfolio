@@ -17,7 +17,7 @@ const contacts = [
     id: "instagram",
     label: "Instagram",
     handle: "@irzalvano_",
-    desc: "See my daily updates",
+    desc: "See what I’m working on",
     icon: SiInstagram,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
@@ -27,7 +27,7 @@ const contacts = [
     id: "tiktok",
     label: "TikTok",
     handle: "@rehanwatsav",
-    desc: "Watch my short-form content",
+    desc: "Short videos and experiments",
     icon: SiTiktok,
     color: "text-[#a43f2d]",
     borderHover: "hover:border-[#a43f2d]",
@@ -54,11 +54,11 @@ export default function ContactSection() {
         <div ref={headerRef} className="fade-up text-center mb-16">
            <p data-motion-item className="section-kicker mb-4">06 / Contact</p>
            <h2 data-motion-item className="text-3xl font-semibold tracking-[-.06em] text-[#211f1b] md:text-6xl">
-             Open <span className="text-[#a43f2d]">line.</span>
+             Let’s <span className="text-[#a43f2d]">talk.</span>
           </h2>
            <div data-motion-item className="rgb-divider mx-auto mb-6 w-20" />
            <p data-motion-item className="mx-auto max-w-md text-base leading-relaxed text-[#6d6a62]">
-             For a project, a question about the work, or a useful introduction, choose the channel that suits you.
+              For a project, a collaboration, or a question about something I built, you can reach me here.
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default function ContactSection() {
           >
              <span className="w-2 h-2 rounded-full bg-[#a43f2d] animate-pulse" />
              <span className="text-[#6d6a62] text-sm font-medium">
-              Available for freelance &amp; collaboration
+               Open to freelance work &amp; collaborations
             </span>
           </div>
         </div>

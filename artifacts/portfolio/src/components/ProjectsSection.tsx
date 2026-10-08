@@ -9,9 +9,9 @@ const projects = [
     id: 1,
     short: "TJKT",
     title: "TJKT",
-    type: "Information / education",
+    type: "Department website",
     description:
-      "Website informasi dan pengenalan Jurusan Teknik Jaringan Komputer dan Telekomunikasi SMKN 2 Lubuk Basung.",
+      "A website introducing the TJKT department at SMK Negeri 2 Lubuk Basung, including its activities and identity.",
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
@@ -21,9 +21,9 @@ const projects = [
     id: 2,
     short: "VR",
     title: "VIREON Library",
-    type: "Digital workspace",
+    type: "Digital library",
     description:
-      "Ruang kerja digital untuk koleksi, anggota, peminjaman, dan laporan perpustakaan.",
+      "A digital library system for managing books, members, loans, and reports.",
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
@@ -35,7 +35,7 @@ const projects = [
     title: "Reyhan WhatsApp Portfolio",
     type: "Personal portfolio",
     description:
-      "Frontend portfolio personal yang modern dan interaktif.",
+      "A personal portfolio built around my WhatsApp-related work and experiments.",
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
@@ -397,17 +397,16 @@ export default function ProjectsSection() {
           className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <p className="projects-kicker mb-5">Selected work / three builds</p>
+            <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              Built to be
+              Things I’ve actually
               <br />
-               <span className="text-[#a43f2d]">used.</span>
+               <span className="text-[#a43f2d]">built.</span>
             </h2>
           </div>
           <p className="projects-intro text-sm md:mb-1 md:text-base">
-            Three real products, each with a different job to do. Follow the
-            thread from a school department introduction to a working library
-            system and a personal interface.
+            Three projects with different goals: a school department website, a
+            digital library, and my own portfolio.
           </p>
         </div>
 
@@ -519,7 +518,7 @@ export default function ProjectsSection() {
                       data-testid={`button-details-${project.id}`}
                       aria-label={`Read more about ${project.title}`}
                     >
-                      Note <span aria-hidden="true">+</span>
+                      Details <span aria-hidden="true">+</span>
                     </button>
                   </div>
                 </div>
@@ -551,7 +550,7 @@ export default function ProjectsSection() {
           >
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="project-detail-label">Project note / 0{modal.id}</p>
+                <p className="project-detail-label">Project / 0{modal.id}</p>
                  <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
                   {modal.title}
                 </h3>
@@ -569,7 +568,7 @@ export default function ProjectsSection() {
             </div>
 
              <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
-              <p className="project-detail-label">What it is</p>
+              <p className="project-detail-label">About this project</p>
                <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
             </div>
 
