@@ -182,7 +182,7 @@
   justify-content: center;
   width: clamp(1.9rem, 3.25vw, 2.75rem);
   height: clamp(1.9rem, 3.25vw, 2.75rem);
-  opacity: .9;
+  opacity: 1;
   transition:
     opacity .24s ease,
     transform .32s cubic-bezier(.22, 1, .36, 1),
@@ -204,11 +204,11 @@
 }
 
 .technology-band--system .technology-band__viewport {
-  opacity: .78;
+  opacity: 1;
 }
 
 .technology-band--network .technology-band__viewport {
-  opacity: .84;
+  opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {

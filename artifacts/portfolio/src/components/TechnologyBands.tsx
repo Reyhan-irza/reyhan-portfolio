@@ -38,26 +38,26 @@ const brandLogos: Record<string, BrandLogo> = {
   "C#": { Icon: SiDotnet, color: "#512BD4" },
   "Node.js": { Icon: SiNodedotjs, color: "#5FA04E" },
   Git: { Icon: SiGit, color: "#F05032" },
-  GitHub: { Icon: SiGithub, color: "#F5F7FA" },
+  GitHub: { Icon: SiGithub, color: "#A78BFA" },
   Tailwind: { Icon: SiTailwindcss, color: "#06B6D4" },
   Windows: { Icon: FaWindows, color: "#0078D4" },
   Linux: { Icon: SiLinux, color: "#FCC624" },
   Android: { Icon: SiAndroid, color: "#3DDC84" },
   "Visual Studio": { Icon: DiVisualstudio, color: "#5C2D91" },
   "VS Code": { Icon: VscVscode, color: "#007ACC" },
-  "Kali Linux": { Icon: SiKalilinux, color: "#557C94" },
-  Debian: { Icon: SiDebian, color: "#A81D33" },
-  MikroTik: { Icon: SiMikrotik, color: "#E8EDF4" },
-  Cisco: { Icon: SiCisco, color: "#049FD9" },
+  "Kali Linux": { Icon: SiKalilinux, color: "#79B8FF" },
+  Debian: { Icon: SiDebian, color: "#E34B67" },
+  MikroTik: { Icon: SiMikrotik, color: "#38BDF8" },
+  Cisco: { Icon: SiCisco, color: "#00BCEB" },
 };
 
 const conceptIcons: Record<string, ConceptIcon> = {
-  Termux: { Icon: Terminal, color: "#C9D0DC" },
-  Router: { Icon: Router, color: "#D2D8E2" },
-  Switch: { Icon: Network, color: "#D2D8E2" },
+  Termux: { Icon: Terminal, color: "#34D399" },
+  Router: { Icon: Router, color: "#F97316" },
+  Switch: { Icon: Network, color: "#22D3EE" },
   VLAN: { Icon: Layers3, color: "#C4B5FD" },
-  "TCP/IP": { Icon: Cable, color: "#D2D8E2" },
-  "Network Infrastructure": { Icon: Waypoints, color: "#D2D8E2" },
+  "TCP/IP": { Icon: Cable, color: "#FB7185" },
+  "Network Infrastructure": { Icon: Waypoints, color: "#FBBF24" },
 };
 
 function TechnologyLogo({ name }: { name: string }) {
