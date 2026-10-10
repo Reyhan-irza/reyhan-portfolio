@@ -4,6 +4,7 @@ import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
+// Product previews are direct captures of the linked public sites, not recreated UI.
 const projects = [
   {
     id: 1,
@@ -15,6 +16,12 @@ const projects = [
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/tjkt-homepage.webp`,
+      width: 1440,
+      height: 1000,
+      alt: "TJKT department website homepage with its school identity and networking-program information.",
+    },
     accent: "TJKT",
   },
   {
@@ -27,6 +34,12 @@ const projects = [
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/vireon-library.webp`,
+      width: 1440,
+      height: 857,
+      alt: "VIREON Library landing page with a library-management dashboard preview and workflow summary.",
+    },
     accent: "VIREON",
   },
   {
@@ -39,6 +52,12 @@ const projects = [
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/reyhan-portfolio.webp`,
+      width: 1440,
+      height: 857,
+      alt: "Reyhan Irza Alvano portfolio homepage captured from the public WhatsApp-related portfolio site.",
+    },
     accent: "REYHAN",
   },
 ] as const;
@@ -447,12 +466,21 @@ export default function ProjectsSection() {
               >
                 <div
                   data-project-visual
-                  className="project-visual"
+                  className="project-visual project-visual--screenshot"
                   onPointerMove={handlePointerMove}
                   data-testid={`project-visual-${project.id}`}
                 >
+                  <img
+                    className="project-screenshot"
+                    src={project.preview.src}
+                    alt={project.preview.alt}
+                    width={project.preview.width}
+                    height={project.preview.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="project-visual-grid" aria-hidden="true" />
-                  <span className="project-stamp">Live build</span>
+                  <span className="project-stamp">Site capture</span>
                   <span className="project-number" aria-hidden="true">
                     0{project.id}
                   </span>

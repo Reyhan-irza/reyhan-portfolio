@@ -1034,6 +1034,24 @@
   transition: border-color 260ms ease;
 }
 
+.project-visual--screenshot {
+  align-self: center;
+  height: clamp(17rem, 20vw, 23rem);
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  background: #05070b;
+}
+
+.project-screenshot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
 .project-visual::before {
   content: "";
   position: absolute;
@@ -1043,6 +1061,39 @@
     linear-gradient(135deg, rgba(232,231,220,0.06), transparent 42%);
   pointer-events: none;
   transition: opacity 240ms ease;
+}
+
+.project-visual--screenshot::before {
+  background: linear-gradient(
+    180deg,
+    rgba(5,7,11,0.12),
+    transparent 18%,
+    transparent 82%,
+    rgba(5,7,11,0.2)
+  );
+}
+
+.project-visual--screenshot .project-visual-grid,
+.project-visual--screenshot .project-number {
+  display: none;
+}
+
+.project-visual--screenshot .project-stamp {
+  background: rgba(5,7,11,0.82);
+}
+
+.project-visual--screenshot .project-wordmark {
+  top: auto;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: calc(100% - 2rem);
+  padding: 0.3rem 0.55rem;
+  background: rgba(5,7,11,0.82);
+  border: 1px solid rgba(232,231,220,0.18);
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  transform: none;
 }
 
 .project-row:hover .project-visual,
@@ -2579,6 +2630,14 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   display: block;
   opacity: .46;
   background-size: 34px 34px;
+}
+.portfolio-shell .project-visual--screenshot {
+  height: clamp(17rem, 20vw, 23rem);
+  min-height: 0;
+}
+.portfolio-shell .project-visual--screenshot .project-visual-grid,
+.portfolio-shell .project-visual--screenshot .project-number {
+  display: none;
 }
 .portfolio-shell .project-number { color: rgba(245,247,250,.07); }
 .portfolio-shell .project-wordmark { color: var(--rv-text); }

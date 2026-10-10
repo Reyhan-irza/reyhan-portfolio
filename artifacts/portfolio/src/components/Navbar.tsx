@@ -99,19 +99,43 @@ export default function Navbar() {
   useLayoutEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
+    const sections = navLinks.flatMap(({ href }) => {
+      const section = document.querySelector<HTMLElement>(href);
+      return section ? [{ href, section }] : [];
+    });
+    let hashFrame = 0;
+    const updateActiveFromScroll = () => {
+      const activationLine = window.innerHeight * 0.56;
+      let nextHref = "";
+      for (const { href, section } of sections) {
+        if (section.getBoundingClientRect().top > activationLine) break;
+        nextHref = href;
+      }
+      setActiveHref(nextHref);
+    };
+    const syncActiveHash = () => {
+      const target = sections.find(({ href }) => href === window.location.hash);
+      if (!target) return;
+      setActiveHref(target.href);
+      if (hashFrame) window.cancelAnimationFrame(hashFrame);
+      hashFrame = window.requestAnimationFrame(() => {
+        hashFrame = 0;
+        ScrollTrigger.update();
+      });
+    };
     const context = gsap.context(() => {
-      navLinks.forEach(({ href }) => {
-        const section = document.querySelector<HTMLElement>(href);
-        if (!section) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top 56%",
-          end: "bottom 44%",
-          onEnter: () => setActiveHref(href),
-          onEnterBack: () => setActiveHref(href),
-        });
+      ScrollTrigger.create({
+        id: "portfolio-active-navigation",
+        trigger: document.documentElement,
+        start: 0,
+        end: "max",
+        onUpdate: updateActiveFromScroll,
+        onRefresh: updateActiveFromScroll,
       });
     }, nav);
+    window.addEventListener("hashchange", syncActiveHash);
+    updateActiveFromScroll();
+    syncActiveHash();
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const intro = gsap.from("[data-nav-enter]", {
@@ -125,6 +149,8 @@ export default function Navbar() {
       return () => intro.kill();
     });
     return () => {
+      window.removeEventListener("hashchange", syncActiveHash);
+      if (hashFrame) window.cancelAnimationFrame(hashFrame);
       media.revert();
       context.revert();
     };
