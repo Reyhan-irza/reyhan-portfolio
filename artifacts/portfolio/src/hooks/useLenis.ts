@@ -13,10 +13,11 @@ export function useLenis() {
     let lenis: Lenis | null = null;
     let ticker: ((time: number) => void) | null = null;
     let refreshFrame = 0;
-    let scrollLocked = false;
+    let scrollLocked = document.body.style.overflow === "hidden";
 
     const handleScrollLock = (event: Event) => {
-      scrollLocked = (event as CustomEvent<boolean>).detail;
+      scrollLocked =
+        (event as CustomEvent<boolean>).detail || document.body.style.overflow === "hidden";
       if (scrollLocked) lenis?.stop();
       else lenis?.start();
     };

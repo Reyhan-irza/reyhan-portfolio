@@ -31,95 +31,108 @@ export default function HeroSection() {
             .fromTo("[data-hero-rule]", { scaleX: 0 }, {
               scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
             }, 0.12);
-          const scrollRange = {
-            trigger: section,
-            start: "top top",
-            end: "bottom top",
-            scrub: compact ? 0.35 : 0.7,
-            invalidateOnRefresh: true,
-          };
           const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
           const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
           const grid = section.querySelector<HTMLElement>(".hero-grid");
+          const kicker = section.querySelector<HTMLElement>("[data-hero-kicker]");
+          const orbit = section.querySelector<HTMLElement>("[data-hero-orbit]");
+          const axisX = section.querySelector<HTMLElement>("[data-hero-axis-x]");
+          const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
+          const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
+          const story = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.45 : 0.8,
+              invalidateOnRefresh: true,
+            },
+          });
 
+          story.addLabel("identity", 0);
           if (title) {
-            gsap.to(title, {
-              y: compact ? -10 : -30,
-              scale: compact ? 0.985 : 0.95,
-              opacity: 0.88,
+            story.to(title, {
+              y: compact ? -8 : -18,
+              scale: compact ? 0.99 : 0.975,
+              opacity: 0.9,
               transformOrigin: "left center",
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.3 : 0.62 },
-            });
+              duration: 0.58,
+            }, "identity");
           }
           if (lead) {
-            gsap.to(lead, {
-              y: compact ? -5 : -14,
-              opacity: 0.78,
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.25 : 0.5 },
-            });
+            story.to(lead, {
+              y: compact ? -4 : -10,
+              opacity: 0.72,
+              duration: 0.58,
+            }, "identity");
+          }
+          if (kicker) {
+            story.to(kicker, { x: compact ? -4 : -12, opacity: 0.68, duration: 0.58 }, "identity");
           }
           if (grid) {
-            gsap.to(grid, {
-              yPercent: compact ? 5 : 15,
-              opacity: compact ? 0.28 : 0.62,
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.35 : 0.75 },
-            });
+            story.to(grid, {
+              yPercent: compact ? 5 : 12,
+              opacity: compact ? 0.3 : 0.58,
+              duration: 0.58,
+            }, "identity");
           }
           if (markRef.current && !compact) {
-            gsap.to(markRef.current, {
-              y: -28,
-              rotate: 5,
-              scale: 1.08,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: "bottom top",
-                scrub: 0.8,
-                invalidateOnRefresh: true,
-              },
-            });
+            story.to(markRef.current, { y: -18, rotate: 3, scale: 1.045, duration: 0.58 }, "identity");
           }
-          gsap.fromTo("[data-hero-orbit]", { rotate: -5 }, {
-            rotate: 24,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo("[data-hero-axis-x]", { scaleX: 0.12, opacity: 0.2 }, {
-            scaleX: 1,
-            opacity: 1,
-            transformOrigin: "center center",
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.3 : 0.65,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo("[data-hero-axis-y]", { scaleY: 0.12, opacity: 0.2 }, {
-            scaleY: 1,
-            opacity: 1,
-            transformOrigin: "center center",
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.3 : 0.65,
-              invalidateOnRefresh: true,
-            },
-          });
+          if (orbit && !compact) {
+            story.fromTo(orbit, { rotate: -5 }, { rotate: 26, duration: 0.58 }, "identity");
+          }
+          if (axisX && !compact) {
+            story.fromTo(axisX, {
+              scaleX: 0.12,
+              opacity: 0.2,
+              transformOrigin: "center center",
+            }, {
+              scaleX: 1,
+              opacity: 0.78,
+              duration: 0.44,
+            }, 0.14);
+          }
+          if (axisY && !compact) {
+            story.fromTo(axisY, {
+              scaleY: 0.12,
+              opacity: 0.2,
+              transformOrigin: "center center",
+            }, {
+              scaleY: 1,
+              opacity: 0.78,
+              duration: 0.38,
+            }, 0.2);
+          }
+
+          story.addLabel("release", 0.58);
+          if (title) {
+            story.to(title, {
+              y: compact ? -20 : -48,
+              scale: compact ? 0.965 : 0.91,
+              opacity: 0.14,
+              duration: 0.42,
+            }, "release");
+          }
+          if (lead) {
+            story.to(lead, { y: compact ? -18 : -30, opacity: 0.16, duration: 0.42 }, "release");
+          }
+          if (kicker) {
+            story.to(kicker, { x: compact ? -12 : -24, opacity: 0.12, duration: 0.42 }, "release");
+          }
+          if (grid) {
+            story.to(grid, { yPercent: compact ? 18 : 26, opacity: 0.12, duration: 0.42 }, "release");
+          }
+          if (markRef.current && !compact) {
+            story.to(markRef.current, { y: -46, rotate: 8, scale: 1.1, opacity: 0.32, duration: 0.42 }, "release");
+          }
+          if (orbit && !compact) {
+            story.to(orbit, { rotate: 46, opacity: 0.18, duration: 0.42 }, "release");
+          }
+          if (axisX && !compact) story.to(axisX, { opacity: 0.18, duration: 0.42 }, "release");
+          if (axisY && !compact) story.to(axisY, { opacity: 0.18, duration: 0.42 }, "release");
+          if (scrollCue) story.to(scrollCue, { opacity: 0, duration: 0.28 }, "release");
           if (!compact && window.matchMedia("(pointer: fine)").matches) {
             section.querySelectorAll<HTMLElement>("[data-hero-magnetic]").forEach((button) => {
               const moveX = gsap.quickTo(button, "x", { duration: 0.24, ease: "power3.out" });
@@ -161,7 +174,7 @@ export default function HeroSection() {
       <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
-          <p data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
+          <p data-hero-kicker data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
             <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
@@ -218,7 +231,7 @@ export default function HeroSection() {
           <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
       </div>
-      <a href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
+      <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
       </a>
     </section>

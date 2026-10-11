@@ -26,38 +26,38 @@ import { VscVscode } from "react-icons/vsc";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import "./TechnologyBands.css";
 
-type BrandLogo = { Icon: IconType; color: string };
-type ConceptIcon = { Icon: LucideIcon; color: string };
+type BrandLogo = { Icon: IconType };
+type ConceptIcon = { Icon: LucideIcon };
 
 const brandLogos: Record<string, BrandLogo> = {
-  React: { Icon: SiReact, color: "#61DAFB" },
-  TypeScript: { Icon: SiTypescript, color: "#3178C6" },
-  JavaScript: { Icon: SiJavascript, color: "#F7DF1E" },
-  HTML: { Icon: SiHtml5, color: "#E34F26" },
-  CSS: { Icon: SiCss, color: "#1572B6" },
-  "C#": { Icon: SiDotnet, color: "#512BD4" },
-  "Node.js": { Icon: SiNodedotjs, color: "#5FA04E" },
-  Git: { Icon: SiGit, color: "#F05032" },
-  GitHub: { Icon: SiGithub, color: "#A78BFA" },
-  Tailwind: { Icon: SiTailwindcss, color: "#06B6D4" },
-  Windows: { Icon: FaWindows, color: "#0078D4" },
-  Linux: { Icon: SiLinux, color: "#FCC624" },
-  Android: { Icon: SiAndroid, color: "#3DDC84" },
-  "Visual Studio": { Icon: DiVisualstudio, color: "#5C2D91" },
-  "VS Code": { Icon: VscVscode, color: "#007ACC" },
-  "Kali Linux": { Icon: SiKalilinux, color: "#79B8FF" },
-  Debian: { Icon: SiDebian, color: "#E34B67" },
-  MikroTik: { Icon: SiMikrotik, color: "#38BDF8" },
-  Cisco: { Icon: SiCisco, color: "#00BCEB" },
+  React: { Icon: SiReact },
+  TypeScript: { Icon: SiTypescript },
+  JavaScript: { Icon: SiJavascript },
+  HTML: { Icon: SiHtml5 },
+  CSS: { Icon: SiCss },
+  "C#": { Icon: SiDotnet },
+  "Node.js": { Icon: SiNodedotjs },
+  Git: { Icon: SiGit },
+  GitHub: { Icon: SiGithub },
+  Tailwind: { Icon: SiTailwindcss },
+  Windows: { Icon: FaWindows },
+  Linux: { Icon: SiLinux },
+  Android: { Icon: SiAndroid },
+  "Visual Studio": { Icon: DiVisualstudio },
+  "VS Code": { Icon: VscVscode },
+  "Kali Linux": { Icon: SiKalilinux },
+  Debian: { Icon: SiDebian },
+  MikroTik: { Icon: SiMikrotik },
+  Cisco: { Icon: SiCisco },
 };
 
 const conceptIcons: Record<string, ConceptIcon> = {
-  Termux: { Icon: Terminal, color: "#34D399" },
-  Router: { Icon: Router, color: "#F97316" },
-  Switch: { Icon: Network, color: "#22D3EE" },
-  VLAN: { Icon: Layers3, color: "#C4B5FD" },
-  "TCP/IP": { Icon: Cable, color: "#FB7185" },
-  "Network Infrastructure": { Icon: Waypoints, color: "#FBBF24" },
+  Termux: { Icon: Terminal },
+  Router: { Icon: Router },
+  Switch: { Icon: Network },
+  VLAN: { Icon: Layers3 },
+  "TCP/IP": { Icon: Cable },
+  "Network Infrastructure": { Icon: Waypoints },
 };
 
 function TechnologyLogo({ name }: { name: string }) {
@@ -65,7 +65,7 @@ function TechnologyLogo({ name }: { name: string }) {
   if (brand) {
     const Icon = brand.Icon;
     return (
-      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: brand.color }}>
+      <span className="technology-band__mark" aria-hidden="true">
         <Icon aria-hidden="true" focusable="false" />
       </span>
     );
@@ -75,7 +75,7 @@ function TechnologyLogo({ name }: { name: string }) {
   if (concept) {
     const Icon = concept.Icon;
     return (
-      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: concept.color }}>
+      <span className="technology-band__mark" aria-hidden="true">
         <Icon aria-hidden="true" focusable="false" strokeWidth={1.8} />
       </span>
     );
@@ -334,6 +334,7 @@ export default function TechnologyBands() {
                             onPointerLeave={() => setPressedTechnology(null)}
                           >
                             <TechnologyLogo name={technology} />
+                            <span className="technology-band__technology-name">{technology}</span>
                           </li>
                         );
                       })}

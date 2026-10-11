@@ -21,9 +21,13 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
     const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
     const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
-    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || pieces.length !== 3) return;
+    const flash = element.querySelector<HTMLElement>("[data-intro-flash]");
+    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || !flash || pieces.length !== 3) return;
 
     element.focus({ preventScroll: true });
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: true }));
     const media = gsap.matchMedia();
     media.add(
       {
@@ -35,36 +39,32 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         const compact = window.matchMedia("(max-width: 640px)").matches;
         const distance = Math.min(compact ? 76 : 142, Math.max(compact ? 36 : 76, element.clientWidth * 0.16));
 
-        gsap.set(element, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-        gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
-        gsap.set(finalLogo, { autoAlpha: 0, scale: 0.97 });
-        gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
-        gsap.set(identity, { autoAlpha: 0, y: 14, filter: "blur(4px)" });
-        gsap.set([orbit, frame], { autoAlpha: 0, scale: 0.92 });
-        gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
-
         if (isReduced) {
-          gsap.set(finalLogo, { autoAlpha: 1, scale: 1 });
-          gsap.set(identity, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
-          const reducedTimeline = gsap.timeline({ onComplete: onFinish });
-          reducedTimeline.to(element, {
-            autoAlpha: 0,
-            delay: 0.9,
-            duration: 0.16,
-            ease: "none",
-          });
-          return () => reducedTimeline.kill();
+          onFinish();
+          return;
         }
 
+        gsap.set(element, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
+        gsap.set(finalLogo, { autoAlpha: 0, scale: 0.94, rotation: -2 });
+        gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
+        gsap.set(identity, { autoAlpha: 0, y: 22, filter: "blur(7px)" });
+        gsap.set(orbit, { autoAlpha: 0, scale: 0.82, rotation: -18 });
+        gsap.set(frame, { autoAlpha: 0, scale: 0.92, rotation: 8 });
+        gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
+        gsap.set(flash, { autoAlpha: 0, scale: 0.7 });
+
         const timeline = gsap.timeline({
-          delay: 0.12,
+          delay: 0.08,
           onComplete: onFinish,
-          defaults: { overwrite: "auto" },
+          defaults: { overwrite: "auto", ease: "power3.out" },
         });
 
         timeline
-          .to(orbit, { autoAlpha: 1, scale: 1, duration: 0.62, ease: "power3.out" }, 0)
-          .to(frame, { autoAlpha: 1, scale: 1, duration: 0.66, ease: "power2.out" }, 0.1)
+          .addLabel("signal", 0)
+          .to(orbit, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.9 }, "signal")
+          .to(frame, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.74, ease: "power2.out" }, 0.1)
+          .addLabel("assembly", 0.18)
           .fromTo(pieces[0], {
             x: -distance,
             y: -distance * 0.58,
@@ -78,8 +78,8 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             scale: 1,
             autoAlpha: 1,
             duration: 0.7,
-            ease: "power3.out",
-          }, 0.24)
+            ease: "power4.out",
+          }, "assembly")
           .fromTo(pieces[1], {
             x: -distance * 0.76,
             y: distance * 0.62,
@@ -93,8 +93,8 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             scale: 1,
             autoAlpha: 1,
             duration: 0.7,
-            ease: "power3.out",
-          }, 0.56)
+            ease: "power4.out",
+          }, "assembly+=0.3")
           .fromTo(pieces[2], {
             x: distance,
             y: -distance * 0.2,
@@ -108,47 +108,63 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
             scale: 1,
             autoAlpha: 1,
             duration: 0.72,
-            ease: "power3.out",
-          }, 0.88)
-          .to(scan, { autoAlpha: 0.8, scaleX: 1, duration: 0.42, ease: "power2.inOut" }, 1.22)
-          .to(pieces, { scale: 0.985, duration: 0.22, ease: "power2.inOut" }, 1.72)
-          .to(pieces, { scale: 1, duration: 0.2, ease: "power3.out" }, 1.94)
-          .to(pieces, { autoAlpha: 0, duration: 0.2, ease: "power2.inOut" }, 2.2)
+            ease: "power4.out",
+          }, "assembly+=0.56")
+          .addLabel("lockup", 1.48)
+          .to(scan, { autoAlpha: 0.8, scaleX: 1, duration: 0.42, ease: "power2.inOut" }, "lockup-=0.14")
+          .to(pieces, { scale: 1.035, duration: 0.18, ease: "power2.out" }, "lockup")
+          .to(flash, { autoAlpha: 0.72, scale: 1.08, duration: 0.1, ease: "power2.out" }, "lockup+=0.08")
+          .to(flash, { autoAlpha: 0, scale: 1.3, duration: 0.36, ease: "power2.out" }, "lockup+=0.18")
+          .to(pieces, { autoAlpha: 0, scale: 0.985, duration: 0.22, ease: "power2.inOut" }, "lockup+=0.18")
           .to(finalLogo, {
             autoAlpha: 1,
             scale: 1,
-            duration: 0.34,
+            rotation: 0,
+            duration: 0.46,
             ease: "power2.out",
-          }, 2.2)
+          }, "lockup+=0.18")
           .fromTo(sweep, { xPercent: -130, autoAlpha: 0 }, {
             xPercent: 130,
             autoAlpha: 1,
-            duration: 0.56,
+            duration: 0.62,
             ease: "power2.inOut",
-          }, 2.48)
-          .to(sweep, { autoAlpha: 0, duration: 0.1 }, 2.94)
-          .to(scan, { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }, 2.2)
-          .to(identity, {
+          }, "lockup+=0.38")
+          .to(sweep, { autoAlpha: 0, duration: 0.1 }, "lockup+=0.9")
+          .to(scan, { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }, "lockup+=0.2")
+          .addLabel("introduction", "lockup+=0.48")
+          .to(identity[0], {
             autoAlpha: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 0.44,
-            stagger: 0.08,
-            ease: "power3.out",
-          }, 2.72)
-          .to(identityGroup, { y: -18, scale: 0.97, duration: 0.55, ease: "power2.inOut" }, 3.82)
+            duration: 0.42,
+          }, "introduction")
+          .to(identity.slice(1), {
+            autoAlpha: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.5,
+            stagger: 0.1,
+          }, "introduction+=0.12")
+          .to(finalLogo, { scale: 1.025, duration: 0.26, ease: "power1.inOut" }, "introduction+=0.62")
+          .to(finalLogo, { scale: 1, duration: 0.26, ease: "power2.out" }, "introduction+=0.88")
+          .addLabel("reveal", "introduction+=1.2")
+          .to(identityGroup, { y: -16, scale: 0.97, duration: 0.5, ease: "power2.inOut" }, "reveal")
           .to(element, {
             clipPath: "inset(0% 0% 100% 0%)",
-            duration: 0.62,
+            duration: 0.5,
             ease: "power3.inOut",
-          }, 3.82)
-          .to(element, { autoAlpha: 0, duration: 0.02 }, 4.42);
+          }, "reveal")
+          .to(element, { autoAlpha: 0, duration: 0.02 }, "reveal+=0.5");
 
         return () => timeline.kill();
       },
     );
 
-    return () => media.revert();
+    return () => {
+      media.revert();
+      document.body.style.overflow = previousOverflow;
+      window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
+    };
   }, [onFinish]);
 
   return (
@@ -179,6 +195,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
               <polygon points="50,1 99,50 50,99 1,50" />
             </svg>
           </span>
+          <span data-intro-flash className="rv-intro-flash absolute inset-0" />
           <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
           <div className="rv-intro-assembly">
             <img
@@ -223,9 +240,10 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           </div>
         </div>
         <div data-intro-identity className="rv-intro-identity">
-          <p data-intro-copy className="font-mono text-[10px] uppercase tracking-[.2em] text-[#aab4ff]">Vierlykirk / personal portfolio</p>
-          <h1 id="intro-name" data-intro-copy className="mt-3 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">Reyhan Irza Alvano</h1>
-          <p data-intro-copy className="mt-2 text-xs tracking-[.08em] text-white/60">Student Developer · SMK</p>
+          <p data-intro-copy className="rv-intro-kicker">STUDENT DEVELOPER / LUBUK BASUNG, INDONESIA</p>
+          <h1 id="intro-name" data-intro-copy className="rv-intro-name">Reyhan Irza Alvano</h1>
+          <p data-intro-copy className="rv-intro-role">Student Developer · SMK</p>
+          <p data-intro-copy className="rv-intro-story">I’m a student developer who learns by building.</p>
         </div>
       </div>
     </div>

@@ -73,15 +73,31 @@ export default function ProjectsSection() {
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
+  const pinnedStoryActiveRef = useRef(false);
   const [activeProject, setActiveProject] = useState(0);
   const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
   const [modal, setModal] = useState<Project | null>(null);
+
+  const updatePinnedStoryActive = (active: boolean) => {
+    pinnedStoryActiveRef.current = active;
+    setPinnedStoryActive(active);
+  };
 
   const updateActiveProject = (index: number) => {
     const next = Math.max(0, Math.min(projects.length - 1, index));
     if (activeProjectRef.current === next) return;
     activeProjectRef.current = next;
     setActiveProject(next);
+
+    if (!pinnedStoryActiveRef.current) return;
+    const rows = sectionRef.current?.querySelectorAll<HTMLElement>("[data-project-row]");
+    const currentRow = Array.from(rows ?? []).find((row) => row.contains(document.activeElement));
+    const nextRow = rows?.[next];
+    if (!currentRow || !nextRow || currentRow === nextRow) return;
+
+    nextRow.inert = false;
+    nextRow.setAttribute("aria-hidden", "false");
+    nextRow.focus({ preventScroll: true });
   };
 
   useLayoutEffect(() => {
@@ -131,8 +147,8 @@ export default function ProjectsSection() {
                 scrub: 0.8,
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
-                onEnter: () => setPinnedStoryActive(true),
-                onEnterBack: () => setPinnedStoryActive(true),
+                onEnter: () => updatePinnedStoryActive(true),
+                onEnterBack: () => updatePinnedStoryActive(true),
                 onUpdate: (self) => {
                   const progressAcrossSlides = self.progress * travelDistance();
                   const nextIndex = Math.min(
@@ -142,7 +158,7 @@ export default function ProjectsSection() {
                   updateActiveProject(nextIndex);
                 },
                 onLeaveBack: () => {
-                  setPinnedStoryActive(false);
+                  updatePinnedStoryActive(false);
                   updateActiveProject(0);
                 },
               },
@@ -304,7 +320,7 @@ export default function ProjectsSection() {
         }, section);
         return () => {
           resizeObserver?.disconnect();
-          setPinnedStoryActive(false);
+          updatePinnedStoryActive(false);
           context.revert();
         };
       },
