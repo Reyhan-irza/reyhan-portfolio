@@ -44,8 +44,7 @@ export default function Navbar() {
     if (!isOpen) return;
     const panel = panelRef.current;
     const focusables = () => {
-      const inPanel = Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
-      return [...inPanel, ...(menuTriggerRef.current ? [menuTriggerRef.current] : [])];
+      return Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
     };
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -54,8 +53,13 @@ export default function Navbar() {
       }
       if (event.key !== "Tab") return;
       const items = focusables();
-        if (!items.length) return;
-        if (event.shiftKey && document.activeElement === items[0]) {
+      if (!items.length) return;
+      if (!panel?.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? items[items.length - 1] : items[0]).focus();
+        return;
+      }
+      if (event.shiftKey && document.activeElement === items[0]) {
         event.preventDefault();
         items[items.length - 1].focus();
       } else if (!event.shiftKey && document.activeElement === items[items.length - 1]) {
