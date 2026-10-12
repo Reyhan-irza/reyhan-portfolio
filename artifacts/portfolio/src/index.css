@@ -236,14 +236,6 @@
 .portfolio-shell .hero-grid { opacity: .35; }
 .portfolio-shell .profile-glow { border-color: #667cff; }
 .portfolio-shell .profile-glow::before { background: linear-gradient(135deg,#667cff,#8b6cff); }
-.portfolio-shell a:focus-visible,
-.portfolio-shell button:focus-visible,
-.portfolio-shell input:focus-visible,
-.portfolio-shell textarea:focus-visible,
-.portfolio-shell select:focus-visible {
-  outline: 2px solid #8b9aff;
-  outline-offset: 3px;
-}
 @media (prefers-reduced-motion: reduce) {
   .portfolio-shell *,
   .portfolio-shell *::before,
@@ -2488,12 +2480,6 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .achievement-milestone-card:nth-child(3) {
   border-top-color: rgba(170,180,255,.34);
 }
-.portfolio-shell .projects-section {
-  --project-ink: #070a10; --project-paper: #f0f2f7; --project-muted: #9aa3b3;
-  --project-acid: #8190ff; --project-coral: #a891ff;
-  background-color: #070a10;
-}
-.portfolio-shell .project-visual { background: var(--rv-surface) !important; }
 .portfolio-shell .glass {
   background: rgba(10,14,21,.82) !important;
   border-color: rgba(255,255,255,.12) !important;
@@ -2504,9 +2490,6 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .portfolio-shell .project-row:hover .project-visual,
 .portfolio-shell .project-row:focus-within .project-visual { border-color: rgba(129,144,255,.55); }
-.portfolio-shell .project-stamp { border-color: rgba(129,144,255,.4); }
-.portfolio-shell .project-link { color: #070a10; }
-.portfolio-shell .project-detail-dialog { color: #f5f7fa; }
 .portfolio-shell [class*="text-[#211f1b]"] { color: #f5f7fa !important; }
 .portfolio-shell [class*="text-[#1b1c18]"] { color: #f5f7fa !important; }
 .portfolio-shell [class*="text-[#4e5149]"],
@@ -2524,42 +2507,6 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell [style*="#f3efe6"],
 .portfolio-shell [style*="#f3f0e8"] { background-color: #0a0e15 !important; }
 .portfolio-shell [style*="#e8e1d4"] { background-color: #101621 !important; }
-.portfolio-shell a:focus-visible,
-.portfolio-shell button:focus-visible,
-.portfolio-shell input:focus-visible,
-.portfolio-shell textarea:focus-visible,
-.portfolio-shell select:focus-visible { outline: 2px solid #8b9aff; outline-offset: 4px; }
-
-@media (max-width: 767px) {
-  .portfolio-shell .proof-item { min-height: auto; padding: 1.1rem .25rem; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.09); }
-  .portfolio-shell .proof-item:last-child { border-bottom: 0; }
-  .portfolio-shell .hero-section { min-height: 100svh; padding-bottom: 6rem; }
-  .portfolio-shell .hero-section > div:nth-child(2) { min-height: calc(100svh - 12rem); }
-  .portfolio-shell .hero-name-accent { letter-spacing: -.105em; }
-  .portfolio-shell .hero-scroll-cue { left: 1.25rem; transform: none; }
-  .portfolio-shell .secondary-archive { margin: 3rem 1.25rem; }
-  .portfolio-shell .secondary-archive summary { padding-block: 1rem; }
-  .portfolio-shell .journey-timeline { --timeline-rail:3px; }
-  .portfolio-shell .journey-timeline::before,
-  .portfolio-shell .journey-timeline-progress { left:3px; }
-  .portfolio-shell .journey-year { padding-left:1.4rem; }
-  .portfolio-shell .journey-node { left:0; }
-  .portfolio-shell .education-timeline { padding-left:2rem; }
-  .portfolio-shell .education-timeline-track,
-  .portfolio-shell .education-timeline-progress { left:.35rem; }
-  .portfolio-shell .education-node { left:-2rem; }
-  .portfolio-shell .education-item-current { padding-inline:.7rem; }
-  .portfolio-shell .achievement-milestone-card { min-height:0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-shell .hero-primary,
-  .portfolio-shell .mobile-menu-line { transition: none; }
-  .portfolio-shell .journey-timeline-progress { transform:scaleY(1) !important; }
-  .portfolio-shell .journey-node { transform:scale(1); opacity:1; }
-  .portfolio-shell .education-timeline-progress { transform:scaleY(1) !important; }
-  .portfolio-shell .education-node { transform:scale(1); opacity:1; }
-}
 
 /* Final RV system pass — one palette, one geometry language, no paper-era leftovers. */
 .portfolio-shell {
@@ -2690,6 +2637,11 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .award-record a:last-child:hover { border-color: var(--rv-blue); color: #aab4ff !important; }
 
 .portfolio-shell .projects-section {
+  --project-ink: #070a10;
+  --project-paper: #f0f2f7;
+  --project-muted: #9aa3b3;
+  --project-acid: #8190ff;
+  --project-coral: #a891ff;
   color: var(--rv-text);
   background:
     linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
@@ -2775,26 +2727,38 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .hero-mark-stage:hover .hero-mark-frame-inner { border-color: rgba(129,144,255,.4); }
 .portfolio-shell .hero-mark-frame-inner { transition: border-color .35s ease; }
 .portfolio-shell :is(a,button,summary,[tabindex="0"]) { -webkit-tap-highlight-color: transparent; }
-.portfolio-shell :is(a,button,summary):focus-visible {
+.portfolio-shell :is(a,button,input,textarea,select,summary,[tabindex="0"]):focus-visible {
   outline: 2px solid #a4adff;
   outline-offset: 4px;
 }
 .portfolio-shell button:disabled { cursor: not-allowed; opacity: .55; }
 
 @media (max-width: 767px) {
+  .portfolio-shell .proof-item { min-height: auto; padding: 1.1rem .25rem; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+  .portfolio-shell .proof-item:last-child { border-bottom: 0; }
+  .portfolio-shell .hero-section { min-height: 100svh; padding-bottom: 6rem; }
+  .portfolio-shell .hero-section > div:nth-child(2) { min-height: calc(100svh - 12rem); }
+  .portfolio-shell .hero-name-accent { letter-spacing: -.105em; }
+  .portfolio-shell .hero-scroll-cue { left: 1.25rem; transform: none; }
+  .portfolio-shell .secondary-archive { margin: 3rem 1.25rem; }
+  .portfolio-shell .secondary-archive summary { padding-block: 1rem; }
+  .portfolio-shell .journey-timeline { --timeline-rail:3px; }
+  .portfolio-shell .journey-timeline::before,
+  .portfolio-shell .journey-timeline-progress { left:3px; }
+  .portfolio-shell .journey-year { padding-left:1.4rem; }
+  .portfolio-shell .journey-node { left:0; }
+  .portfolio-shell .education-timeline { padding-left:2rem; }
+  .portfolio-shell .education-timeline-track,
+  .portfolio-shell .education-timeline-progress { left:.35rem; }
+  .portfolio-shell .education-node { left:-2rem; }
+  .portfolio-shell .education-item-current { padding-inline:.7rem; }
+  .portfolio-shell .achievement-milestone-card { min-height:0; }
   .portfolio-shell .aurora-bg::before { background-size: 72px 72px; opacity: .13; }
   .portfolio-shell .aurora-bg::after { width: 76vw; right: -36vw; top: 20vh; }
   .portfolio-shell .projects-section { background-size: 100px 100%; }
   .portfolio-shell .project-visual { min-height: 16rem; }
-  .portfolio-shell .proof-item { padding-inline: .25rem; }
   .portfolio-shell .nav-scrim { backdrop-filter: none; }
   .portfolio-shell .hero-mark-stage:hover .hero-mark-image img { transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-shell .aurora-bg::after,
-  .portfolio-shell .hero-mark-stage:hover .hero-mark-image img { transform: none; }
-  .portfolio-shell .editorial-nav,
-  .portfolio-shell .hero-mark-image img { transition: none; }
 }
 
 .rv-intro {
@@ -3053,6 +3017,16 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .portfolio-shell .hero-primary,
+  .portfolio-shell .mobile-menu-line,
+  .portfolio-shell .editorial-nav,
+  .portfolio-shell .hero-mark-image img { transition: none; }
+  .portfolio-shell .journey-timeline-progress,
+  .portfolio-shell .education-timeline-progress { transform: scaleY(1) !important; }
+  .portfolio-shell .journey-node,
+  .portfolio-shell .education-node { transform: scale(1); opacity: 1; }
+  .portfolio-shell .aurora-bg::after,
+  .portfolio-shell .hero-mark-stage:hover .hero-mark-image img { transform: none; }
   .rv-intro, .rv-intro * { animation: none !important; transition: none !important; }
   .rv-intro-piece,
   .rv-intro-light-sweep { will-change: auto; }
