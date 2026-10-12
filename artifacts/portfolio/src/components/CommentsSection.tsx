@@ -183,13 +183,14 @@ export default function CommentsSection() {
         <div ref={formRef} className="fade-up glass neon-border rounded-2xl p-6 mb-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
+               <label htmlFor="comment-name" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
               <div className="relative">
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6d6a62]" />
                 <input
+                  id="comment-name"
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (error) setError(""); }}
-                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all"
                   placeholder="Nama kamu..."
                   maxLength={50}
                   disabled={submitting}
@@ -198,14 +199,15 @@ export default function CommentsSection() {
             </div>
 
             <div>
-              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
+               <label htmlFor="comment-message" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
               <div className="relative">
                 <MessageSquare className="absolute left-3.5 top-3.5 w-4 h-4 text-[#6d6a62]" />
                 <textarea
+                  id="comment-message"
                   value={message}
                   onChange={(e) => { setMessage(e.target.value); if (error) setError(""); }}
                   rows={3}
-                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all resize-none"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all resize-none"
                   placeholder="Tulis pesan kamu..."
                   maxLength={500}
                   disabled={submitting}
