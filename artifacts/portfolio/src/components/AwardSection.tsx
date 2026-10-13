@@ -4,6 +4,7 @@ import { gsap } from "../lib/motion";
 
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-preview.webp`;
+const digitalLibraryCertificateUrl = `${import.meta.env.BASE_URL}sertifikat-apresiasi-inovasi-digital-2026.webp`;
 
 export default function AwardSection() {
   const previewRef = useRef<HTMLAnchorElement>(null);
@@ -123,6 +124,85 @@ export default function AwardSection() {
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="fade-up award-record mx-auto mt-8 grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10">
+        <div className="flex flex-col justify-between gap-8" data-motion-item>
+          <div>
+            <p className="section-kicker">Achievement / 2026</p>
+            <p className="mt-2 text-xs text-white/45">Apresiasi inovasi digital</p>
+          </div>
+          <div className="flex items-center gap-4 border-y border-white/10 py-6">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#667cff]/35 bg-[#667cff]/10 text-[#aab4ff]">
+              <Award className="h-6 w-6" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[.15em] text-[#aab4ff]">Sertifikat penghargaan</p>
+              <p className="mt-1 text-xs text-white/55">Agustus 2026 · Kelas XII TKJ4</p>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-[clamp(1.65rem,3.2vw,2.8rem)] font-semibold leading-[1.06] tracking-[-.055em] text-white">
+              Aplikasi Pustaka Digital
+            </h2>
+            <p className="mt-4 flex items-center gap-2 text-sm text-[#c9d0dc]">
+              <MapPin className="h-4 w-4 shrink-0 text-[#8491ff]" aria-hidden="true" />
+              SMK Negeri 2 Lubuk Basung
+            </p>
+          </div>
+          <p className="text-xs leading-relaxed text-white/45">
+            Sertifikat penghargaan atas pengembangan Aplikasi Pustaka Digital.
+          </p>
+        </div>
+
+        <div data-motion-item className="min-w-0">
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <p className="section-kicker">Sertifikat / Agustus 2026</p>
+              <p className="mt-2 text-sm font-medium text-white">Apresiasi Inovasi Digital · Aplikasi Pustaka Digital</p>
+            </div>
+            <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">WebP image</span>
+          </div>
+          <a
+            href={digitalLibraryCertificateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="certificate-preview group relative block aspect-[7/5] overflow-hidden border border-white/15 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8b9aff]"
+            data-testid="link-pustaka-certificate-preview"
+            aria-label="Open the August 2026 Pustaka Digital award certificate image in a new tab"
+          >
+            <img
+              src={digitalLibraryCertificateUrl}
+              alt="Sertifikat penghargaan SMK Negeri 2 Lubuk Basung kepada Reyhan Irza Alvano atas pengembangan Aplikasi Pustaka Digital, Agustus 2026."
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.015] motion-reduce:transition-none"
+            />
+          </a>
+          <p className="mt-2 text-[11px] text-white/45">Buka gambar untuk melihat sertifikat ukuran penuh.</p>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={digitalLibraryCertificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-view-pustaka-certificate"
+              aria-label="View the August 2026 Pustaka Digital award certificate image in a new tab"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
+            >
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              Lihat sertifikat
+            </a>
+            <a
+              href={digitalLibraryCertificateUrl}
+              download="sertifikat-apresiasi-inovasi-digital-2026.webp"
+              data-testid="link-download-pustaka-certificate"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+            >
+              <Download className="h-4 w-4" aria-hidden="true" />
+              Unduh sertifikat
             </a>
           </div>
         </div>
