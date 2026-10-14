@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { SiGmail, SiInstagram, SiTiktok, SiWhatsapp } from "react-icons/si";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const contacts = [
@@ -6,24 +7,28 @@ const contacts = [
     id: "whatsapp",
     label: "WhatsApp",
     handle: "ReyhanWhatsap",
+    icon: SiWhatsapp,
     href: "https://wa.me/62881385242876",
   },
   {
     id: "instagram",
     label: "Instagram",
     handle: "@irzalvano_",
+    icon: SiInstagram,
     href: "https://www.instagram.com/irzalvano_?igsh=ZXRqM2lvY3EyY2Nj",
   },
   {
     id: "tiktok",
     label: "TikTok",
     handle: "@rehanwatsav",
+    icon: SiTiktok,
     href: "https://www.tiktok.com/@rehanwatsav?_r=1&_t=ZS-95Kk0Lxdw5B",
   },
   {
     id: "email",
     label: "Email",
     handle: "irzanour@gmail.com",
+    icon: SiGmail,
     href: "mailto:irzanour@gmail.com",
   },
 ];
@@ -68,6 +73,7 @@ export default function ContactSection() {
 
 function ContactRow({ contact, delay }: { contact: (typeof contacts)[0]; delay: number }) {
   const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay });
+  const Icon = contact.icon;
 
   return (
     <li className="border-b border-neutral-800/60">
@@ -76,21 +82,25 @@ function ContactRow({ contact, delay }: { contact: (typeof contacts)[0]; delay: 
         href={contact.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group fade-up flex min-h-16 items-center justify-between gap-5 py-4 transition-colors hover:text-white focus-visible:text-white"
+        className="group fade-up grid min-h-20 grid-cols-[2.25rem_minmax(4.5rem,.75fr)_minmax(0,1.25fr)_1rem] items-center gap-3 py-6 transition-colors hover:text-white focus-visible:text-white sm:min-h-24 sm:grid-cols-[2.75rem_minmax(7rem,.75fr)_minmax(0,1.25fr)_1.25rem] sm:gap-5 sm:py-7"
         data-testid={`link-contact-${contact.id}`}
       >
+        <Icon
+          className="h-5 w-5 justify-self-start text-neutral-400 transition-colors group-hover:text-white sm:h-[1.35rem] sm:w-[1.35rem]"
+          aria-hidden="true"
+        />
         <span className="shrink-0 font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500">
           {contact.label}
         </span>
-        <span className="flex min-w-0 items-center gap-3">
-          <span className="truncate text-right text-sm font-semibold text-neutral-100 sm:text-base">
+        <span className="min-w-0 text-right">
+          <span className="block truncate text-sm font-semibold text-neutral-100 sm:text-base">
             {contact.handle}
           </span>
-          <ArrowUpRight
-            className="h-4 w-4 shrink-0 text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neutral-200"
-            aria-hidden="true"
-          />
         </span>
+        <ArrowUpRight
+          className="h-4 w-4 justify-self-end text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neutral-200"
+          aria-hidden="true"
+        />
       </a>
     </li>
   );
