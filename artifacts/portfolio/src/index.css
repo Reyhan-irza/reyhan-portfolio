@@ -3041,3 +3041,11 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .portfolio-closing-zone .secondary-archive {
   margin: 0 auto 1.5rem;
 }
+
+.portfolio-shell [data-testid="availability-status"] [class~="bg-emerald-500"] {
+  background-color: #10b981 !important;
+}
+
+.portfolio-shell [data-testid="availability-status"] [class~="bg-emerald-500/50"] {
+  background-color: rgba(16, 185, 129, .5) !important;
+}
