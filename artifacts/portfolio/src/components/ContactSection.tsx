@@ -37,8 +37,8 @@ export default function ContactSection() {
   const headerRef = useScrollAnim({ threshold: 0.2 });
 
   return (
-    <section id="contact" className="relative px-6 pb-10 pt-20 md:pb-14 md:pt-28">
-      <div className="mx-auto max-w-5xl">
+    <section id="contact" className="relative px-4 pb-10 pt-20 sm:px-6 md:pb-14 md:pt-28">
+      <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up mb-10 max-w-2xl">
           <p data-motion-item className="section-kicker mb-4">06 / Contact</p>
           <h2 data-motion-item className="text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
@@ -70,27 +70,23 @@ function ContactRow({ contact, delay }: { contact: (typeof contacts)[0]; delay: 
         href={contact.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group fade-up flex min-h-[72px] items-center justify-between gap-4 py-6 transition-colors hover:text-white focus-visible:text-white sm:min-h-[84px] sm:py-7"
+        className="group fade-up grid min-h-[72px] grid-cols-[1.5rem_auto_minmax(0,1fr)_1rem] items-center gap-x-3 py-6 transition-colors duration-200 hover:bg-white/[.025] hover:text-white focus-visible:bg-white/[.025] focus-visible:text-white sm:min-h-[84px] sm:grid-cols-[2rem_auto_minmax(0,1fr)_1.25rem] sm:gap-x-4 sm:py-7"
         data-testid={`link-contact-${contact.id}`}
       >
-        <span className="flex min-w-0 items-center gap-4">
-          <Icon
-            className="h-5 w-5 shrink-0 text-neutral-400 transition-colors group-hover:text-white sm:h-[1.35rem] sm:w-[1.35rem]"
-            aria-hidden="true"
-          />
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500">
-            {contact.label}
-          </span>
+        <Icon
+          className="h-5 w-5 justify-self-start text-neutral-400 transition-colors group-hover:text-white sm:h-[1.35rem] sm:w-[1.35rem]"
+          aria-hidden="true"
+        />
+        <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500 transition-colors group-hover:text-neutral-300">
+          {contact.label}
         </span>
-        <span className="flex min-w-0 items-center justify-end gap-3">
-          <span className="min-w-0 truncate whitespace-nowrap text-right text-[13px] font-semibold text-neutral-100 sm:text-base">
-            {contact.handle}
-          </span>
-          <ArrowUpRight
-            className="h-4 w-4 shrink-0 text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neutral-200"
-            aria-hidden="true"
-          />
+        <span className="min-w-0 truncate whitespace-nowrap text-right text-[13px] font-semibold text-neutral-100 sm:text-base">
+          {contact.handle}
         </span>
+        <ArrowUpRight
+          className="h-4 w-4 justify-self-end text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neutral-200"
+          aria-hidden="true"
+        />
       </a>
     </li>
   );
