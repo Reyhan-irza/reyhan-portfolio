@@ -97,23 +97,25 @@ export default function Home() {
         <Divider />
         <GitHubSection />
         <Divider />
-        <ContactSection />
-        <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
-          if (event.currentTarget.open) setArchiveVisited(true);
-        }}>
-          <summary data-testid="button-open-secondary-archive">
-            <span>Secondary archive</span>
-            <span>Updates · music · comments</span>
-          </summary>
-          {archiveVisited && (
-            <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading updates and community features">
-              <div className="h-2 w-28 animate-pulse bg-white/10" />
-              <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
-            </div>}>
-              <SecondaryArchive />
-            </Suspense>
-          )}
-        </details>
+        <div className="portfolio-closing-zone">
+          <ContactSection />
+          <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
+            if (event.currentTarget.open) setArchiveVisited(true);
+          }}>
+            <summary data-testid="button-open-secondary-archive">
+              <span>Secondary archive</span>
+              <span>Updates · music · comments</span>
+            </summary>
+            {archiveVisited && (
+              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading updates and community features">
+                <div className="h-2 w-28 animate-pulse bg-white/10" />
+                <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
+              </div>}>
+                <SecondaryArchive />
+              </Suspense>
+            )}
+          </details>
+        </div>
       </main>
       <div className="relative z-10" ref={footerRef}>
         <Footer />

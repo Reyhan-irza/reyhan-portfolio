@@ -3032,3 +3032,12 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   .rv-intro-light-sweep { will-change: auto; }
   .portfolio-shell .music-card [style*="equalizerBounce"] { animation: none !important; }
 }
+
+.portfolio-shell .portfolio-closing-zone,
+.portfolio-shell .portfolio-closing-footer {
+  background-color: #0a0a0a;
+}
+
+.portfolio-shell .portfolio-closing-zone .secondary-archive {
+  margin: 0 auto 1.5rem;
+}
