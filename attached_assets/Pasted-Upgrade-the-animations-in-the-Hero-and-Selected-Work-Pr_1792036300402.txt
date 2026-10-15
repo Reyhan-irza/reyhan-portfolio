@@ -1,0 +1,19 @@
+Upgrade the animations in the Hero and Selected Work (Projects) sections to achieve an editorial, Awwwards-style motion graphic feel while maintaining strict 60fps mobile performance. Do not alter the existing copy, links, or layout structure. Apply these exact rules:
+
+1. **Performance & Bundle Guardrails (Mandatory):**
+   - Animate ONLY GPU-accelerated properties: `transform` (`x`, `y`, `scale`, `scaleY`) and `opacity`. Never animate `height`, `width`, `margin`, or `filter/blur` on scroll.
+   - Use custom cubic-bezier easing `[0.16, 1, 0.3, 1]` for reveals and natural spring physics (`type: "spring", stiffness: 300, damping: 24`) for interactive hover/tap states.
+   - Set all scroll-triggered animations to run once (`viewport={{ once: true, margin: "-10%" }}`) to prevent mobile CPU lag when scrolling up and down.
+
+2. **Hero Section Choreography:**
+   - **Main Title ("REYHAN IRZA ALVANO."):** Implement a masked vertical clip reveal. Wrap each line in an `overflow-hidden` container and animate the text from `y: "110%"` to `y: "0%"` over `0.8s` with a `0.08s` stagger between lines.
+   - **Top Eyebrow Badge ("STUDENT DEVELOPER / LUBUK BASUNG, INDONESIA"):** Animate the blue square indicator with a subtle scale-in, followed by a clean slide-up (`y: 12` to `0`, `opacity: 0` to `1`).
+   - **Quote Callout Block:** Animate the left vertical accent border using `scaleY: 0` to `scaleY: 1` (`origin-top`, duration `0.6s`), while the text inside fades and slides in slightly from the left (`x: -10` to `0`).
+   - **CTA Buttons ("EXPLORE MY WORK" & "SAY HELLO"):** Stagger their entrance after the bio text. Add tactile micro-interactions: `whileTap={{ scale: 0.97 }}`, and make the `↓` arrow nudge down (`translate-y-0.5`) and `↗` arrow shift top-right (`translate-x-0.5 -translate-y-0.5`) on hover.
+
+3. **Selected Work ("Things I've actually built.") Motion Graphics:**
+   - **Section Heading:** Apply the same masked vertical line-by-line reveal to `"Things I've actually built."` when it enters the viewport.
+   - **Project Site Capture Previews (TJKT, VIREON Library, Reyhan WhatsApp Portfolio):**
+     - Wrap each project image container in `overflow-hidden`.
+     - When entering the viewport, animate the container with a subtle clip/opacity reveal while simultaneously animating the inner screenshot image from `scale: 1.08` to `scale: 1.0` over `1s` (`ease: [0.22, 1, 0.36, 1]`) for a smooth cinematic zoom-out effect.
+   - **Tech Stack Tags & Action Bar:** Orchestrate a staggered cascade (`staggerChildren: 0.05`) for the tech stack pills (`REACT`, `TYPESCRIPT`, `SUPABASE`, `GSAP`, etc.) so they ripple in sequentially from `y: 10, opacity: 0` before the `OPEN LIVE SITE ↗` and `DETAILS +` buttons appear.

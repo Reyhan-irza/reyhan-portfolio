@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
+import { LazyMotion, domAnimation, m } from "framer-motion";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
@@ -118,6 +119,73 @@ export default function ProjectsSection() {
         let resizeObserver: ResizeObserver | undefined;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+          const revealProject = (
+            row: HTMLElement,
+            visual: HTMLElement,
+            copy: HTMLElement,
+            containerAnimation?: gsap.core.Animation,
+          ) => {
+            const screenshot = visual.querySelector<HTMLElement>(".project-screenshot");
+            const technologies = gsap.utils.toArray<HTMLElement>(".project-tech", copy);
+            const actions = copy.querySelector<HTMLElement>(".project-actions");
+            const scrollTrigger = {
+              trigger: row,
+              start: compact ? "top 86%" : "top 80%",
+              once: true,
+              toggleActions: "play none none none",
+              invalidateOnRefresh: true,
+              ...(containerAnimation ? { containerAnimation, start: "left 86%" } : {}),
+            };
+            const timeline = gsap.timeline({ scrollTrigger });
+
+            timeline.fromTo(visual, {
+              y: 12,
+              opacity: 0,
+              scale: 0.99,
+            }, {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 0.62,
+              ease: [0.16, 1, 0.3, 1],
+            });
+            if (screenshot) {
+              timeline.fromTo(screenshot, { scale: 1.08 }, {
+                scale: 1,
+                duration: 1,
+                ease: [0.22, 1, 0.36, 1],
+              }, 0);
+            }
+            timeline.fromTo(copy, {
+              x: compact ? 10 : 16,
+              opacity: 0,
+            }, {
+              x: 0,
+              opacity: 1,
+              duration: 0.52,
+              ease: [0.16, 1, 0.3, 1],
+            }, 0.1);
+            if (technologies.length > 0) {
+              timeline.fromTo(technologies, {
+                y: 10,
+                opacity: 0,
+              }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.38,
+                stagger: 0.05,
+                ease: [0.16, 1, 0.3, 1],
+              }, 0.28);
+            }
+            if (actions) {
+              timeline.fromTo(actions, { y: 10, opacity: 0 }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.42,
+                ease: [0.16, 1, 0.3, 1],
+              }, 0.28 + technologies.length * 0.05);
+            }
+          };
 
           const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
           const track = section.querySelector<HTMLElement>("[data-project-track]");
@@ -167,74 +235,8 @@ export default function ProjectsSection() {
             rows.forEach((row) => {
               const visual = row.querySelector<HTMLElement>("[data-project-visual]");
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-              const wordmark = row.querySelector<HTMLElement>("[data-project-wordmark-motion]");
               if (!visual || !copy) return;
-
-              gsap.fromTo(visual, {
-                clipPath: "inset(7% 8% 7% 0%)",
-                scale: 0.94,
-              }, {
-                clipPath: "inset(0% 0% 0% 0%)",
-                scale: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: row,
-                  containerAnimation: horizontalStory,
-                  start: "left 86%",
-                  end: "left 28%",
-                  scrub: 0.55,
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              gsap.fromTo(copy, {
-                x: 34,
-                opacity: 0.18,
-              }, {
-                x: 0,
-                opacity: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: row,
-                  containerAnimation: horizontalStory,
-                  start: "left 82%",
-                  end: "left 30%",
-                  scrub: 0.45,
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
-              if (geometry) {
-                gsap.to(geometry, {
-                  yPercent: -5,
-                  xPercent: 3,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    containerAnimation: horizontalStory,
-                    start: "left right",
-                    end: "right left",
-                    scrub: 0.7,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
-
-              if (wordmark) {
-                gsap.fromTo(wordmark, { xPercent: 12 }, {
-                  xPercent: -9,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    containerAnimation: horizontalStory,
-                    start: "left right",
-                    end: "right left",
-                    scrub: 0.8,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
+              revealProject(row, visual, copy, horizontalStory);
             });
 
             resizeObserver = new ResizeObserver(() => {
@@ -249,74 +251,33 @@ export default function ProjectsSection() {
               const visual = row.querySelector<HTMLElement>("[data-project-visual]");
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
-
-              const entrance = gsap.timeline({
-                scrollTrigger: {
-                  trigger: row,
-                  start: compact ? "top 86%" : "top 80%",
-                  toggleActions: "play none play reverse",
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              entrance
-                .fromTo(
-                  visual,
-                  { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
-                  {
-                    x: 0,
-                    opacity: 1,
-                    scale: 1,
-                    duration: compact ? 0.48 : 0.62,
-                    ease: "power3.out",
-                  },
-                )
-                .fromTo(
-                  copy,
-                  { y: compact ? 8 : 16, opacity: 0 },
-                  {
-                    y: 0,
-                    opacity: 1,
-                    duration: compact ? 0.42 : 0.56,
-                    ease: "power3.out",
-                  },
-                  compact ? 0.06 : 0.1,
-                );
-
-              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
-              if (geometry) {
-                gsap.to(geometry, {
-                  yPercent: compact ? -3 : -9,
-                  xPercent: compact ? 0 : 2,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: compact ? 0.45 : 0.8,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
+              revealProject(row, visual, copy);
             });
           }
 
-          gsap.fromTo(
-            "[data-project-heading]",
-            { y: compact ? 10 : 20, opacity: 0 },
-            {
+          const headingTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: "top 90%",
+              once: true,
+              toggleActions: "play none none none",
+              invalidateOnRefresh: true,
+            },
+          });
+          headingTimeline
+            .fromTo("[data-project-title-line]", { yPercent: 110, opacity: 0 }, {
+              yPercent: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.08,
+              ease: [0.16, 1, 0.3, 1],
+            })
+            .fromTo("[data-project-intro]", { y: 12, opacity: 0 }, {
               y: 0,
               opacity: 1,
-              duration: compact ? 0.5 : 0.68,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: section,
-                start: "top 84%",
-                toggleActions: "play none play reverse",
-                invalidateOnRefresh: true,
-              },
-            },
-          );
+              duration: 0.5,
+              ease: [0.16, 1, 0.3, 1],
+            }, "-=0.24");
         }, section);
         return () => {
           resizeObserver?.disconnect();
@@ -420,6 +381,7 @@ export default function ProjectsSection() {
   };
 
   return (
+    <LazyMotion features={domAnimation}>
     <section
       ref={sectionRef}
       id="projects"
@@ -434,12 +396,11 @@ export default function ProjectsSection() {
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              Things I’ve actually
-              <br />
-               <span className="text-[#a43f2d]">built.</span>
+              <span className="block overflow-hidden"><span data-project-title-line className="block">Things I’ve actually</span></span>
+              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">built.</span></span>
             </h2>
           </div>
-          <p className="projects-intro text-sm md:mb-1 md:text-base">
+          <p data-project-intro className="projects-intro text-sm md:mb-1 md:text-base">
             Three projects with different goals: a school department website, a
             digital library, and my own portfolio.
           </p>
@@ -535,35 +496,44 @@ export default function ProjectsSection() {
                   </ul>
 
                   <div className="project-actions">
-                    <a
+                    <m.a
                       href={project.live}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-link"
                       data-testid={`link-live-${project.id}`}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                    <a
+                    </m.a>
+                    <m.a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-link project-link--quiet"
                       data-testid={`link-github-${project.id}`}
                       aria-label={`Open ${project.title} GitHub repository`}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       <Github className="h-4 w-4" aria-hidden="true" />
                       <span className="sr-only">GitHub repository</span>
-                    </a>
-                    <button
+                    </m.a>
+                    <m.button
                       type="button"
                       onClick={(event) => openDetails(project, event.currentTarget)}
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
                       aria-label={`Read more about ${project.title}`}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       Details <span aria-hidden="true">+</span>
-                    </button>
+                    </m.button>
                   </div>
                 </div>
                   </article>
@@ -653,5 +623,6 @@ export default function ProjectsSection() {
         </div>
       )}
     </section>
+    </LazyMotion>
   );
 }
