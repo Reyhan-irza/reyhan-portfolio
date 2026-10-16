@@ -1213,14 +1213,13 @@
   background: var(--project-acid);
   font-size: 0.63rem;
   font-weight: 500;
-  transition: transform 220ms ease, background-color 220ms ease, color 220ms ease;
+  transition: background-color 220ms ease, color 220ms ease;
 }
 
 .project-link:hover,
 .project-link:focus-visible {
   color: var(--project-ink);
   background: #dce98f;
-  transform: translateY(-2px);
 }
 
 .project-link--quiet {
@@ -2374,10 +2373,9 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 }
 .portfolio-shell .hero-name-accent { color: #aab3c5; }
 .portfolio-shell .hero-primary {
-  background: #667cff; color: #080b11; transition: background-color .25s ease, color .25s ease, transform .25s ease;
+  background: #667cff; color: #080b11; transition: background-color .25s ease, color .25s ease;
 }
-.portfolio-shell .hero-primary:hover { background: #8794ff; transform: translateY(-2px); }
-.portfolio-shell .hero-primary:active { transform: translateY(0); }
+.portfolio-shell .hero-primary:hover { background: #8794ff; }
 .portfolio-shell .hero-secondary { border: 1px solid rgba(255,255,255,.14); }
 .portfolio-shell .hero-secondary:hover { border-color: rgba(139,108,255,.55); }
 .portfolio-shell .hero-mark-stage { perspective: 900px; }

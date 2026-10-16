@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
-import { LazyMotion, domAnimation, m } from "framer-motion";
+import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
@@ -66,6 +66,7 @@ const projects = [
 type Project = (typeof projects)[number];
 
 export default function ProjectsSection() {
+  const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -141,11 +142,12 @@ export default function ProjectsSection() {
             timeline.fromTo(visual, {
               y: 12,
               opacity: 0,
-              scale: 0.99,
+              scaleX: 0.97,
+              transformOrigin: "left center",
             }, {
               y: 0,
               opacity: 1,
-              scale: 1,
+              scaleX: 1,
               duration: 0.62,
               ease: cubicBezierEase(0.16, 1, 0.3, 1),
             });
@@ -502,8 +504,8 @@ export default function ProjectsSection() {
                       rel="noopener noreferrer"
                       className="project-link"
                       data-testid={`link-live-${project.id}`}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -515,8 +517,8 @@ export default function ProjectsSection() {
                       className="project-link project-link--quiet"
                       data-testid={`link-github-${project.id}`}
                       aria-label={`Open ${project.title} GitHub repository`}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       <Github className="h-4 w-4" aria-hidden="true" />
@@ -528,8 +530,8 @@ export default function ProjectsSection() {
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
                       aria-label={`Read more about ${project.title}`}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.97 }}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       Details <span aria-hidden="true">+</span>
