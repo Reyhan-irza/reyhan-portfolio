@@ -69,6 +69,7 @@ export default function ProjectsSection() {
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
+  const progressFillRef = useRef<HTMLSpanElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
@@ -142,9 +143,15 @@ export default function ProjectsSection() {
               ease: cubicBezierEase(0.16, 1, 0.3, 1),
             });
             if (screenshot) {
-              timeline.fromTo(screenshot, { scale: 1.08 }, {
+              timeline.fromTo(screenshot, {
+                scale: compact ? 1.035 : 1.08,
+                x: compact ? 0 : 18,
+                y: compact ? 8 : 0,
+              }, {
                 scale: 1,
-                duration: 1,
+                x: 0,
+                y: 0,
+                duration: compact ? 0.72 : 1,
                 ease: cubicBezierEase(0.22, 1, 0.36, 1),
               }, 0);
             }
@@ -211,6 +218,10 @@ export default function ProjectsSection() {
                 onEnter: () => updatePinnedStoryActive(true),
                 onEnterBack: () => updatePinnedStoryActive(true),
                 onUpdate: (self) => {
+                  progressFillRef.current?.style.setProperty(
+                    "--project-story-progress",
+                    String(self.progress),
+                  );
                   const progressAcrossSlides = self.progress * travelDistance();
                   const nextIndex = Math.min(
                     rows.length - 1,
@@ -219,6 +230,7 @@ export default function ProjectsSection() {
                   updateActiveProject(nextIndex);
                 },
                 onLeaveBack: () => {
+                  progressFillRef.current?.style.setProperty("--project-story-progress", "0");
                   updatePinnedStoryActive(false);
                   updateActiveProject(0);
                 },
@@ -245,6 +257,12 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               revealProject(row, visual, copy);
+              ScrollTrigger.create({
+                trigger: row,
+                start: "center center",
+                onEnter: () => updateActiveProject(Number(row.dataset.projectIndex)),
+                onEnterBack: () => updateActiveProject(Number(row.dataset.projectIndex)),
+              });
             });
           }
 
@@ -275,6 +293,7 @@ export default function ProjectsSection() {
         return () => {
           resizeObserver?.disconnect();
           sizedTrack?.style.removeProperty("--project-slide-width");
+          progressFillRef.current?.style.removeProperty("--project-story-progress");
           updatePinnedStoryActive(false);
           context.revert();
         };
@@ -410,6 +429,11 @@ export default function ProjectsSection() {
             <div className="sticky top-32 flex items-start gap-5">
               <div className="project-rail relative h-24 w-px">
                 <span
+                  ref={progressFillRef}
+                  className="project-story-progress-fill absolute inset-0 block w-px"
+                  aria-hidden="true"
+                />
+                <span
                   ref={markerRef}
                   className="project-rail-marker absolute -left-[3px] top-0 block h-6 w-[5px]"
                   aria-hidden="true"
@@ -434,6 +458,7 @@ export default function ProjectsSection() {
                       key={project.id}
                       data-project-row
                       data-project-index={index}
+                      data-active-project={activeProject === index ? "true" : "false"}
                       tabIndex={0}
                       className="project-row"
                       onMouseEnter={() => updateActiveProject(index)}

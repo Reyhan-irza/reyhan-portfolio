@@ -18,15 +18,38 @@ export default function HeroSection() {
         reduced: "(prefers-reduced-motion: reduce)",
         compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
+        desktop: "(min-width: 1024px)",
       },
       (context) => {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
+        const desktop = Boolean(context.conditions?.desktop);
         const scope = gsap.context(() => {
           const opening = gsap.timeline({
             defaults: { ease: cubicBezierEase(0.16, 1, 0.3, 1) },
             delay: 0.08,
           });
+          const markStage = section.querySelector<HTMLElement>("[data-hero-mark-stage]");
+          if (desktop && markStage && markRef.current) {
+            opening
+              .fromTo(markStage, { autoAlpha: 0, scale: 0.985 }, {
+                autoAlpha: 1,
+                scale: 1,
+                duration: 0.7,
+              }, 0.1)
+              .fromTo(markRef.current, {
+                autoAlpha: 0,
+                y: 9,
+                scale: 0.965,
+                rotation: -1.5,
+              }, {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                rotation: 0,
+                duration: 0.72,
+              }, 0.24);
+          }
           opening
             .fromTo("[data-hero-indicator]", { scale: 0.65, opacity: 0 }, {
               scale: 1, opacity: 1, duration: 0.36,
@@ -63,6 +86,7 @@ export default function HeroSection() {
           const axisX = section.querySelector<HTMLElement>("[data-hero-axis-x]");
           const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
           const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
+          const copyDepth = section.querySelector<HTMLElement>("[data-hero-copy-depth]");
           const story = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
@@ -75,38 +99,42 @@ export default function HeroSection() {
           });
 
           story.addLabel("identity", 0);
+          if (copyDepth) {
+            story.to(copyDepth, {
+              y: compact ? -3 : -10,
+              opacity: compact ? 0.97 : 0.88,
+              duration: 0.58,
+            }, "identity");
+          }
           if (title) {
             story.to(title, {
-              y: compact ? -6 : -18,
-              scale: compact ? 0.995 : 0.975,
-              opacity: compact ? 0.94 : 0.9,
+              y: compact ? -3 : -14,
+              scale: compact ? 0.998 : 0.98,
+              opacity: compact ? 0.98 : 0.9,
               transformOrigin: "left center",
               duration: 0.58,
             }, "identity");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -3 : -10,
-              opacity: compact ? 0.9 : 0.72,
+              y: compact ? -2 : -8,
+              opacity: compact ? 0.98 : 0.8,
               duration: 0.58,
             }, "identity");
           }
           if (kicker) {
             story.to(kicker, {
-              x: compact ? -4 : -12,
-              opacity: compact ? 0.86 : 0.68,
+              x: compact ? -2 : -10,
+              opacity: compact ? 0.96 : 0.76,
               duration: 0.58,
             }, "identity");
           }
           if (grid) {
             story.to(grid, {
-              yPercent: compact ? 3 : 12,
-              opacity: compact ? 0.3 : 0.58,
+              yPercent: compact ? 1.5 : 7,
+              opacity: compact ? 0.36 : 0.5,
               duration: 0.58,
             }, "identity");
-          }
-          if (markRef.current && !compact) {
-            story.to(markRef.current, { y: -18, rotate: 3, scale: 1.045, duration: 0.58 }, "identity");
           }
           if (orbit && !compact) {
             story.fromTo(orbit, { rotate: -5 }, { rotate: 26, duration: 0.58 }, "identity");
@@ -137,31 +165,35 @@ export default function HeroSection() {
           story.addLabel("release", 0.58);
           if (title) {
             story.to(title, {
-              y: compact ? -16 : -48,
-              scale: compact ? 0.975 : 0.91,
-              opacity: compact ? 0.42 : 0.14,
+              y: compact ? -8 : -34,
+              scale: compact ? 0.99 : 0.94,
+              opacity: compact ? 0.9 : 0.68,
               duration: 0.42,
             }, "release");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -10 : -30,
-              opacity: compact ? 0.58 : 0.16,
+              y: compact ? -5 : -22,
+              opacity: compact ? 0.92 : 0.68,
               duration: 0.42,
             }, "release");
           }
           if (kicker) {
             story.to(kicker, {
-              x: compact ? -9 : -24,
-              opacity: compact ? 0.52 : 0.12,
+              x: compact ? -4 : -18,
+              opacity: compact ? 0.9 : 0.62,
               duration: 0.42,
             }, "release");
           }
           if (grid) {
-            story.to(grid, { yPercent: compact ? 18 : 26, opacity: 0.12, duration: 0.42 }, "release");
+            story.to(grid, { yPercent: compact ? 5 : 16, opacity: 0.12, duration: 0.42 }, "release");
           }
-          if (markRef.current && !compact) {
-            story.to(markRef.current, { y: -46, rotate: 8, scale: 1.1, opacity: 0.32, duration: 0.42 }, "release");
+          if (copyDepth) {
+            story.to(copyDepth, {
+              y: compact ? -7 : -24,
+              opacity: compact ? 0.94 : 0.72,
+              duration: 0.42,
+            }, "release");
           }
           if (orbit && !compact) {
             story.to(orbit, { rotate: 46, opacity: 0.18, duration: 0.42 }, "release");
@@ -188,7 +220,7 @@ export default function HeroSection() {
     <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
       <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
-        <div className="relative z-10 pb-6">
+        <div data-hero-copy-depth className="relative z-10 pb-6">
           <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
             <span data-hero-indicator className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
@@ -229,7 +261,7 @@ export default function HeroSection() {
           </a>
         </div>
 
-        <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
+        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
           <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
           <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
