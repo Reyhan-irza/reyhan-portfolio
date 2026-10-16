@@ -257,11 +257,16 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               revealProject(row, visual, copy);
+              const projectIndex = Number(row.dataset.projectIndex);
               ScrollTrigger.create({
                 trigger: row,
-                start: "center center",
-                onEnter: () => updateActiveProject(Number(row.dataset.projectIndex)),
-                onEnterBack: () => updateActiveProject(Number(row.dataset.projectIndex)),
+                start: "top center",
+                end: "bottom center",
+                onEnter: () => updateActiveProject(projectIndex),
+                onEnterBack: () => updateActiveProject(projectIndex),
+                onLeaveBack: () => {
+                  if (projectIndex === 0) updateActiveProject(0);
+                },
               });
             });
           }
