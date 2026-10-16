@@ -6,7 +6,7 @@
 - [RV intro and navigation behavior](rv-intro-navigation.md) — keep the cinematic RV intro skippable and reduced-motion aware; trap menu focus and restore it on close.
 - [Portfolio Tools in Motion scope](portfolio-tools-motion-scope.md) — keep visual updates within this section; preserve all other portfolio sections and the original RV accent.
 - [RV portfolio identity](rv-portfolio-identity.md) — use the supplied RV master mark as the only logo source; do not redraw it or restore legacy marks.
-- [GSAP media conditions](gsap-media-conditions.md) — cover every intended mode; unused viewport queries can reset persistent animations during resize.
+- [GSAP media conditions](gsap-media-conditions.md) — cover every mode and clear direct inline styles during responsive media cleanup.
 - [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
 - [GSAP transform ownership](gsap-transform-ownership.md) — avoid stacking CSS translation with GSAP percentage transforms on the same animated element.
 - [Mobile menu transform ownership](mobile-menu-transform-ownership.md) — keep the hamburger lines' open-state transforms under GSAP alone; legacy CSS selectors can clip the morph.

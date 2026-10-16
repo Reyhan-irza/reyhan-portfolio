@@ -8,3 +8,9 @@ When `gsap.matchMedia().add()` receives an object of conditions, its callback on
 **Why:** The portfolio's desktop reveals were absent when no listed GSAP condition matched. Later, removing unused width conditions prevented resize resets, while omitting the complementary motion condition stopped animation setup for standard motion settings.
 
 **How to apply:** Enumerate the actual behavior variants, ensure at least one condition matches each supported preference, and verify that resizing or changing motion preferences cannot leave visible UI inconsistent with its application state.
+
+GSAP context cleanup reverts GSAP-owned changes, not direct DOM styles set by callbacks such as `ResizeObserver`. Keep a reference to elements that receive responsive inline properties and explicitly remove those properties in the matching media cleanup.
+
+**Why:** A project slide-width custom property remained on the track after switching to mobile or reduced motion, even though its desktop pin and triggers were correctly removed.
+
+**How to apply:** When responsive setup writes `element.style` directly, verify both the style value and trigger/pin count after leaving and re-entering that media condition.
