@@ -352,6 +352,11 @@ export default function ProjectsSection() {
     }
   };
 
+  const focusedElementIndex =
+    document.activeElement instanceof HTMLElement
+      ? Number(document.activeElement.closest<HTMLElement>("[data-project-row]")?.dataset.projectIndex)
+      : Number.NaN;
+
   const openDetails = (project: Project, trigger: HTMLButtonElement) => {
     openerRef.current = trigger;
     markViewed(project);
@@ -419,26 +424,27 @@ export default function ProjectsSection() {
             <div data-project-track-viewport className="project-track-viewport">
               <div data-project-track className="project-track">
                 {projects.map((project, index) => (
-                  <article
-                key={project.id}
-                data-project-row
-                tabIndex={0}
-                className="project-row"
-                onMouseEnter={() => updateActiveProject(index)}
-                onFocus={() => {
-                  setFocusedProject(index);
-                  updateActiveProject(index);
-                }}
-                onBlur={(event: FocusEvent<HTMLElement>) => {
-                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-                  setFocusedProject((current) => current === index ? null : current);
-                }}
-                onTouchStart={() => updateActiveProject(index)}
-                data-testid={`project-${project.id}`}
-                aria-labelledby={`project-title-${project.id}`}
-                aria-hidden={pinnedStoryActive && activeProject !== index && focusedProject !== index}
-                inert={pinnedStoryActive && activeProject !== index && focusedProject !== index}
-              >
+                    <article
+                      key={project.id}
+                      data-project-row
+                      data-project-index={index}
+                      tabIndex={0}
+                      className="project-row"
+                      onMouseEnter={() => updateActiveProject(index)}
+                      onFocus={() => {
+                        setFocusedProject(index);
+                        updateActiveProject(index);
+                      }}
+                      onBlur={(event: FocusEvent<HTMLElement>) => {
+                        if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                        setFocusedProject((current) => current === index ? null : current);
+                      }}
+                      onTouchStart={() => updateActiveProject(index)}
+                      data-testid={`project-${project.id}`}
+                      aria-labelledby={`project-title-${project.id}`}
+                      aria-hidden={pinnedStoryActive && activeProject !== index && focusedProject !== index && focusedElementIndex !== index}
+                      inert={pinnedStoryActive && activeProject !== index && focusedProject !== index && focusedElementIndex !== index}
+                    >
                 <div
                   data-project-visual
                   className="project-visual project-visual--screenshot"
@@ -534,7 +540,7 @@ export default function ProjectsSection() {
                     </m.button>
                   </div>
                 </div>
-                  </article>
+                    </article>
                 ))}
               </div>
             </div>
