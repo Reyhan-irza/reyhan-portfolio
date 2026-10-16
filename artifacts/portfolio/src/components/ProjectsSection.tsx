@@ -213,6 +213,22 @@ export default function ProjectsSection() {
                 pin: stage,
                 pinSpacing: true,
                 scrub: 0.8,
+                snap: {
+                  snapTo: (progress) => {
+                    const panelStep = 1 / (rows.length - 1);
+                    const focusedRow = document.activeElement instanceof HTMLElement
+                      ? document.activeElement.closest<HTMLElement>("[data-project-row]")
+                      : null;
+                    const focusedIndex = Number(focusedRow?.dataset.projectIndex);
+                    if (Number.isInteger(focusedIndex) && focusedIndex >= 0 && focusedIndex < rows.length) {
+                      return focusedIndex * panelStep;
+                    }
+                    return Math.round(progress / panelStep) * panelStep;
+                  },
+                  delay: 0.12,
+                  duration: { min: 0.2, max: 0.48 },
+                  ease: "power2.inOut",
+                },
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
                 onEnter: () => updatePinnedStoryActive(true),
@@ -470,6 +486,14 @@ export default function ProjectsSection() {
                       onFocus={() => {
                         setFocusedProject(index);
                         updateActiveProject(index);
+                        const story = ScrollTrigger.getById("portfolio-project-story");
+                        if (story?.isActive) {
+                          const panelProgress = index / (projects.length - 1);
+                          window.scrollTo({
+                            top: story.start + (story.end - story.start) * panelProgress,
+                            behavior: "auto",
+                          });
+                        }
                       }}
                       onBlur={(event: FocusEvent<HTMLElement>) => {
                         if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;

@@ -2905,6 +2905,81 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   .portfolio-shell .hero-mark-stage:hover .hero-mark-image img { transform: none; }
 }
 
+@media (max-width: 767px) and (max-height: 740px) {
+  .portfolio-shell .hero-section {
+    padding-top: 5.5rem;
+    padding-bottom: 3.5rem;
+  }
+  .portfolio-shell .hero-section > div:nth-child(2) {
+    min-height: calc(100svh - 9rem);
+    gap: 1.25rem;
+  }
+  .portfolio-shell .hero-section [data-hero-kicker] { margin-bottom: 1rem; }
+  .portfolio-shell .hero-section h1 {
+    font-size: clamp(3.2rem, 15.8vw, 4rem);
+  }
+  .portfolio-shell .hero-section .hero-rule { margin-top: 1.25rem; }
+  .portfolio-shell .hero-section [data-hero-copy-depth] > .mt-7 {
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .portfolio-shell .hero-section [data-hero-copy-depth] > .mt-9 { margin-top: 1.25rem; }
+  .portfolio-shell .hero-section [data-hero-github] { margin-top: 1.25rem; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (max-height: 480px) {
+  .portfolio-shell .hero-section {
+    padding: 4.5rem 2rem 1rem;
+  }
+  .portfolio-shell .hero-section > div:nth-child(2) {
+    min-height: 0;
+    gap: 0;
+  }
+  .portfolio-shell .hero-section [data-hero-copy-depth] {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.9fr);
+    grid-template-rows: auto auto auto auto auto;
+    column-gap: 2rem;
+    align-content: center;
+    align-items: center;
+    padding-bottom: 0;
+  }
+  .portfolio-shell .hero-section [data-hero-kicker] {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin-bottom: 0.75rem;
+  }
+  .portfolio-shell .hero-section [data-hero-title-depth] {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .portfolio-shell .hero-section h1 { font-size: clamp(3.15rem, 8vw, 4rem); }
+  .portfolio-shell .hero-section .hero-rule {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin-block: 0.75rem 0;
+  }
+  .portfolio-shell .hero-section [data-hero-copy-depth] > .mt-7 {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    margin-top: 0;
+  }
+  .portfolio-shell .hero-section [data-hero-copy-depth] > .mt-9 {
+    grid-column: 2;
+    grid-row: 4;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+  }
+  .portfolio-shell .hero-section [data-hero-github] {
+    grid-column: 2;
+    grid-row: 5;
+    margin-top: 0.6rem;
+  }
+  .portfolio-shell .hero-section .hero-scroll-cue { display: none; }
+}
+
 .rv-intro {
   color: var(--rv-text);
   background: #05070b;
