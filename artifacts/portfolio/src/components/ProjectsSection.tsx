@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { PointerEvent } from "react";
+import type { FocusEvent, PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
@@ -75,13 +75,12 @@ export default function ProjectsSection() {
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
-  const pinnedStoryActiveRef = useRef(false);
   const [activeProject, setActiveProject] = useState(0);
   const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
+  const [focusedProject, setFocusedProject] = useState<number | null>(null);
   const [modal, setModal] = useState<Project | null>(null);
 
   const updatePinnedStoryActive = (active: boolean) => {
-    pinnedStoryActiveRef.current = active;
     setPinnedStoryActive(active);
   };
 
@@ -90,16 +89,6 @@ export default function ProjectsSection() {
     if (activeProjectRef.current === next) return;
     activeProjectRef.current = next;
     setActiveProject(next);
-
-    if (!pinnedStoryActiveRef.current) return;
-    const rows = sectionRef.current?.querySelectorAll<HTMLElement>("[data-project-row]");
-    const currentRow = Array.from(rows ?? []).find((row) => row.contains(document.activeElement));
-    const nextRow = rows?.[next];
-    if (!currentRow || !nextRow || currentRow === nextRow) return;
-
-    nextRow.inert = false;
-    nextRow.setAttribute("aria-hidden", "false");
-    nextRow.focus({ preventScroll: true });
   };
 
   useLayoutEffect(() => {
@@ -436,12 +425,19 @@ export default function ProjectsSection() {
                 tabIndex={0}
                 className="project-row"
                 onMouseEnter={() => updateActiveProject(index)}
-                onFocus={() => updateActiveProject(index)}
+                onFocus={() => {
+                  setFocusedProject(index);
+                  updateActiveProject(index);
+                }}
+                onBlur={(event: FocusEvent<HTMLElement>) => {
+                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                  setFocusedProject((current) => current === index ? null : current);
+                }}
                 onTouchStart={() => updateActiveProject(index)}
                 data-testid={`project-${project.id}`}
                 aria-labelledby={`project-title-${project.id}`}
-                aria-hidden={pinnedStoryActive && activeProject !== index}
-                inert={pinnedStoryActive && activeProject !== index}
+                aria-hidden={pinnedStoryActive && activeProject !== index && focusedProject !== index}
+                inert={pinnedStoryActive && activeProject !== index && focusedProject !== index}
               >
                 <div
                   data-project-visual

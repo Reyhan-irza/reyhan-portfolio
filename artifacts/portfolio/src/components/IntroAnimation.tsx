@@ -156,7 +156,9 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           }, "reveal")
           .to(element, { autoAlpha: 0, duration: 0.02 }, "reveal+=0.5");
 
-        return () => timeline.kill();
+      timeline.timeScale(compact ? 1.45 : 1.15);
+
+      return () => timeline.kill();
       },
     );
 
