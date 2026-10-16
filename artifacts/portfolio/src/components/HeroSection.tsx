@@ -69,7 +69,7 @@ export default function HeroSection() {
               trigger: section,
               start: "top top",
               end: "bottom top",
-              scrub: compact ? 0.45 : 0.8,
+                scrub: compact ? 0.18 : 0.8,
               invalidateOnRefresh: true,
             },
           });
@@ -77,26 +77,30 @@ export default function HeroSection() {
           story.addLabel("identity", 0);
           if (title) {
             story.to(title, {
-              y: compact ? -8 : -18,
-              scale: compact ? 0.99 : 0.975,
-              opacity: 0.9,
+              y: compact ? -6 : -18,
+              scale: compact ? 0.995 : 0.975,
+              opacity: compact ? 0.94 : 0.9,
               transformOrigin: "left center",
               duration: 0.58,
             }, "identity");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -4 : -10,
-              opacity: 0.72,
+              y: compact ? -3 : -10,
+              opacity: compact ? 0.9 : 0.72,
               duration: 0.58,
             }, "identity");
           }
           if (kicker) {
-            story.to(kicker, { x: compact ? -4 : -12, opacity: 0.68, duration: 0.58 }, "identity");
+            story.to(kicker, {
+              x: compact ? -4 : -12,
+              opacity: compact ? 0.86 : 0.68,
+              duration: 0.58,
+            }, "identity");
           }
           if (grid) {
             story.to(grid, {
-              yPercent: compact ? 5 : 12,
+              yPercent: compact ? 3 : 12,
               opacity: compact ? 0.3 : 0.58,
               duration: 0.58,
             }, "identity");
@@ -133,17 +137,25 @@ export default function HeroSection() {
           story.addLabel("release", 0.58);
           if (title) {
             story.to(title, {
-              y: compact ? -20 : -48,
-              scale: compact ? 0.965 : 0.91,
-              opacity: 0.14,
+              y: compact ? -16 : -48,
+              scale: compact ? 0.975 : 0.91,
+              opacity: compact ? 0.42 : 0.14,
               duration: 0.42,
             }, "release");
           }
           if (lead) {
-            story.to(lead, { y: compact ? -18 : -30, opacity: 0.16, duration: 0.42 }, "release");
+            story.to(lead, {
+              y: compact ? -10 : -30,
+              opacity: compact ? 0.58 : 0.16,
+              duration: 0.42,
+            }, "release");
           }
           if (kicker) {
-            story.to(kicker, { x: compact ? -12 : -24, opacity: 0.12, duration: 0.42 }, "release");
+            story.to(kicker, {
+              x: compact ? -9 : -24,
+              opacity: compact ? 0.52 : 0.12,
+              duration: 0.42,
+            }, "release");
           }
           if (grid) {
             story.to(grid, { yPercent: compact ? 18 : 26, opacity: 0.12, duration: 0.42 }, "release");

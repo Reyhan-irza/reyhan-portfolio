@@ -7,11 +7,14 @@ const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-previe
 const digitalLibraryCertificateUrl = `${import.meta.env.BASE_URL}sertifikat-apresiasi-inovasi-digital-2026.webp`;
 
 export default function AwardSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const previewRef = useRef<HTMLAnchorElement>(null);
 
   useLayoutEffect(() => {
-    const preview = previewRef.current;
-    if (!preview) return;
+    const section = sectionRef.current;
+    if (!section) return;
+    const previews = gsap.utils.toArray<HTMLElement>(".certificate-preview", section);
+    if (previews.length === 0) return;
     const media = gsap.matchMedia();
     media.add(
       {
@@ -23,24 +26,49 @@ export default function AwardSection() {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
         const scope = gsap.context(() => {
-          gsap.fromTo(preview, {
-            clipPath: "inset(9% 7% 9% 7%)",
-            scale: 0.965,
-            yPercent: 7,
-          }, {
-            clipPath: "inset(0% 0% 0% 0%)",
-            scale: 1,
-            yPercent: -3,
-            ease: "none",
-            scrollTrigger: {
-              trigger: preview,
-              start: "top 94%",
-              end: "bottom 28%",
-              scrub: compact ? 0.3 : 0.62,
-              invalidateOnRefresh: true,
-            },
-          });
-        }, preview);
+          if (compact) {
+            previews.forEach((preview) => {
+              gsap.fromTo(preview, {
+                autoAlpha: 0,
+                y: 14,
+                scale: 0.985,
+              }, {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.62,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: preview,
+                  start: "top 88%",
+                  once: true,
+                  toggleActions: "play none none none",
+                  invalidateOnRefresh: true,
+                },
+              });
+            });
+          } else {
+            const preview = previewRef.current;
+            if (!preview) return;
+            gsap.fromTo(preview, {
+              clipPath: "inset(9% 7% 9% 7%)",
+              scale: 0.965,
+              yPercent: 7,
+            }, {
+              clipPath: "inset(0% 0% 0% 0%)",
+              scale: 1,
+              yPercent: -3,
+              ease: "none",
+              scrollTrigger: {
+                trigger: preview,
+                start: "top 94%",
+                end: "bottom 28%",
+                scrub: 0.62,
+                invalidateOnRefresh: true,
+              },
+            });
+          }
+        }, section);
         return () => scope.revert();
       },
     );
@@ -48,7 +76,7 @@ export default function AwardSection() {
   }, []);
 
   return (
-    <section id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
+      <section ref={sectionRef} id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
       <div
         className="fade-up award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
       >

@@ -83,7 +83,7 @@ export default function JourneySection() {
               trigger: education,
               start: "top 70%",
               end: "bottom 34%",
-              scrub: compact ? 0.25 : 0.55,
+              scrub: compact ? 0.18 : 0.55,
               invalidateOnRefresh: true,
             },
           });
@@ -101,12 +101,12 @@ export default function JourneySection() {
               ? (index / (educationNodes.length - 1)) * 0.84
               : 0;
             educationStory.fromTo(node, {
-              scale: 0.7,
-              opacity: 0.42,
+              scale: compact ? 0.86 : 0.7,
+              opacity: compact ? 0.62 : 0.42,
             }, {
               scale: 1,
               opacity: 1,
-              duration: 0.16,
+              duration: compact ? 0.24 : 0.16,
             }, position);
           });
 
@@ -117,12 +117,12 @@ export default function JourneySection() {
               ? (index / (educationNodes.length - 1)) * 0.84
               : 0;
             educationStory.fromTo(content, {
-              x: compact ? 4 : 10,
-              opacity: 0.62,
+              x: compact ? 8 : 10,
+              opacity: compact ? 0.68 : 0.62,
             }, {
               x: 0,
               opacity: 1,
-              duration: 0.16,
+              duration: compact ? 0.24 : 0.16,
             }, position);
           });
         }
@@ -140,7 +140,9 @@ export default function JourneySection() {
             scrollTrigger: {
               trigger: achievementsRef.current,
               start: "top 78%",
-              toggleActions: "play none none reverse",
+              toggleActions: mediaContext.conditions?.compact
+                ? "play none none none"
+                : "play none none reverse",
               invalidateOnRefresh: true,
             },
           });
