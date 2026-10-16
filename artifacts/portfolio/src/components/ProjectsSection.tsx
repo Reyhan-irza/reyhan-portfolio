@@ -423,7 +423,10 @@ export default function ProjectsSection() {
           <div className="project-stage-content">
             <div data-project-track-viewport className="project-track-viewport">
               <div data-project-track className="project-track">
-                {projects.map((project, index) => (
+                {projects.map((project, index) => {
+                  const focusWithinRow =
+                    focusedProject === index || focusedElementIndex === index;
+                  return (
                     <article
                       key={project.id}
                       data-project-row
@@ -442,8 +445,8 @@ export default function ProjectsSection() {
                       onTouchStart={() => updateActiveProject(index)}
                       data-testid={`project-${project.id}`}
                       aria-labelledby={`project-title-${project.id}`}
-                      aria-hidden={pinnedStoryActive && activeProject !== index && focusedProject !== index && focusedElementIndex !== index}
-                      inert={pinnedStoryActive && activeProject !== index && focusedProject !== index && focusedElementIndex !== index}
+                      aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
+                      inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                     >
                 <div
                   data-project-visual
@@ -541,7 +544,8 @@ export default function ProjectsSection() {
                   </div>
                 </div>
                     </article>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
