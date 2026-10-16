@@ -107,6 +107,7 @@ export default function ProjectsSection() {
         if (mediaContext.conditions?.reduced) return;
         const compact = Boolean(mediaContext.conditions?.compact);
         let resizeObserver: ResizeObserver | undefined;
+        let sizedTrack: HTMLElement | null = null;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
           const revealProject = (
@@ -186,6 +187,7 @@ export default function ProjectsSection() {
           );
 
           if (hasHorizontalStory && viewport && track && stage) {
+            sizedTrack = track;
             const setSlideWidth = () => {
               track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
             };
@@ -272,6 +274,7 @@ export default function ProjectsSection() {
         }, section);
         return () => {
           resizeObserver?.disconnect();
+          sizedTrack?.style.removeProperty("--project-slide-width");
           updatePinnedStoryActive(false);
           context.revert();
         };
