@@ -37,19 +37,19 @@ export default function ContactSection() {
   const headerRef = useScrollAnim({ threshold: 0.2 });
 
   return (
-    <section id="contact" className="relative px-4 pb-10 pt-20 sm:px-6 md:pb-14 md:pt-28">
-      <div className="mx-auto max-w-6xl">
-        <div ref={headerRef} className="fade-up mb-10 max-w-2xl">
-          <p data-motion-item className="section-kicker mb-4">06 / Contact</p>
-          <h2 data-motion-item className="text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
+    <section id="contact" className="contact-section relative px-4 py-20 sm:px-6 md:py-28">
+      <div className="contact-layout mx-auto max-w-6xl">
+        <header ref={headerRef} className="contact-intro fade-up">
+          <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Contact</p>
+          <h2 data-motion-item className="contact-title text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
             Let’s talk.
           </h2>
-          <p data-motion-item className="mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
+          <p data-motion-item className="contact-description mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
             For a project, a collaboration, or a question about something I built, you can reach me here.
           </p>
-        </div>
+        </header>
 
-        <ul aria-label="Contact links" className="border-t border-neutral-800/60">
+        <ul aria-label="Contact links" className="contact-list">
           {contacts.map((contact, i) => (
             <ContactRow key={contact.id} contact={contact} delay={i * 70} />
           ))}
@@ -64,29 +64,27 @@ function ContactRow({ contact, delay }: { contact: (typeof contacts)[0]; delay: 
   const Icon = contact.icon;
 
   return (
-    <li className="border-b border-neutral-800/60">
+    <li className="contact-item">
       <a
         ref={ref}
         href={contact.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group fade-up grid min-h-[72px] grid-cols-[1.5rem_auto_minmax(0,1fr)_1rem] items-center gap-x-3 py-6 transition-colors duration-200 hover:bg-white/[.025] hover:text-white focus-visible:bg-white/[.025] focus-visible:text-white sm:min-h-[84px] sm:grid-cols-[2rem_auto_minmax(0,1fr)_1.25rem] sm:gap-x-4 sm:py-7"
+        className="contact-link group fade-up"
         data-testid={`link-contact-${contact.id}`}
       >
-        <Icon
-          className="h-5 w-5 justify-self-start text-neutral-400 transition-colors group-hover:text-white sm:h-[1.35rem] sm:w-[1.35rem]"
-          aria-hidden="true"
-        />
-        <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500 transition-colors group-hover:text-neutral-300">
+        <span className="contact-icon">
+          <Icon className="h-[1.1rem] w-[1.1rem]" aria-hidden="true" />
+        </span>
+        <span className="contact-label">
           {contact.label}
         </span>
-        <span className="min-w-0 truncate whitespace-nowrap text-right text-[13px] font-semibold text-neutral-100 sm:text-base">
+        <span className="contact-handle">
           {contact.handle}
         </span>
-        <ArrowUpRight
-          className="h-4 w-4 justify-self-end text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neutral-200"
-          aria-hidden="true"
-        />
+        <span className="contact-arrow">
+          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+        </span>
       </a>
     </li>
   );
