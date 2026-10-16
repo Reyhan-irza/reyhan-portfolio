@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { LazyMotion, domAnimation, m } from "framer-motion";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
 
 export default function HeroSection() {
@@ -22,7 +22,10 @@ export default function HeroSection() {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
         const scope = gsap.context(() => {
-          const opening = gsap.timeline({ defaults: { ease: [0.16, 1, 0.3, 1] }, delay: 0.08 });
+          const opening = gsap.timeline({
+            defaults: { ease: cubicBezierEase(0.16, 1, 0.3, 1) },
+            delay: 0.08,
+          });
           opening
             .fromTo("[data-hero-indicator]", { scale: 0.65, opacity: 0 }, {
               scale: 1, opacity: 1, duration: 0.36,

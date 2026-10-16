@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { LazyMotion, domAnimation, m } from "framer-motion";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 // Product previews are direct captures of the linked public sites, not recreated UI.
@@ -147,13 +147,13 @@ export default function ProjectsSection() {
               opacity: 1,
               scale: 1,
               duration: 0.62,
-              ease: [0.16, 1, 0.3, 1],
+              ease: cubicBezierEase(0.16, 1, 0.3, 1),
             });
             if (screenshot) {
               timeline.fromTo(screenshot, { scale: 1.08 }, {
                 scale: 1,
                 duration: 1,
-                ease: [0.22, 1, 0.36, 1],
+                ease: cubicBezierEase(0.22, 1, 0.36, 1),
               }, 0);
             }
             timeline.fromTo(copy, {
@@ -163,7 +163,7 @@ export default function ProjectsSection() {
               x: 0,
               opacity: 1,
               duration: 0.52,
-              ease: [0.16, 1, 0.3, 1],
+              ease: cubicBezierEase(0.16, 1, 0.3, 1),
             }, 0.1);
             if (technologies.length > 0) {
               timeline.fromTo(technologies, {
@@ -174,7 +174,7 @@ export default function ProjectsSection() {
                 opacity: 1,
                 duration: 0.38,
                 stagger: 0.05,
-                ease: [0.16, 1, 0.3, 1],
+                ease: cubicBezierEase(0.16, 1, 0.3, 1),
               }, 0.28);
             }
             if (actions) {
@@ -182,7 +182,7 @@ export default function ProjectsSection() {
                 y: 0,
                 opacity: 1,
                 duration: 0.42,
-                ease: [0.16, 1, 0.3, 1],
+                ease: cubicBezierEase(0.16, 1, 0.3, 1),
               }, 0.28 + technologies.length * 0.05);
             }
           };
@@ -270,13 +270,13 @@ export default function ProjectsSection() {
               opacity: 1,
               duration: 0.8,
               stagger: 0.08,
-              ease: [0.16, 1, 0.3, 1],
+              ease: cubicBezierEase(0.16, 1, 0.3, 1),
             })
             .fromTo("[data-project-intro]", { y: 12, opacity: 0 }, {
               y: 0,
               opacity: 1,
               duration: 0.5,
-              ease: [0.16, 1, 0.3, 1],
+              ease: cubicBezierEase(0.16, 1, 0.3, 1),
             }, "-=0.24");
         }, section);
         return () => {
