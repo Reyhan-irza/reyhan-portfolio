@@ -299,7 +299,7 @@ export default function Navbar() {
         aria-labelledby="mobile-navigation-title"
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
-        className="mobile-nav-panel fixed inset-y-0 right-0 z-[49] flex w-[min(88vw,410px)] flex-col border-l border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
+        className="mobile-nav-panel fixed inset-0 z-[49] flex w-full flex-col border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
         style={{ visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >

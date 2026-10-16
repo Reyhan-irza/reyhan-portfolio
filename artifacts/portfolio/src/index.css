@@ -2339,14 +2339,14 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 @media (min-width: 1024px) {
   .portfolio-shell .editorial-nav .mobile-menu-trigger { display: none; }
 }
-.portfolio-shell .mobile-menu-glyph { position: relative; width: 18px; height: 14px; }
+.portfolio-shell .mobile-menu-glyph { position: relative; width: 20px; height: 20px; }
 .portfolio-shell .mobile-menu-line {
-  position: absolute; left: 0; width: 18px; height: 1px; background: currentColor;
+  position: absolute; left: 2px; width: 16px; height: 1px; background: currentColor;
   transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, top .35s cubic-bezier(.22,1,.36,1);
 }
-.portfolio-shell .mobile-menu-line-top { top: 1px; }
-.portfolio-shell .mobile-menu-line-middle { top: 6px; }
-.portfolio-shell .mobile-menu-line-bottom { top: 11px; }
+.portfolio-shell .mobile-menu-line-top { top: 4px; }
+.portfolio-shell .mobile-menu-line-middle { top: 9px; }
+.portfolio-shell .mobile-menu-line-bottom { top: 14px; }
 .portfolio-shell .mobile-menu-line { transition: none; }
 .portfolio-shell .hero-section { background: radial-gradient(ellipse at 75% 45%,rgba(38,47,103,.18),transparent 37%), #05070b; }
 .portfolio-shell .hero-grid {
