@@ -44,10 +44,10 @@ export default function HeroSection() {
             }, 0.62)
             .fromTo("[data-hero-action]", { y: 12, opacity: 0 }, {
               y: 0, opacity: 1, duration: 0.5, stagger: 0.08,
-            }, 0.75)
+            }, 1.1)
             .fromTo("[data-hero-github]", { y: 10, opacity: 0 }, {
               y: 0, opacity: 1, duration: 0.45,
-            }, 1.02)
+            }, 1.38)
             .fromTo("[data-hero-rule]", { scaleX: 0 }, {
               scaleX: 1, transformOrigin: "left center", duration: 0.8,
             }, 0.52);
