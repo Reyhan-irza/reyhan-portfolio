@@ -21,7 +21,7 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
-  const menuTimelineRef = useRef<{ play: () => unknown; reverse: () => unknown } | null>(null);
+  const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const previouslyOpen = useRef(false);
 
   useEffect(() => {
@@ -162,8 +162,10 @@ export default function Navbar() {
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
-    if (!panel) return;
+    const trigger = menuTriggerRef.current;
+    if (!panel || !trigger) return;
     const targets = panel.querySelectorAll<HTMLElement>("[data-menu-item]");
+    const glyphLines = trigger.querySelectorAll<HTMLElement>(".mobile-menu-line");
     const media = gsap.matchMedia();
     media.add(
       {
@@ -174,21 +176,41 @@ export default function Navbar() {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
           gsap.set(panel, { xPercent: 105, autoAlpha: 0 });
-          gsap.set(targets, { x: 14, autoAlpha: 0 });
+          gsap.set(targets, { x: 18, y: 3, autoAlpha: 0 });
+          gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true })
             .to(panel, {
               xPercent: 0,
               autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.54,
-              ease: "power3.inOut",
+              duration: reduced ? 0.01 : 0.62,
+              ease: "power4.out",
             })
             .to(targets, {
               x: 0,
+              y: 0,
               autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.34,
-              stagger: reduced ? 0 : 0.045,
-              ease: "power2.out",
-            }, reduced ? 0 : 0.15);
+              duration: reduced ? 0.01 : 0.42,
+              stagger: reduced ? 0 : 0.052,
+              ease: "power3.out",
+            }, reduced ? 0 : 0.18)
+            .to(glyphLines[0], {
+              y: 5,
+              rotation: 45,
+              duration: reduced ? 0.01 : 0.32,
+              ease: "power3.inOut",
+            }, 0)
+            .to(glyphLines[1], {
+              scaleX: 0,
+              autoAlpha: 0,
+              duration: reduced ? 0.01 : 0.2,
+              ease: "power2.in",
+            }, 0)
+            .to(glyphLines[2], {
+              y: -5,
+              rotation: -45,
+              duration: reduced ? 0.01 : 0.32,
+              ease: "power3.inOut",
+            }, 0);
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
@@ -267,7 +289,7 @@ export default function Navbar() {
         aria-label="Close navigation"
         tabIndex={isOpen ? 0 : -1}
         onClick={closeMenu}
-        className={`nav-scrim fixed inset-0 z-[48] bg-[#02040a]/75 backdrop-blur-sm transition-opacity ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`nav-scrim fixed inset-0 z-[48] bg-[#02040a]/75 transition-opacity ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
       />
       <aside
         ref={panelRef}

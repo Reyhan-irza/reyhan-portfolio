@@ -51,7 +51,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
             scrollTrigger: {
               trigger: el,
               start: `top ${Math.round((1 - threshold) * 100)}%`,
-              toggleActions: "play none play reverse",
+              toggleActions: compact ? "play none none none" : "play none play reverse",
               invalidateOnRefresh: true,
             },
           });
@@ -59,15 +59,15 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
           timeline.fromTo(
             el,
             {
-              opacity: 0,
-              y: motionDistance,
-              scale: compact ? 1 : scale,
+              autoAlpha: 0,
+              y: compact ? 12 : motionDistance,
+              scale: compact ? 0.985 : scale,
             },
             {
-              opacity: 1,
+              autoAlpha: 1,
               y: 0,
               scale: 1,
-              duration: compact ? 0.46 : 0.68,
+              duration: compact ? 0.58 : 0.68,
               ease: "power3.out",
             },
           );
@@ -76,18 +76,23 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
             timeline.fromTo(
               targets,
               {
-                opacity: 0,
-                y: (index) => Math.min(
-                  motionDistance * itemDepth[index % itemDepth.length] * 0.7,
-                  compact ? 6 : 14,
-                ),
+                autoAlpha: 0,
+                x: (index) => compact
+                  ? (index % 2 === 0 ? -10 : 10)
+                  : 0,
+                y: (index) => compact
+                  ? 2
+                  : Math.min(motionDistance * itemDepth[index % itemDepth.length] * 0.7, 14),
+                scale: compact ? 0.99 : 1,
               },
               {
-                opacity: 1,
+                autoAlpha: 1,
+                x: 0,
                 y: 0,
-                duration: compact ? 0.36 : 0.48,
-                stagger: compact ? Math.min(stagger, 0.045) : stagger,
-                ease: "power2.out",
+                scale: 1,
+                duration: compact ? 0.48 : 0.48,
+                stagger: compact ? Math.min(stagger, 0.06) : stagger,
+                ease: compact ? "power3.out" : "power2.out",
               },
               compact ? 0.04 : 0.08,
             );

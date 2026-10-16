@@ -153,6 +153,12 @@ export default function TechnologyBands() {
           const revealDistance = () => gsap.utils.clamp(16, 42, section.clientWidth * 0.035);
           const animatedTracks: AnimatedTrack[] = [];
           let resetSpeed: gsap.core.Tween | undefined;
+          let sectionIsActive = false;
+          const syncTrackPlayback = () => {
+            animatedTracks.forEach(({ tween }) => {
+              tween.paused(!sectionIsActive || document.hidden);
+            });
+          };
 
           section.querySelectorAll<HTMLElement>("[data-band-track]").forEach((track) => {
             const bandElement = track.closest<HTMLElement>("[data-band-id]");
@@ -183,43 +189,83 @@ export default function TechnologyBands() {
 
           const header = section.querySelector<HTMLElement>("[data-section-header]");
           if (header) {
-            gsap.fromTo(
-              header,
-              { x: () => -gsap.utils.clamp(16, 24, section.clientWidth * 0.02), autoAlpha: 0 },
-              {
-                x: 0,
-                autoAlpha: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: section,
-                  start: "top 86%",
-                  end: "top 34%",
-                  scrub: 0.65,
-                  invalidateOnRefresh: true,
+            if (compact) {
+              gsap.fromTo(
+                header,
+                { y: 14, autoAlpha: 0 },
+                {
+                  y: 0,
+                  autoAlpha: 1,
+                  duration: 0.62,
+                  ease: "power3.out",
+                  scrollTrigger: {
+                    trigger: section,
+                    start: "top 88%",
+                    toggleActions: "play none none none",
+                    invalidateOnRefresh: true,
+                  },
                 },
-              },
-            );
+              );
+            } else {
+              gsap.fromTo(
+                header,
+                { x: () => -gsap.utils.clamp(16, 24, section.clientWidth * 0.02), autoAlpha: 0 },
+                {
+                  x: 0,
+                  autoAlpha: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: section,
+                    start: "top 86%",
+                    end: "top 34%",
+                    scrub: 0.65,
+                    invalidateOnRefresh: true,
+                  },
+                },
+              );
+            }
           }
           section.querySelectorAll<HTMLElement>("[data-band-entry]").forEach((entry) => {
             const band = entry.closest<HTMLElement>("[data-band-id]");
             if (!band) return;
             const direction = band.dataset.direction === "right" ? 1 : -1;
-            gsap.fromTo(
-              entry,
-              { x: () => direction * revealDistance(), autoAlpha: 0 },
-              {
-                x: 0,
-                autoAlpha: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: band,
-                  start: "top 92%",
-                  end: "top 48%",
-                  scrub: 0.7,
-                  invalidateOnRefresh: true,
+            if (compact) {
+              gsap.fromTo(
+                entry,
+                { x: direction * 16, y: 4, scale: 0.99, autoAlpha: 0 },
+                {
+                  x: 0,
+                  y: 0,
+                  scale: 1,
+                  autoAlpha: 1,
+                  duration: 0.55,
+                  ease: "power3.out",
+                  scrollTrigger: {
+                    trigger: band,
+                    start: "top 90%",
+                    toggleActions: "play none none none",
+                    invalidateOnRefresh: true,
+                  },
                 },
-              },
-            );
+              );
+            } else {
+              gsap.fromTo(
+                entry,
+                { x: () => direction * revealDistance(), autoAlpha: 0 },
+                {
+                  x: 0,
+                  autoAlpha: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: band,
+                    start: "top 92%",
+                    end: "top 48%",
+                    scrub: 0.7,
+                    invalidateOnRefresh: true,
+                  },
+                },
+              );
+            }
           });
 
           const velocityTrigger = ScrollTrigger.create({
@@ -227,14 +273,15 @@ export default function TechnologyBands() {
             start: "top bottom",
             end: "bottom top",
             onToggle: (self) => {
+              sectionIsActive = self.isActive;
               if (!self.isActive) {
                 resetSpeed?.kill();
                 resetSpeed = undefined;
               }
-              animatedTracks.forEach(({ tween, setSpeed }) => {
-                tween.paused(!self.isActive);
+              animatedTracks.forEach(({ setSpeed }) => {
                 if (!self.isActive) setSpeed(1);
               });
+              syncTrackPlayback();
             },
             onUpdate: (self) => {
               const velocity = Math.abs(self.getVelocity());
@@ -248,9 +295,12 @@ export default function TechnologyBands() {
             },
           });
 
-          animatedTracks.forEach(({ tween }) => tween.paused(!velocityTrigger.isActive));
+          sectionIsActive = velocityTrigger.isActive;
+          document.addEventListener("visibilitychange", syncTrackPlayback);
+          syncTrackPlayback();
 
           return () => {
+            document.removeEventListener("visibilitychange", syncTrackPlayback);
             resetSpeed?.kill();
             velocityTrigger.kill();
             animatedTracks.forEach(({ tween }) => tween.kill());
