@@ -225,7 +225,7 @@ export default function ProjectsSection() {
                   const progressAcrossSlides = self.progress * travelDistance();
                   const nextIndex = Math.min(
                     rows.length - 1,
-                    Math.floor(progressAcrossSlides / slideWidth()),
+                    Math.round(progressAcrossSlides / slideWidth()),
                   );
                   updateActiveProject(nextIndex);
                 },
