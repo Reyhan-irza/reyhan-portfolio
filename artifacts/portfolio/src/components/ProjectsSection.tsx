@@ -202,6 +202,7 @@ export default function ProjectsSection() {
 
             const slideWidth = () => viewport.clientWidth;
             const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const panelStep = 1 / (rows.length - 1);
             const horizontalStory = gsap.to(track, {
               x: () => -travelDistance(),
               ease: "none",
@@ -214,17 +215,7 @@ export default function ProjectsSection() {
                 pinSpacing: true,
                 scrub: 0.8,
                 snap: {
-                  snapTo: (progress) => {
-                    const panelStep = 1 / (rows.length - 1);
-                    const focusedRow = document.activeElement instanceof HTMLElement
-                      ? document.activeElement.closest<HTMLElement>("[data-project-row]")
-                      : null;
-                    const focusedIndex = Number(focusedRow?.dataset.projectIndex);
-                    if (Number.isInteger(focusedIndex) && focusedIndex >= 0 && focusedIndex < rows.length) {
-                      return focusedIndex * panelStep;
-                    }
-                    return Math.round(progress / panelStep) * panelStep;
-                  },
+                  snapTo: panelStep,
                   delay: 0.12,
                   duration: { min: 0.2, max: 0.48 },
                   ease: "power2.inOut",
