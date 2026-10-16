@@ -215,7 +215,17 @@ export default function ProjectsSection() {
                 pinSpacing: true,
                 scrub: 0.8,
                 snap: {
-                  snapTo: panelStep,
+                  snapTo: (progress) => {
+                    const focusedRow = document.activeElement instanceof HTMLElement
+                      ? document.activeElement.closest<HTMLElement>("[data-project-row]")
+                      : null;
+                    const focusedIndex = Number(focusedRow?.dataset.projectIndex);
+                    if (Number.isInteger(focusedIndex) && focusedIndex >= 0 && focusedIndex < rows.length) {
+                      return focusedIndex * panelStep;
+                    }
+                    return Math.round(progress / panelStep) * panelStep;
+                  },
+                  directional: false,
                   delay: 0.12,
                   duration: { min: 0.2, max: 0.48 },
                   ease: "power2.inOut",
