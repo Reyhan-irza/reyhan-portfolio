@@ -14,3 +14,4 @@
 - [GitHub write path](github-write-path.md) — prefer the connected GitHub App when HTTPS push auth is unavailable; keep commits scoped and update refs non-force.
 - [Portfolio audit phase gates](portfolio-audit-phase-gates.md) — finish and verify one audit phase, report it, then wait for review before continuing.
 - [Project-task completion gating](project-task-completion-gating.md) — an `IN_PROGRESS` project task may still be unassigned as the current main task and reject completion.
+- [Project index and focus](project-index-focus.md) — keep the pinned Projects index scroll-derived; focused rows may guide snapping to keep controls visible without directly setting active state.
