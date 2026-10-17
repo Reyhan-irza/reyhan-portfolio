@@ -132,34 +132,37 @@ export default function CommentsSection() {
     }
 
     setSubmitting(true);
-    const { data, error: sbErr } = await supabase
+    const { error: sbErr } = await supabase
       .from("comments")
-      .insert([{ username: cleanName, message: cleanMsg }])
-      .select();
+      .insert([{ username: cleanName, message: cleanMsg }]);
 
     if (sbErr) {
       console.error("Insert error:", sbErr);
       setError(
         sbErr.code === "42501"
-          ? "Komentar tidak dapat dikirim (akses ditolak). Cek RLS Supabase."
+          ? "Supabase menolak izin INSERT (42501). Pastikan migration komentar dijalankan pada project yang dipakai situs."
           : "Gagal kirim komentar. Silakan coba lagi."
       );
       setSubmitting(false);
       return;
     }
 
-    if (data && data[0]) {
-      localStorage.setItem(RATE_KEY, Date.now().toString());
-      setComments((prev) => [data[0], ...prev]);
-      setName(""); setMessage(""); setError("");
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 4000);
-      setPage(1);
-      setTimeout(() => {
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
-      }, 150);
-    }
+    localStorage.setItem(RATE_KEY, Date.now().toString());
+    setComments((prev) => [{
+      id: -Date.now(),
+      username: cleanName,
+      message: cleanMsg,
+      pinned: false,
+      created_at: new Date().toISOString(),
+    }, ...prev]);
+    setName(""); setMessage(""); setError("");
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 4000);
+    setPage(1);
+    setTimeout(() => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+    }, 150);
     setSubmitting(false);
   };
 
