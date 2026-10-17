@@ -108,6 +108,7 @@ export default function ProjectsSection() {
         if (mediaContext.conditions?.reduced) return;
         const compact = Boolean(mediaContext.conditions?.compact);
         let resizeObserver: ResizeObserver | undefined;
+        let refreshFrame = 0;
         let sizedTrack: HTMLElement | null = null;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
@@ -254,7 +255,11 @@ export default function ProjectsSection() {
 
             resizeObserver = new ResizeObserver(() => {
               setSlideWidth();
-              ScrollTrigger.refresh();
+              if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+              refreshFrame = window.requestAnimationFrame(() => {
+                refreshFrame = 0;
+                ScrollTrigger.refresh();
+              });
             });
             resizeObserver.observe(viewport);
           }
@@ -305,6 +310,7 @@ export default function ProjectsSection() {
         }, section);
         return () => {
           resizeObserver?.disconnect();
+          if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
           sizedTrack?.style.removeProperty("--project-slide-width");
           progressFillRef.current?.style.removeProperty("--project-story-progress");
           updatePinnedStoryActive(false);
