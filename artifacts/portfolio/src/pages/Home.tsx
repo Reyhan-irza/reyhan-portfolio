@@ -10,6 +10,7 @@ import RoadmapSection from "@/components/RoadmapSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import GitHubSection from "@/components/GitHubSection";
 import ContactSection from "@/components/ContactSection";
+import PortfolioRatingSection from "@/components/PortfolioRatingSection";
 import Footer from "@/components/Footer";
 import AchievementToast from "@/components/AchievementToast";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
@@ -98,6 +99,7 @@ export default function Home() {
         <SectionBoundary variant="resolve" />
         <div className="portfolio-closing-zone">
           <ContactSection />
+          <PortfolioRatingSection />
           <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
             if (event.currentTarget.open) setArchiveVisited(true);
           }}>
