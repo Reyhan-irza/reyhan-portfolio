@@ -183,12 +183,12 @@ export default function MusicSection() {
 
         {/* Dots */}
         <div className="flex justify-center gap-2 mt-6">
-          {songs.map((_, i) => (
+          {songs.map((song, i) => (
             <button
               key={i}
               onClick={() => handleSelect(i)}
               className="grid h-11 w-11 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff]"
-              aria-label={`Lagu ${i + 1}`}
+              aria-label={`Pilih ${song.title} oleh ${song.artist}`}
               aria-pressed={nowPlaying === i}
             >
               <span

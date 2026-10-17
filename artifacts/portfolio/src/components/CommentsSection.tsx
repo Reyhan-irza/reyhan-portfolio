@@ -218,7 +218,7 @@ export default function CommentsSection() {
               <p className="text-right text-[#6d6a62] text-[10px] mt-1">{message.length}/500</p>
             </div>
 
-            {error   && <p role="alert" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">{error}</p>}
+            {error   && <p role="status" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">{error}</p>}
             {success && <p role="status" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">Komentar berhasil dikirim.</p>}
 
             <button
@@ -339,17 +339,24 @@ export default function CommentsSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Halaman komentar sebelumnya"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             </button>
-            <span className="text-[#6d6a62] text-sm tabular-nums">{page} / {totalPages}</span>
+            <span className="text-[#6d6a62] text-sm tabular-nums">
+              <span aria-hidden="true">{page} / {totalPages}</span>
+              <span role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                Halaman {page} dari {totalPages}
+              </span>
+            </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Halaman komentar berikutnya"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         )}
