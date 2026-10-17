@@ -26,8 +26,8 @@ packages = ["freetype", "gumbo", "harfbuzz", "jbig2dec", "libjpeg_turbo", "mupdf
 [userenv]
 
 [userenv.shared]
-VITE_SUPABASE_URL = "https://mejvfkazfyfokcqzuivq.supabase.co"
-VITE_SUPABASE_ANON_KEY = "sb_publishable_tpDvOdpqnNDUtfyB-cwBlA_SpIWpQNS"
+VITE_SUPABASE_URL = "https://csjrgetcxbgrzqnjnbhm.supabase.co"
+VITE_SUPABASE_ANON_KEY = "sb_publishable_jrB0Vw0aMqPkIqT98qPxFA_lCZ7MiSz"
 
 [[ports]]
 localPort = 8080
