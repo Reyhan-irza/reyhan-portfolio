@@ -18,10 +18,9 @@ import { gsap, ScrollTrigger } from "../lib/motion";
 import { useLenis } from "../hooks/useLenis";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import IntroAnimation from "@/components/IntroAnimation";
+import SectionBoundary from "@/components/SectionBoundary";
 
 const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
-
-const Divider = () => <div className="editorial-divider mx-auto max-w-6xl" aria-hidden="true" />;
 
 export default function Home() {
   useLenis();
@@ -87,16 +86,16 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <Divider />
+        <SectionBoundary variant="trace" />
         <AboutSection />
         <ProjectsSection />
-        <Divider />
+        <SectionBoundary variant="return" />
         <JourneySection />
         <AwardSection />
         <RoadmapSection />
-        <Divider />
+        <SectionBoundary variant="trace" />
         <GitHubSection />
-        <Divider />
+        <SectionBoundary variant="resolve" />
         <div className="portfolio-closing-zone">
           <ContactSection />
           <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {

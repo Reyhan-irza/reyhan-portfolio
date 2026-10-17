@@ -103,7 +103,7 @@ export default function Navbar() {
   useLayoutEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
-    const sections = navLinks.flatMap(({ href }) => {
+    const sections = ["#home", ...navLinks.map(({ href }) => href)].flatMap((href) => {
       const section = document.querySelector<HTMLElement>(href);
       return section ? [{ href, section }] : [];
     });
@@ -117,10 +117,10 @@ export default function Navbar() {
       }
       setActiveHref(nextHref);
     };
-    const syncActiveHash = () => {
+    const syncNavigationState = () => {
       const target = sections.find(({ href }) => href === window.location.hash);
-      if (!target) return;
-      setActiveHref(target.href);
+      if (target) setActiveHref(target.href);
+      else updateActiveFromScroll();
       if (hashFrame) window.cancelAnimationFrame(hashFrame);
       hashFrame = window.requestAnimationFrame(() => {
         hashFrame = 0;
@@ -137,9 +137,10 @@ export default function Navbar() {
         onRefresh: updateActiveFromScroll,
       });
     }, nav);
-    window.addEventListener("hashchange", syncActiveHash);
+    window.addEventListener("hashchange", syncNavigationState);
+    window.addEventListener("popstate", syncNavigationState);
     updateActiveFromScroll();
-    syncActiveHash();
+    syncNavigationState();
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const intro = gsap.from("[data-nav-enter]", {
@@ -153,7 +154,8 @@ export default function Navbar() {
       return () => intro.kill();
     });
     return () => {
-      window.removeEventListener("hashchange", syncActiveHash);
+      window.removeEventListener("hashchange", syncNavigationState);
+      window.removeEventListener("popstate", syncNavigationState);
       if (hashFrame) window.cancelAnimationFrame(hashFrame);
       media.revert();
       context.revert();
@@ -238,7 +240,7 @@ export default function Navbar() {
         className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <a href="#home" data-nav-enter aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
+          <a href="#home" data-nav-enter aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
             <BrandLogo size="sm" alt="" />
             <span className="flex flex-col leading-tight">
               <span className="text-[11px] font-bold uppercase tracking-[.15em] text-white">Reyhan Irza Alvano</span>
