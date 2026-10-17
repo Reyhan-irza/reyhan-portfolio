@@ -101,7 +101,7 @@ export default function MusicController() {
           {/* Header */}
           <div className="flex items-center gap-2.5 mb-3">
            <div className="w-8 h-8 rounded-lg bg-[#a43f2d]/10 border border-[#a43f2d]/20 flex items-center justify-center flex-shrink-0">
-             <Music className={`w-4 h-4 text-[#a43f2d] ${playing ? "animate-pulse" : ""}`} />
+              <Music className={`w-4 h-4 text-[#a43f2d] ${playing ? "animate-pulse motion-reduce:animate-none" : ""}`} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[#211f1b] text-xs font-semibold">Background Music</p>
@@ -116,7 +116,7 @@ export default function MusicController() {
             {BAR_HEIGHTS.map((h, i) => (
               <div
                 key={i}
-                 className="flex-1 rounded-full bg-[#a43f2d]"
+                className="music-visualizer-bar flex-1 rounded-full bg-[#a43f2d]"
                 style={{
                   height: "100%",
                   transformOrigin: "bottom",
@@ -169,7 +169,7 @@ export default function MusicController() {
         aria-label={minimized ? "Open music player" : "Minimize music player"}
       >
         {minimized
-          ? <Music className={`w-4 h-4 ${playing ? "animate-pulse" : ""}`} />
+          ? <Music className={`w-4 h-4 ${playing ? "animate-pulse motion-reduce:animate-none" : ""}`} />
           : <ChevronDown className="w-4 h-4" />
         }
       </button>

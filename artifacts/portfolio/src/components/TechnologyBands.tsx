@@ -201,7 +201,7 @@ export default function TechnologyBands() {
                   scrollTrigger: {
                     trigger: section,
                     start: "top 88%",
-                    toggleActions: "play none none none",
+                    toggleActions: "play none play reverse",
                     invalidateOnRefresh: true,
                   },
                 },
@@ -243,7 +243,7 @@ export default function TechnologyBands() {
                   scrollTrigger: {
                     trigger: band,
                     start: "top 90%",
-                    toggleActions: "play none none none",
+                    toggleActions: "play none play reverse",
                     invalidateOnRefresh: true,
                   },
                 },

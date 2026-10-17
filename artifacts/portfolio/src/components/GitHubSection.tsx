@@ -48,7 +48,7 @@ function formatDate(dateStr: string) {
 }
 
 function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
-  const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay });
+  const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay, reversibleOnCompact: true });
   const langColor = repo.language ? (LANG_COLORS[repo.language] || "bg-[#a43f2d]") : null;
 
   return (
@@ -107,7 +107,7 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
 }
 
 export default function GitHubSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
+  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
   const [repos,   setRepos]   = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(false);
@@ -117,6 +117,7 @@ export default function GitHubSection() {
     stagger: 0.08,
     distance: 14,
     refreshKey: stats ? "loaded" : "pending",
+    reversibleOnCompact: true,
   });
 
   useEffect(() => {
@@ -140,8 +141,6 @@ export default function GitHubSection() {
     })();
     return () => { alive = false; };
   }, []);
-
-  if (!loading && error) return null;
 
   return (
     <section id="github" className="relative py-24 px-6">
@@ -175,14 +174,30 @@ export default function GitHubSection() {
         )}
 
         {/* Repo grid */}
+        <div aria-busy={loading}>
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => <SkeletonGitHubCard key={i} />)}
           </div>
+        ) : error ? (
+          <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
+            GitHub data could not be loaded. The profile link is still available below.
+          </p>
+        ) : repos.length === 0 ? (
+          <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
+            No public repositories are available to show right now.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {repos.map((r, i) => <RepoCard key={r.id} repo={r} delay={i * 60} />)}
           </div>
+        )}
+        </div>
+        {loading && <p role="status" className="sr-only">Loading public GitHub repositories.</p>}
+        {!loading && !error && repos.length > 0 && (
+          <p role="status" className="sr-only">
+            {repos.length} public {repos.length === 1 ? "repository" : "repositories"} loaded.
+          </p>
         )}
 
         <div className="mt-8 flex justify-center">

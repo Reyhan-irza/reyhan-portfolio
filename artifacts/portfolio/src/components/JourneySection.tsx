@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from "react";
-import { Award, BookOpen, GraduationCap, Trophy } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
@@ -9,7 +8,7 @@ const educationPeriods = [
   { period: "2015–2021", level: "SD", label: "Elementary School" },
   { period: "2021–2024", level: "SMP", label: "Junior High School" },
   {
-    period: "2024–sekarang",
+    period: "2024–present",
     level: "SMK",
     label: "Vocational High School",
     school: "SMK Negeri 2 Lubuk Basung",
@@ -18,36 +17,11 @@ const educationPeriods = [
   },
 ] as const;
 
-const achievements = [
-  {
-    index: "01",
-    category: "COMPETITION",
-    title: "Juara 1",
-    detail: "LKS IT Software Solution for Business · Kabupaten Agam · 2025",
-    Icon: Award,
-  },
-  {
-    index: "02",
-    category: "COMPETITION",
-    title: "Juara 2",
-    detail: "CTF Competition",
-    Icon: Trophy,
-  },
-  {
-    index: "03",
-    category: "PROJECT",
-    title: "VIREON Library",
-    detail: "Proyek perpustakaan digital untuk lingkungan sekolah.",
-    Icon: BookOpen,
-  },
-] as const;
-
 export default function JourneySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useScrollAnim({ threshold: 0.2 });
   const educationRef = useRef<HTMLDivElement>(null);
   const educationProgressRef = useRef<HTMLSpanElement>(null);
-  const achievementsRef = useRef<HTMLDivElement>(null);
   const didFire = useRef(false);
 
   useLayoutEffect(() => {
@@ -72,13 +46,31 @@ export default function JourneySection() {
 
         const education = educationRef.current;
         const educationProgress = educationProgressRef.current;
-        const achievementCards = achievementsRef.current?.querySelectorAll<HTMLElement>("[data-achievement-card]");
         if (!mediaContext.conditions?.reduced && education && educationProgress) {
           const compact = Boolean(mediaContext.conditions?.compact);
           const educationRows = gsap.utils.toArray<HTMLElement>("[data-education-row]", education);
           const educationNodes = gsap.utils.toArray<HTMLElement>("[data-education-node]", education);
+          const revealDuration = compact ? 0.24 : 0.16;
+          const milestoneRange = 1 - revealDuration;
+          const setActiveMilestone = (progress: number) => {
+            const activeIndex = Math.min(
+              educationRows.length - 1,
+              Math.floor(Math.min(progress, 0.999999) * educationRows.length),
+            );
+            educationRows.forEach((row, index) => {
+              if (index === activeIndex) {
+                row.setAttribute("data-education-active", "true");
+                row.setAttribute("aria-current", "step");
+              } else {
+                row.removeAttribute("data-education-active");
+                row.removeAttribute("aria-current");
+              }
+            });
+          };
+          setActiveMilestone(0);
           const educationStory = gsap.timeline({
             defaults: { ease: "none" },
+            onUpdate: () => setActiveMilestone(educationStory.progress()),
             scrollTrigger: {
               trigger: education,
               start: "top 70%",
@@ -98,7 +90,7 @@ export default function JourneySection() {
 
           educationNodes.forEach((node, index) => {
             const position = educationNodes.length > 1
-              ? (index / (educationNodes.length - 1)) * 0.84
+              ? (index / (educationNodes.length - 1)) * milestoneRange
               : 0;
             educationStory.fromTo(node, {
               scale: compact ? 0.86 : 0.7,
@@ -114,7 +106,7 @@ export default function JourneySection() {
             const content = row.querySelector<HTMLElement>("[data-education-content]");
             if (!content) return;
             const position = educationNodes.length > 1
-              ? (index / (educationNodes.length - 1)) * 0.84
+              ? (index / (educationNodes.length - 1)) * milestoneRange
               : 0;
             educationStory.fromTo(content, {
               x: compact ? 8 : 10,
@@ -127,26 +119,6 @@ export default function JourneySection() {
           });
         }
 
-        if (!mediaContext.conditions?.reduced && achievementCards?.length) {
-          gsap.fromTo(achievementCards, {
-            y: mediaContext.conditions?.compact ? 12 : 20,
-            opacity: 0,
-          }, {
-            y: 0,
-            opacity: 1,
-            duration: 0.48,
-            stagger: 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: achievementsRef.current,
-              start: "top 78%",
-              toggleActions: mediaContext.conditions?.compact
-                ? "play none none none"
-                : "play none none reverse",
-              invalidateOnRefresh: true,
-            },
-          });
-        }
       }, el);
       return () => context.revert();
     });
@@ -158,7 +130,7 @@ export default function JourneySection() {
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
           <div data-motion-item><p className="section-kicker">Personal journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">What I’ve done so far.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>I’m still early in the journey, but a few projects and achievements have already shaped how I learn.</p>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>A chronological record of my formal education, from TK through my current vocational studies.</p>
         </div>
 
         <section className="mt-10" aria-labelledby="education-timeline-title">
@@ -180,6 +152,7 @@ export default function JourneySection() {
                     className={`education-item grid gap-2 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6 ${isCurrent ? "education-item-current" : ""}`}
                     data-education-row
                     data-education-current={isCurrent || undefined}
+                    aria-current={isCurrent ? "step" : undefined}
                   >
                     <span className={`education-node ${isCurrent ? "education-node-current" : ""}`} data-education-node aria-hidden="true" />
                     <div className="education-period">
@@ -205,27 +178,6 @@ export default function JourneySection() {
           </div>
         </section>
 
-        <section ref={achievementsRef} className="mt-16" aria-labelledby="achievement-milestones-title">
-          <div className="flex flex-col gap-2 border-b border-[rgba(27,28,24,.16)] pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="section-kicker">Verified milestones</p>
-              <h3 id="achievement-milestones-title" className="mt-3 text-2xl font-semibold tracking-[-.05em] text-white md:text-3xl">Achievement &amp; Project Milestones</h3>
-            </div>
-            <p className="max-w-xs text-sm leading-relaxed text-white/55">Competitions and projects, kept separate from formal education.</p>
-          </div>
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
-            {achievements.map(({ index, category, title, detail, Icon }) => (
-              <article key={index} className="achievement-milestone-card" data-achievement-card>
-                <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-[10px] tracking-[.15em] text-[#aab4ff]">{index} / {category}</span>
-                  <Icon className="h-4 w-4 text-[#91a0ff]" aria-hidden="true" />
-                </div>
-                <h4 className="mt-8 text-xl font-semibold tracking-[-.04em] text-white">{title}</h4>
-                <p className="mt-2 text-sm leading-relaxed text-[#c9d0dc]">{detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
       </div>
     </section>
   );

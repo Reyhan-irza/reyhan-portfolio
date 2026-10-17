@@ -11,6 +11,7 @@ export default function Footer() {
     stagger: 0.06,
     distance: 12,
     scale: 0.995,
+    reversibleOnCompact: true,
   });
   const year = new Date().getFullYear();
   const [, navigate] = useLocation();

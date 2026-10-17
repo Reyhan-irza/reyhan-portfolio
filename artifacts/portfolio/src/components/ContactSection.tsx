@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { SiGmail, SiInstagram, SiTiktok, SiWhatsapp } from "react-icons/si";
+import { SiInstagram, SiTiktok, SiWhatsapp } from "react-icons/si";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const contacts = [
@@ -24,17 +24,10 @@ const contacts = [
     icon: SiTiktok,
     href: "https://www.tiktok.com/@rehanwatsav?_r=1&_t=ZS-95Kk0Lxdw5B",
   },
-  {
-    id: "email",
-    label: "Email",
-    handle: "irzanour@gmail.com",
-    icon: SiGmail,
-    href: "mailto:irzanour@gmail.com",
-  },
 ];
 
 export default function ContactSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
+  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
 
   return (
     <section id="contact" className="contact-section relative px-4 py-20 sm:px-6 md:py-28">
@@ -49,18 +42,32 @@ export default function ContactSection() {
           </p>
         </header>
 
-        <ul aria-label="Contact links" className="contact-list">
-          {contacts.map((contact, i) => (
-            <ContactRow key={contact.id} contact={contact} delay={i * 70} />
-          ))}
-        </ul>
+        <div className="contact-actions">
+          <ul aria-label="Other ways to reach me" className="contact-list">
+            {contacts.map((contact, i) => (
+              <ContactRow key={contact.id} contact={contact} delay={i * 70} />
+            ))}
+          </ul>
+          <a
+            className="contact-primary-cta"
+            href="mailto:irzanour@gmail.com"
+            data-testid="link-contact-email"
+            aria-label="Email Reyhan Irza Alvano"
+          >
+            <span className="contact-cta-copy">
+              <span className="contact-cta-eyebrow">Have a project or question?</span>
+              <span className="contact-cta-title">Send me an email</span>
+            </span>
+            <span className="contact-cta-arrow" aria-hidden="true"><ArrowUpRight className="h-5 w-5" /></span>
+          </a>
+        </div>
       </div>
     </section>
   );
 }
 
 function ContactRow({ contact, delay }: { contact: (typeof contacts)[0]; delay: number }) {
-  const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay });
+  const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay, reversibleOnCompact: true });
   const Icon = contact.icon;
 
   return (

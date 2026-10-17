@@ -30,7 +30,8 @@ function CommentText({ text }: { text: string }) {
       {isLong && (
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="text-[#a43f2d] text-xs mt-1.5 hover:text-[#843322] transition-colors"
+          className="comment-read-more text-[#a43f2d] text-xs mt-1.5 hover:text-[#843322] transition-colors"
+          aria-expanded={expanded}
         >
           {expanded ? "Sembunyikan ▲" : "Baca Selengkapnya ▼"}
         </button>
@@ -53,8 +54,8 @@ function formatTime(ts: string): string {
 }
 
 export default function CommentsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
-  const formRef   = useScrollAnim({ threshold: 0.15, delay: 100 });
+  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
+  const formRef   = useScrollAnim({ threshold: 0.15, delay: 100, reversibleOnCompact: true });
 
   const [comments,    setComments]    = useState<Comment[]>([]);
   const [replies,     setReplies]     = useState<Reply[]>([]);
@@ -75,6 +76,7 @@ export default function CommentsSection() {
     threshold: 0.08,
     stagger: 0.06,
     refreshKey: `${comments.length}-${page}`,
+    reversibleOnCompact: true,
   });
 
   useEffect(() => {
@@ -256,6 +258,11 @@ export default function CommentsSection() {
           </div>
         )}
 
+        {dataLoading && <p role="status" className="sr-only">Memuat komentar.</p>}
+        {!dataLoading && !dataError && comments.length > 0 && (
+          <p role="status" className="sr-only">Komentar berhasil dimuat.</p>
+        )}
+
         {/* LIST */}
         <div
           ref={(el) => {
@@ -263,17 +270,18 @@ export default function CommentsSection() {
             listAnimRef.current = el;
           }}
           className="flex flex-col gap-3"
+          aria-busy={dataLoading}
         >
           {dataLoading ? (
-            <div className="flex justify-center py-16">
+            <div className="flex justify-center py-16" aria-hidden="true">
                <Loader2 className="w-5 h-5 text-[#a43f2d] animate-spin" />
             </div>
           ) : dataError ? (
-             <div className="text-center py-12 text-[#a43f2d] text-sm">
+            <div role="status" className="text-center py-12 text-[#a43f2d] text-sm">
               Gagal memuat komentar. Periksa koneksi dan coba refresh.
             </div>
           ) : paginated.length === 0 ? (
-             <div className="text-center py-12 text-[#6d6a62] text-sm">
+             <div role="status" className="text-center py-12 text-[#6d6a62] text-sm">
               {search ? "Tidak ada komentar yang cocok." : "Belum ada komentar. Jadilah yang pertama!"}
             </div>
           ) : paginated.map((c) => {
@@ -331,7 +339,7 @@ export default function CommentsSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -339,7 +347,7 @@ export default function CommentsSection() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

@@ -5,6 +5,20 @@ import { gsap } from "../lib/motion";
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-preview.webp`;
 const digitalLibraryCertificateUrl = `${import.meta.env.BASE_URL}sertifikat-apresiasi-inovasi-digital-2026.webp`;
+const otherEvidence = [
+  {
+    index: "01",
+    category: "Competition result",
+    title: "2nd place",
+    source: "CTF Competition",
+  },
+  {
+    index: "02",
+    category: "Digital library project",
+    title: "VIREON Library",
+    source: "A digital library system for managing books, members, loans, and reports.",
+  },
+] as const;
 
 export default function AwardSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -14,7 +28,8 @@ export default function AwardSection() {
     const section = sectionRef.current;
     if (!section) return;
     const previews = gsap.utils.toArray<HTMLElement>(".certificate-preview", section);
-    if (previews.length === 0) return;
+    const evidenceLines = gsap.utils.toArray<HTMLElement>("[data-award-evidence-line]", section);
+    if (previews.length === 0 && evidenceLines.length === 0) return;
     const media = gsap.matchMedia();
     media.add(
       {
@@ -26,6 +41,23 @@ export default function AwardSection() {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
         const scope = gsap.context(() => {
+          const evidenceList = section.querySelector<HTMLElement>("[data-award-evidence-list]");
+          if (evidenceLines.length && evidenceList) {
+            gsap.fromTo(evidenceLines, {
+              scaleX: 0,
+            }, {
+              scaleX: 1,
+              duration: 0.48,
+              stagger: 0.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: evidenceList,
+                start: "top 82%",
+                toggleActions: "play none none reverse",
+                invalidateOnRefresh: true,
+              },
+            });
+          }
           if (compact) {
             previews.forEach((preview) => {
               gsap.fromTo(preview, {
@@ -169,7 +201,7 @@ export default function AwardSection() {
             </span>
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[.15em] text-[#aab4ff]">Sertifikat penghargaan</p>
-              <p className="mt-1 text-xs text-white/55">Agustus 2026 · Kelas XII TKJ4</p>
+              <p className="mt-1 text-xs text-white/55">Kelas XII TKJ14 · Agustus 2026</p>
             </div>
           </div>
           <div>
@@ -235,6 +267,32 @@ export default function AwardSection() {
           </div>
         </div>
       </div>
+
+      <section
+        className="mx-auto mt-8 max-w-6xl"
+        aria-labelledby="award-evidence-title"
+      >
+        <div className="mb-5 flex flex-col gap-2 border-b border-white/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="section-kicker">Additional verified outcomes</p>
+            <h3 id="award-evidence-title" className="mt-2 text-xl font-semibold tracking-[-.04em] text-white md:text-2xl">
+              Competition &amp; project evidence
+            </h3>
+          </div>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2" data-award-evidence-list>
+          {otherEvidence.map(({ index, category, title, source }) => (
+            <article key={index} className="award-record award-evidence-card p-5 md:p-7">
+              <span className="award-evidence-line" data-award-evidence-line aria-hidden="true" />
+              <p className="award-detail-label">{index} / {category}</p>
+              <h4 className="mt-5 text-xl font-semibold tracking-[-.04em] text-white md:text-2xl">
+                {title}
+              </h4>
+              <p className="mt-2 text-sm leading-relaxed text-white/55">{source}</p>
+            </article>
+          ))}
+        </div>
+      </section>
     </section>
   );
 }

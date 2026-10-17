@@ -68,7 +68,8 @@ function NewsCard({ item }: { item: News }) {
         {isLong && (
           <button
             onClick={() => setExpanded((e) => !e)}
-             className="mt-2 text-[#a43f2d] text-xs hover:text-[#843322] flex items-center gap-1 transition-colors"
+             className="comment-read-more mt-2 text-[#a43f2d] text-xs hover:text-[#843322] flex items-center gap-1 transition-colors"
+            aria-expanded={expanded}
           >
             {expanded ? "Sembunyikan" : "Baca Selengkapnya"}
             <ArrowRight className={`w-3 h-3 transition-transform ${expanded ? "rotate-90" : ""}`} />
@@ -80,29 +81,36 @@ function NewsCard({ item }: { item: News }) {
 }
 
 export default function NewsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.15 });
+  const headerRef = useScrollAnim({ threshold: 0.15, reversibleOnCompact: true });
   const [news,    setNews]    = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
-  const gridRef   = useScrollAnim({ threshold: 0.08, delay: 80, refreshKey: `${loading}-${news.length}` });
+  const [loadError, setLoadError] = useState(false);
+  const gridRef   = useScrollAnim({
+    threshold: 0.08,
+    delay: 80,
+    refreshKey: `${loading}-${news.length}`,
+    reversibleOnCompact: true,
+  });
 
   useEffect(() => {
     let alive = true;
     (async () => {
-      const { data, error } = await supabase
-        .from("news")
-        .select("*")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-
-      if (alive) {
-        if (!error && data) setNews(data);
-        setLoading(false);
+      try {
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .eq("published", true)
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        if (alive && data) setNews(data);
+      } catch {
+        if (alive) setLoadError(true);
+      } finally {
+        if (alive) setLoading(false);
       }
     })();
     return () => { alive = false; };
   }, []);
-
-  if (!loading && news.length === 0) return null;
 
   return (
     <section id="news" className="relative py-24 px-6">
@@ -120,18 +128,33 @@ export default function NewsSection() {
           </p>
         </div>
 
-        <div ref={gridRef} className="fade-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div
+          ref={gridRef}
+          className="fade-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          aria-busy={loading}
+        >
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonNewsCard key={i} />)
-            : news.map((item) => <NewsCard key={item.id} item={item} />)
+            : loadError
+              ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">Berita belum dapat dimuat saat ini.</p>
+              : news.length === 0
+                ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">Belum ada berita yang dipublikasikan.</p>
+                : news.map((item) => <NewsCard key={item.id} item={item} />)
           }
         </div>
 
-        <div className="mt-6 flex items-center justify-center">
+        {loading && <p role="status" className="sr-only">Memuat berita.</p>}
+        {!loading && !loadError && news.length > 0 && (
+          <p role="status" className="sr-only">
+            {news.length} artikel berita berhasil dimuat.
+          </p>
+        )}
+
+        {!loading && !loadError && news.length > 0 && <div className="mt-6 flex items-center justify-center">
              <span className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
             <Newspaper className="w-3 h-3" /> {news.length} artikel dipublish
           </span>
-        </div>
+        </div>}
       </div>
     </section>
   );

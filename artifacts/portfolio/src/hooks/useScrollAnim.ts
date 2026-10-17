@@ -8,6 +8,7 @@ interface Options {
   distance?: number;
   scale?: number;
   refreshKey?: string | number;
+  reversibleOnCompact?: boolean;
 }
 
 /** Reversible, responsive reveal shared by section content and card groups. */
@@ -19,6 +20,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
     distance = 20,
     scale = 1,
     refreshKey,
+    reversibleOnCompact = false,
   }: Options = {},
 ) {
   const ref = useRef<T>(null);
@@ -51,7 +53,9 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
             scrollTrigger: {
               trigger: el,
               start: `top ${Math.round((1 - threshold) * 100)}%`,
-              toggleActions: compact ? "play none none none" : "play none play reverse",
+              toggleActions: compact && !reversibleOnCompact
+                ? "play none none none"
+                : "play none play reverse",
               invalidateOnRefresh: true,
             },
           });
@@ -105,7 +109,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
     return () => {
       media.revert();
     };
-  }, [threshold, delay, stagger, distance, scale, refreshKey]);
+  }, [threshold, delay, stagger, distance, scale, refreshKey, reversibleOnCompact]);
 
   return ref;
 }

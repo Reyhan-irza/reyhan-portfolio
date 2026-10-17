@@ -73,6 +73,8 @@ export default function ProjectsSection() {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
+  const focusRestoreTimerRef = useRef<number | null>(null);
+  const focusRestoreFrameRef = useRef<number | null>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
@@ -340,6 +342,15 @@ export default function ProjectsSection() {
   useEffect(() => {
     if (!modal) return;
 
+    if (focusRestoreTimerRef.current !== null) {
+      window.clearTimeout(focusRestoreTimerRef.current);
+      focusRestoreTimerRef.current = null;
+    }
+    if (focusRestoreFrameRef.current !== null) {
+      window.cancelAnimationFrame(focusRestoreFrameRef.current);
+      focusRestoreFrameRef.current = null;
+    }
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
@@ -377,7 +388,14 @@ export default function ProjectsSection() {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
-      openerRef.current?.focus();
+      const opener = openerRef.current;
+      focusRestoreTimerRef.current = window.setTimeout(() => {
+        focusRestoreTimerRef.current = null;
+        focusRestoreFrameRef.current = window.requestAnimationFrame(() => {
+          focusRestoreFrameRef.current = null;
+          if (opener?.isConnected) opener.focus({ preventScroll: true });
+        });
+      }, 120);
     };
   }, [modal]);
 
@@ -495,10 +513,11 @@ export default function ProjectsSection() {
                       data-active-project={activeProject === index ? "true" : "false"}
                       tabIndex={0}
                       className="project-row"
-                      onFocus={() => {
+                      onFocus={(event: FocusEvent<HTMLElement>) => {
+                        const row = event.currentTarget;
                         setFocusedProject(index);
                         const story = ScrollTrigger.getById("portfolio-project-story");
-                        if (story?.isActive) {
+                        if (story?.isActive && row.dataset.activeProject !== "true") {
                           const panelProgress = index / (projects.length - 1);
                           window.scrollTo({
                             top: story.start + (story.end - story.start) * panelProgress,
@@ -508,6 +527,7 @@ export default function ProjectsSection() {
                       }}
                       onBlur={(event: FocusEvent<HTMLElement>) => {
                         if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                        if (dialogRef.current?.contains(event.relatedTarget as Node | null)) return;
                         setFocusedProject((current) => current === index ? null : current);
                       }}
                       data-testid={`project-${project.id}`}

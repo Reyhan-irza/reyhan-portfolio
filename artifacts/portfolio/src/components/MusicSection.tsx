@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Music, ChevronLeft, ChevronRight } from "lucide-react";
+import { Music, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 interface Song {
@@ -9,8 +9,6 @@ interface Song {
   trackId: string;
   coverUrl: string;
   color: string;
-  accent: string;
-  accentRing: string;
 }
 
 const songs: Song[] = [
@@ -21,8 +19,6 @@ const songs: Song[] = [
     trackId: "1BLfQ6dPXmuDrFmbdfW7Jl",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c4/21/00/c42100f9-f329-aad4-7535-9055429efc3f/mzi.tbskuyey.jpg/400x400bb.jpg",
     color: "bg-[#e8e1d4]",
-    accent: "border-[#a43f2d]",
-    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 2,
@@ -31,8 +27,6 @@ const songs: Song[] = [
     trackId: "2FML7gk7ac6quGFIjvkDb3",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/45/ab/b7/45abb7a5-6a53-8d8f-91b0-03d1ef93111e/dj.zzffiuki.jpg/400x400bb.jpg",
     color: "bg-[#e8e1d4]",
-    accent: "border-[#a43f2d]",
-    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 3,
@@ -41,8 +35,6 @@ const songs: Song[] = [
     trackId: "6koKhrBBcExADvWuOgceNZ",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bd/3b/a9/bd3ba9fb-9609-144f-bcfe-ead67b5f6ab3/196589564931.jpg/400x400bb.jpg",
     color: "bg-[#e8e1d4]",
-    accent: "border-[#a43f2d]",
-    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 4,
@@ -51,8 +43,6 @@ const songs: Song[] = [
     trackId: "4iZ4pt7kvcaH6Yo8UoZ4s2",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/62/93/13/6293132e-20ff-67ab-3d1f-96bb6797a6ba/196589564955.jpg/400x400bb.jpg",
     color: "bg-[#e8e1d4]",
-    accent: "border-[#a43f2d]",
-    accentRing: "ring-[#a43f2d]/30",
   },
   {
     id: 5,
@@ -61,8 +51,6 @@ const songs: Song[] = [
     trackId: "1bjeWoagtHmUKputLVyDxQ",
     coverUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/97/bd/88/97bd8804-7d3e-e6c8-0532-ff22877b931c/196871766890.jpg/400x400bb.jpg",
     color: "bg-[#e8e1d4]",
-    accent: "border-[#a43f2d]",
-    accentRing: "ring-[#a43f2d]/30",
   },
 ];
 
@@ -70,8 +58,13 @@ export default function MusicSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [nowPlaying, setNowPlaying] = useState<number | null>(null);
   const [spotifyKey, setSpotifyKey] = useState(0);
-  const scrollRef = useScrollAnim<HTMLDivElement>({ threshold: 0.08, stagger: 0.06, refreshKey: songs.length });
-  const headerRef = useScrollAnim({ threshold: 0.2 });
+  const scrollRef = useScrollAnim<HTMLDivElement>({
+    threshold: 0.08,
+    stagger: 0.06,
+    refreshKey: songs.length,
+    reversibleOnCompact: true,
+  });
+  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
 
   // When background music resumes, stop Spotify by reloading the embed
   useEffect(() => {
@@ -140,12 +133,12 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
-          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Peak <span className="text-[#a43f2d]">Song</span>
+          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">My Music Fav Gweh</p>
+          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
+            Peak <span className="text-[#8290ff]">Song</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-6" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
+          <p data-motion-item className="text-[#c9d0dc] max-w-md mx-auto text-base">
             Ts Song Still Banger,y&apos;all.
           </p>
         </div>
@@ -154,7 +147,7 @@ export default function MusicSection() {
         <div className="relative">
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-10 h-10 rounded-full glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-200 hidden md:flex"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-[#c9d0dc] hover:text-white hover:border-[#8290ff]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] transition-all duration-200 hidden md:flex"
             aria-label="Lagu sebelumnya"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -173,7 +166,7 @@ export default function MusicSection() {
                 key={song.id}
                 song={song}
                 isActive={activeIdx === idx}
-                isPlaying={nowPlaying === idx}
+                isSelected={nowPlaying === idx}
                 onClick={() => handleSelect(idx)}
               />
             ))}
@@ -181,7 +174,7 @@ export default function MusicSection() {
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-10 h-10 rounded-full glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-200 hidden md:flex"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-[#c9d0dc] hover:text-white hover:border-[#8290ff]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] transition-all duration-200 hidden md:flex"
             aria-label="Lagu berikutnya"
           >
             <ChevronRight className="w-5 h-5" />
@@ -196,11 +189,11 @@ export default function MusicSection() {
               onClick={() => handleSelect(i)}
               className="grid h-11 w-11 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff]"
               aria-label={`Lagu ${i + 1}`}
-              aria-pressed={activeIdx === i}
+              aria-pressed={nowPlaying === i}
             >
               <span
                 aria-hidden="true"
-                className={`h-2 rounded-full bg-[#a43f2d] transition-[width,opacity] duration-300 motion-reduce:transition-none ${
+                className={`h-2 rounded-full bg-[#8290ff] transition-[width,opacity] duration-300 motion-reduce:transition-none ${
                   activeIdx === i ? "w-6 opacity-100" : "w-2 opacity-35"
                 }`}
               />
@@ -210,11 +203,15 @@ export default function MusicSection() {
 
         {/* Spotify embed */}
         <div className="mt-8">
-          <SpotifyEmbed song={songs[activeIdx]} isPlaying={nowPlaying === activeIdx} resetKey={spotifyKey} />
+          <SpotifyEmbed
+            song={songs[nowPlaying ?? activeIdx]}
+            isSelected={nowPlaying !== null}
+            resetKey={spotifyKey}
+          />
         </div>
 
-        <p className="text-center text-[#6d6a62] text-xs mt-4">
-          Klik card untuk berganti lagu &bull; Music background otomatis pause saat Spotify aktif
+        <p className="text-center text-[#8b93a3] text-xs mt-4">
+          Klik card untuk memilih lagu &bull; Music background pause saat lagu Spotify dipilih
         </p>
       </div>
     </section>
@@ -224,27 +221,29 @@ export default function MusicSection() {
 function MusicCard({
   song,
   isActive,
-  isPlaying,
+  isSelected,
   onClick,
 }: {
   song: Song;
   isActive: boolean;
-  isPlaying: boolean;
+  isSelected: boolean;
   onClick: () => void;
 }) {
   const [imgError, setImgError] = useState(false);
 
   return (
     <button
-      className={`music-card flex-shrink-0 snap-center w-52 md:w-60 rounded-2xl p-4 glass border transition-all duration-400 text-left cursor-pointer ${
-        isActive
-          ? `${song.accent} ring-2 ${song.accentRing} scale-105`
-          : "border-[rgba(33,31,27,.16)] hover:border-[#a43f2d] hover:scale-102 hover:-translate-y-1"
+      className={`music-card flex-shrink-0 snap-center w-52 md:w-60 rounded-2xl p-4 glass border transition-all duration-300 text-left cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] ${
+        isSelected
+          ? "border-[#8290ff]/65 bg-[#101621] shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
+          : isActive
+            ? "border-white/20 bg-white/[0.035] scale-[1.02]"
+            : "border-white/10 bg-white/[0.015] hover:border-white/25 hover:bg-white/[0.035] hover:-translate-y-0.5"
       }`}
       onClick={onClick}
       data-motion-item
-      aria-label={`${isActive ? "Selected: " : ""}${song.title} by ${song.artist}. Select to play.`}
-      aria-pressed={isActive}
+      aria-label={`${isSelected ? "Selected: " : ""}${song.title} by ${song.artist}. Select in the Spotify player.`}
+      aria-pressed={isSelected}
     >
       {/* Cover art */}
        <div className={`w-full aspect-square rounded-xl mb-4 ${song.color} overflow-hidden relative`}>
@@ -257,71 +256,41 @@ function MusicCard({
               onError={() => setImgError(true)}
             />
             {isActive && (
-               <div className="absolute inset-0 bg-[#211f1b]/15" />
+               <div className="absolute inset-0 bg-black/15" />
             )}
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Music className="w-10 h-10 text-[#6d6a62]" />
+            <Music className="w-10 h-10 text-[#c9d0dc]" />
           </div>
         )}
 
-        {isPlaying && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-end gap-0.5 bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">
-            <EqualizerBar delay="0s" />
-            <EqualizerBar delay="0.15s" />
-            <EqualizerBar delay="0.3s" />
-            <EqualizerBar delay="0.1s" />
-            <EqualizerBar delay="0.25s" />
-          </div>
-        )}
       </div>
 
-      {isPlaying && (
-        <div className="flex items-center gap-1.5 mb-2">
-           <span className="w-1.5 h-1.5 rounded-full bg-[#a43f2d] animate-pulse" />
-           <span className="text-[#a43f2d] text-[10px] font-semibold uppercase tracking-widest">Now Playing</span>
-        </div>
+      <h3 className="text-[#f5f7fa] font-semibold text-sm leading-snug mb-1 truncate">{song.title}</h3>
+      <p className="text-[#c9d0dc] text-xs truncate">{song.artist}</p>
+      {isSelected && (
+        <span className="mt-2 inline-flex items-center gap-1.5 text-[#aeb8ff] text-[10px] font-semibold uppercase tracking-[0.12em]">
+          <Check className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
+          Selected for Spotify
+        </span>
       )}
-
-       <h3 className="text-[#211f1b] font-semibold text-sm leading-snug mb-1 truncate">{song.title}</h3>
-       <p className="text-[#6d6a62] text-xs truncate">{song.artist}</p>
     </button>
   );
 }
 
-function EqualizerBar({ delay }: { delay: string }) {
-  return (
-        <span
-      className="w-1 rounded-full bg-[#a43f2d]"
-      style={{
-        height: "12px",
-        animation: "equalizerBounce 0.6s ease-in-out infinite alternate",
-        animationDelay: delay,
-      }}
-          aria-hidden="true"
-    />
-  );
-}
-
-function SpotifyEmbed({ song, isPlaying, resetKey }: { song: Song; isPlaying: boolean; resetKey: number }) {
+function SpotifyEmbed({ song, isSelected, resetKey }: { song: Song; isSelected: boolean; resetKey: number }) {
   const embedUrl = `https://open.spotify.com/embed/track/${song.trackId}?utm_source=generator&theme=0`;
 
   return (
     <div
-       className={`transition-all duration-500 glass neon-border rounded-2xl overflow-hidden p-1 ${
-         isPlaying ? "ring-2 ring-[#a43f2d]/30" : ""
+       className={`transition-all duration-300 glass border rounded-2xl overflow-hidden p-1 ${
+          isSelected ? "border-[#8290ff]/35" : "border-white/10"
       }`}
     >
       <div className="flex items-center gap-2 px-4 py-2 border-b border-[rgba(33,31,27,.16)]">
-         <Music className="w-4 h-4 text-[#a43f2d]" />
-         <span className="text-[#6d6a62] text-xs">Spotify Player</span>
-        {isPlaying && (
-           <span className="ml-auto flex items-center gap-1.5 text-[#a43f2d] text-xs">
-             <span className="w-1.5 h-1.5 rounded-full bg-[#a43f2d] animate-pulse" />
-            Now Playing
-          </span>
-        )}
+         <Music className="w-4 h-4 text-[#8290ff]" />
+         <span className="text-[#c9d0dc] text-xs">Spotify Player</span>
       </div>
       <iframe
         key={`${song.trackId}-${resetKey}`}
