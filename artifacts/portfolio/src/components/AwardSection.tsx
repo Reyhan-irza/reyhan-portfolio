@@ -174,7 +174,7 @@ export default function AwardSection() {
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              Lihat sertifikat
+              View certificate
             </a>
             <a
               href={certificateUrl}
@@ -253,7 +253,7 @@ export default function AwardSection() {
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              Lihat sertifikat
+              View certificate
             </a>
             <a
               href={digitalLibraryCertificateUrl}

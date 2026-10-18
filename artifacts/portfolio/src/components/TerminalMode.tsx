@@ -90,7 +90,7 @@ export default function TerminalMode() {
       const result  = handler();
 
       if (result === "__clear__") {
-        setHistory([{ type: "output", text: "Terminal dibersihkan.\n", id: idRef.current++ }]);
+        setHistory([{ type: "output", text: "Terminal cleared.\n", id: idRef.current++ }]);
         return;
       }
       if (result === "__exit__") { setOpen(false); return; }

@@ -154,14 +154,14 @@ export default function PortfolioRatingSection() {
           Nilai portofolio ini
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#c9d0dc]">
-          Pilih 1 sampai 5 bintang untuk memberi penilaian.
+          Choose 1 to 5 stars to rate this portfolio.
         </p>
 
         <div
           ref={starsRef}
           className="mt-6 flex justify-center gap-1.5 sm:gap-2"
           role="group"
-          aria-label="Beri rating dari 1 sampai 5 bintang"
+          aria-label="Rate this portfolio from 1 to 5 stars"
           aria-busy={submitting}
         >
           {ratingValues.map((value) => {
@@ -192,12 +192,12 @@ export default function PortfolioRatingSection() {
           })}
         </div>
         <p id="portfolio-rating-hint" className="sr-only">
-          Pilih bintang untuk menyimpan penilaian. Kamu bisa mengubahnya dari browser ini.
+          Select a star to submit your rating. You can change it from this browser.
         </p>
 
         <div className="mt-6 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-3">
           {summaryLoading ? (
-          <p role="status" className="text-xs text-[#8b93a3]">Memuat hasil penilaian…</p>
+          <p role="status" className="text-xs text-[#8b93a3]">Loading ratings…</p>
           ) : summaryError ? (
             <p role="status" className="text-xs text-[#c9d0dc]">{summaryError}</p>
           ) : summary && summary.rating_count > 0 ? (
@@ -207,11 +207,11 @@ export default function PortfolioRatingSection() {
                 {Number(summary.average_rating).toFixed(1)} / 5
               </span>
               <span className="text-xs text-[#8b93a3]">
-                dari {summary.rating_count.toLocaleString("id-ID")} penilaian pengunjung
+                from {summary.rating_count.toLocaleString("en-US")} visitor ratings
               </span>
             </>
           ) : (
-          <p role="status" className="text-xs text-[#8b93a3]">Belum ada penilaian — jadilah yang pertama.</p>
+          <p role="status" className="text-xs text-[#8b93a3]">No ratings yet — be the first.</p>
           )}
         </div>
 
@@ -225,7 +225,7 @@ export default function PortfolioRatingSection() {
         {submitting && (
           <p role="status" className="mt-4 inline-flex items-center gap-2 text-xs text-[#8b93a3]">
             <LoaderCircle className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
-            Menyimpan penilaian…
+            Saving rating…
           </p>
         )}
       </div>

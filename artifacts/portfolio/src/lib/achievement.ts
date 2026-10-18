@@ -17,13 +17,13 @@ export function unlockAchievement(achievement: Achievement) {
 }
 
 export const ACHIEVEMENTS = {
-  FIRST_SCROLL:    { icon: "target"  as AchievementIcon, title: "Langkah pertama", desc: "Anda mulai menjelajahi portofolio ini." },
-  MUSIC_LOVER:     { icon: "music"   as AchievementIcon, title: "Playlist ditemukan", desc: "Anda menemukan playlist yang sering saya dengarkan." },
-  PROJECT_READER:  { icon: "rocket"  as AchievementIcon, title: "Penjelajah proyek", desc: "Anda telah melihat ketiga proyek saya." },
-  EASTER_EGG:      { icon: "star"    as AchievementIcon, title: "Easter egg ditemukan", desc: "Anda menemukan detail tersembunyi." },
-  ROAST_MASTER:    { icon: "flame"   as AchievementIcon, title: "Roast portofolio", desc: "Makasih sudah memberi roast buat portofolio ini." },
-  SCROLL_BOTTOM:   { icon: "trophy"  as AchievementIcon, title: "Sampai di akhir", desc: "Makasih sudah menggulir sampai bagian paling bawah." },
+  FIRST_SCROLL:    { icon: "target"  as AchievementIcon, title: "First Steps", desc: "You started exploring the portfolio." },
+  MUSIC_LOVER:     { icon: "music"   as AchievementIcon, title: "Playlist Found", desc: "You found my frequent listens." },
+  PROJECT_READER:  { icon: "rocket"  as AchievementIcon, title: "Project Explorer", desc: "You’ve viewed all three projects." },
+  EASTER_EGG:      { icon: "star"    as AchievementIcon, title: "Easter Egg Found", desc: "You found a hidden detail." },
+  ROAST_MASTER:    { icon: "flame"   as AchievementIcon, title: "Portfolio Roast", desc: "Thanks for roasting the portfolio." },
+  SCROLL_BOTTOM:   { icon: "trophy"  as AchievementIcon, title: "Made It to the End", desc: "Thanks for scrolling all the way down." },
   COMMENTER:       { icon: "message" as AchievementIcon, title: "Makasih komentarnya", desc: "Makasih sudah meninggalkan pesan." },
-  JOURNEY_READER:  { icon: "book"    as AchievementIcon, title: "Pembaca perjalanan", desc: "Anda telah melihat perjalanan saya." },
-  AGE_GUESSER:     { icon: "help"    as AchievementIcon, title: "Tebakan tepat", desc: "Tebakan usia Anda benar." },
+  JOURNEY_READER:  { icon: "book"    as AchievementIcon, title: "Journey Reader", desc: "You’ve viewed my journey." },
+  AGE_GUESSER:     { icon: "help"    as AchievementIcon, title: "Correct Guess", desc: "You guessed my age." },
 };

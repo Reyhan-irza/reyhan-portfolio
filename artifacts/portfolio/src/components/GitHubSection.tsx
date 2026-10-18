@@ -36,15 +36,15 @@ function formatDate(dateStr: string) {
   const d = new Date(dateStr);
   const diff = Date.now() - d.getTime();
   const days = Math.floor(diff / 86_400_000);
-  if (days < 1) return "hari ini";
-  if (days === 1) return "kemarin";
-  if (days < 30) return `${days} hari yang lalu`;
+  if (days < 1) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
   if (days < 365) {
     const months = Math.floor(days / 30);
-    return `${months} bulan yang lalu`;
+    return `${months} months ago`;
   }
   const years = Math.floor(days / 365);
-  return `${years} tahun yang lalu`;
+  return `${years} years ago`;
 }
 
 function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
@@ -70,7 +70,7 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
       </div>
 
       <p className="text-[#6d6a62] text-xs leading-relaxed flex-1 line-clamp-2">
-        {repo.description || "Belum ada deskripsi."}
+        {repo.description || "No description provided."}
       </p>
 
       {repo.topics.length > 0 && (
@@ -185,7 +185,7 @@ export default function GitHubSection() {
           </p>
         ) : repos.length === 0 ? (
           <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
-            Belum ada repositori publik yang bisa ditampilkan.
+            No public repositories to show.
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -193,7 +193,7 @@ export default function GitHubSection() {
           </div>
         )}
         </div>
-        {loading && <p role="status" className="sr-only">Memuat repositori publik GitHub.</p>}
+        {loading && <p role="status" className="sr-only">Loading public GitHub repositories.</p>}
         {!loading && !error && repos.length > 0 && (
           <p role="status" className="sr-only">
             {repos.length} repositori publik berhasil dimuat.
@@ -207,7 +207,7 @@ export default function GitHubSection() {
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-6 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-300 hover:-translate-y-0.5 text-sm font-medium"
           >
-            <Github className="w-4 h-4" /> Lihat semua di GitHub
+            <Github className="w-4 h-4" /> View all on GitHub
           </a>
         </div>
       </div>

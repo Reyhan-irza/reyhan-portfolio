@@ -158,7 +158,7 @@ export default function MusicSection() {
             className="flex gap-4 overflow-x-auto overscroll-x-contain px-[max(0px,calc((100%-13rem)/2))] pb-4 snap-x snap-mandatory md:px-[max(0px,calc((100%-15rem)/2))]"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             role="region"
-            aria-label="Lagu favorit"
+            aria-label="Favorite songs"
             tabIndex={0}
           >
             {songs.map((song, idx) => (
@@ -188,7 +188,7 @@ export default function MusicSection() {
               key={i}
               onClick={() => handleSelect(i)}
               className="grid h-11 w-11 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff]"
-              aria-label={`Pilih ${song.title} oleh ${song.artist}`}
+              aria-label={`Play ${song.title} by ${song.artist}`}
               aria-pressed={nowPlaying === i}
             >
               <span
@@ -242,7 +242,7 @@ function MusicCard({
       }`}
       onClick={onClick}
       data-motion-item
-      aria-label={`${isSelected ? "Dipilih: " : ""}${song.title} oleh ${song.artist}. Pilih di pemutar Spotify.`}
+      aria-label={`${isSelected ? "Selected: " : ""}${song.title} by ${song.artist}. Select to play.`}
       aria-pressed={isSelected}
     >
       {/* Cover art */}

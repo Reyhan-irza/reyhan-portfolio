@@ -3,19 +3,19 @@ import type { CSSProperties } from "react";
 const projects = [
   {
     title: "TJKT",
-    description: "Situs yang memperkenalkan jurusan TJKT di SMK Negeri 2 Lubuk Basung, termasuk kegiatan dan identitasnya.",
+    description: "A website introducing the TJKT department at SMK Negeri 2 Lubuk Basung, including its activities and identity.",
     live: "https://tjkt-tech.vercel.app",
     source: "https://github.com/Reyhan-irza/TJKT",
   },
   {
     title: "VIREON Library",
-    description: "Sistem perpustakaan digital untuk mengelola buku, anggota, peminjaman, dan laporan.",
+    description: "A digital library system for managing books, members, loans, and reports.",
     live: "https://vireon-lib.vercel.app",
     source: "https://github.com/Reyhan-irza/Library",
   },
   {
     title: "Reyhan WhatsApp Portfolio",
-    description: "Portofolio pribadi yang menampilkan karya dan eksperimen terkait WhatsApp.",
+    description: "A personal portfolio built around my WhatsApp-related work and experiments.",
     live: "https://reyhan-watsap-portfolio.vercel.app",
     source: "https://github.com/Reyhan-irza/reyhan-portfolio",
   },
@@ -25,7 +25,7 @@ const education = [
   ["2014–2015", "TK", "Taman Kanak-kanak"],
   ["2015–2021", "SD", "Sekolah Dasar"],
   ["2021–2024", "SMP", "Sekolah Menengah Pertama"],
-  ["2024–sekarang", "SMK", "Sekolah Menengah Kejuruan · SMK Negeri 2 Lubuk Basung · TJKT"],
+    ["2024–sekarang", "SMK", "Sekolah Menengah Kejuruan · SMK Negeri 2 Lubuk Basung · TJKT"],
 ];
 
 const contacts = [
