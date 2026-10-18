@@ -3,16 +3,16 @@ import { X, Flame } from "lucide-react";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const ROASTS = [
-  "Ada pencapaian khusus buat yang sampai ke footer. Di sini, menggulir pun dapat penghargaan.",
-  "Roadmap-nya bilang “lihat nanti arahnya ke mana”. Setidaknya ada satu rencana yang santai.",
-  "Tiga proyek dan beberapa catatan. Proyek mana yang ingin Anda lihat lebih dulu?",
-  "Ada playlist di halaman portofolio. Satu alasan lebih sedikit buat pindah tab.",
-  "Demo dan GitHub berdampingan. Lihat hasilnya, lalu intip kodenya.",
-  "Ada linimasa, pencapaian, dan roadmap. Portofolio ini punya daftar isi sendiri.",
-  "Portofolio pribadi dengan tombol roast. Pilihan yang berani.",
-  "Catatan proyeknya ada di sini. Semoga pesan commit-nya juga sejelas ini.",
-  "Pengunjung dapat pencapaian. Rupanya, menjelajah juga butuh sistem hadiah.",
-  "Ada catatan tentang proyek. Semoga pesan commit-nya sama jelasnya.",
+  "There’s an achievement for reaching the footer. Even scrolling gets a milestone here.",
+  "The roadmap says “see where it goes.” At least one plan has room to breathe.",
+  "Three projects, a few notes, and one question: which one should you open first?",
+  "A playlist on a portfolio page. One less reason to switch tabs.",
+  "Demo and GitHub links side by side. See the result, then take a look at the code.",
+  "A timeline, an award, and a roadmap. This portfolio has a table of contents of its own.",
+  "A personal portfolio with a “Roast me” button. Bold choice.",
+  "The project notes are here. The commit messages should be just as clear.",
+  "There are achievements for visitors. Apparently, browsing needed a reward system.",
+  "There are notes on the projects. Let’s hope the commit messages are just as clear.",
 ];
 
 export default function RoastButton() {
@@ -41,11 +41,11 @@ export default function RoastButton() {
       <button
         onClick={handleOpen}
           className="portfolio-roast-trigger fixed bottom-6 left-4 z-[90] flex items-center gap-2 px-4 py-2.5 rounded-full glass border border-[#a43f2d]/35 bg-[#a43f2d]/10 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/20 hover:border-[#a43f2d] hover:scale-105 active:scale-95 transition-all duration-300"
-        title="Roast situs ini"
-        aria-label="Lihat roast ringan tentang portofolio ini"
+        title="Roast this website"
+        aria-label="Get a light-hearted portfolio roast"
       >
         <Flame className="w-4 h-4" />
-        <span>Roast ringan</span>
+        <span>Roast Me!</span>
       </button>
 
       {/* Modal */}
@@ -56,9 +56,9 @@ export default function RoastButton() {
               <X className="w-5 h-5" />
             </button>
 
-             <div className="mb-3 text-xs font-mono uppercase tracking-[.16em] text-[#a43f2d]">Catatan kecil</div>
-             <h3 className="text-lg font-bold text-[#a43f2d] mb-1">Roast situs ini!</h3>
-              <p className="text-[#6d6a62] text-xs mb-5">Candaan ringan tentang portofolio ini.</p>
+             <div className="mb-3 text-xs font-mono uppercase tracking-[.16em] text-[#a43f2d]">Side note</div>
+             <h3 className="text-lg font-bold text-[#a43f2d] mb-1">Roast This Website!</h3>
+              <p className="text-[#6d6a62] text-xs mb-5">A light-hearted look at this portfolio.</p>
 
              <div className="glass border border-[#a43f2d]/20 rounded-xl p-5 min-h-[80px] flex items-center justify-center mb-5">
               {loading ? (

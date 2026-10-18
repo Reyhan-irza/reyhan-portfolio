@@ -42,7 +42,7 @@ export default function Footer() {
             <button
               onClick={() => scroll("#home")}
               className="mb-3 flex items-center gap-3 text-lg font-bold tracking-tight text-[#f5f7fa] transition-opacity hover:opacity-80"
-              aria-label="Kembali ke bagian beranda"
+              aria-label="Return to the home section"
             >
               <BrandLogo size="md" alt="" />
               <span>Reyhan Irza Alvano</span>
@@ -78,12 +78,12 @@ export default function Footer() {
           <p className="text-center text-xs text-neutral-500 sm:text-left">
             &copy; {year}{" "}
               <span className="font-medium text-neutral-200">Reyhan Irza Alvano</span>.
-            Hak cipta dilindungi.
+            All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
             <span className="font-mono text-[10px] tracking-wide text-neutral-500">
-              Teknologi: React · TypeScript · Tailwind
+              Built with React · TypeScript · Tailwind
             </span>
             <div className="flex items-center gap-3">
               <GuessMyAge />
@@ -91,10 +91,10 @@ export default function Footer() {
               <button
                 onClick={() => navigate("/admin")}
                 className="group flex items-center gap-1 text-xs text-neutral-400 transition-colors duration-300 hover:text-white"
-                title="Akses pengembang"
+                title="Developer Access"
               >
                 <Settings className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90" />
-                <span>Akses pengembang</span>
+                <span>Developer Access</span>
               </button>
             </div>
           </div>

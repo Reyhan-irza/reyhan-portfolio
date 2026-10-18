@@ -43,7 +43,7 @@ export default function ContactSection() {
         </header>
 
         <div className="contact-actions">
-          <ul aria-label="Cara lain menghubungi Reyhan" className="contact-list">
+          <ul aria-label="Contact links" className="contact-list">
             {contacts.map((contact, i) => (
               <ContactRow key={contact.id} contact={contact} delay={i * 70} />
             ))}
@@ -52,7 +52,7 @@ export default function ContactSection() {
             className="contact-primary-cta"
             href="mailto:irzanour@gmail.com"
             data-testid="link-contact-email"
-            aria-label="Kirim email ke Reyhan Irza Alvano"
+            aria-label="Send an email to Reyhan Irza Alvano"
           >
             <span className="contact-cta-copy">
               <span className="contact-cta-eyebrow">Ada proyek atau pertanyaan?</span>

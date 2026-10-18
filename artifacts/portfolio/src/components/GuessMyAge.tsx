@@ -29,11 +29,11 @@ export default function GuessMyAge() {
 
     if (g === DEVELOPER_AGE) {
       setStatus("won");
-      setFeedback(`Benar! Usia saya ${DEVELOPER_AGE} tahun. Tebakan yang tepat.`);
+      setFeedback(`Exactly! I'm ${DEVELOPER_AGE} years old. Great guess.`);
       unlockAchievement(ACHIEVEMENTS.AGE_GUESSER);
     } else if (remaining === 0) {
       setStatus("lost");
-      setFeedback(`Belum tepat. Usia saya ${DEVELOPER_AGE} tahun. Silakan coba lagi nanti.`);
+      setFeedback(`Not quite. I'm ${DEVELOPER_AGE} years old. Try again next time.`);
     } else {
       const diff = Math.abs(g - DEVELOPER_AGE);
       const hint = g < DEVELOPER_AGE
@@ -49,10 +49,10 @@ export default function GuessMyAge() {
       <button
         onClick={() => { setOpen(true); reset(); }}
         className="flex items-center gap-1.5 text-xs text-white/35 hover:text-violet-300 transition-colors duration-200"
-        aria-label="Mini game tebak usia Reyhan"
+        aria-label="Guess My Age mini game"
       >
         <HelpCircle className="w-3.5 h-3.5" />
-        Tebak usia saya
+        Guess My Age
       </button>
 
       {open && (
@@ -67,8 +67,8 @@ export default function GuessMyAge() {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-white font-semibold text-sm">Tebak usia saya</h3>
-                <p className="text-white/35 text-xs mt-0.5">Mini game singkat tentang saya.</p>
+                <h3 className="text-white font-semibold text-sm">Guess My Age</h3>
+                <p className="text-white/35 text-xs mt-0.5">A quick game about me.</p>
               </div>
               <button onClick={() => setOpen(false)} className="text-white/25 hover:text-white/60 transition-colors p-1">
                 <X className="w-4 h-4" />
@@ -76,7 +76,7 @@ export default function GuessMyAge() {
             </div>
 
             <p className="text-white/45 text-xs mb-5 leading-relaxed">
-              Menurut Anda, berapa usia saya? Tebak dengan benar dalam {MAX_ATTEMPTS} kesempatan.
+              How old do you think I am? Guess correctly in {MAX_ATTEMPTS} tries.
             </p>
 
             {/* Attempts bar */}
@@ -100,7 +100,7 @@ export default function GuessMyAge() {
                   onChange={(e) => setGuess(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGuess()}
                   className="flex-1 px-3 py-2 rounded-xl glass border border-white/10 bg-white/4 text-white text-sm outline-none focus:border-violet-500/40 transition-colors placeholder-white/20"
-                  placeholder="Masukkan tebakan…"
+                  placeholder="Enter your guess…"
                   min={1}
                   max={99}
                   autoFocus
@@ -109,7 +109,7 @@ export default function GuessMyAge() {
                   onClick={handleGuess}
                   className="btn-neon relative z-10 px-4 py-2 rounded-xl text-xs font-medium"
                 >
-                  <span className="relative z-10">Tebak</span>
+                  <span className="relative z-10">Guess</span>
                 </button>
               </div>
             )}

@@ -104,7 +104,7 @@ export default function MusicController() {
               <Music className={`w-4 h-4 text-[#a43f2d] ${playing ? "animate-pulse motion-reduce:animate-none" : ""}`} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[#211f1b] text-xs font-semibold">Musik latar</p>
+              <p className="text-[#211f1b] text-xs font-semibold">Background music</p>
                <p className={`text-[10px] ${playing ? "text-[#a43f2d]" : "text-[#6d6a62]"}`}>
                 {playing ? "● Diputar..." : "Dijeda"}
               </p>
@@ -136,7 +136,7 @@ export default function MusicController() {
             <button
               onClick={togglePlay}
                className="w-8 h-8 rounded-lg bg-[#a43f2d]/10 border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:bg-[#a43f2d]/20 transition-colors flex-shrink-0"
-              aria-label={playing ? "Jeda" : "Putar"}
+              aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
             </button>
@@ -144,7 +144,7 @@ export default function MusicController() {
             <button
               onClick={toggleMute}
                className="w-8 h-8 rounded-lg glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] transition-colors flex-shrink-0"
-              aria-label={muted ? "Nyalakan suara" : "Bisukan"}
+              aria-label={muted ? "Unmute" : "Mute"}
             >
               {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
             </button>
@@ -166,7 +166,7 @@ export default function MusicController() {
         onClick={() => setMin((p) => !p)}
         className={`w-10 h-10 rounded-xl glass border flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg
            ${playing ? "border-[#a43f2d]/40 text-[#a43f2d]" : "border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b]"}`}
-        aria-label={minimized ? "Buka pemutar musik" : "Minimalkan pemutar musik"}
+        aria-label={minimized ? "Open music player" : "Minimize music player"}
       >
         {minimized
           ? <Music className={`w-4 h-4 ${playing ? "animate-pulse motion-reduce:animate-none" : ""}`} />
