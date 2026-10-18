@@ -178,7 +178,7 @@ export default function CommentsSection() {
             Yoo wassup y&apos;all
           </p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Absen-absen or <span className="text-[#a43f2d]">Something</span>
+            Ayo tinggalkan pesan buat <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
