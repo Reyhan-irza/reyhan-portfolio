@@ -11,9 +11,9 @@ const projects = [
     id: 1,
     short: "TJKT",
     title: "TJKT",
-    type: "Situs jurusan",
+    type: "Department website",
     description:
-      "Situs yang memperkenalkan jurusan TJKT di SMK Negeri 2 Lubuk Basung, termasuk kegiatan dan identitasnya.",
+      "A website introducing the TJKT department at SMK Negeri 2 Lubuk Basung, including its activities and identity.",
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
@@ -21,7 +21,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/tjkt-homepage.webp`,
       width: 1440,
       height: 1000,
-      alt: "Halaman utama situs jurusan TJKT dengan identitas sekolah dan informasi program jaringan.",
+      alt: "TJKT department website homepage with its school identity and networking-program information.",
     },
     accent: "TJKT",
   },
@@ -29,9 +29,9 @@ const projects = [
     id: 2,
     short: "VR",
     title: "VIREON Library",
-    type: "Perpustakaan digital",
+    type: "Digital library",
     description:
-      "Sistem perpustakaan digital untuk mengelola buku, anggota, peminjaman, dan laporan.",
+      "A digital library system for managing books, members, loans, and reports.",
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
@@ -39,7 +39,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/vireon-library.webp`,
       width: 1440,
       height: 857,
-      alt: "Halaman utama VIREON Library dengan pratinjau dasbor pengelolaan perpustakaan dan ringkasan alur kerja.",
+      alt: "VIREON Library landing page with a library-management dashboard preview and workflow summary.",
     },
     accent: "VIREON",
   },
@@ -47,9 +47,9 @@ const projects = [
     id: 3,
     short: "WA",
     title: "Reyhan WhatsApp Portfolio",
-    type: "Portofolio pribadi",
+    type: "Personal portfolio",
     description:
-      "Portofolio pribadi yang menampilkan karya dan eksperimen terkait WhatsApp.",
+      "A personal portfolio built around my WhatsApp-related work and experiments.",
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
@@ -57,7 +57,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/reyhan-portfolio.webp`,
       width: 1440,
       height: 857,
-      alt: "Halaman utama portofolio Reyhan Irza Alvano dari situs portofolio terkait WhatsApp.",
+      alt: "Reyhan Irza Alvano portfolio homepage captured from the public WhatsApp-related portfolio site.",
     },
     accent: "REYHAN",
   },
@@ -501,10 +501,10 @@ export default function ProjectsSection() {
           className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <p className="projects-kicker mb-5">Proyek pilihan</p>
+            <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
               <span className="block overflow-hidden"><span data-project-title-line className="block">Yang benar-benar</span></span>
-              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">saya bangun.</span></span>
+              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">I’ve built.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-sm md:mb-1 md:text-base">
@@ -695,7 +695,7 @@ export default function ProjectsSection() {
           >
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="project-detail-label">Proyek / 0{modal.id}</p>
+                  <p className="project-detail-label">Project / 0{modal.id}</p>
                  <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
                   {modal.title}
                 </h3>
@@ -713,12 +713,12 @@ export default function ProjectsSection() {
             </div>
 
              <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
-              <p className="project-detail-label">Tentang proyek ini</p>
+                <p className="project-detail-label">About this project</p>
                <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
             </div>
 
             <div className="mt-7">
-              <p className="project-detail-label">Dibuat dengan</p>
+              <p className="project-detail-label">Built with</p>
               <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                 {modal.tech.map((technology) => (
                    <span key={technology} className="text-sm text-[#211f1b]">

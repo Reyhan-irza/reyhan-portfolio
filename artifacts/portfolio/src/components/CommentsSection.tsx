@@ -175,10 +175,10 @@ export default function CommentsSection() {
         {/* HEADER */}
         <div ref={headerRef} className="fade-up text-center mb-14">
           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Pesan pengunjung
+            COMMENTS
           </p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Tinggalkan pesan untuk <span className="text-[#a43f2d]">Reyhan</span>
+            Leave a message for <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Terima kasih sudah berkunjung.</p>
@@ -243,7 +243,7 @@ export default function CommentsSection() {
               <input
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                placeholder="Cari nama atau komentar..."
+                placeholder="Search names or comments..."
                  className="w-full pl-10 pr-4 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
               />
             </div>
@@ -254,16 +254,16 @@ export default function CommentsSection() {
                 onChange={(e) => { setSort(e.target.value as "newest" | "oldest"); setPage(1); }}
                  className="bg-transparent text-[#211f1b] text-sm focus:outline-none cursor-pointer"
               >
-                 <option value="newest" className="bg-[#f3efe6]">Terbaru</option>
-                 <option value="oldest" className="bg-[#f3efe6]">Terlama</option>
+                 <option value="newest" className="bg-[#f3efe6]">Newest</option>
+                 <option value="oldest" className="bg-[#f3efe6]">Oldest</option>
               </select>
             </div>
           </div>
         )}
 
-        {dataLoading && <p role="status" className="sr-only">Memuat komentar.</p>}
+        {dataLoading && <p role="status" className="sr-only">Loading comments.</p>}
         {!dataLoading && !dataError && comments.length > 0 && (
-          <p role="status" className="sr-only">Komentar berhasil dimuat.</p>
+          <p role="status" className="sr-only">Comments loaded.</p>
         )}
 
         {/* LIST */}

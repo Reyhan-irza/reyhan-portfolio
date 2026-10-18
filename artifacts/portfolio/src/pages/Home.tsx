@@ -63,27 +63,27 @@ export default function Home() {
   return (
     <div className="portfolio-shell relative min-h-[100dvh]">
       <AuroraBackground />
-      <a className="skip-to-content" href="#main-content">Lewati ke konten</a>
+      <a className="skip-to-content" href="#main-content">Skip to content</a>
       <Navbar />
       <main id="main-content" className="relative z-10">
         <HeroSection />
         <TechnologyBands />
-        <section id="proof" className="proof-strip px-6" aria-label="Ringkasan portofolio">
+        <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
-              <strong>Tiga proyek yang saya bangun</strong>
-              <span>TJKT, VIREON Library, dan Reyhan WhatsApp Portfolio.</span>
+              <strong>Three projects I’ve built</strong>
+              <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">02</span>
-              <strong>Belajar lewat proyek web</strong>
-              <span>Terus mengeksplorasi pemrograman, AI, dan teknologi web.</span>
+              <strong>Web development practice</strong>
+              <span>Exploring code, AI, and web technologies.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>
-              <strong>Pencapaian kompetisi</strong>
-              <span>CTF Competition · posisi kedua; LKS IT Software Solution For Business · Juara I.</span>
+              <strong>Competition results</strong>
+              <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · 1st place.</span>
             </div>
           </div>
         </section>

@@ -17,12 +17,12 @@ export default function Footer() {
   const [, navigate] = useLocation();
 
   const links = [
-    { label: "Beranda",  href: "#home"     },
-    { label: "Tentang",  href: "#about"    },
-    { label: "Proyek",   href: "#projects" },
-    { label: "Perjalanan", href: "#journey" },
-    { label: "Pencapaian", href: "#achievement" },
-    { label: "Kontak",   href: "#contact"  },
+    { label: "Home",     href: "#home"     },
+    { label: "About",    href: "#about"    },
+    { label: "Projects", href: "#projects" },
+    { label: "Journey",  href: "#journey"  },
+    { label: "Awards",   href: "#achievement" },
+    { label: "Contact",  href: "#contact"  },
   ];
 
   const scroll = (href: string) => {

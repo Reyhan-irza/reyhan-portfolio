@@ -12,7 +12,7 @@ const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 
 function RouteLoadingState() {
   return (
-    <main className="min-h-[100dvh] bg-[#05070b] px-6 pt-28 text-[#c9d0dc]" role="status" aria-label="Memuat halaman">
+    <main className="min-h-[100dvh] bg-[#05070b] px-6 pt-28 text-[#c9d0dc]" role="status" aria-label="Loading page">
       <div className="mx-auto max-w-5xl animate-pulse space-y-5">
         <div className="h-2 w-24 bg-white/10" />
         <div className="h-10 max-w-lg bg-white/[.07]" />

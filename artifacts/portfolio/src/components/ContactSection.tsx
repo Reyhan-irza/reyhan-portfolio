@@ -33,9 +33,9 @@ export default function ContactSection() {
     <section id="contact" className="contact-section relative px-4 py-20 sm:px-6 md:py-28">
       <div className="contact-layout mx-auto max-w-6xl">
         <header ref={headerRef} className="contact-intro fade-up">
-          <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Kontak</p>
+          <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Contact</p>
           <h2 data-motion-item className="contact-title text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
-            Mari berbincang.
+            Let's talk.
           </h2>
           <p data-motion-item className="contact-description mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
             Untuk proyek, kolaborasi, atau pertanyaan seputar karya saya, silakan hubungi saya.
@@ -56,7 +56,7 @@ export default function ContactSection() {
           >
             <span className="contact-cta-copy">
               <span className="contact-cta-eyebrow">Ada proyek atau pertanyaan?</span>
-              <span className="contact-cta-title">Kirim email</span>
+              <span className="contact-cta-title">Send me an email</span>
             </span>
             <span className="contact-cta-arrow" aria-hidden="true"><ArrowUpRight className="h-5 w-5" /></span>
           </a>

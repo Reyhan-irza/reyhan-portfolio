@@ -17,7 +17,7 @@ export default function AboutSection() {
         <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div data-motion-item>
             <p className="section-kicker">01 / About</p>
-            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Masih belajar. Terus membangun.</h2>
+            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Still learning. Still building.</h2>
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">

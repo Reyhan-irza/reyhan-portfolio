@@ -117,14 +117,14 @@ export default function NewsSection() {
       <div className="max-w-6xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-14">
            <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Kabar terbaru
+            LATEST NEWS
           </p>
            <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Berita &amp; <span className="text-[#a43f2d]">Pembaruan</span>
+            News &amp; <span className="text-[#a43f2d]">Updates</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
            <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Catatan tentang proyek dan hal yang sedang saya kerjakan.
+            Updates from projects and things I’m working on.
           </p>
         </div>
 
@@ -136,23 +136,23 @@ export default function NewsSection() {
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonNewsCard key={i} />)
             : loadError
-              ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">Berita belum dapat dimuat saat ini.</p>
+              ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">News could not be loaded right now.</p>
               : news.length === 0
-                ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">Belum ada berita yang dipublikasikan.</p>
+                ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">No news has been published yet.</p>
                 : news.map((item) => <NewsCard key={item.id} item={item} />)
           }
         </div>
 
-        {loading && <p role="status" className="sr-only">Memuat berita.</p>}
+        {loading && <p role="status" className="sr-only">Loading news.</p>}
         {!loading && !loadError && news.length > 0 && (
           <p role="status" className="sr-only">
-            {news.length} artikel berita berhasil dimuat.
+            {news.length} news articles loaded.
           </p>
         )}
 
         {!loading && !loadError && news.length > 0 && <div className="mt-6 flex items-center justify-center">
              <span className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
-            <Newspaper className="w-3 h-3" /> {news.length} artikel dipublikasikan
+            <Newspaper className="w-3 h-3" /> {news.length} articles published
           </span>
         </div>}
       </div>
