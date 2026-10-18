@@ -16,12 +16,12 @@ export default function AboutSection() {
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div data-motion-item>
-            <p className="section-kicker">01 / About</p>
+            <p className="section-kicker">01 / Tentang gue</p>
             <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Masih belajar. Terus membangun.</h2>
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
-              I’m Reyhan, a student at SMK Negeri 2 Lubuk Basung studying TJKT. I learn by building things, testing ideas, breaking them, fixing them, and trying again.
+              Gue Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Gue belajar dengan membangun proyek, mencoba ide, menemukan masalah, lalu memperbaikinya.
             </p>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">Dari rasa penasaran di warnet sampai proyek yang gue bangun sekarang, proses belajarnya terus berlanjut.</p>
           </div>

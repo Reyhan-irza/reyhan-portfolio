@@ -319,7 +319,7 @@ export default function CommentsSection() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className="text-[#a43f2d] font-semibold text-xs">{r.admin_name || "Developer"}</span>
+                            <span className="text-[#a43f2d] font-semibold text-xs">{r.admin_name || "Pengembang"}</span>
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#a43f2d]/10 border border-[#a43f2d]/20 text-[9px] font-bold text-[#a43f2d] uppercase tracking-wider">
                               <BadgeCheck className="w-2.5 h-2.5" /> DEVELOPER
                             </span>

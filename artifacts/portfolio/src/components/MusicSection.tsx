@@ -272,7 +272,7 @@ function MusicCard({
       {isSelected && (
         <span className="mt-2 inline-flex items-center gap-1.5 text-[#aeb8ff] text-[10px] font-semibold uppercase tracking-[0.12em]">
           <Check className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
-          Selected for Spotify
+          Dipilih untuk Spotify
         </span>
       )}
     </button>

@@ -38,13 +38,13 @@ function formatDate(dateStr: string) {
   const days = Math.floor(diff / 86_400_000);
   if (days < 1) return "hari ini";
   if (days === 1) return "kemarin";
-  if (days < 30) return `${days} days ago`;
+  if (days < 30) return `${days} hari yang lalu`;
   if (days < 365) {
     const months = Math.floor(days / 30);
-    return `${months} ${months === 1 ? "month" : "months"} ago`;
+    return `${months} bulan yang lalu`;
   }
   const years = Math.floor(days / 365);
-  return `${years} ${years === 1 ? "year" : "years"} ago`;
+  return `${years} tahun yang lalu`;
 }
 
 function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {

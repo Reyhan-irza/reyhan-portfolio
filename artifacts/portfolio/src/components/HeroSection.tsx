@@ -252,7 +252,7 @@ export default function HeroSection() {
                 Lihat proyek gue <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
               </m.button>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Say hello <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                Sapa gue <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
               </m.button>
             </LazyMotion>
           </div>

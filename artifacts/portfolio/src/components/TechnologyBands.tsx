@@ -98,7 +98,7 @@ const bands: readonly TechnologyBand[] = [
   {
     id: "build",
     number: "01",
-    label: "BUILD",
+    label: "PENGEMBANGAN",
     direction: "left",
     duration: 30,
     mobileDuration: 36,
@@ -107,7 +107,7 @@ const bands: readonly TechnologyBand[] = [
   {
     id: "system",
     number: "02",
-    label: "SYSTEM",
+    label: "SISTEM",
     direction: "right",
     duration: 36,
     mobileDuration: 42,
@@ -116,7 +116,7 @@ const bands: readonly TechnologyBand[] = [
   {
     id: "network",
     number: "03",
-    label: "NETWORK",
+    label: "JARINGAN",
     direction: "left",
     duration: 42,
     mobileDuration: 48,
@@ -322,18 +322,18 @@ export default function TechnologyBands() {
       aria-labelledby="technology-bands-title"
     >
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
-        Technologies I use
+        Teknologi yang gue gunakan
       </h2>
       <header className="technology-bands__header" data-section-header>
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
             <span>01</span>
             <span aria-hidden="true">/</span>
-            <span>TOOLS IN MOTION</span>
+            <span>TEKNOLOGI YANG DIGUNAKAN</span>
           </p>
         </div>
         <p className="technology-bands__intro">
-          Languages, systems and networks behind the work.
+          Bahasa pemrograman, sistem, dan jaringan yang mendukung proyek gue.
         </p>
       </header>
 
@@ -361,7 +361,7 @@ export default function TechnologyBands() {
                   {[0, 1].map((copy) => (
                     <ul
                       className="technology-band__sequence"
-                      aria-label={copy === 0 ? `${band.label} technologies` : undefined}
+                      aria-label={copy === 0 ? `Teknologi ${band.label.toLowerCase()}` : undefined}
                       aria-hidden={copy === 1}
                       key={copy}
                     >

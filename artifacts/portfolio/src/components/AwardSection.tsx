@@ -9,12 +9,12 @@ const otherEvidence = [
   {
     index: "01",
     category: "Hasil kompetisi",
-    title: "2nd place",
+    title: "Posisi kedua",
     source: "CTF Competition",
   },
   {
     index: "02",
-    category: "Digital library project",
+    category: "Proyek perpustakaan digital",
     title: "VIREON Library",
     source: "A digital library system for managing books, members, loans, and reports.",
   },
@@ -174,7 +174,7 @@ export default function AwardSection() {
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              View certificate
+              Lihat sertifikat
             </a>
             <a
               href={certificateUrl}
@@ -183,7 +183,7 @@ export default function AwardSection() {
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
-              Download PDF
+              Unduh PDF
             </a>
           </div>
         </div>

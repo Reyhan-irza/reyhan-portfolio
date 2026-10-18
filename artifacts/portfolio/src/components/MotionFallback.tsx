@@ -94,7 +94,7 @@ export default function MotionFallback() {
 
         <main>
           <section id="about" aria-labelledby="fallback-about-title" style={sectionStyle}>
-            <h2 id="fallback-about-title">Perjalanan belajar gue</h2>
+            <h2 id="fallback-about-title">Tentang gue</h2>
             <p>Sekitar 2015, gue sering ke warnet dan makin penasaran sama komputer, walau belum punya komputer sendiri.</p>
             <p>Selama pandemi, gue mencoba berbagai kegiatan online untuk mendapat uang tambahan. Dari situ, gue mulai mengenal Python, script, dan bot WhatsApp.</p>
             <p>Pada 2025, gue mulai mengeksplorasi coding dan AI, lalu ikut LKS IT Software Solution For Business meski belum pernah belajar C#. Gue jadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
@@ -172,7 +172,7 @@ export default function MotionFallback() {
             <a href="#achievement" style={linkStyle}>Pencapaian</a>
             <a href="#contact" style={linkStyle}>Kontak</a>
           </nav>
-          <p>© {new Date().getFullYear()} Reyhan Irza Alvano. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Reyhan Irza Alvano. Hak cipta dilindungi.</p>
           <p>Teknologi: React · TypeScript · Tailwind</p>
         </footer>
       </div>
