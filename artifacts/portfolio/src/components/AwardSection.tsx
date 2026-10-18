@@ -135,7 +135,7 @@ export default function AwardSection() {
               Kabupaten Agam
             </p>
           </div>
-          <p className="text-xs leading-relaxed text-white/45">Gue jadi satu-satunya perwakilan sekolah di LKS IT Software Solution For Business 2025 dan meraih Juara I tingkat Kabupaten Agam.</p>
+          <p className="text-xs leading-relaxed text-white/45">Saya menjadi satu-satunya perwakilan sekolah di LKS IT Software Solution For Business 2025 dan meraih Juara I tingkat Kabupaten Agam.</p>
         </div>
 
         <div data-motion-item className="min-w-0">

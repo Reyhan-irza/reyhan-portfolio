@@ -126,7 +126,7 @@ export default function PortfolioRatingSection() {
         // The database write succeeded; retain the in-memory selection.
       }
       setMyRating(value);
-      setFeedback("Terima kasih, rating kamu sudah tersimpan.");
+      setFeedback("Terima kasih, penilaian Anda sudah tersimpan.");
 
       const { data, error: summaryFetchError } = await supabase
         .from("portfolio_rating_summary")

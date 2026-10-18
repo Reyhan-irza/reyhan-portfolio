@@ -242,10 +242,10 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           </div>
         </div>
         <div data-intro-identity className="rv-intro-identity">
-          <p data-intro-copy className="rv-intro-kicker">PELAJAR SMK / LUBUK BASUNG, INDONESIA</p>
+          <p data-intro-copy className="rv-intro-kicker">HALO / LUBUK BASUNG, INDONESIA</p>
           <h1 id="intro-name" data-intro-copy className="rv-intro-name">Reyhan Irza Alvano</h1>
           <p data-intro-copy className="rv-intro-role">Pelajar SMK · Pengembang web</p>
-          <p data-intro-copy className="rv-intro-story">Gue belajar dengan terus membangun.</p>
+          <p data-intro-copy className="rv-intro-story">Selamat datang di portofolio saya.</p>
         </div>
       </div>
     </div>

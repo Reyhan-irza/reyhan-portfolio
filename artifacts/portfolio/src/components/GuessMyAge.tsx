@@ -29,11 +29,11 @@ export default function GuessMyAge() {
 
     if (g === DEVELOPER_AGE) {
       setStatus("won");
-      setFeedback(`Tepat! Umur gue ${DEVELOPER_AGE} tahun. Tebakan bagus.`);
+      setFeedback(`Benar! Usia saya ${DEVELOPER_AGE} tahun. Tebakan yang tepat.`);
       unlockAchievement(ACHIEVEMENTS.AGE_GUESSER);
     } else if (remaining === 0) {
       setStatus("lost");
-      setFeedback(`Belum tepat. Umur gue ${DEVELOPER_AGE} tahun. Coba lagi lain kali.`);
+      setFeedback(`Belum tepat. Usia saya ${DEVELOPER_AGE} tahun. Silakan coba lagi nanti.`);
     } else {
       const diff = Math.abs(g - DEVELOPER_AGE);
       const hint = g < DEVELOPER_AGE
@@ -49,10 +49,10 @@ export default function GuessMyAge() {
       <button
         onClick={() => { setOpen(true); reset(); }}
         className="flex items-center gap-1.5 text-xs text-white/35 hover:text-violet-300 transition-colors duration-200"
-        aria-label="Mini game tebak umur gue"
+        aria-label="Mini game tebak usia Reyhan"
       >
         <HelpCircle className="w-3.5 h-3.5" />
-        Tebak umur gue
+        Tebak usia saya
       </button>
 
       {open && (
@@ -67,8 +67,8 @@ export default function GuessMyAge() {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-white font-semibold text-sm">Tebak umur gue</h3>
-                <p className="text-white/35 text-xs mt-0.5">Tebak umur gue dalam mini game singkat.</p>
+                <h3 className="text-white font-semibold text-sm">Tebak usia saya</h3>
+                <p className="text-white/35 text-xs mt-0.5">Mini game singkat tentang saya.</p>
               </div>
               <button onClick={() => setOpen(false)} className="text-white/25 hover:text-white/60 transition-colors p-1">
                 <X className="w-4 h-4" />
@@ -76,7 +76,7 @@ export default function GuessMyAge() {
             </div>
 
             <p className="text-white/45 text-xs mb-5 leading-relaxed">
-              Menurut lo, berapa umur gue? Tebak dengan benar dalam {MAX_ATTEMPTS} kesempatan.
+              Menurut Anda, berapa usia saya? Tebak dengan benar dalam {MAX_ATTEMPTS} kesempatan.
             </p>
 
             {/* Attempts bar */}

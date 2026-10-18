@@ -153,7 +153,7 @@ export default function GitHubSection() {
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Beberapa repositori dan eksperimen yang sedang gue kerjakan.
+            Beberapa repositori dan eksperimen yang sedang saya kerjakan.
           </p>
         </div>
 

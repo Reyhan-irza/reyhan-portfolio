@@ -322,7 +322,7 @@ export default function TechnologyBands() {
       aria-labelledby="technology-bands-title"
     >
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
-        Teknologi yang gue gunakan
+        Teknologi yang saya gunakan
       </h2>
       <header className="technology-bands__header" data-section-header>
         <div className="technology-bands__heading">
@@ -333,7 +333,7 @@ export default function TechnologyBands() {
           </p>
         </div>
         <p className="technology-bands__intro">
-          Bahasa pemrograman, sistem, dan jaringan yang mendukung proyek gue.
+          Bahasa pemrograman, sistem, dan jaringan yang mendukung proyek saya.
         </p>
       </header>
 

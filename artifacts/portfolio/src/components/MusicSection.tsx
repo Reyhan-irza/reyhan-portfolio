@@ -133,7 +133,7 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Musik pilihan gue</p>
+          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Pilihan musik saya</p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
             Artis <span className="text-[#8290ff]">favorit</span>
           </h2>

@@ -35,15 +35,15 @@ export default function ContactSection() {
         <header ref={headerRef} className="contact-intro fade-up">
           <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Kontak</p>
           <h2 data-motion-item className="contact-title text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
-            Yuk, ngobrol.
+            Mari berbincang.
           </h2>
           <p data-motion-item className="contact-description mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
-            Kalau lo mau ngobrol soal proyek, kolaborasi, atau karya yang gue bangun, hubungi gue lewat tautan ini.
+            Untuk proyek, kolaborasi, atau pertanyaan seputar karya saya, silakan hubungi saya.
           </p>
         </header>
 
         <div className="contact-actions">
-          <ul aria-label="Cara lain menghubungi gue" className="contact-list">
+          <ul aria-label="Cara lain menghubungi Reyhan" className="contact-list">
             {contacts.map((contact, i) => (
               <ContactRow key={contact.id} contact={contact} delay={i * 70} />
             ))}
@@ -55,8 +55,8 @@ export default function ContactSection() {
             aria-label="Kirim email ke Reyhan Irza Alvano"
           >
             <span className="contact-cta-copy">
-              <span className="contact-cta-eyebrow">Punya proyek atau pertanyaan?</span>
-              <span className="contact-cta-title">Kirim email ke gue</span>
+              <span className="contact-cta-eyebrow">Ada proyek atau pertanyaan?</span>
+              <span className="contact-cta-title">Kirim email</span>
             </span>
             <span className="contact-cta-arrow" aria-hidden="true"><ArrowUpRight className="h-5 w-5" /></span>
           </a>

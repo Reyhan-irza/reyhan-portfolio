@@ -2,9 +2,9 @@ import { Circle, BookOpen, Blocks, Compass } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const roadmap = [
-  { label: "Latihan", title: "Terus belajar", desc: "Gue terus memperdalam HTML, CSS, JavaScript, C#, TypeScript, dan Tailwind sambil membangun proyek.", Icon: BookOpen },
-  { label: "Proyek", title: "Terus membangun", desc: "Gue mengerjakan proyek di waktu luang untuk menambah pengalaman praktik.", Icon: Blocks },
-  { label: "Tujuan", title: "Menjadi pengembang web full-stack", desc: "Gue ingin menjadi pengembang web full-stack dengan pemahaman praktis tentang AI yang kuat.", Icon: Compass },
+  { label: "Latihan", title: "Terus belajar", desc: "Saya terus memperdalam HTML, CSS, JavaScript, C#, TypeScript, dan Tailwind sambil membangun proyek.", Icon: BookOpen },
+  { label: "Proyek", title: "Terus membangun", desc: "Saya mengerjakan proyek di waktu luang untuk menambah pengalaman praktik.", Icon: Blocks },
+  { label: "Tujuan", title: "Pengembang web full-stack", desc: "Saya ingin menjadi pengembang web full-stack dengan pemahaman praktis AI yang kuat.", Icon: Compass },
 ] as const;
 
 export default function RoadmapSection() {
@@ -15,8 +15,8 @@ export default function RoadmapSection() {
     <section id="roadmap" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={ref} className="fade-up grid gap-8 border-b border-[rgba(27,28,24,.16)] pb-10 md:grid-cols-[1fr_1fr]">
-          <div data-motion-item><p className="section-kicker">Fokus gue sekarang</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Belajar sambil membangun.</h2></div>
-          <p className="max-w-md text-base leading-relaxed text-[#65675f]" data-motion-item>Gue terus mengeksplorasi AI dan teknologi web, lalu menerapkannya lewat proyek.</p>
+          <div data-motion-item><p className="section-kicker">Roadmap</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Belajar sambil membangun.</h2></div>
+          <p className="max-w-md text-base leading-relaxed text-[#65675f]" data-motion-item>Saya terus mengeksplorasi AI dan teknologi web, lalu menerapkannya lewat proyek.</p>
         </div>
         <ol ref={roadmapRef} className="mt-5 divide-y divide-[rgba(27,28,24,.16)] border-b border-[rgba(27,28,24,.16)]">
           {roadmap.map(({ label, title, desc, Icon }) => (

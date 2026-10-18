@@ -82,23 +82,23 @@ export default function MotionFallback() {
           </nav>
           <section id="home" aria-labelledby="fallback-title">
             <p style={{ color: "#aab4ff", fontSize: ".8rem", letterSpacing: ".12em" }}>
-              PELAJAR SMK / LUBUK BASUNG, INDONESIA
+              HALO / LUBUK BASUNG, INDONESIA
             </p>
             <h1 id="fallback-title" style={{ fontSize: "clamp(2.25rem, 9vw, 5rem)", lineHeight: 1.05, marginBlock: ".75rem" }}>
               Reyhan Irza Alvano
             </h1>
             <p>Pelajar SMK · Pengembang web</p>
-            <p>Rasa penasaran gue pada komputer dimulai sekitar 2015. Sekarang gue belajar dengan membangun proyek web dan bereksperimen dengan teknologi.</p>
+            <p>Saya Reyhan. Rasa ingin tahu tentang komputer tumbuh sejak sekitar 2015, saat saya sering berkunjung ke warnet. Sekarang, saya belajar lewat proyek web dan eksplorasi teknologi.</p>
           </section>
         </header>
 
         <main>
           <section id="about" aria-labelledby="fallback-about-title" style={sectionStyle}>
-            <h2 id="fallback-about-title">Tentang gue</h2>
-            <p>Sekitar 2015, gue sering ke warnet dan makin penasaran sama komputer, walau belum punya komputer sendiri.</p>
-            <p>Selama pandemi, gue mencoba berbagai kegiatan online untuk mendapat uang tambahan. Dari situ, gue mulai mengenal Python, skrip, dan bot WhatsApp.</p>
-            <p>Pada 2025, gue mulai mengeksplorasi pemrograman dan AI, lalu ikut LKS IT Software Solution For Business meski belum pernah belajar C#. Gue jadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
-            <p>Setelah LKS, gue memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, gue mengeksplorasi pengembangan berbantuan AI dengan Replit Agent, TypeScript, dan Tailwind. Gue terus bikin proyek di waktu luang dan bercita-cita jadi pengembang web full-stack dengan pemahaman AI yang kuat.</p>
+            <h2 id="fallback-about-title">About me</h2>
+            <p>Sekitar 2015, saya sering berkunjung ke warnet dan mulai tertarik pada komputer, meski belum memilikinya sendiri.</p>
+            <p>Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Dari situ, saya mulai mengenal Python, scripts, dan WhatsApp bots.</p>
+            <p>Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business meski belum pernah belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
+            <p>Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus mengerjakan proyek di waktu luang dan ingin menjadi pengembang web full-stack dengan pemahaman AI yang kuat.</p>
           </section>
 
           <section id="projects" aria-labelledby="fallback-projects-title" style={sectionStyle}>
@@ -151,7 +151,7 @@ export default function MotionFallback() {
 
           <section id="contact" aria-labelledby="fallback-contact-title" style={sectionStyle}>
             <h2 id="fallback-contact-title">Kontak</h2>
-            <p>Kalau lo mau ngobrol soal proyek, kolaborasi, atau karya yang gue bangun, hubungi gue lewat tautan ini.</p>
+            <p>Untuk proyek, kolaborasi, atau pertanyaan seputar karya saya, silakan hubungi saya.</p>
             <ul>
               {contacts.map(([label, href]) => (
                 <li key={label} style={{ paddingBlock: ".3rem" }}>

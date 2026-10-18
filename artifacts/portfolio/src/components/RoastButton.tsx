@@ -5,11 +5,11 @@ import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 const ROASTS = [
   "Ada pencapaian khusus buat yang sampai ke footer. Di sini, menggulir pun dapat penghargaan.",
   "Roadmap-nya bilang “lihat nanti arahnya ke mana”. Setidaknya ada satu rencana yang santai.",
-  "Tiga proyek dan beberapa catatan. Pertanyaannya: lo mau buka yang mana dulu?",
+  "Tiga proyek dan beberapa catatan. Proyek mana yang ingin Anda lihat lebih dulu?",
   "Ada playlist di halaman portofolio. Satu alasan lebih sedikit buat pindah tab.",
   "Demo dan GitHub berdampingan. Lihat hasilnya, lalu intip kodenya.",
   "Ada linimasa, pencapaian, dan roadmap. Portofolio ini punya daftar isi sendiri.",
-  "Portofolio pribadi dengan tombol “Roast gue”. Berani juga.",
+  "Portofolio pribadi dengan tombol roast. Pilihan yang berani.",
   "Catatan proyeknya ada di sini. Semoga pesan commit-nya juga sejelas ini.",
   "Pengunjung dapat pencapaian. Rupanya, menjelajah juga butuh sistem hadiah.",
   "Ada catatan tentang proyek. Semoga pesan commit-nya sama jelasnya.",
@@ -45,7 +45,7 @@ export default function RoastButton() {
         aria-label="Lihat roast ringan tentang portofolio ini"
       >
         <Flame className="w-4 h-4" />
-        <span>Roast gue!</span>
+        <span>Roast ringan</span>
       </button>
 
       {/* Modal */}

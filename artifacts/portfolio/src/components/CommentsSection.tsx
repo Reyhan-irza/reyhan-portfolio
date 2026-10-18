@@ -175,13 +175,13 @@ export default function CommentsSection() {
         {/* HEADER */}
         <div ref={headerRef} className="fade-up text-center mb-14">
           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Hai, apa kabar?
+            Pesan pengunjung
           </p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Ayo tinggalkan pesan buat <span className="text-[#a43f2d]">Reyhan</span>
+            Tinggalkan pesan untuk <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Tinggalkan pesan buat gue.</p>
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Terima kasih sudah berkunjung.</p>
         </div>
 
         {/* FORM */}
@@ -196,7 +196,7 @@ export default function CommentsSection() {
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (error) setError(""); }}
                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all"
-                  placeholder="Nama kamu..."
+                  placeholder="Masukkan nama Anda..."
                   maxLength={50}
                   disabled={submitting}
                 />
@@ -213,7 +213,7 @@ export default function CommentsSection() {
                   onChange={(e) => { setMessage(e.target.value); if (error) setError(""); }}
                   rows={3}
                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all resize-none"
-                  placeholder="Tulis pesan kamu..."
+                  placeholder="Tulis pesan untuk Reyhan..."
                   maxLength={500}
                   disabled={submitting}
                 />

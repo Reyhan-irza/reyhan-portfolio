@@ -236,23 +236,23 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                Rasa penasaran gue pada komputer dimulai sekitar 2015. Sekarang gue belajar dengan membangun proyek web dan bereksperimen dengan teknologi.
+                Halo, saya Reyhan. Rasa ingin tahu tentang komputer tumbuh sejak sekitar 2015, saat saya sering berkunjung ke warnet. Sekarang, saya belajar lewat proyek web dan eksplorasi teknologi.
               </p>
             </div>
             <p className="relative max-w-[220px] pl-4 text-xs leading-relaxed text-[#8b93a3]">
               <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
               <span data-hero-callout-copy className="block">
-              Gue terus mengasah kemampuan web dan mengeksplorasi AI sambil membangun proyek di waktu luang.
+              Saya terus mengembangkan kemampuan web dan mengeksplorasi AI melalui proyek yang saya kerjakan di waktu luang.
               </span>
             </p>
           </div>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <LazyMotion features={domAnimation}>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Lihat proyek gue <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+                Lihat proyek <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
               </m.button>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Sapa gue <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                Hubungi saya <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
               </m.button>
             </LazyMotion>
           </div>

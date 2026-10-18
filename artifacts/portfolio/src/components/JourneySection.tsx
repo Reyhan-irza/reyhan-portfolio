@@ -129,8 +129,8 @@ export default function JourneySection() {
     <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-          <div data-motion-item><p className="section-kicker">Perjalanan gue</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Sejauh ini.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Catatan perjalanan pendidikan gue, dari TK sampai sekolah kejuruan.</p>
+          <div data-motion-item><p className="section-kicker">Journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Perjalanan sejauh ini.</h2></div>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Catatan perjalanan pendidikan saya, dari TK sampai sekolah kejuruan.</p>
         </div>
 
         <section className="mt-10" aria-labelledby="education-timeline-title">

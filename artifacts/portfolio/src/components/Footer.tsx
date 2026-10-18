@@ -48,7 +48,7 @@ export default function Footer() {
               <span>Reyhan Irza Alvano</span>
             </button>
           <p className="max-w-xs text-sm leading-relaxed text-neutral-400">
-               Gue pelajar yang terus membangun proyek dengan React, TypeScript, dan teknologi yang sedang gue pelajari.
+               Saya pelajar yang terus membangun proyek dengan React, TypeScript, dan teknologi yang sedang dipelajari.
             </p>
           </div>
 

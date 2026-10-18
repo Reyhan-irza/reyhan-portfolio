@@ -124,7 +124,7 @@ export default function NewsSection() {
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
            <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Catatan tentang proyek dan hal yang sedang gue kerjakan.
+            Catatan tentang proyek dan hal yang sedang saya kerjakan.
           </p>
         </div>
 

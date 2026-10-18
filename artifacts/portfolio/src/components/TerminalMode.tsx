@@ -11,19 +11,19 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Perintah yang tersedia:\n\n  whoami    Tentang gue\n  skills    Teknologi di proyek gue\n  projects  Proyek pilihan\n  roadmap   Fokus gue sekarang\n  contact   Hubungi gue\n  music     Musik yang gue dengarkan\n  ls        Lihat bagian halaman\n  pwd       Direktori saat ini\n  date      Tanggal/waktu saat ini\n  clear     Bersihkan terminal\n  exit      Tutup terminal`,
+    `Perintah yang tersedia:\n\n  whoami    Tentang saya\n  skills    Teknologi di proyek saya\n  projects  Proyek pilihan\n  roadmap   Fokus saya sekarang\n  contact   Hubungi saya\n  music     Musik pilihan saya\n  ls        Lihat bagian halaman\n  pwd       Direktori saat ini\n  date      Tanggal/waktu saat ini\n  clear     Bersihkan terminal\n  exit      Tutup terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nRasa penasaran gue pada komputer\nbermula sekitar 2015. Dari Python,\nskrip, dan bot WhatsApp, gue lanjut\nmengeksplorasi pemrograman, AI, dan web.\n\nGue terus membangun proyek sambil\nmengejar tujuan jadi pengembang web\nfull-stack dengan pemahaman AI yang kuat.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nMinat saya pada komputer tumbuh\nsekitar 2015. Dari Python scripts dan\nWhatsApp bots, saya lanjut mempelajari\ncoding, AI, dan teknologi web.\n\nSaya terus membangun proyek sambil\nmengejar tujuan menjadi pengembang\nweb full-stack dengan pemahaman AI kuat.`,
 
   skills: () =>
-    `TEKNOLOGI DI PROYEK GUE\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nTeknologi ini gue pakai di berbagai\nproyek sambil terus belajar.`,
+    `TEKNOLOGI DI PROYEK SAYA\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nTeknologi ini digunakan di berbagai\nproyek yang saya kerjakan.`,
 
   projects: () =>
     `Proyek pilihan:\n\n  [01] TJKT                       Tayang\n  [02] VIREON Library             Tayang\n  [03] Reyhan WhatsApp Portfolio  Tayang\n\n  → Lihat semua: gulir ke #projects`,
 
   roadmap: () =>
-    `Fokus gue sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi pengembang web full-stack\n\nGue ingin punya pemahaman praktik AI\nyang kuat sambil terus mengembangkan\nkemampuan web.`,
+    `Fokus saya sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi pengembang web full-stack\n\nSaya ingin memiliki pemahaman praktik\nAI yang kuat sambil mengembangkan\nkemampuan web.`,
 
   future: () => COMMANDS.roadmap(),
 
@@ -31,7 +31,7 @@ const COMMANDS: Record<string, () => string> = {
     `Get in touch:\n\n  WhatsApp   wa.me/62881385242876\n  Instagram  @irzalvano_\n  TikTok     @rehanwatsav\n  Email      irzanour@gmail.com`,
 
   music: () =>
-    `Sedang gue dengarkan:\n\n  Little Piece of Heaven  — Avenged Sevenfold\n  Dear God                — Avenged Sevenfold\n  Open Arms               — SZA ft. Travis Scott\n  Snooze                  — SZA\n  Saturn                  — SZA\n\n  → Playlist lengkap: gulir ke #music`,
+    `Sedang saya dengarkan:\n\n  Little Piece of Heaven  — Avenged Sevenfold\n  Dear God                — Avenged Sevenfold\n  Open Arms               — SZA ft. Travis Scott\n  Snooze                  — SZA\n  Saturn                  — SZA\n\n  → Playlist lengkap: gulir ke #music`,
 
   ls: () =>
     `hero/  about/  journey/  roadmap/  music/\nprojects/  contact/  comments/`,

@@ -72,7 +72,7 @@ export default function Home() {
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
-              <strong>Tiga proyek yang gue bangun</strong>
+              <strong>Tiga proyek yang saya bangun</strong>
               <span>TJKT, VIREON Library, dan Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item" data-motion-item>

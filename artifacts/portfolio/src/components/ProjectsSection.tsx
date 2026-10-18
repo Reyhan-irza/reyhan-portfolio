@@ -504,7 +504,7 @@ export default function ProjectsSection() {
             <p className="projects-kicker mb-5">Proyek pilihan</p>
             <h2 className="projects-title max-w-4xl">
               <span className="block overflow-hidden"><span data-project-title-line className="block">Yang benar-benar</span></span>
-              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">gue bangun.</span></span>
+              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">saya bangun.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-sm md:mb-1 md:text-base">

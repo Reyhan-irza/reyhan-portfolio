@@ -16,4 +16,4 @@
 - [Project-task completion gating](project-task-completion-gating.md) — an `IN_PROGRESS` project task may still be unassigned as the current main task and reject completion.
 - [Project index and focus](project-index-focus.md) — keep the pinned Projects index scroll-derived; focused rows may guide snapping to keep controls visible without directly setting active state.
 - [Projects modal focus return](projects-modal-focus.md) — restore focus after the pinned project track finishes remeasuring on modal close.
-- [Portfolio story privacy](portfolio-story-privacy.md) — use first-person informal Indonesian, keep unspecified online activities vague, and don't invent personal details.
+- [Portfolio story privacy](portfolio-story-privacy.md) — use respectful first-person Indonesian, greet visitors, preserve natural English terms, and keep unspecified activities vague.

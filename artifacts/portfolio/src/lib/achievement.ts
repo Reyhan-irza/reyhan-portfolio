@@ -17,13 +17,13 @@ export function unlockAchievement(achievement: Achievement) {
 }
 
 export const ACHIEVEMENTS = {
-  FIRST_SCROLL:    { icon: "target"  as AchievementIcon, title: "Langkah pertama", desc: "Lo mulai menjelajahi portofolio ini." },
-  MUSIC_LOVER:     { icon: "music"   as AchievementIcon, title: "Playlist ditemukan", desc: "Lo menemukan playlist yang sering gue dengarkan." },
-  PROJECT_READER:  { icon: "rocket"  as AchievementIcon, title: "Penjelajah proyek", desc: "Lo sudah melihat ketiga proyek gue." },
-  EASTER_EGG:      { icon: "star"    as AchievementIcon, title: "Easter egg ditemukan", desc: "Lo menemukan detail tersembunyi." },
+  FIRST_SCROLL:    { icon: "target"  as AchievementIcon, title: "Langkah pertama", desc: "Anda mulai menjelajahi portofolio ini." },
+  MUSIC_LOVER:     { icon: "music"   as AchievementIcon, title: "Playlist ditemukan", desc: "Anda menemukan playlist yang sering saya dengarkan." },
+  PROJECT_READER:  { icon: "rocket"  as AchievementIcon, title: "Penjelajah proyek", desc: "Anda telah melihat ketiga proyek saya." },
+  EASTER_EGG:      { icon: "star"    as AchievementIcon, title: "Easter egg ditemukan", desc: "Anda menemukan detail tersembunyi." },
   ROAST_MASTER:    { icon: "flame"   as AchievementIcon, title: "Roast portofolio", desc: "Makasih sudah memberi roast buat portofolio ini." },
   SCROLL_BOTTOM:   { icon: "trophy"  as AchievementIcon, title: "Sampai di akhir", desc: "Makasih sudah menggulir sampai bagian paling bawah." },
   COMMENTER:       { icon: "message" as AchievementIcon, title: "Makasih komentarnya", desc: "Makasih sudah meninggalkan pesan." },
-  JOURNEY_READER:  { icon: "book"    as AchievementIcon, title: "Pembaca perjalanan", desc: "Lo sudah melihat perjalanan gue." },
-  AGE_GUESSER:     { icon: "help"    as AchievementIcon, title: "Tebakan tepat", desc: "Tebakan usia lo benar." },
+  JOURNEY_READER:  { icon: "book"    as AchievementIcon, title: "Pembaca perjalanan", desc: "Anda telah melihat perjalanan saya." },
+  AGE_GUESSER:     { icon: "help"    as AchievementIcon, title: "Tebakan tepat", desc: "Tebakan usia Anda benar." },
 };
