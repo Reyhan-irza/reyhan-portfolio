@@ -38,7 +38,7 @@ export default function ContactSection() {
             Yuk, ngobrol.
           </h2>
           <p data-motion-item className="contact-description mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
-            For a project, a collaboration, or a question about something I built, you can reach me here.
+            Kalau lo mau ngobrol soal proyek, kolaborasi, atau karya yang gue bangun, hubungi gue lewat tautan ini.
           </p>
         </header>
 

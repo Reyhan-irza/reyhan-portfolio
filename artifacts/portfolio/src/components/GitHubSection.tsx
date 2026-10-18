@@ -161,7 +161,7 @@ export default function GitHubSection() {
         {stats && (
           <div ref={statsRef} className="flex justify-center gap-6 md:gap-10 mb-10">
             {[
-              { label: "Repositories", value: stats.public_repos },
+              { label: "Repositori", value: stats.public_repos },
               { label: "Pengikut",    value: stats.followers    },
               { label: "Mengikuti",    value: stats.following    },
             ].map(({ label, value }) => (
