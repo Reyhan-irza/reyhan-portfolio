@@ -253,6 +253,11 @@
   font-family: 'Outfit', sans-serif;
   letter-spacing: -.09em;
 }
+.portfolio-shell .hero-typing-loop {
+  display: inline-block;
+  min-height: 1.2em;
+  white-space: nowrap;
+}
 @media (prefers-reduced-motion: reduce) {
   .portfolio-shell .story-note::before,
   .portfolio-shell .story-roadmap > li {

@@ -100,8 +100,8 @@ const bands: readonly TechnologyBand[] = [
     number: "01",
     label: "PENGEMBANGAN",
     direction: "left",
-    duration: 30,
-    mobileDuration: 36,
+    duration: 27,
+    mobileDuration: 18,
     technologies: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "C#", "Node.js", "Git", "GitHub", "Tailwind"],
   },
   {
@@ -109,8 +109,8 @@ const bands: readonly TechnologyBand[] = [
     number: "02",
     label: "SISTEM",
     direction: "right",
-    duration: 36,
-    mobileDuration: 42,
+    duration: 33,
+    mobileDuration: 23,
     technologies: ["Windows", "Linux", "Android", "Visual Studio", "VS Code", "Termux", "Kali Linux", "Debian"],
   },
   {
@@ -118,8 +118,8 @@ const bands: readonly TechnologyBand[] = [
     number: "03",
     label: "JARINGAN",
     direction: "left",
-    duration: 42,
-    mobileDuration: 48,
+    duration: 39,
+    mobileDuration: 28,
     technologies: ["MikroTik", "Cisco", "Router", "Switch", "VLAN", "TCP/IP", "Network Infrastructure"],
   },
 ];

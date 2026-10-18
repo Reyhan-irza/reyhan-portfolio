@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
+import HeroTypingLoop from "./HeroTypingLoop";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -244,7 +245,14 @@ export default function HeroSection() {
             <p className="relative max-w-[220px] pl-4 text-xs leading-relaxed text-[#8b93a3]">
               <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
               <span data-hero-callout-copy className="block">
-              Belakangan ini, saya juga mendalami TypeScript, Tailwind, dan AI lewat proyek di waktu luang.
+                <span aria-hidden="true">
+                  Belakangan ini, saya juga mendalami:
+                  <br />
+                  <HeroTypingLoop />
+                </span>
+                <span className="sr-only">
+                  Belakangan ini, saya juga mendalami web, TypeScript, Tailwind, dan AI lewat proyek di waktu luang.
+                </span>
               </span>
             </p>
           </div>

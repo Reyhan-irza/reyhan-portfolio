@@ -9,6 +9,12 @@ Use external animation references for pacing, panel transitions, and layered mov
 
 **How to apply:** When using a reference for this portfolio, borrow motion patterns but retain the site's own branding and functionality. Check responsive and reduced-motion behavior after scroll-animation changes.
 
+For the technology-logo ticker, use the full available width on phones, make marks and labels large enough to read, and give rows distinct, faster durations than desktop.
+
+**Why:** The user said the ticker felt undersized and left too much empty space on mobile, and asked for faster, varied running speeds.
+
+**How to apply:** Let the category label sit above the ticker on narrow screens; preserve seamless loops, visibility/section pausing, and the static layout for reduced motion.
+
 For a horizontal project track, derive the displayed active index from the nearest slide position (`round(progress × travel / slide width)`) rather than completed-slide count (`floor`). The latter can leave the final panel unselected until the track reaches its exact end.
 
 **Why:** The portfolio's three-panel track showed the middle panel too late and the final panel only at the terminal scroll position when the index used `floor`.
