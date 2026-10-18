@@ -4,7 +4,7 @@ import { useScrollAnim } from "../hooks/useScrollAnim";
 const roadmap = [
   { label: "Latihan", title: "Terus belajar", desc: "Gue terus memperdalam HTML, CSS, JavaScript, C#, TypeScript, dan Tailwind sambil membangun proyek.", Icon: BookOpen },
   { label: "Proyek", title: "Terus membangun", desc: "Gue mengerjakan proyek di waktu luang untuk menambah pengalaman praktik.", Icon: Blocks },
-  { label: "Tujuan", title: "Menjadi full-stack web developer", desc: "Gue ingin menjadi full-stack web developer dengan pemahaman praktis tentang AI yang kuat.", Icon: Compass },
+  { label: "Tujuan", title: "Menjadi pengembang web full-stack", desc: "Gue ingin menjadi pengembang web full-stack dengan pemahaman praktis tentang AI yang kuat.", Icon: Compass },
 ] as const;
 
 export default function RoadmapSection() {

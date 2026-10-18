@@ -97,8 +97,8 @@ export default function MotionFallback() {
             <h2 id="fallback-about-title">Tentang gue</h2>
             <p>Sekitar 2015, gue sering ke warnet dan makin penasaran sama komputer, walau belum punya komputer sendiri.</p>
             <p>Selama pandemi, gue mencoba berbagai kegiatan online untuk mendapat uang tambahan. Dari situ, gue mulai mengenal Python, script, dan bot WhatsApp.</p>
-            <p>Pada 2025, gue mulai mengeksplorasi coding dan AI, lalu ikut LKS IT Software Solution For Business meski belum pernah belajar C#. Gue jadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
-            <p>Setelah LKS, gue memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, gue mengeksplorasi pengembangan berbantuan AI dengan Replit Agent, TypeScript, dan Tailwind. Gue terus bikin proyek di waktu luang dan bercita-cita jadi full-stack web developer dengan pemahaman AI yang kuat.</p>
+            <p>Pada 2025, gue mulai mengeksplorasi pemrograman dan AI, lalu ikut LKS IT Software Solution For Business meski belum pernah belajar C#. Gue jadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
+            <p>Setelah LKS, gue memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, gue mengeksplorasi pengembangan berbantuan AI dengan Replit Agent, TypeScript, dan Tailwind. Gue terus bikin proyek di waktu luang dan bercita-cita jadi pengembang web full-stack dengan pemahaman AI yang kuat.</p>
           </section>
 
           <section id="projects" aria-labelledby="fallback-projects-title" style={sectionStyle}>

@@ -187,7 +187,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     >
       <div className="rv-intro-backdrop absolute inset-0" aria-hidden="true" />
       <button ref={skipRef} type="button" className="rv-intro-skip absolute inline-flex min-h-11 items-center" onClick={onFinish} aria-label="Lewati intro">
-        Skip
+        Lewati
       </button>
       <div className="rv-intro-content z-10 text-center">
         <div className="rv-intro-stage grid place-items-center" aria-hidden="true">

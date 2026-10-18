@@ -78,7 +78,7 @@ export default function Home() {
             <div className="proof-item" data-motion-item>
               <span className="proof-index">02</span>
               <strong>Belajar lewat proyek web</strong>
-              <span>Terus mengeksplorasi coding, AI, dan teknologi web.</span>
+              <span>Terus mengeksplorasi pemrograman, AI, dan teknologi web.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>

@@ -147,7 +147,7 @@ export default function GitHubSection() {
       <div className="max-w-6xl mx-auto">
 
         <div ref={headerRef} className="fade-up text-center mb-14">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Code / projects</p>
+          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Kode / proyek</p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             GitHub
           </h2>

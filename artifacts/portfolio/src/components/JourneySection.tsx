@@ -4,13 +4,13 @@ import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 
 const educationPeriods = [
-  { period: "2014–2015", level: "TK", label: "Kindergarten" },
-  { period: "2015–2021", level: "SD", label: "Elementary School" },
-  { period: "2021–2024", level: "SMP", label: "Junior High School" },
+  { period: "2014–2015", level: "TK", label: "Taman Kanak-kanak" },
+  { period: "2015–2021", level: "SD", label: "Sekolah Dasar" },
+  { period: "2021–2024", level: "SMP", label: "Sekolah Menengah Pertama" },
   {
-    period: "2024–present",
+    period: "2024–sekarang",
     level: "SMK",
-    label: "Vocational High School",
+    label: "Sekolah Menengah Kejuruan",
     school: "SMK Negeri 2 Lubuk Basung",
     major: "TJKT",
     current: true,

@@ -151,7 +151,7 @@ export default function PortfolioRatingSection() {
           Visitor feedback
         </p>
         <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-          Rate this portfolio
+          Nilai portofolio ini
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#c9d0dc]">
           Pilih 1 sampai 5 bintang untuk memberi penilaian.
@@ -192,7 +192,7 @@ export default function PortfolioRatingSection() {
           })}
         </div>
         <p id="portfolio-rating-hint" className="sr-only">
-          Pilih bintang untuk menyimpan rating. Kamu dapat mengubah rating dari browser ini.
+          Pilih bintang untuk menyimpan penilaian. Kamu bisa mengubahnya dari browser ini.
         </p>
 
         <div className="mt-6 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-3">
@@ -207,7 +207,7 @@ export default function PortfolioRatingSection() {
                 {Number(summary.average_rating).toFixed(1)} / 5
               </span>
               <span className="text-xs text-[#8b93a3]">
-                dari {summary.rating_count.toLocaleString("id-ID")} rating visitor
+                dari {summary.rating_count.toLocaleString("id-ID")} penilaian pengunjung
               </span>
             </>
           ) : (
