@@ -99,6 +99,7 @@ export default function ProjectsSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
+    let restoreProjectFrame = 0;
     media.add(
       {
         reduced: "(prefers-reduced-motion: reduce)",
@@ -112,6 +113,7 @@ export default function ProjectsSection() {
         let resizeObserver: ResizeObserver | undefined;
         let refreshFrame = 0;
         let sizedTrack: HTMLElement | null = null;
+        let horizontalStoryPinned = false;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
           const revealProject = (
@@ -241,8 +243,14 @@ export default function ProjectsSection() {
                 },
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
-                onEnter: () => updatePinnedStoryActive(true),
-                onEnterBack: () => updatePinnedStoryActive(true),
+                onEnter: () => {
+                  horizontalStoryPinned = true;
+                  updatePinnedStoryActive(true);
+                },
+                onEnterBack: () => {
+                  horizontalStoryPinned = true;
+                  updatePinnedStoryActive(true);
+                },
                 onUpdate: (self) => {
                   progressFillRef.current?.style.setProperty(
                     "--project-story-progress",
@@ -257,8 +265,13 @@ export default function ProjectsSection() {
                 },
                 onLeaveBack: () => {
                   progressFillRef.current?.style.setProperty("--project-story-progress", "0");
+                  horizontalStoryPinned = false;
                   updatePinnedStoryActive(false);
                   updateActiveProject(0);
+                },
+                onLeave: () => {
+                  horizontalStoryPinned = false;
+                  updatePinnedStoryActive(false);
                 },
               },
             });
@@ -326,17 +339,41 @@ export default function ProjectsSection() {
             }, "-=0.24");
         }, section);
         return () => {
+          if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
+          const shouldRestoreProject = Boolean(
+            sizedTrack &&
+            horizontalStoryPinned &&
+            (window.innerWidth < 1024 || window.matchMedia("(prefers-reduced-motion: reduce)").matches),
+          );
+          const projectIndex = activeProjectRef.current;
           resizeObserver?.disconnect();
           if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
           sizedTrack?.style.removeProperty("--project-slide-width");
           progressFillRef.current?.style.removeProperty("--project-story-progress");
           updatePinnedStoryActive(false);
           context.revert();
+          if (shouldRestoreProject) {
+            const activeRow = section.querySelector<HTMLElement>(
+              `[data-project-row][data-project-index="${projectIndex}"]`,
+            );
+            if (activeRow) {
+              restoreProjectFrame = window.requestAnimationFrame(() => {
+                restoreProjectFrame = 0;
+                if (!activeRow.isConnected) return;
+                const targetTop = activeRow.getBoundingClientRect().top + window.scrollY - 96;
+                window.scrollTo({ top: Math.max(0, targetTop), behavior: "instant" });
+                ScrollTrigger.refresh();
+              });
+            }
+          }
         };
       },
     );
 
-    return () => media.revert();
+    return () => {
+      if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
+      media.revert();
+    };
   }, []);
 
   useEffect(() => {
