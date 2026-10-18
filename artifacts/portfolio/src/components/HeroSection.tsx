@@ -238,13 +238,13 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                Halo, saya Reyhan. Cerita saya dengan komputer dimulai sekitar 2015, dari kunjungan-kunjungan ke warnet. Sekarang, saya belajar web dengan cara yang paling terasa nyata: membangun proyek, mencoba, lalu memperbaikinya.
+                Halo, saya Reyhan. Rasa penasaran saya pada komputer tumbuh saat sering mampir ke warnet sekitar 2015. Sekarang saya belajar web lewat proyek: mencoba ide, menemukan yang perlu diperbaiki, lalu mencoba lagi.
               </p>
             </div>
             <p className="relative max-w-[220px] pl-4 text-xs leading-relaxed text-[#8b93a3]">
               <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
               <span data-hero-callout-copy className="block">
-              Saat ini saya terus belajar web development dan mengeksplorasi AI lewat proyek-proyek kecil yang saya kerjakan.
+              Belakangan ini, saya juga mendalami TypeScript, Tailwind, dan AI lewat proyek di waktu luang.
               </span>
             </p>
           </div>

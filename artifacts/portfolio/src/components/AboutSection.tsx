@@ -21,9 +21,9 @@ export default function AboutSection() {
           </div>
           <div data-motion-item>
             <p className="story-lead max-w-2xl text-lg leading-relaxed md:text-xl">
-              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya paling banyak belajar saat sebuah ide berubah jadi proyek: ada yang berhasil, ada yang perlu dibongkar dan dicoba lagi.
+              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar lewat proyek: mencoba ide, menemukan masalah, lalu memperbaikinya—satu langkah kecil setiap kali.
             </p>
-            <p className="story-aside mt-5 max-w-2xl text-sm leading-relaxed">Kalau kamu juga suka melihat proses di balik sebuah karya, semoga cerita kecil ini terasa akrab.</p>
+            <p className="story-aside mt-5 max-w-2xl text-sm leading-relaxed">Kalau kamu suka melihat proses di balik sebuah karya, semoga cerita ini menyenangkan untuk diikuti.</p>
           </div>
         </div>
         <div ref={notesRef} className="story-notes mt-16 grid gap-px border-y border-[rgba(255,255,255,.12)] bg-[rgba(255,255,255,.12)] md:grid-cols-2">

@@ -88,7 +88,7 @@ export default function MotionFallback() {
               Reyhan Irza Alvano
             </h1>
             <p>Student Developer · SMK</p>
-            <p>Halo, saya Reyhan. Cerita saya dengan komputer dimulai sekitar 2015, dari kunjungan-kunjungan ke warnet. Sekarang, saya belajar web dengan membangun proyek, mencoba, lalu memperbaikinya.</p>
+            <p>Halo, saya Reyhan. Rasa penasaran saya pada komputer tumbuh saat sering mampir ke warnet sekitar 2015. Sekarang saya belajar web dengan membuat proyek: mencoba ide, menemukan yang perlu diperbaiki, lalu mencoba lagi.</p>
           </section>
         </header>
 
