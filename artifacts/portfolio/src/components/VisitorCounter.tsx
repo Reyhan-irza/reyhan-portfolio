@@ -37,20 +37,20 @@ export default function VisitorCounter() {
   return (
     <div
       className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
-      aria-label="Portfolio visitor counts"
+      aria-label="Jumlah kunjungan portofolio"
     >
        <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
         <Users className="h-3 w-3" aria-hidden="true" />
-        {total.toLocaleString("id-ID")} visits
+        {total.toLocaleString("id-ID")} kunjungan
       </span>
       {today !== null && (
          <span className="flex items-center gap-1.5 text-[11px] text-[#6d6a62]">
           <Calendar className="h-3 w-3" aria-hidden="true" />
-          {today.toLocaleString("id-ID")} today (UTC)
+          {today.toLocaleString("id-ID")} hari ini (UTC)
         </span>
       )}
        <span className="font-mono text-[9px] uppercase tracking-[.12em] text-[#6d6a62]">
-         Totals
+         Total
       </span>
       </div>
   );

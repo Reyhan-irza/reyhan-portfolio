@@ -175,13 +175,13 @@ export default function CommentsSection() {
         {/* HEADER */}
         <div ref={headerRef} className="fade-up text-center mb-14">
           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Yoo wassup y&apos;all
+            Hai, apa kabar?
           </p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             Ayo tinggalkan pesan buat <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
+          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Tinggalkan pesan buat gue.</p>
         </div>
 
         {/* FORM */}
@@ -243,7 +243,7 @@ export default function CommentsSection() {
               <input
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                placeholder="Cari nama atau isi komentar..."
+                placeholder="Cari nama atau komentar..."
                  className="w-full pl-10 pr-4 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
               />
             </div>
@@ -293,7 +293,7 @@ export default function CommentsSection() {
               <div data-motion-item key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
                 {c.pinned && (
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Pinned</span>
+                    <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Disematkan</span>
                   </div>
                 )}
                 <div className="flex gap-3">
@@ -315,7 +315,7 @@ export default function CommentsSection() {
                     {cReplies.map((r) => (
                       <div key={r.id} className="flex gap-2.5 bg-[#a43f2d]/5 border border-[#a43f2d]/15 rounded-xl p-3">
                         <div className="w-7 h-7 rounded-full overflow-hidden border border-[rgba(33,31,27,.16)] flex-shrink-0">
-                          <img src="/profile.jpg" alt="Developer" className="w-full h-full object-cover" />
+                          <img src="/profile.jpg" alt="Pengembang" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">

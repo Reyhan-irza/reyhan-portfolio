@@ -33,9 +33,9 @@ export default function ContactSection() {
     <section id="contact" className="contact-section relative px-4 py-20 sm:px-6 md:py-28">
       <div className="contact-layout mx-auto max-w-6xl">
         <header ref={headerRef} className="contact-intro fade-up">
-          <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Contact</p>
+          <p data-motion-item className="section-kicker contact-kicker mb-4">06 / Kontak</p>
           <h2 data-motion-item className="contact-title text-4xl font-semibold tracking-[-.06em] text-white md:text-6xl">
-            Let’s talk.
+            Yuk, ngobrol.
           </h2>
           <p data-motion-item className="contact-description mt-5 max-w-xl text-base leading-relaxed text-neutral-400">
             For a project, a collaboration, or a question about something I built, you can reach me here.
@@ -43,7 +43,7 @@ export default function ContactSection() {
         </header>
 
         <div className="contact-actions">
-          <ul aria-label="Other ways to reach me" className="contact-list">
+          <ul aria-label="Cara lain menghubungi gue" className="contact-list">
             {contacts.map((contact, i) => (
               <ContactRow key={contact.id} contact={contact} delay={i * 70} />
             ))}
@@ -52,11 +52,11 @@ export default function ContactSection() {
             className="contact-primary-cta"
             href="mailto:irzanour@gmail.com"
             data-testid="link-contact-email"
-            aria-label="Email Reyhan Irza Alvano"
+            aria-label="Kirim email ke Reyhan Irza Alvano"
           >
             <span className="contact-cta-copy">
-              <span className="contact-cta-eyebrow">Have a project or question?</span>
-              <span className="contact-cta-title">Send me an email</span>
+              <span className="contact-cta-eyebrow">Punya proyek atau pertanyaan?</span>
+              <span className="contact-cta-title">Kirim email ke gue</span>
             </span>
             <span className="contact-cta-arrow" aria-hidden="true"><ArrowUpRight className="h-5 w-5" /></span>
           </a>

@@ -11,9 +11,9 @@ const projects = [
     id: 1,
     short: "TJKT",
     title: "TJKT",
-    type: "Department website",
+    type: "Situs jurusan",
     description:
-      "A website introducing the TJKT department at SMK Negeri 2 Lubuk Basung, including its activities and identity.",
+      "Situs yang memperkenalkan jurusan TJKT di SMK Negeri 2 Lubuk Basung, termasuk kegiatan dan identitasnya.",
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
@@ -21,7 +21,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/tjkt-homepage.webp`,
       width: 1440,
       height: 1000,
-      alt: "TJKT department website homepage with its school identity and networking-program information.",
+      alt: "Halaman utama situs jurusan TJKT dengan identitas sekolah dan informasi program jaringan.",
     },
     accent: "TJKT",
   },
@@ -29,9 +29,9 @@ const projects = [
     id: 2,
     short: "VR",
     title: "VIREON Library",
-    type: "Digital library",
+    type: "Perpustakaan digital",
     description:
-      "A digital library system for managing books, members, loans, and reports.",
+      "Sistem perpustakaan digital untuk mengelola buku, anggota, peminjaman, dan laporan.",
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
@@ -39,7 +39,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/vireon-library.webp`,
       width: 1440,
       height: 857,
-      alt: "VIREON Library landing page with a library-management dashboard preview and workflow summary.",
+      alt: "Halaman utama VIREON Library dengan pratinjau dasbor pengelolaan perpustakaan dan ringkasan alur kerja.",
     },
     accent: "VIREON",
   },
@@ -47,9 +47,9 @@ const projects = [
     id: 3,
     short: "WA",
     title: "Reyhan WhatsApp Portfolio",
-    type: "Personal portfolio",
+    type: "Portofolio pribadi",
     description:
-      "A personal portfolio built around my WhatsApp-related work and experiments.",
+      "Portofolio pribadi yang menampilkan karya dan eksperimen terkait WhatsApp.",
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
@@ -57,7 +57,7 @@ const projects = [
       src: `${import.meta.env.BASE_URL}project-previews/reyhan-portfolio.webp`,
       width: 1440,
       height: 857,
-      alt: "Reyhan Irza Alvano portfolio homepage captured from the public WhatsApp-related portfolio site.",
+      alt: "Halaman utama portofolio Reyhan Irza Alvano dari situs portofolio terkait WhatsApp.",
     },
     accent: "REYHAN",
   },
@@ -501,15 +501,14 @@ export default function ProjectsSection() {
           className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <p className="projects-kicker mb-5">Selected work</p>
+            <p className="projects-kicker mb-5">Proyek pilihan</p>
             <h2 className="projects-title max-w-4xl">
-              <span className="block overflow-hidden"><span data-project-title-line className="block">Things I’ve actually</span></span>
-              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">built.</span></span>
+              <span className="block overflow-hidden"><span data-project-title-line className="block">Yang benar-benar</span></span>
+              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">gue bangun.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-sm md:mb-1 md:text-base">
-            Three projects with different goals: a school department website, a
-            digital library, and my own portfolio.
+            Tiga proyek dengan tujuan berbeda: situs jurusan sekolah, perpustakaan digital, dan portofolio pribadi.
           </p>
         </div>
 
@@ -588,7 +587,7 @@ export default function ProjectsSection() {
                     decoding="async"
                   />
                   <div className="project-visual-grid" aria-hidden="true" />
-                  <span className="project-stamp">Site capture</span>
+                  <span className="project-stamp">Cuplikan situs</span>
                   <span className="project-number" aria-hidden="true">
                     0{project.id}
                   </span>
@@ -618,7 +617,7 @@ export default function ProjectsSection() {
                   </h3>
                   <p className="project-copy">{project.description}</p>
 
-                  <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
+                  <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
                     {project.tech.map((technology) => (
                       <li key={technology} className="project-tech">
                         {technology}
@@ -637,7 +636,7 @@ export default function ProjectsSection() {
                       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
-                      Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      Buka situs <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </m.a>
                     <m.a
                       href={project.github}
@@ -645,25 +644,25 @@ export default function ProjectsSection() {
                       rel="noopener noreferrer"
                       className="project-link project-link--quiet"
                       data-testid={`link-github-${project.id}`}
-                      aria-label={`Open ${project.title} GitHub repository`}
+                      aria-label={`Buka repositori GitHub ${project.title}`}
                       whileHover={reduceMotion ? undefined : { y: -2 }}
                       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       <Github className="h-4 w-4" aria-hidden="true" />
-                      <span className="sr-only">GitHub repository</span>
+                      <span className="sr-only">Repositori GitHub</span>
                     </m.a>
                     <m.button
                       type="button"
                       onClick={(event) => openDetails(project, event.currentTarget)}
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
-                      aria-label={`Read more about ${project.title}`}
+                      aria-label={`Baca selengkapnya tentang ${project.title}`}
                       whileHover={reduceMotion ? undefined : { y: -2 }}
                       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
-                      Details <span aria-hidden="true">+</span>
+                      Detail <span aria-hidden="true">+</span>
                     </m.button>
                   </div>
                 </div>
@@ -696,7 +695,7 @@ export default function ProjectsSection() {
           >
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="project-detail-label">Project / 0{modal.id}</p>
+                <p className="project-detail-label">Proyek / 0{modal.id}</p>
                  <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
                   {modal.title}
                 </h3>
@@ -706,7 +705,7 @@ export default function ProjectsSection() {
                 type="button"
                  className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
                 onClick={() => setModal(null)}
-                aria-label="Close project note"
+                aria-label="Tutup catatan proyek"
                 data-testid="button-close-project-detail"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -714,12 +713,12 @@ export default function ProjectsSection() {
             </div>
 
              <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
-              <p className="project-detail-label">About this project</p>
+              <p className="project-detail-label">Tentang proyek ini</p>
                <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
             </div>
 
             <div className="mt-7">
-              <p className="project-detail-label">Built with</p>
+              <p className="project-detail-label">Dibuat dengan</p>
               <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                 {modal.tech.map((technology) => (
                    <span key={technology} className="text-sm text-[#211f1b]">

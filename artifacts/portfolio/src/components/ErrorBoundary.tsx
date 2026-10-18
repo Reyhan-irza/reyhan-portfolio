@@ -35,10 +35,10 @@ export default class ErrorBoundary extends Component<Props, State> {
           textAlign: "center",
         }}>
           <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "#f87171" }}>
-            Something went wrong while loading the page.
+            Terjadi masalah saat memuat halaman.
           </h2>
           <p style={{ color: "#9ca3af", maxWidth: "400px", lineHeight: 1.6 }}>
-            {this.state.message || "An unexpected error occurred."}
+            {this.state.message || "Terjadi kesalahan yang tidak terduga."}
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -53,7 +53,7 @@ export default class ErrorBoundary extends Component<Props, State> {
               fontSize: "0.9rem",
             }}
           >
-            Refresh page
+            Muat ulang halaman
           </button>
         </div>
       );

@@ -4,12 +4,12 @@ import { gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#projects" },
-  { label: "Journey", href: "#journey" },
-  { label: "Recognition", href: "#achievement" },
-  { label: "Activity", href: "#github" },
-  { label: "Contact", href: "#contact" },
+  { label: "Tentang", href: "#about" },
+  { label: "Proyek", href: "#projects" },
+  { label: "Perjalanan", href: "#journey" },
+  { label: "Pencapaian", href: "#achievement" },
+  { label: "Aktivitas", href: "#github" },
+  { label: "Kontak", href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -236,19 +236,19 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
-        aria-label="Primary navigation"
+        aria-label="Navigasi utama"
         className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <a href="#home" data-nav-enter aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
+          <a href="#home" data-nav-enter aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, beranda" className="group flex items-center gap-3">
             <BrandLogo size="sm" alt="" />
             <span className="flex flex-col leading-tight">
               <span className="text-[11px] font-bold uppercase tracking-[.15em] text-white">Reyhan Irza Alvano</span>
-              <span className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/45">Student Developer</span>
+              <span className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/45">Pelajar · Pengembang Web</span>
             </span>
           </a>
 
-          <div className="hidden items-center gap-7 lg:flex" aria-label="Page sections">
+          <div className="hidden items-center gap-7 lg:flex" aria-label="Bagian halaman">
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -271,7 +271,7 @@ export default function Navbar() {
             type="button"
             className={`mobile-menu-trigger lg:hidden ${isOpen ? "is-open" : ""}`}
             onClick={() => setIsOpen((open) => !open)}
-            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
             aria-haspopup="dialog"
@@ -288,7 +288,7 @@ export default function Navbar() {
 
       <button
         type="button"
-        aria-label="Close navigation"
+        aria-label="Tutup navigasi"
         tabIndex={isOpen ? 0 : -1}
         onClick={closeMenu}
         className={`nav-scrim fixed inset-0 z-[48] bg-[#02040a]/75 transition-opacity ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
@@ -299,13 +299,13 @@ export default function Navbar() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="mobile-navigation-title"
-        aria-label="Mobile navigation"
+        aria-label="Navigasi seluler"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-0 z-[49] flex w-full flex-col border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
         style={{ visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >
-        <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>
+        <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Jelajahi / portofolio</p>
         <div className="h-px bg-white/10" />
         <nav className="mt-5 flex flex-col">
           {navLinks.map((link, index) => (

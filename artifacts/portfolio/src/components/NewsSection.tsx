@@ -117,14 +117,14 @@ export default function NewsSection() {
       <div className="max-w-6xl mx-auto">
         <div ref={headerRef} className="fade-up text-center mb-14">
            <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Latest updates
+            Kabar terbaru
           </p>
            <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            News &amp; <span className="text-[#a43f2d]">Updates</span>
+            Berita &amp; <span className="text-[#a43f2d]">Pembaruan</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
            <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Notes on recent projects and what I’ve been working on.
+            Catatan tentang proyek dan hal yang sedang gue kerjakan.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function NewsSection() {
 
         {!loading && !loadError && news.length > 0 && <div className="mt-6 flex items-center justify-center">
              <span className="flex items-center gap-1.5 text-[#6d6a62] text-xs">
-            <Newspaper className="w-3 h-3" /> {news.length} artikel dipublish
+            <Newspaper className="w-3 h-3" /> {news.length} artikel dipublikasikan
           </span>
         </div>}
       </div>

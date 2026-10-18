@@ -11,8 +11,8 @@ export default function SecondaryArchive() {
       <NewsSection />
       <MusicSection />
       <CommentsSection />
-      <div className="secondary-archive-tools" aria-label="Portfolio extras">
-        <span className="secondary-archive-tools-label">Small extras</span>
+      <div className="secondary-archive-tools" aria-label="Fitur tambahan portofolio">
+        <span className="secondary-archive-tools-label">Fitur tambahan</span>
         <RoastButton />
         <TerminalMode />
         <MusicController />

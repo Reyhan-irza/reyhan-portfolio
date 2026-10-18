@@ -63,27 +63,27 @@ export default function Home() {
   return (
     <div className="portfolio-shell relative min-h-[100dvh]">
       <AuroraBackground />
-      <a className="skip-to-content" href="#main-content">Skip to content</a>
+      <a className="skip-to-content" href="#main-content">Lewati ke konten</a>
       <Navbar />
       <main id="main-content" className="relative z-10">
         <HeroSection />
         <TechnologyBands />
-        <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
+        <section id="proof" className="proof-strip px-6" aria-label="Ringkasan portofolio">
           <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item" data-motion-item>
               <span className="proof-index">01</span>
-              <strong>Three projects I’ve built</strong>
-              <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
+              <strong>Tiga proyek yang gue bangun</strong>
+              <span>TJKT, VIREON Library, dan Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">02</span>
-              <strong>React / TypeScript practice</strong>
-              <span>Web projects and experiments built as I learn.</span>
+              <strong>Belajar lewat proyek web</strong>
+              <span>Terus mengeksplorasi coding, AI, dan teknologi web.</span>
             </div>
             <div className="proof-item" data-motion-item>
               <span className="proof-index">03</span>
-              <strong>Competition results</strong>
-              <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · Juara I.</span>
+              <strong>Pencapaian kompetisi</strong>
+              <span>CTF Competition · posisi kedua; LKS IT Software Solution For Business · Juara I.</span>
             </div>
           </div>
         </section>
@@ -104,11 +104,11 @@ export default function Home() {
             if (event.currentTarget.open) setArchiveVisited(true);
           }}>
             <summary data-testid="button-open-secondary-archive">
-              <span>Secondary archive</span>
-              <span>Updates · music · comments</span>
+              <span>Arsip lainnya</span>
+              <span>Berita · musik · komentar</span>
             </summary>
             {archiveVisited && (
-              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading updates and community features">
+              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Memuat berita dan fitur komunitas">
                 <div className="h-2 w-28 animate-pulse bg-white/10" />
                 <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
               </div>}>

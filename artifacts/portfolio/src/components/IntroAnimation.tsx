@@ -186,7 +186,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       }}
     >
       <div className="rv-intro-backdrop absolute inset-0" aria-hidden="true" />
-      <button ref={skipRef} type="button" className="rv-intro-skip absolute inline-flex min-h-11 items-center" onClick={onFinish} aria-label="Skip introduction">
+      <button ref={skipRef} type="button" className="rv-intro-skip absolute inline-flex min-h-11 items-center" onClick={onFinish} aria-label="Lewati intro">
         Skip
       </button>
       <div className="rv-intro-content z-10 text-center">
@@ -242,10 +242,10 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           </div>
         </div>
         <div data-intro-identity className="rv-intro-identity">
-          <p data-intro-copy className="rv-intro-kicker">STUDENT DEVELOPER / LUBUK BASUNG, INDONESIA</p>
+          <p data-intro-copy className="rv-intro-kicker">PELAJAR SMK / LUBUK BASUNG, INDONESIA</p>
           <h1 id="intro-name" data-intro-copy className="rv-intro-name">Reyhan Irza Alvano</h1>
-          <p data-intro-copy className="rv-intro-role">Student Developer · SMK</p>
-          <p data-intro-copy className="rv-intro-story">I’m a student developer who learns by building.</p>
+          <p data-intro-copy className="rv-intro-role">Pelajar SMK · Pengembang web</p>
+          <p data-intro-copy className="rv-intro-story">Gue belajar dengan terus membangun.</p>
         </div>
       </div>
     </div>

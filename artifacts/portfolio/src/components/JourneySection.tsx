@@ -129,15 +129,15 @@ export default function JourneySection() {
     <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-          <div data-motion-item><p className="section-kicker">Personal journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">What I’ve done so far.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>A chronological record of my formal education, from TK through my current vocational studies.</p>
+          <div data-motion-item><p className="section-kicker">Perjalanan gue</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Sejauh ini.</h2></div>
+          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Catatan perjalanan pendidikan gue, dari TK sampai sekolah kejuruan.</p>
         </div>
 
         <section className="mt-10" aria-labelledby="education-timeline-title">
           <div className="flex flex-col gap-2 border-b border-[rgba(27,28,24,.16)] pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="section-kicker">Formal education</p>
-              <h3 id="education-timeline-title" className="mt-3 text-2xl font-semibold tracking-[-.05em] text-white md:text-3xl">Education Timeline</h3>
+              <p className="section-kicker">Pendidikan</p>
+              <h3 id="education-timeline-title" className="mt-3 text-2xl font-semibold tracking-[-.05em] text-white md:text-3xl">Linimasa pendidikan</h3>
             </div>
           </div>
           <div ref={educationRef} className="education-timeline relative mt-8 pl-9 md:pl-12">
@@ -162,7 +162,7 @@ export default function JourneySection() {
                     <div data-education-content>
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                         <p className="text-xs uppercase tracking-[.11em] text-white/50">{entry.label}</p>
-                        {isCurrent ? <span className="education-current-badge">Current</span> : null}
+                        {isCurrent ? <span className="education-current-badge">Saat ini</span> : null}
                       </div>
                       {"school" in entry ? (
                         <>

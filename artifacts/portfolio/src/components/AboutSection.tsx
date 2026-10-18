@@ -2,10 +2,10 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const notes = [
-  { icon: Layout, label: "Where I’m starting from", text: "I study TJKT at SMK Negeri 2 Lubuk Basung, where I’m learning about networking, systems, and web development." },
-  { icon: Database, label: "What I like building", text: "I started with school projects and gradually moved into department websites, digital libraries, and personal web projects. I like making things that have an actual use, even when they start as a simple idea." },
-  { icon: Workflow, label: "Build it. See what breaks. Fix it.", text: "I learn a lot from the parts that don’t work the first time. Building a project, finding the problem, and figuring out how to fix it usually teaches me more than just reading about it." },
-  { icon: Code2, label: "Why Vierlykirk?", text: "Vierlykirk is the name I use for my creative work. The RV mark became the visual identity behind this portfolio and the projects I put here." },
+  { icon: Layout, label: "Rasa penasaran sejak 2015", text: "Sekitar 2015, gue sering ke warnet dan makin penasaran sama komputer, walau belum punya komputer sendiri." },
+  { icon: Database, label: "Awal belajar ngoding", text: "Selama pandemi, gue mencoba berbagai kegiatan online untuk mendapat uang tambahan. Dari situ, gue mulai mengenal Python, script, dan bot WhatsApp." },
+  { icon: Workflow, label: "Belajar lewat tantangan", text: "Pada 2025, gue mulai mengeksplorasi coding dan AI, lalu ikut LKS IT Software Solution For Business meski belum pernah belajar C#. Gue jadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam." },
+  { icon: Code2, label: "Terus membangun", text: "Setelah LKS, gue memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, gue mengeksplorasi pengembangan berbantuan AI dengan Replit Agent, TypeScript, dan Tailwind. Gue terus bikin proyek di waktu luang dan bercita-cita jadi full-stack web developer dengan pemahaman AI yang kuat." },
 ];
 
 export default function AboutSection() {
@@ -17,13 +17,13 @@ export default function AboutSection() {
         <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div data-motion-item>
             <p className="section-kicker">01 / About</p>
-            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Still learning. Still building.</h2>
+            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Masih belajar. Terus membangun.</h2>
           </div>
           <div data-motion-item>
             <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
               I’m Reyhan, a student at SMK Negeri 2 Lubuk Basung studying TJKT. I learn by building things, testing ideas, breaking them, fixing them, and trying again.
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">Most of what you see here came from that process.</p>
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">Dari rasa penasaran di warnet sampai proyek yang gue bangun sekarang, proses belajarnya terus berlanjut.</p>
           </div>
         </div>
         <div ref={notesRef} className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">

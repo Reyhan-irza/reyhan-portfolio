@@ -58,7 +58,7 @@ export default function AchievementToast() {
             </div>
             <div className="min-w-0">
                <p className="text-[#a43f2d] text-[9px] font-semibold uppercase tracking-widest mb-0.5">
-                Achievement
+                Pencapaian
               </p>
                <p className="text-[#211f1b] text-xs font-medium leading-tight">{t.title}</p>
                <p className="text-[#6d6a62] text-[10px] truncate">{t.desc}</p>

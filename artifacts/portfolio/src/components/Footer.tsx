@@ -17,12 +17,12 @@ export default function Footer() {
   const [, navigate] = useLocation();
 
   const links = [
-    { label: "Home",     href: "#home"     },
-    { label: "About",    href: "#about"    },
-    { label: "Work",     href: "#projects" },
-    { label: "Journey",  href: "#journey"  },
-    { label: "Award",    href: "#achievement" },
-    { label: "Contact",  href: "#contact"  },
+    { label: "Beranda",  href: "#home"     },
+    { label: "Tentang",  href: "#about"    },
+    { label: "Proyek",   href: "#projects" },
+    { label: "Perjalanan", href: "#journey" },
+    { label: "Pencapaian", href: "#achievement" },
+    { label: "Kontak",   href: "#contact"  },
   ];
 
   const scroll = (href: string) => {
@@ -42,13 +42,13 @@ export default function Footer() {
             <button
               onClick={() => scroll("#home")}
               className="mb-3 flex items-center gap-3 text-lg font-bold tracking-tight text-[#f5f7fa] transition-opacity hover:opacity-80"
-              aria-label="Return to the home section"
+              aria-label="Kembali ke bagian beranda"
             >
               <BrandLogo size="md" alt="" />
               <span>Reyhan Irza Alvano</span>
             </button>
           <p className="max-w-xs text-sm leading-relaxed text-neutral-400">
-               Student developer building with React, TypeScript, and whatever I’m currently learning.
+               Gue pelajar yang terus membangun proyek dengan React, TypeScript, dan teknologi yang sedang gue pelajari.
             </p>
           </div>
 
@@ -78,12 +78,12 @@ export default function Footer() {
           <p className="text-center text-xs text-neutral-500 sm:text-left">
             &copy; {year}{" "}
               <span className="font-medium text-neutral-200">Reyhan Irza Alvano</span>.
-            All rights reserved.
+            Hak cipta dilindungi.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
             <span className="font-mono text-[10px] tracking-wide text-neutral-500">
-              Stack: React · TypeScript · Tailwind
+              Teknologi: React · TypeScript · Tailwind
             </span>
             <div className="flex items-center gap-3">
               <GuessMyAge />
@@ -91,10 +91,10 @@ export default function Footer() {
               <button
                 onClick={() => navigate("/admin")}
                 className="group flex items-center gap-1 text-xs text-neutral-400 transition-colors duration-300 hover:text-white"
-                title="Developer Access"
+                title="Akses pengembang"
               >
                 <Settings className="h-3 w-3 transition-transform duration-300 group-hover:rotate-90" />
-                <span>Developer Access</span>
+                <span>Akses pengembang</span>
               </button>
             </div>
           </div>

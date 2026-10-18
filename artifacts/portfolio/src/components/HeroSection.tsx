@@ -223,7 +223,7 @@ export default function HeroSection() {
         <div data-hero-copy-depth className="relative z-10 pb-6">
           <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
             <span data-hero-indicator className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
-            Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
+            Pelajar SMK <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
           <div data-hero-title-depth>
             <h1 className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
@@ -236,20 +236,20 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                I’m a student developer who learns by building. I make websites, digital tools, and small experiments, then improve them as I go.
+                Rasa penasaran gue pada komputer dimulai sekitar 2015. Sekarang gue belajar dengan membangun proyek web dan bereksperimen dengan teknologi.
               </p>
             </div>
             <p className="relative max-w-[220px] pl-4 text-xs leading-relaxed text-[#8b93a3]">
               <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
               <span data-hero-callout-copy className="block">
-              I mostly work with React and TypeScript while learning more about systems, networking, and how things work behind the interface.
+              Gue terus mengasah kemampuan web dan mengeksplorasi AI sambil membangun proyek di waktu luang.
               </span>
             </p>
           </div>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <LazyMotion features={domAnimation}>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Explore my work <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+                Lihat proyek gue <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
               </m.button>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
                 Say hello <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
@@ -261,7 +261,7 @@ export default function HeroSection() {
           </a>
         </div>
 
-        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
+        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="Identitas visual RV">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
           <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
           <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
@@ -270,12 +270,12 @@ export default function HeroSection() {
           <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
-              alt="Metallic silver RV monogram with cool-blue edge lighting"
+              alt="Monogram RV berwarna perak metalik dengan cahaya biru"
               fetchPriority="high"
               className="h-full w-full"
             />
           </div>
-          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
+          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identitas / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
           <span className="hero-corner hero-corner-a" aria-hidden="true" />
           <span className="hero-corner hero-corner-b" aria-hidden="true" />

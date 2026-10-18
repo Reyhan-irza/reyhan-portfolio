@@ -197,7 +197,7 @@ export default function PortfolioRatingSection() {
 
         <div className="mt-6 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-3">
           {summaryLoading ? (
-            <p role="status" className="text-xs text-[#8b93a3]">Memuat hasil rating…</p>
+          <p role="status" className="text-xs text-[#8b93a3]">Memuat hasil penilaian…</p>
           ) : summaryError ? (
             <p role="status" className="text-xs text-[#c9d0dc]">{summaryError}</p>
           ) : summary && summary.rating_count > 0 ? (
@@ -211,7 +211,7 @@ export default function PortfolioRatingSection() {
               </span>
             </>
           ) : (
-            <p role="status" className="text-xs text-[#8b93a3]">Belum ada rating — jadilah yang pertama.</p>
+          <p role="status" className="text-xs text-[#8b93a3]">Belum ada penilaian — jadilah yang pertama.</p>
           )}
         </div>
 
@@ -225,7 +225,7 @@ export default function PortfolioRatingSection() {
         {submitting && (
           <p role="status" className="mt-4 inline-flex items-center gap-2 text-xs text-[#8b93a3]">
             <LoaderCircle className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
-            Menyimpan rating…
+            Menyimpan penilaian…
           </p>
         )}
       </div>

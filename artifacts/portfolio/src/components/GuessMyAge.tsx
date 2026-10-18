@@ -20,7 +20,7 @@ export default function GuessMyAge() {
   const handleGuess = () => {
     const g = parseInt(guess);
     if (isNaN(g) || g < 1 || g > 99) {
-      setFeedback("Enter a valid number between 1 and 99.");
+      setFeedback("Masukkan angka yang valid antara 1 dan 99.");
       return;
     }
 
@@ -29,17 +29,17 @@ export default function GuessMyAge() {
 
     if (g === DEVELOPER_AGE) {
       setStatus("won");
-      setFeedback(`Exactly! I’m ${DEVELOPER_AGE} years old. Nice guess.`);
+      setFeedback(`Tepat! Umur gue ${DEVELOPER_AGE} tahun. Tebakan bagus.`);
       unlockAchievement(ACHIEVEMENTS.AGE_GUESSER);
     } else if (remaining === 0) {
       setStatus("lost");
-      setFeedback(`Not quite. I’m ${DEVELOPER_AGE} years old. Better luck next time.`);
+      setFeedback(`Belum tepat. Umur gue ${DEVELOPER_AGE} tahun. Coba lagi lain kali.`);
     } else {
       const diff = Math.abs(g - DEVELOPER_AGE);
       const hint = g < DEVELOPER_AGE
-        ? (diff <= 2 ? "Almost—try a slightly higher number." : diff <= 5 ? "Try a higher number." : "That’s too low.")
-        : (diff <= 2 ? "Almost—try a slightly lower number." : diff <= 5 ? "Try a lower number." : "That’s too high.");
-      setFeedback(`${hint} ${remaining} ${remaining === 1 ? "try" : "tries"} left.`);
+        ? (diff <= 2 ? "Hampir—coba angka yang sedikit lebih tinggi." : diff <= 5 ? "Coba angka yang lebih tinggi." : "Terlalu rendah.")
+        : (diff <= 2 ? "Hampir—coba angka yang sedikit lebih rendah." : diff <= 5 ? "Coba angka yang lebih rendah." : "Terlalu tinggi.");
+      setFeedback(`${hint} Sisa ${remaining} kesempatan.`);
     }
     setGuess("");
   };
@@ -49,10 +49,10 @@ export default function GuessMyAge() {
       <button
         onClick={() => { setOpen(true); reset(); }}
         className="flex items-center gap-1.5 text-xs text-white/35 hover:text-violet-300 transition-colors duration-200"
-        aria-label="Guess My Age mini game"
+        aria-label="Mini game tebak umur gue"
       >
         <HelpCircle className="w-3.5 h-3.5" />
-        Guess My Age
+        Tebak umur gue
       </button>
 
       {open && (
@@ -67,8 +67,8 @@ export default function GuessMyAge() {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-white font-semibold text-sm">Guess My Age</h3>
-                <p className="text-white/35 text-xs mt-0.5">A quick game about me</p>
+                <h3 className="text-white font-semibold text-sm">Tebak umur gue</h3>
+                <p className="text-white/35 text-xs mt-0.5">Tebak umur gue dalam mini game singkat.</p>
               </div>
               <button onClick={() => setOpen(false)} className="text-white/25 hover:text-white/60 transition-colors p-1">
                 <X className="w-4 h-4" />
@@ -76,7 +76,7 @@ export default function GuessMyAge() {
             </div>
 
             <p className="text-white/45 text-xs mb-5 leading-relaxed">
-              How old do you think I am? Guess correctly in {MAX_ATTEMPTS} tries.
+              Menurut lo, berapa umur gue? Tebak dengan benar dalam {MAX_ATTEMPTS} kesempatan.
             </p>
 
             {/* Attempts bar */}
@@ -100,7 +100,7 @@ export default function GuessMyAge() {
                   onChange={(e) => setGuess(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGuess()}
                   className="flex-1 px-3 py-2 rounded-xl glass border border-white/10 bg-white/4 text-white text-sm outline-none focus:border-violet-500/40 transition-colors placeholder-white/20"
-                  placeholder="Enter your guess…"
+                  placeholder="Masukkan tebakan…"
                   min={1}
                   max={99}
                   autoFocus
@@ -109,7 +109,7 @@ export default function GuessMyAge() {
                   onClick={handleGuess}
                   className="btn-neon relative z-10 px-4 py-2 rounded-xl text-xs font-medium"
                 >
-                  <span className="relative z-10">Guess</span>
+                  <span className="relative z-10">Tebak</span>
                 </button>
               </div>
             )}
@@ -131,7 +131,7 @@ export default function GuessMyAge() {
                 className="flex items-center gap-1.5 text-xs text-white/35 hover:text-white/60 transition-colors mt-1"
               >
                 <RefreshCw className="w-3 h-3" />
-                Play again
+                Main lagi
               </button>
             )}
           </div>

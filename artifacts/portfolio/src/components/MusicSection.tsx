@@ -133,9 +133,9 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">My Banger Music</p>
+          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Musik pilihan gue</p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
-            Peak <span className="text-[#8290ff]">Artist</span>
+            Artis <span className="text-[#8290ff]">favorit</span>
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-6" />
           <p data-motion-item className="text-[#c9d0dc] max-w-md mx-auto text-base">
@@ -158,7 +158,7 @@ export default function MusicSection() {
             className="flex gap-4 overflow-x-auto overscroll-x-contain px-[max(0px,calc((100%-13rem)/2))] pb-4 snap-x snap-mandatory md:px-[max(0px,calc((100%-15rem)/2))]"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             role="region"
-            aria-label="Favorite songs"
+            aria-label="Lagu favorit"
             tabIndex={0}
           >
             {songs.map((song, idx) => (
@@ -242,7 +242,7 @@ function MusicCard({
       }`}
       onClick={onClick}
       data-motion-item
-      aria-label={`${isSelected ? "Selected: " : ""}${song.title} by ${song.artist}. Select in the Spotify player.`}
+      aria-label={`${isSelected ? "Dipilih: " : ""}${song.title} oleh ${song.artist}. Pilih di pemutar Spotify.`}
       aria-pressed={isSelected}
     >
       {/* Cover art */}
@@ -251,7 +251,7 @@ function MusicCard({
           <>
             <img
               src={song.coverUrl}
-              alt={`${song.title} cover`}
+              alt={`Sampul ${song.title}`}
               className="w-full h-full object-cover"
               onError={() => setImgError(true)}
             />
@@ -290,7 +290,7 @@ function SpotifyEmbed({ song, isSelected, resetKey }: { song: Song; isSelected: 
     >
       <div className="flex items-center gap-2 px-4 py-2 border-b border-[rgba(33,31,27,.16)]">
          <Music className="w-4 h-4 text-[#8290ff]" />
-         <span className="text-[#c9d0dc] text-xs">Spotify Player</span>
+         <span className="text-[#c9d0dc] text-xs">Pemutar Spotify</span>
       </div>
       <iframe
         key={`${song.trackId}-${resetKey}`}

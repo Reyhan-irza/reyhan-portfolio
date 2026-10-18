@@ -36,8 +36,8 @@ function formatDate(dateStr: string) {
   const d = new Date(dateStr);
   const diff = Date.now() - d.getTime();
   const days = Math.floor(diff / 86_400_000);
-  if (days < 1) return "today";
-  if (days === 1) return "yesterday";
+  if (days < 1) return "hari ini";
+  if (days === 1) return "kemarin";
   if (days < 30) return `${days} days ago`;
   if (days < 365) {
     const months = Math.floor(days / 30);
@@ -70,7 +70,7 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
       </div>
 
       <p className="text-[#6d6a62] text-xs leading-relaxed flex-1 line-clamp-2">
-        {repo.description || "No description available."}
+        {repo.description || "Belum ada deskripsi."}
       </p>
 
       {repo.topics.length > 0 && (
@@ -153,7 +153,7 @@ export default function GitHubSection() {
           </h2>
           <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Some of the repositories and experiments I’ve been working on.
+            Beberapa repositori dan eksperimen yang sedang gue kerjakan.
           </p>
         </div>
 
@@ -162,8 +162,8 @@ export default function GitHubSection() {
           <div ref={statsRef} className="flex justify-center gap-6 md:gap-10 mb-10">
             {[
               { label: "Repositories", value: stats.public_repos },
-              { label: "Followers",    value: stats.followers    },
-              { label: "Following",    value: stats.following    },
+              { label: "Pengikut",    value: stats.followers    },
+              { label: "Mengikuti",    value: stats.following    },
             ].map(({ label, value }) => (
               <div key={label} data-motion-item className="text-center">
                 <p className="text-2xl font-black text-[#a43f2d] tabular-nums">{value}</p>
@@ -181,11 +181,11 @@ export default function GitHubSection() {
           </div>
         ) : error ? (
           <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
-            GitHub data could not be loaded. The profile link is still available below.
+            Data GitHub belum bisa dimuat. Tautan profil tetap tersedia di bawah.
           </p>
         ) : repos.length === 0 ? (
           <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
-            No public repositories are available to show right now.
+            Belum ada repositori publik yang bisa ditampilkan.
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -193,10 +193,10 @@ export default function GitHubSection() {
           </div>
         )}
         </div>
-        {loading && <p role="status" className="sr-only">Loading public GitHub repositories.</p>}
+        {loading && <p role="status" className="sr-only">Memuat repositori publik GitHub.</p>}
         {!loading && !error && repos.length > 0 && (
           <p role="status" className="sr-only">
-            {repos.length} public {repos.length === 1 ? "repository" : "repositories"} loaded.
+            {repos.length} repositori publik berhasil dimuat.
           </p>
         )}
 
@@ -207,7 +207,7 @@ export default function GitHubSection() {
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-6 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-300 hover:-translate-y-0.5 text-sm font-medium"
           >
-            <Github className="w-4 h-4" /> View all on GitHub
+            <Github className="w-4 h-4" /> Lihat semua di GitHub
           </a>
         </div>
       </div>
