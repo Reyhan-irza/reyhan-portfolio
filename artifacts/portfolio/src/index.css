@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -185,6 +184,79 @@
   }
   html {
     scroll-behavior: smooth;
+  }
+}
+
+/* Personal story: warm editorial voice set against the portfolio's RV night palette. */
+.portfolio-shell .story-intro h2 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  letter-spacing: -.065em;
+}
+.portfolio-shell .story-intro h2::first-line {
+  text-wrap: balance;
+}
+.portfolio-shell .story-lead {
+  color: #d4d7e6;
+  letter-spacing: -.025em;
+}
+.portfolio-shell .story-aside {
+  color: #a2a8bd;
+}
+.portfolio-shell .story-notes {
+  border-color: rgba(220, 219, 255, .14);
+  background: rgba(220, 219, 255, .14);
+}
+.portfolio-shell .story-note {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(20, 24, 43, .96), rgba(12, 15, 29, .98));
+  color: #ececf4;
+}
+.portfolio-shell .story-note::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: linear-gradient(180deg, #9a91ff, rgba(154, 145, 255, .08));
+  content: "";
+  opacity: .7;
+  transform: scaleY(.28);
+  transform-origin: top;
+  transition: transform 420ms cubic-bezier(.2,.8,.2,1), opacity 420ms ease;
+}
+.portfolio-shell .story-note:hover::before {
+  transform: scaleY(1);
+  opacity: 1;
+}
+.portfolio-shell .story-note h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.28rem, 2vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: -.025em;
+}
+.portfolio-shell .story-note p {
+  color: #aeb3c6;
+}
+.portfolio-shell .story-roadmap > li {
+  transition: background-color 240ms ease;
+}
+.portfolio-shell .story-roadmap > li:hover {
+  background-color: rgba(135, 128, 255, .045);
+}
+.portfolio-shell .hero-section [data-hero-bio] {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1.36;
+}
+.portfolio-shell .hero-section .hero-name-accent {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -.09em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-shell .story-note::before,
+  .portfolio-shell .story-roadmap > li {
+    transition: none;
   }
 }
 

@@ -19,7 +19,7 @@ const educationPeriods = [
 
 export default function JourneySection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useScrollAnim({ threshold: 0.2 });
+  const headerRef = useScrollAnim({ threshold: 0.2, story: true });
   const educationRef = useRef<HTMLDivElement>(null);
   const educationProgressRef = useRef<HTMLSpanElement>(null);
   const didFire = useRef(false);
@@ -130,13 +130,13 @@ export default function JourneySection() {
       <div className="mx-auto max-w-6xl">
         <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
           <div data-motion-item><p className="section-kicker">Personal journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">My journey so far.</h2></div>
-          <p className="max-w-sm text-sm leading-relaxed text-[#65675f]" data-motion-item>Saya masih berada di awal perjalanan, tetapi beberapa proyek dan pencapaian sudah membentuk cara saya belajar.</p>
+          <p className="story-aside max-w-sm text-sm leading-relaxed" data-motion-item>Saya masih di awal perjalanan. Sejauh ini, sekolah, proyek, dan tantangan baru ikut membentuk cara saya belajar.</p>
         </div>
 
         <section className="mt-10" aria-labelledby="education-timeline-title">
           <div className="flex flex-col gap-2 border-b border-[rgba(27,28,24,.16)] pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="section-kicker">Formal education</p>
+              <p className="section-kicker">The path so far</p>
               <h3 id="education-timeline-title" className="mt-3 text-2xl font-semibold tracking-[-.05em] text-white md:text-3xl">Education Timeline</h3>
             </div>
           </div>

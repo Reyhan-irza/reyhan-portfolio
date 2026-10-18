@@ -9,6 +9,7 @@ interface Options {
   scale?: number;
   refreshKey?: string | number;
   reversibleOnCompact?: boolean;
+  story?: boolean;
 }
 
 /** Reversible, responsive reveal shared by section content and card groups. */
@@ -21,6 +22,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
     scale = 1,
     refreshKey,
     reversibleOnCompact = false,
+    story = false,
   }: Options = {},
 ) {
   const ref = useRef<T>(null);
@@ -81,22 +83,24 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
               targets,
               {
                 autoAlpha: 0,
-                x: (index) => compact
-                  ? (index % 2 === 0 ? -10 : 10)
-                  : 0,
+                x: (index) => story
+                  ? (index % 2 === 0 ? -14 : 14)
+                  : compact
+                    ? (index % 2 === 0 ? -10 : 10)
+                    : 0,
                 y: (index) => compact
-                  ? 2
+                  ? story ? 4 : 2
                   : Math.min(motionDistance * itemDepth[index % itemDepth.length] * 0.7, 14),
-                scale: compact ? 0.99 : 1,
+                scale: story ? 0.992 : compact ? 0.99 : 1,
               },
               {
                 autoAlpha: 1,
                 x: 0,
                 y: 0,
                 scale: 1,
-                duration: compact ? 0.48 : 0.48,
-                stagger: compact ? Math.min(stagger, 0.06) : stagger,
-                ease: compact ? "power3.out" : "power2.out",
+                duration: story ? 0.58 : 0.48,
+                stagger: story ? (compact ? 0.075 : 0.13) : compact ? Math.min(stagger, 0.06) : stagger,
+                ease: story ? "power2.out" : compact ? "power3.out" : "power2.out",
               },
               compact ? 0.04 : 0.08,
             );
@@ -109,7 +113,7 @@ export function useScrollAnim<T extends HTMLElement = HTMLDivElement>(
     return () => {
       media.revert();
     };
-  }, [threshold, delay, stagger, distance, scale, refreshKey, reversibleOnCompact]);
+  }, [threshold, delay, stagger, distance, scale, refreshKey, reversibleOnCompact, story]);
 
   return ref;
 }

@@ -87,120 +87,122 @@ export default function HeroSection() {
           const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
           const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
           const copyDepth = section.querySelector<HTMLElement>("[data-hero-copy-depth]");
+          // The opening is a hand-off: the name holds while the personal note
+          // moves forward, then the whole composition gently yields to the page.
           const story = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: section,
               start: "top top",
               end: "bottom top",
-                scrub: compact ? 0.18 : 0.8,
+              scrub: compact ? 0.2 : 0.72,
               invalidateOnRefresh: true,
             },
           });
 
-          story.addLabel("identity", 0);
+          story.addLabel("hold", 0);
           if (copyDepth) {
             story.to(copyDepth, {
-              y: compact ? -3 : -10,
-              opacity: compact ? 0.97 : 0.88,
-              duration: 0.58,
-            }, "identity");
+              y: compact ? -3 : -8,
+              opacity: compact ? 0.98 : 0.94,
+              duration: 0.48,
+            }, "hold");
           }
           if (title) {
             story.to(title, {
-              y: compact ? -3 : -14,
-              scale: compact ? 0.998 : 0.98,
-              opacity: compact ? 0.98 : 0.9,
+              y: compact ? -4 : -12,
+              scale: compact ? 0.998 : 0.985,
+              opacity: compact ? 0.98 : 0.94,
               transformOrigin: "left center",
-              duration: 0.58,
-            }, "identity");
+              duration: 0.48,
+            }, "hold");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -2 : -8,
-              opacity: compact ? 0.98 : 0.8,
-              duration: 0.58,
-            }, "identity");
+              y: compact ? -2 : -5,
+              opacity: compact ? 0.98 : 0.92,
+              duration: 0.48,
+            }, "hold+=0.08");
           }
           if (kicker) {
             story.to(kicker, {
-              x: compact ? -2 : -10,
-              opacity: compact ? 0.96 : 0.76,
-              duration: 0.58,
-            }, "identity");
+              x: compact ? -1 : -5,
+              opacity: compact ? 0.98 : 0.88,
+              duration: 0.48,
+            }, "hold");
           }
           if (grid) {
             story.to(grid, {
-              yPercent: compact ? 1.5 : 7,
-              opacity: compact ? 0.36 : 0.5,
-              duration: 0.58,
-            }, "identity");
+              yPercent: compact ? 1 : 3,
+              opacity: compact ? 0.5 : 0.58,
+              duration: 0.48,
+            }, "hold");
           }
           if (orbit && !compact) {
-            story.fromTo(orbit, { rotate: -5 }, { rotate: 26, duration: 0.58 }, "identity");
+            story.fromTo(orbit, { rotate: -5 }, { rotate: 12, duration: 0.48 }, "hold");
           }
           if (axisX && !compact) {
             story.fromTo(axisX, {
-              scaleX: 0.12,
-              opacity: 0.2,
+              scaleX: 0.72,
+              opacity: 0.5,
               transformOrigin: "center center",
             }, {
               scaleX: 1,
-              opacity: 0.78,
-              duration: 0.44,
-            }, 0.14);
+              opacity: 0.72,
+              duration: 0.38,
+            }, "hold+=0.06");
           }
           if (axisY && !compact) {
             story.fromTo(axisY, {
-              scaleY: 0.12,
-              opacity: 0.2,
+              scaleY: 0.72,
+              opacity: 0.5,
               transformOrigin: "center center",
             }, {
               scaleY: 1,
-              opacity: 0.78,
-              duration: 0.38,
-            }, 0.2);
+              opacity: 0.72,
+              duration: 0.34,
+            }, "hold+=0.1");
           }
 
-          story.addLabel("release", 0.58);
+          story.addLabel("release", 0.56);
           if (title) {
             story.to(title, {
-              y: compact ? -8 : -34,
-              scale: compact ? 0.99 : 0.94,
-              opacity: compact ? 0.9 : 0.68,
-              duration: 0.42,
+              y: compact ? -8 : -25,
+              scale: compact ? 0.994 : 0.96,
+              opacity: compact ? 0.92 : 0.76,
+              duration: 0.44,
             }, "release");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -5 : -22,
-              opacity: compact ? 0.92 : 0.68,
-              duration: 0.42,
+              y: compact ? -5 : -16,
+              opacity: compact ? 0.94 : 0.78,
+              duration: 0.44,
             }, "release");
           }
           if (kicker) {
             story.to(kicker, {
-              x: compact ? -4 : -18,
-              opacity: compact ? 0.9 : 0.62,
-              duration: 0.42,
+              x: compact ? -3 : -12,
+              opacity: compact ? 0.92 : 0.68,
+              duration: 0.44,
             }, "release");
           }
           if (grid) {
-            story.to(grid, { yPercent: compact ? 5 : 16, opacity: 0.12, duration: 0.42 }, "release");
+            story.to(grid, { yPercent: compact ? 3 : 10, opacity: 0.2, duration: 0.44 }, "release");
           }
           if (copyDepth) {
             story.to(copyDepth, {
-              y: compact ? -7 : -24,
-              opacity: compact ? 0.94 : 0.72,
-              duration: 0.42,
+              y: compact ? -7 : -18,
+              opacity: compact ? 0.96 : 0.82,
+              duration: 0.44,
             }, "release");
           }
           if (orbit && !compact) {
-            story.to(orbit, { rotate: 46, opacity: 0.18, duration: 0.42 }, "release");
+            story.to(orbit, { rotate: 28, opacity: 0.36, duration: 0.44 }, "release");
           }
-          if (axisX && !compact) story.to(axisX, { opacity: 0.18, duration: 0.42 }, "release");
-          if (axisY && !compact) story.to(axisY, { opacity: 0.18, duration: 0.42 }, "release");
-          if (scrollCue) story.to(scrollCue, { opacity: 0, duration: 0.28 }, "release");
+          if (axisX && !compact) story.to(axisX, { opacity: 0.32, duration: 0.44 }, "release");
+          if (axisY && !compact) story.to(axisY, { opacity: 0.32, duration: 0.44 }, "release");
+          if (scrollCue) story.to(scrollCue, { opacity: 0, duration: 0.28 }, "release+=0.08");
         }, section);
         return () => {
           scope.revert();
@@ -236,13 +238,13 @@ export default function HeroSection() {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                Halo, saya Reyhan. Rasa ingin tahu tentang komputer tumbuh sejak sekitar 2015, saat saya sering berkunjung ke warnet. Sekarang, saya belajar lewat proyek web dan eksplorasi teknologi.
+                Halo, saya Reyhan. Cerita saya dengan komputer dimulai sekitar 2015, dari kunjungan-kunjungan ke warnet. Sekarang, saya belajar web dengan cara yang paling terasa nyata: membangun proyek, mencoba, lalu memperbaikinya.
               </p>
             </div>
             <p className="relative max-w-[220px] pl-4 text-xs leading-relaxed text-[#8b93a3]">
               <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
               <span data-hero-callout-copy className="block">
-              Saya terus mengembangkan kemampuan web dan mengeksplorasi AI melalui proyek yang saya kerjakan di waktu luang.
+              Saat ini saya terus belajar web development dan mengeksplorasi AI lewat proyek-proyek kecil yang saya kerjakan.
               </span>
             </p>
           </div>

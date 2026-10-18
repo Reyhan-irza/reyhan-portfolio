@@ -88,17 +88,17 @@ export default function MotionFallback() {
               Reyhan Irza Alvano
             </h1>
             <p>Student Developer · SMK</p>
-            <p>Halo, saya Reyhan. Rasa ingin tahu tentang komputer tumbuh sejak sekitar 2015, saat saya sering berkunjung ke warnet. Sekarang, saya belajar lewat proyek web dan eksplorasi teknologi.</p>
+            <p>Halo, saya Reyhan. Cerita saya dengan komputer dimulai sekitar 2015, dari kunjungan-kunjungan ke warnet. Sekarang, saya belajar web dengan membangun proyek, mencoba, lalu memperbaikinya.</p>
           </section>
         </header>
 
         <main>
           <section id="about" aria-labelledby="fallback-about-title" style={sectionStyle}>
             <h2 id="fallback-about-title">About</h2>
-            <p>Sekitar 2015, saya sering berkunjung ke warnet dan mulai tertarik pada komputer, meski belum memilikinya sendiri.</p>
-            <p>Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Dari situ, saya mulai mengenal Python, scripts, dan WhatsApp bots.</p>
-            <p>Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business meski belum pernah belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
-            <p>Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus mengerjakan proyek di waktu luang dan ingin menjadi pengembang web full-stack dengan pemahaman AI yang kuat.</p>
+            <p>Sekitar 2015, saya sering mampir ke warnet. Dari sana tumbuh rasa penasaran pada komputer, meski waktu itu saya belum punya komputer sendiri.</p>
+            <p>Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Di perjalanan itu saya berkenalan dengan Python, scripts, dan WhatsApp bots.</p>
+            <p>Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business tanpa pengalaman belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam.</p>
+            <p>Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mulai mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus membangun proyek di waktu luang, dengan tujuan menjadi pengembang web full-stack yang punya pemahaman AI kuat.</p>
           </section>
 
           <section id="projects" aria-labelledby="fallback-projects-title" style={sectionStyle}>

@@ -2,23 +2,23 @@ import { Circle, BookOpen, Blocks, Compass } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const roadmap = [
-  { label: "Practice", title: "Keep learning", desc: "Saya terus memperdalam HTML, CSS, JavaScript, C#, TypeScript, dan Tailwind sambil membangun proyek.", Icon: BookOpen },
-  { label: "Projects", title: "Keep building", desc: "Saya mengerjakan proyek di waktu luang untuk menambah pengalaman praktik.", Icon: Blocks },
-  { label: "Goal", title: "Full-stack web developer", desc: "Saya ingin menjadi pengembang web full-stack dengan pemahaman praktis AI yang kuat.", Icon: Compass },
+  { label: "Practice", title: "Learn by making", desc: "Saya terus memperdalam HTML, CSS, JavaScript, C#, TypeScript, dan Tailwind sambil mengubah hal yang dipelajari menjadi proyek.", Icon: BookOpen },
+  { label: "Projects", title: "Try, then refine", desc: "Di waktu luang, saya mengerjakan proyek untuk mendapat lebih banyak pengalaman praktik.", Icon: Blocks },
+  { label: "Goal", title: "Full-stack, with AI fluency", desc: "Saya ingin menjadi pengembang web full-stack dengan pemahaman praktis AI yang kuat.", Icon: Compass },
 ] as const;
 
 export default function RoadmapSection() {
-  const ref = useScrollAnim({ threshold: 0.2 });
-  const roadmapRef = useScrollAnim<HTMLOListElement>({ threshold: 0.1, stagger: 0.08, distance: 14 });
+  const ref = useScrollAnim({ threshold: 0.2, story: true });
+  const roadmapRef = useScrollAnim<HTMLOListElement>({ threshold: 0.1, stagger: 0.08, distance: 14, story: true });
 
   return (
     <section id="roadmap" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
-        <div ref={ref} className="fade-up grid gap-8 border-b border-[rgba(27,28,24,.16)] pb-10 md:grid-cols-[1fr_1fr]">
+        <div ref={ref} className="fade-up story-intro grid gap-8 border-b border-[rgba(255,255,255,.12)] pb-10 md:grid-cols-[1fr_1fr]">
           <div data-motion-item><p className="section-kicker">What I’m working on</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">Learning as I go.</h2></div>
-          <p className="max-w-md text-base leading-relaxed text-[#65675f]" data-motion-item>Saya terus mengeksplorasi AI dan teknologi web, lalu menerapkannya lewat proyek.</p>
+          <p className="story-aside max-w-md text-base leading-relaxed" data-motion-item>Saya belum sampai di tujuan. Untuk sekarang, langkah berikutnya tetap sederhana: belajar sesuatu, lalu mencoba memakainya.</p>
         </div>
-        <ol ref={roadmapRef} className="mt-5 divide-y divide-[rgba(27,28,24,.16)] border-b border-[rgba(27,28,24,.16)]">
+        <ol ref={roadmapRef} className="story-roadmap mt-5 divide-y divide-[rgba(255,255,255,.12)] border-b border-[rgba(255,255,255,.12)]">
           {roadmap.map(({ label, title, desc, Icon }) => (
             <li key={title} className="grid gap-4 py-6 md:grid-cols-[6rem_1fr_1.2fr_auto] md:items-start md:gap-8" data-motion-item>
                <span className="font-mono text-[10px] uppercase tracking-[.14em] text-[#a43f2d]">{label}</span>

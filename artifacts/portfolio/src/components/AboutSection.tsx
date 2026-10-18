@@ -2,33 +2,33 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import { useScrollAnim } from "../hooks/useScrollAnim";
 
 const notes = [
-  { icon: Layout, label: "Rasa ingin tahu sejak 2015", text: "Sekitar 2015, saya sering berkunjung ke warnet dan mulai tertarik pada komputer, meski belum memilikinya sendiri." },
-  { icon: Database, label: "Awal belajar coding", text: "Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Dari situ, saya mulai mengenal Python, scripts, dan WhatsApp bots." },
-  { icon: Workflow, label: "Belajar lewat tantangan", text: "Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business meski belum pernah belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam." },
-  { icon: Code2, label: "Terus berkembang", text: "Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus mengerjakan proyek di waktu luang dan ingin menjadi pengembang web full-stack dengan pemahaman AI yang kuat." },
+  { icon: Layout, label: "Mulanya, dari warnet", text: "Sekitar 2015, saya sering mampir ke warnet. Dari sana tumbuh rasa penasaran pada komputer, meski waktu itu saya belum punya komputer sendiri." },
+  { icon: Database, label: "Mencoba hal pertama", text: "Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Di perjalanan itu saya berkenalan dengan Python, scripts, dan WhatsApp bots." },
+  { icon: Workflow, label: "Berani belajar sambil jalan", text: "Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business tanpa pengalaman belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam." },
+  { icon: Code2, label: "Masih banyak yang ingin dipelajari", text: "Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mulai mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus membangun proyek di waktu luang, dengan tujuan menjadi pengembang web full-stack yang punya pemahaman AI kuat." },
 ];
 
 export default function AboutSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
-  const notesRef = useScrollAnim({ threshold: 0.1, stagger: 0.09, distance: 16, scale: 0.996 });
+  const headerRef = useScrollAnim({ threshold: 0.2, story: true });
+  const notesRef = useScrollAnim({ threshold: 0.1, stagger: 0.09, distance: 16, scale: 0.996, story: true });
   return (
     <section id="about" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
-        <div ref={headerRef} className="fade-up grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
+        <div ref={headerRef} className="fade-up story-intro grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div data-motion-item>
             <p className="section-kicker">01 / About</p>
             <h2 className="mt-5 max-w-md text-4xl font-semibold leading-[.95] tracking-[-.07em] text-[#1b1c18] md:text-6xl">Still learning. Still building.</h2>
           </div>
           <div data-motion-item>
-            <p className="max-w-2xl text-lg leading-relaxed text-[#4e5149] md:text-xl">
-              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar dengan membangun proyek, mencoba ide, menemukan masalah, lalu memperbaikinya.
+            <p className="story-lead max-w-2xl text-lg leading-relaxed md:text-xl">
+              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya paling banyak belajar saat sebuah ide berubah jadi proyek: ada yang berhasil, ada yang perlu dibongkar dan dicoba lagi.
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#77796e]">Dari rasa ingin tahu di warnet hingga proyek yang saya kerjakan sekarang, proses belajarnya terus berlanjut.</p>
+            <p className="story-aside mt-5 max-w-2xl text-sm leading-relaxed">Kalau kamu juga suka melihat proses di balik sebuah karya, semoga cerita kecil ini terasa akrab.</p>
           </div>
         </div>
-        <div ref={notesRef} className="mt-16 grid gap-px border-y border-[rgba(27,28,24,.16)] bg-[rgba(27,28,24,.16)] md:grid-cols-2">
+        <div ref={notesRef} className="story-notes mt-16 grid gap-px border-y border-[rgba(255,255,255,.12)] bg-[rgba(255,255,255,.12)] md:grid-cols-2">
           {notes.map(({ icon: Icon, label, text }, index) => (
-            <article key={label} className="bg-[#f3f0e8] p-7 md:p-9" data-motion-item data-motion-card>
+            <article key={label} className="story-note p-7 md:p-9" data-motion-item data-motion-card>
               <div className="flex items-start justify-between gap-5">
                  <Icon className="h-5 w-5 text-[#a43f2d]" aria-hidden="true" />
                 <span className="font-mono text-[10px] text-[#77796e]">0{index + 1}</span>
