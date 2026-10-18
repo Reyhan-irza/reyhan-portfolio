@@ -133,7 +133,7 @@ export default function MusicSection() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div ref={headerRef} className="fade-up text-center mb-12">
-          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Pilihan musik saya</p>
+          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Music I’m listening to</p>
           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
             Artis <span className="text-[#8290ff]">favorit</span>
           </h2>
@@ -148,7 +148,7 @@ export default function MusicSection() {
           <button
             onClick={handlePrev}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-[#c9d0dc] hover:text-white hover:border-[#8290ff]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] transition-all duration-200 hidden md:flex"
-            aria-label="Lagu sebelumnya"
+            aria-label="Previous song"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -175,7 +175,7 @@ export default function MusicSection() {
           <button
             onClick={handleNext}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 w-10 h-10 rounded-full glass border border-white/10 flex items-center justify-center text-[#c9d0dc] hover:text-white hover:border-[#8290ff]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] transition-all duration-200 hidden md:flex"
-            aria-label="Lagu berikutnya"
+            aria-label="Next song"
           >
             <ChevronRight className="w-5 h-5" />
           </button>

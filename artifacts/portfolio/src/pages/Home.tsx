@@ -105,10 +105,10 @@ export default function Home() {
           }}>
             <summary data-testid="button-open-secondary-archive">
               <span>Arsip lainnya</span>
-              <span>Berita · musik · komentar</span>
+              <span>News · music · comments</span>
             </summary>
             {archiveVisited && (
-              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Memuat berita dan fitur komunitas">
+              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading news and community features">
                 <div className="h-2 w-28 animate-pulse bg-white/10" />
                 <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
               </div>}>

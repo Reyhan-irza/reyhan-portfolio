@@ -636,7 +636,7 @@ export default function ProjectsSection() {
                       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
-                      Buka situs <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </m.a>
                     <m.a
                       href={project.github}
@@ -644,7 +644,7 @@ export default function ProjectsSection() {
                       rel="noopener noreferrer"
                       className="project-link project-link--quiet"
                       data-testid={`link-github-${project.id}`}
-                      aria-label={`Buka repositori GitHub ${project.title}`}
+                      aria-label={`Open ${project.title} GitHub repository`}
                       whileHover={reduceMotion ? undefined : { y: -2 }}
                       whileTap={reduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 300, damping: 24 }}
@@ -705,7 +705,7 @@ export default function ProjectsSection() {
                 type="button"
                  className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
                 onClick={() => setModal(null)}
-                aria-label="Tutup catatan proyek"
+                aria-label="Close project details"
                 data-testid="button-close-project-detail"
               >
                 <X className="h-4 w-4" aria-hidden="true" />

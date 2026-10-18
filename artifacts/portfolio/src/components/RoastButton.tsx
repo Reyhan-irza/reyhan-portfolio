@@ -83,7 +83,7 @@ export default function RoastButton() {
                 onClick={() => setOpen(false)}
                  className="flex-1 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] text-sm font-medium hover:border-[#a43f2d] hover:text-[#211f1b] transition-all duration-200"
               >
-                 Tutup
+                 Close
               </button>
             </div>
           </div>

@@ -11,16 +11,16 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Perintah yang tersedia:\n\n  whoami    Tentang saya\n  skills    Teknologi di proyek saya\n  projects  Proyek pilihan\n  roadmap   Fokus saya sekarang\n  contact   Hubungi saya\n  music     Musik pilihan saya\n  ls        Lihat bagian halaman\n  pwd       Direktori saat ini\n  date      Tanggal/waktu saat ini\n  clear     Bersihkan terminal\n  exit      Tutup terminal`,
+    `Available commands:\n\n  whoami    About me\n  skills    Project technologies\n  projects  Selected projects\n  roadmap   Current focus\n  contact   Get in touch\n  music     Currently listening\n  ls        List portfolio sections\n  pwd       Print working directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
     `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nMinat saya pada komputer tumbuh\nsekitar 2015. Dari Python scripts dan\nWhatsApp bots, saya lanjut mempelajari\ncoding, AI, dan teknologi web.\n\nSaya terus membangun proyek sambil\nmengejar tujuan menjadi pengembang\nweb full-stack dengan pemahaman AI kuat.`,
 
   skills: () =>
-    `TEKNOLOGI DI PROYEK SAYA\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nTeknologi ini digunakan di berbagai\nproyek yang saya kerjakan.`,
+    `PROJECT TECHNOLOGIES\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThese technologies appear across\nprojects I’ve built.`,
 
   projects: () =>
-    `Proyek pilihan:\n\n  [01] TJKT                       Tayang\n  [02] VIREON Library             Tayang\n  [03] Reyhan WhatsApp Portfolio  Tayang\n\n  → Lihat semua: gulir ke #projects`,
+    `Selected projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → View all: scroll to #projects`,
 
   roadmap: () =>
     `Fokus saya sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi pengembang web full-stack\n\nSaya ingin memiliki pemahaman praktik\nAI yang kuat sambil mengembangkan\nkemampuan web.`,
@@ -31,7 +31,7 @@ const COMMANDS: Record<string, () => string> = {
     `Get in touch:\n\n  WhatsApp   wa.me/62881385242876\n  Instagram  @irzalvano_\n  TikTok     @rehanwatsav\n  Email      irzanour@gmail.com`,
 
   music: () =>
-    `Sedang saya dengarkan:\n\n  Little Piece of Heaven  — Avenged Sevenfold\n  Dear God                — Avenged Sevenfold\n  Open Arms               — SZA ft. Travis Scott\n  Snooze                  — SZA\n  Saturn                  — SZA\n\n  → Playlist lengkap: gulir ke #music`,
+    `Currently listening:\n\n  Little Piece of Heaven  — Avenged Sevenfold\n  Dear God                — Avenged Sevenfold\n  Open Arms               — SZA ft. Travis Scott\n  Snooze                  — SZA\n  Saturn                  — SZA\n\n  → Full playlist: scroll to #music`,
 
   ls: () =>
     `hero/  about/  journey/  roadmap/  music/\nprojects/  contact/  comments/`,
@@ -119,8 +119,8 @@ export default function TerminalMode() {
       <button
         onClick={() => setOpen(true)}
          className="portfolio-terminal-trigger fixed bottom-20 right-4 z-[90] w-11 h-11 rounded-xl glass border border-[#a43f2d]/25 flex items-center justify-center text-[#a43f2d] hover:border-[#a43f2d] hover:bg-[#a43f2d]/10 transition-all duration-200 hover:scale-105 active:scale-95"
-        title="Buka terminal pengembang"
-        aria-label="Buka terminal pengembang"
+        title="Open developer terminal"
+        aria-label="Open developer terminal"
       >
         <Terminal className="w-4.5 h-4.5" />
         <span>Terminal</span>
@@ -196,10 +196,10 @@ export default function TerminalMode() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKey}
                  className="flex-1 bg-transparent text-[#211f1b] font-mono text-[12px] outline-none caret-[#a43f2d] placeholder-[#6d6a62]"
-                placeholder="ketik perintah…"
+                placeholder="type a command…"
                 autoComplete="off"
                 spellCheck={false}
-                aria-label="Input terminal"
+                aria-label="Terminal input"
               />
                <span className="w-px h-3.5 bg-[#a43f2d] animate-pulse" />
             </form>

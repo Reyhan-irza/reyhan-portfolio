@@ -8,7 +8,7 @@ const App = lazy(() => import("./App"));
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary fallback={<MotionFallback />}>
-    <Suspense fallback={<main role="status" aria-label="Memuat portofolio">Memuat portofolio…</main>}>
+    <Suspense fallback={<main role="status" aria-label="Loading portfolio">Loading portfolio…</main>}>
       <App />
     </Suspense>
   </ErrorBoundary>,
