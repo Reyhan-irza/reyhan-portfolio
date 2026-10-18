@@ -14,7 +14,7 @@ const COMMANDS: Record<string, () => string> = {
     `Perintah yang tersedia:\n\n  whoami    Tentang gue\n  skills    Teknologi di proyek gue\n  projects  Proyek pilihan\n  roadmap   Fokus gue sekarang\n  contact   Hubungi gue\n  music     Musik yang gue dengarkan\n  ls        Lihat bagian halaman\n  pwd       Direktori saat ini\n  date      Tanggal/waktu saat ini\n  clear     Bersihkan terminal\n  exit      Tutup terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nRasa penasaran gue pada komputer\nbermula sekitar 2015. Dari Python,\nscript, dan bot WhatsApp, gue lanjut\nmengeksplorasi coding, AI, dan web.\n\nGue terus membangun proyek sambil\nmengejar tujuan jadi full-stack web\ndeveloper dengan pemahaman AI yang kuat.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nRasa penasaran gue pada komputer\nbermula sekitar 2015. Dari Python,\nskrip, dan bot WhatsApp, gue lanjut\nmengeksplorasi pemrograman, AI, dan web.\n\nGue terus membangun proyek sambil\nmengejar tujuan jadi pengembang web\nfull-stack dengan pemahaman AI yang kuat.`,
 
   skills: () =>
     `TEKNOLOGI DI PROYEK GUE\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nTeknologi ini gue pakai di berbagai\nproyek sambil terus belajar.`,
@@ -23,7 +23,7 @@ const COMMANDS: Record<string, () => string> = {
     `Proyek pilihan:\n\n  [01] TJKT                       Tayang\n  [02] VIREON Library             Tayang\n  [03] Reyhan WhatsApp Portfolio  Tayang\n\n  → Lihat semua: gulir ke #projects`,
 
   roadmap: () =>
-    `Fokus gue sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi full-stack web developer\n\nGue ingin punya pemahaman praktik AI\nyang kuat sambil terus mengembangkan\nkemampuan web.`,
+    `Fokus gue sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi pengembang web full-stack\n\nGue ingin punya pemahaman praktik AI\nyang kuat sambil terus mengembangkan\nkemampuan web.`,
 
   future: () => COMMANDS.roadmap(),
 
