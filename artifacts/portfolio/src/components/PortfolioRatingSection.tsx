@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Check, LoaderCircle, Star } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { gsap } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const VISITOR_ID_KEY = "portfolio_rating_visitor_v1";
 const MY_RATING_KEY = "portfolio_rating_value_v1";
@@ -146,7 +147,7 @@ export default function PortfolioRatingSection() {
 
   return (
     <section id="portfolio-rating" className="relative px-6 py-16 sm:py-20">
-      <div className="glass mx-auto max-w-4xl rounded-3xl border border-white/10 px-5 py-8 text-center sm:px-8 sm:py-10">
+      <Reveal className="glass mx-auto max-w-4xl rounded-3xl border border-white/10 px-5 py-8 text-center sm:px-8 sm:py-10">
         <p className="mb-3 text-[10px] font-semibold uppercase tracking-[.2em] text-[#aeb8ff]">
           Visitor feedback
         </p>
@@ -228,7 +229,7 @@ export default function PortfolioRatingSection() {
             Saving rating…
           </p>
         )}
-      </div>
+      </Reveal>
     </section>
   );
 }

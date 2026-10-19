@@ -1,6 +1,5 @@
-import { useLayoutEffect, useRef } from "react";
 import { Award, Download, ExternalLink, MapPin } from "lucide-react";
-import { gsap } from "../lib/motion";
+import Reveal from "./Reveal";
 
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-preview.webp`;
@@ -21,98 +20,13 @@ const otherEvidence = [
 ] as const;
 
 export default function AwardSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const previewRef = useRef<HTMLAnchorElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const previews = gsap.utils.toArray<HTMLElement>(".certificate-preview", section);
-    const evidenceLines = gsap.utils.toArray<HTMLElement>("[data-award-evidence-line]", section);
-    if (previews.length === 0 && evidenceLines.length === 0) return;
-    const media = gsap.matchMedia();
-    media.add(
-      {
-        reduced: "(prefers-reduced-motion: reduce)",
-        compact: "(max-width: 767px)",
-        wide: "(min-width: 768px)",
-      },
-      (context) => {
-        if (context.conditions?.reduced) return;
-        const compact = Boolean(context.conditions?.compact);
-        const scope = gsap.context(() => {
-          const evidenceList = section.querySelector<HTMLElement>("[data-award-evidence-list]");
-          if (evidenceLines.length && evidenceList) {
-            gsap.fromTo(evidenceLines, {
-              scaleX: 0,
-            }, {
-              scaleX: 1,
-              duration: 0.48,
-              stagger: 0.1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: evidenceList,
-                start: "top 82%",
-                toggleActions: "play none none reverse",
-                invalidateOnRefresh: true,
-              },
-            });
-          }
-          if (compact) {
-            previews.forEach((preview) => {
-              gsap.fromTo(preview, {
-                autoAlpha: 0,
-                y: 14,
-                scale: 0.985,
-              }, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.62,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: preview,
-                  start: "top 88%",
-                  once: true,
-                  toggleActions: "play none none none",
-                  invalidateOnRefresh: true,
-                },
-              });
-            });
-          } else {
-            const preview = previewRef.current;
-            if (!preview) return;
-            gsap.fromTo(preview, {
-              clipPath: "inset(9% 7% 9% 7%)",
-              scale: 0.965,
-              yPercent: 7,
-            }, {
-              clipPath: "inset(0% 0% 0% 0%)",
-              scale: 1,
-              yPercent: -3,
-              ease: "none",
-              scrollTrigger: {
-                trigger: preview,
-                start: "top 94%",
-                end: "bottom 28%",
-                scrub: 0.62,
-                invalidateOnRefresh: true,
-              },
-            });
-          }
-        }, section);
-        return () => scope.revert();
-      },
-    );
-    return () => media.revert();
-  }, []);
-
   return (
-      <section ref={sectionRef} id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
-      <div
+      <section id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
+      <Reveal
         className="fade-up award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
+        tall
       >
-        <div className="flex flex-col justify-between gap-8" data-motion-item>
+        <div className="flex flex-col justify-between gap-8">
           <div>
             <p className="section-kicker">Award / 2025</p>
             <p className="mt-2 text-xs text-white/45">Competition result</p>
@@ -138,7 +52,7 @@ export default function AwardSection() {
           <p className="text-xs leading-relaxed text-white/45">Saya menjadi satu-satunya perwakilan sekolah di LKS IT Software Solution For Business 2025 dan meraih Juara I tingkat Kabupaten Agam.</p>
         </div>
 
-        <div data-motion-item className="min-w-0">
+        <div className="min-w-0">
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="section-kicker">Certificate / 2025</p>
@@ -147,7 +61,6 @@ export default function AwardSection() {
             <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">PDF document</span>
           </div>
           <a
-            ref={previewRef}
             href={certificateUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -187,10 +100,10 @@ export default function AwardSection() {
             </a>
           </div>
         </div>
-      </div>
+      </Reveal>
 
-      <div className="fade-up award-record mx-auto mt-8 grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10">
-        <div className="flex flex-col justify-between gap-8" data-motion-item>
+      <Reveal className="award-record mx-auto mt-8 grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10" tall>
+        <div className="flex flex-col justify-between gap-8">
           <div>
             <p className="section-kicker">Award / 2026</p>
             <p className="mt-2 text-xs text-white/45">Apresiasi inovasi digital</p>
@@ -218,7 +131,7 @@ export default function AwardSection() {
           </p>
         </div>
 
-        <div data-motion-item className="min-w-0">
+        <div className="min-w-0">
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="section-kicker">Certificate / August 2026</p>
@@ -266,7 +179,7 @@ export default function AwardSection() {
             </a>
           </div>
         </div>
-      </div>
+      </Reveal>
 
       <section
         className="mx-auto mt-8 max-w-6xl"
@@ -280,7 +193,7 @@ export default function AwardSection() {
             </h3>
           </div>
         </div>
-        <div className="grid gap-3 md:grid-cols-2" data-award-evidence-list>
+        <Reveal className="grid gap-3 md:grid-cols-2" tall>
           {otherEvidence.map(({ index, category, title, source }) => (
             <article key={index} className="award-record award-evidence-card p-5 md:p-7">
               <span className="award-evidence-line" data-award-evidence-line aria-hidden="true" />
@@ -291,7 +204,7 @@ export default function AwardSection() {
               <p className="mt-2 text-sm leading-relaxed text-white/55">{source}</p>
             </article>
           ))}
-        </div>
+        </Reveal>
       </section>
     </section>
   );

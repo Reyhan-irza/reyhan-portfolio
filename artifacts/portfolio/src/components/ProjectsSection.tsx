@@ -3,8 +3,9 @@ import type { FocusEvent, PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+import Reveal from "./Reveal";
 
 // Product previews are direct captures of the linked public sites, not recreated UI.
 const projects = [
@@ -105,94 +106,17 @@ export default function ProjectsSection() {
     media.add(
       {
         reduced: "(prefers-reduced-motion: reduce)",
-        compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
         desktop: "(min-width: 1024px)",
       },
       (mediaContext) => {
         if (mediaContext.conditions?.reduced) return;
-        const compact = Boolean(mediaContext.conditions?.compact);
         let resizeObserver: ResizeObserver | undefined;
         let refreshFrame = 0;
         let sizedTrack: HTMLElement | null = null;
         let horizontalStoryPinned = false;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
-          const revealProject = (
-            row: HTMLElement,
-            visual: HTMLElement,
-            copy: HTMLElement,
-            containerAnimation?: gsap.core.Animation,
-          ) => {
-            const screenshot = visual.querySelector<HTMLElement>(".project-screenshot");
-            const technologies = gsap.utils.toArray<HTMLElement>(".project-tech", copy);
-            const actions = copy.querySelector<HTMLElement>(".project-actions");
-            const scrollTrigger = {
-              trigger: row,
-              start: compact ? "top 86%" : "top 80%",
-              once: true,
-              toggleActions: "play none none none",
-              invalidateOnRefresh: true,
-              ...(containerAnimation ? { containerAnimation, start: "left 86%" } : {}),
-            };
-            const timeline = gsap.timeline({ scrollTrigger });
-
-            timeline.fromTo(visual, {
-              y: 12,
-              opacity: 0,
-              scaleX: 0.97,
-              transformOrigin: "left center",
-            }, {
-              y: 0,
-              opacity: 1,
-              scaleX: 1,
-              duration: 0.62,
-              ease: cubicBezierEase(0.16, 1, 0.3, 1),
-            });
-            if (screenshot) {
-              timeline.fromTo(screenshot, {
-                scale: compact ? 1.035 : 1.08,
-                x: compact ? 0 : 18,
-                y: compact ? 8 : 0,
-              }, {
-                scale: 1,
-                x: 0,
-                y: 0,
-                duration: compact ? 0.72 : 1,
-                ease: cubicBezierEase(0.22, 1, 0.36, 1),
-              }, 0);
-            }
-            timeline.fromTo(copy, {
-              x: compact ? 10 : 16,
-              opacity: 0,
-            }, {
-              x: 0,
-              opacity: 1,
-              duration: 0.52,
-              ease: cubicBezierEase(0.16, 1, 0.3, 1),
-            }, 0.1);
-            if (technologies.length > 0) {
-              timeline.fromTo(technologies, {
-                y: 10,
-                opacity: 0,
-              }, {
-                y: 0,
-                opacity: 1,
-                duration: 0.38,
-                stagger: 0.05,
-                ease: cubicBezierEase(0.16, 1, 0.3, 1),
-              }, 0.28);
-            }
-            if (actions) {
-              timeline.fromTo(actions, { y: 10, opacity: 0 }, {
-                y: 0,
-                opacity: 1,
-                duration: 0.42,
-                ease: cubicBezierEase(0.16, 1, 0.3, 1),
-              }, 0.28 + technologies.length * 0.05);
-            }
-          };
-
           const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
           const track = section.querySelector<HTMLElement>("[data-project-track]");
           const stage = section.querySelector<HTMLElement>("[data-project-stage]");
@@ -278,13 +202,6 @@ export default function ProjectsSection() {
               },
             });
 
-            rows.forEach((row) => {
-              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-              if (!visual || !copy) return;
-              revealProject(row, visual, copy, horizontalStory);
-            });
-
             resizeObserver = new ResizeObserver(() => {
               setSlideWidth();
               if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
@@ -301,7 +218,6 @@ export default function ProjectsSection() {
               const visual = row.querySelector<HTMLElement>("[data-project-visual]");
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
-              revealProject(row, visual, copy);
               const projectIndex = Number(row.dataset.projectIndex);
               ScrollTrigger.create({
                 trigger: row,
@@ -316,29 +232,6 @@ export default function ProjectsSection() {
             });
           }
 
-          const headingTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: section,
-              start: "top 90%",
-              once: true,
-              toggleActions: "play none none none",
-              invalidateOnRefresh: true,
-            },
-          });
-          headingTimeline
-            .fromTo("[data-project-title-line]", { yPercent: 110, opacity: 0 }, {
-              yPercent: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.08,
-              ease: cubicBezierEase(0.16, 1, 0.3, 1),
-            })
-            .fromTo("[data-project-intro]", { y: 12, opacity: 0 }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              ease: cubicBezierEase(0.16, 1, 0.3, 1),
-            }, "-=0.24");
         }, section);
         return () => {
           if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
@@ -518,21 +411,20 @@ export default function ProjectsSection() {
       data-testid="section-projects"
     >
       <div className="relative z-10 mx-auto max-w-6xl">
-        <div
-          data-project-heading
+        <Reveal
           className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              <span className="block overflow-hidden"><span data-project-title-line className="block">Yang benar-benar</span></span>
-              <span className="block overflow-hidden"><span data-project-title-line className="text-[#a43f2d] block">I’ve built.</span></span>
+              <span className="block overflow-hidden"><span className="block">Yang benar-benar</span></span>
+              <span className="block overflow-hidden"><span className="text-[#a43f2d] block">I’ve built.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-sm md:mb-1 md:text-base">
             Tiga proyek dengan tujuan berbeda: situs jurusan sekolah, perpustakaan digital, dan portofolio pribadi.
           </p>
-        </div>
+        </Reveal>
 
         <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
@@ -593,6 +485,7 @@ export default function ProjectsSection() {
                       aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                       inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                     >
+                <Reveal className="min-w-0" media>
                 <div
                   data-project-visual
                   className="project-visual project-visual--screenshot"
@@ -631,7 +524,9 @@ export default function ProjectsSection() {
                     </span>
                   </span>
                 </div>
+                </Reveal>
 
+                <Reveal className="min-w-0" tall>
                 <div data-project-copy>
                   <p className="project-type">{project.type}</p>
                   <h3 id={`project-title-${project.id}`} className="project-name">
@@ -688,6 +583,7 @@ export default function ProjectsSection() {
                     </m.button>
                   </div>
                 </div>
+                </Reveal>
                     </article>
                   );
                 })}

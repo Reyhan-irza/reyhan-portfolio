@@ -1,18 +1,11 @@
 import { Settings } from "lucide-react";
 import { useLocation } from "wouter";
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import Reveal from "./Reveal";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
 import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
-  const footerRef = useScrollAnim<HTMLElement>({
-    threshold: 0.12,
-    stagger: 0.06,
-    distance: 12,
-    scale: 0.995,
-    reversibleOnCompact: true,
-  });
   const year = new Date().getFullYear();
   const [, navigate] = useLocation();
 
@@ -34,10 +27,11 @@ export default function Footer() {
   };
 
   return (
-    <footer ref={footerRef} className="portfolio-closing-footer relative overflow-hidden border-t border-neutral-800/60 px-6 pb-8 pt-10 md:pt-12">
+    <footer className="portfolio-closing-footer relative overflow-hidden border-t border-neutral-800/60 px-6 pb-8 pt-10 md:pt-12">
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
-        <div data-motion-item className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+          <Reveal>
           <div>
             <button
               onClick={() => scroll("#home")}
@@ -51,6 +45,7 @@ export default function Footer() {
                Saya pelajar yang terus membangun proyek dengan React, TypeScript, dan teknologi yang sedang dipelajari.
             </p>
           </div>
+          </Reveal>
 
           <nav className="flex flex-wrap gap-x-6 gap-y-2">
             {links.map((l) => (
@@ -66,15 +61,15 @@ export default function Footer() {
         </div>
 
         {/* Visitor stats */}
-        <div data-motion-item className="mb-5 text-neutral-400">
+        <div className="mb-5 text-neutral-400">
           <VisitorCounter />
         </div>
 
         {/* Divider */}
-        <div data-motion-item className="mb-5 border-t border-neutral-800/60" />
+        <div className="mb-5 border-t border-neutral-800/60" />
 
         {/* Bottom row */}
-        <div data-motion-item className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-center text-xs text-neutral-500 sm:text-left">
             &copy; {year}{" "}
               <span className="font-medium text-neutral-200">Reyhan Irza Alvano</span>.

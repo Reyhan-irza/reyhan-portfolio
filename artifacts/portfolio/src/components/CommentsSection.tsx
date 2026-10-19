@@ -3,8 +3,8 @@ import {
   MessageSquare, Send, User, Search, SlidersHorizontal,
   ChevronLeft, ChevronRight, BadgeCheck, Loader2,
 } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
 import { supabase } from "@/lib/supabase";
+import Reveal from "./Reveal";
 
 // Table: "comments"  — fields: id, username, message, pinned, created_at
 // Table: "replies"   — fields: id, comment_id, reply_text, admin_name, created_at
@@ -54,8 +54,6 @@ function formatTime(ts: string): string {
 }
 
 export default function CommentsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
-  const formRef   = useScrollAnim({ threshold: 0.15, delay: 100, reversibleOnCompact: true });
 
   const [comments,    setComments]    = useState<Comment[]>([]);
   const [replies,     setReplies]     = useState<Reply[]>([]);
@@ -72,12 +70,6 @@ export default function CommentsSection() {
   const [page,   setPage]   = useState(1);
 
   const listRef = useRef<HTMLDivElement>(null);
-  const listAnimRef = useScrollAnim<HTMLDivElement>({
-    threshold: 0.08,
-    stagger: 0.06,
-    refreshKey: `${comments.length}-${page}`,
-    reversibleOnCompact: true,
-  });
 
   useEffect(() => {
     (async () => {
@@ -173,19 +165,23 @@ export default function CommentsSection() {
       <div className="max-w-3xl mx-auto">
 
         {/* HEADER */}
-        <div ref={headerRef} className="fade-up text-center mb-14">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
+        <div className="text-center mb-14">
+        <Reveal>
+          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             COMMENTS
           </p>
-          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             Leave a message for <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
-          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Terima kasih sudah berkunjung.</p>
+        </Reveal>
+        <div className="rgb-divider w-24 mx-auto mb-5" />
+        <Reveal>
+          <p className="text-[#6d6a62] max-w-md mx-auto text-base">Terima kasih sudah berkunjung.</p>
+        </Reveal>
         </div>
 
         {/* FORM */}
-        <div ref={formRef} className="fade-up glass neon-border rounded-2xl p-6 mb-8">
+        <Reveal className="glass neon-border rounded-2xl p-6 mb-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
                <label htmlFor="comment-name" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
@@ -233,7 +229,7 @@ export default function CommentsSection() {
               {submitting ? "Mengirim..." : "Kirim Komentar"}
             </button>
           </form>
-        </div>
+        </Reveal>
 
         {/* SEARCH + FILTER */}
         {comments.length > 0 && (
@@ -267,12 +263,7 @@ export default function CommentsSection() {
         )}
 
         {/* LIST */}
-        <div
-          ref={(el) => {
-            listRef.current = el;
-            listAnimRef.current = el;
-          }}
-          className="flex flex-col gap-3"
+        <Reveal innerRef={listRef} className="flex flex-col gap-3" tall
           aria-busy={dataLoading}
         >
           {dataLoading ? (
@@ -290,7 +281,7 @@ export default function CommentsSection() {
           ) : paginated.map((c) => {
             const cReplies = getReplies(c.id);
             return (
-              <div data-motion-item key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
+              <div key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
                 {c.pinned && (
                   <div className="flex items-center gap-1.5 mb-2">
                     <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Disematkan</span>
@@ -334,7 +325,7 @@ export default function CommentsSection() {
               </div>
             );
           })}
-        </div>
+        </Reveal>
 
         {/* PAGINATION */}
         {totalPages > 1 && (

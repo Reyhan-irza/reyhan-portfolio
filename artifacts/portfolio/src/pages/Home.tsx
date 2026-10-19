@@ -17,9 +17,10 @@ import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { useLenis } from "../hooks/useLenis";
-import { useScrollAnim } from "../hooks/useScrollAnim";
 import IntroAnimation from "@/components/IntroAnimation";
 import SectionBoundary from "@/components/SectionBoundary";
+import { LazyMotion, domAnimation } from "framer-motion";
+import Reveal from "@/components/Reveal";
 
 const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
 
@@ -29,7 +30,6 @@ export default function Home() {
   const [archiveVisited, setArchiveVisited] = useState(false);
   const finishIntro = useCallback(() => setIntroFinished(true), []);
 
-  const proofRef = useScrollAnim<HTMLDivElement>({ threshold: 0.12, stagger: 0.09, distance: 16 });
   const footerRef   = useRef<HTMLDivElement>(null);
   const bottomFired = useRef(false);
   const visitFired  = useRef(false);
@@ -61,6 +61,7 @@ export default function Home() {
   }, []);
 
   return (
+    <LazyMotion features={domAnimation}>
     <div className="portfolio-shell relative min-h-[100dvh]">
       <AuroraBackground />
       <a className="skip-to-content" href="#main-content">Skip to content</a>
@@ -69,23 +70,23 @@ export default function Home() {
         <HeroSection />
         <TechnologyBands />
         <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
-          <div ref={proofRef} className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
-            <div className="proof-item" data-motion-item>
+          <Reveal className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
+            <div className="proof-item">
               <span className="proof-index">01</span>
               <strong>Three projects I’ve built</strong>
               <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
-            <div className="proof-item" data-motion-item>
+            <div className="proof-item">
               <span className="proof-index">02</span>
               <strong>Web development practice</strong>
               <span>Exploring code, AI, and web technologies.</span>
             </div>
-            <div className="proof-item" data-motion-item>
+            <div className="proof-item">
               <span className="proof-index">03</span>
               <strong>Competition results</strong>
               <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · 1st place.</span>
             </div>
-          </div>
+          </Reveal>
         </section>
         <SectionBoundary variant="trace" />
         <AboutSection />
@@ -124,5 +125,6 @@ export default function Home() {
       <AchievementToast />
       {!introFinished && <IntroAnimation onFinish={finishIntro} />}
     </div>
+    </LazyMotion>
   );
 }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Newspaper, Calendar, Tag, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { useScrollAnim } from "@/hooks/useScrollAnim";
 import { SkeletonNewsCard } from "./SkeletonCard";
+import Reveal from "./Reveal";
 
 // Real Supabase schema: id, title, category, thumbnail, content, published, created_at
 interface News {
@@ -34,7 +34,7 @@ function NewsCard({ item }: { item: News }) {
   const tagStyle = CATEGORY_COLORS[item.category] ?? CATEGORY_COLORS.General;
 
   return (
-    <article data-motion-item className="glass border border-[rgba(33,31,27,.16)] rounded-2xl overflow-hidden hover:border-[#a43f2d] transition-all duration-300 group hover:-translate-y-1">
+    <article className="glass border border-[rgba(33,31,27,.16)] rounded-2xl overflow-hidden hover:border-[#a43f2d] transition-all duration-300 group hover:-translate-y-1">
       {item.thumbnail && (
         <div className="h-44 overflow-hidden">
           <img
@@ -81,16 +81,9 @@ function NewsCard({ item }: { item: News }) {
 }
 
 export default function NewsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.15, reversibleOnCompact: true });
   const [news,    setNews]    = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const gridRef   = useScrollAnim({
-    threshold: 0.08,
-    delay: 80,
-    refreshKey: `${loading}-${news.length}`,
-    reversibleOnCompact: true,
-  });
 
   useEffect(() => {
     let alive = true;
@@ -115,23 +108,27 @@ export default function NewsSection() {
   return (
     <section id="news" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <div ref={headerRef} className="fade-up text-center mb-14">
-           <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
+        <div className="text-center mb-14">
+        <Reveal>
+           <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             LATEST NEWS
           </p>
-           <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+           <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
             News &amp; <span className="text-[#a43f2d]">Updates</span>
           </h2>
-          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-           <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
+        </Reveal>
+        <div className="rgb-divider w-24 mx-auto mb-5" />
+        <Reveal>
+          <p className="text-[#6d6a62] max-w-md mx-auto text-base">
             Updates from projects and things I’m working on.
           </p>
+        </Reveal>
         </div>
 
-        <div
-          ref={gridRef}
-          className="fade-up grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        <Reveal
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
           aria-busy={loading}
+          tall
         >
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonNewsCard key={i} />)
@@ -141,7 +138,7 @@ export default function NewsSection() {
                 ? <p role="status" className="md:col-span-2 lg:col-span-3 border border-white/10 px-5 py-6 text-sm text-neutral-400">No news has been published yet.</p>
                 : news.map((item) => <NewsCard key={item.id} item={item} />)
           }
-        </div>
+        </Reveal>
 
         {loading && <p role="status" className="sr-only">Loading news.</p>}
         {!loading && !loadError && news.length > 0 && (

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "../lib/motion";
-import { useScrollAnim } from "../hooks/useScrollAnim";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+import Reveal from "./Reveal";
 
 const educationPeriods = [
   { period: "2014–2015", level: "TK", label: "Taman Kanak-kanak" },
@@ -19,7 +19,6 @@ const educationPeriods = [
 
 export default function JourneySection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useScrollAnim({ threshold: 0.2, story: true });
   const educationRef = useRef<HTMLDivElement>(null);
   const educationProgressRef = useRef<HTMLSpanElement>(null);
   const didFire = useRef(false);
@@ -49,9 +48,6 @@ export default function JourneySection() {
         if (!mediaContext.conditions?.reduced && education && educationProgress) {
           const compact = Boolean(mediaContext.conditions?.compact);
           const educationRows = gsap.utils.toArray<HTMLElement>("[data-education-row]", education);
-          const educationNodes = gsap.utils.toArray<HTMLElement>("[data-education-node]", education);
-          const revealDuration = compact ? 0.24 : 0.16;
-          const milestoneRange = 1 - revealDuration;
           const setActiveMilestone = (progress: number) => {
             const activeIndex = Math.min(
               educationRows.length - 1,
@@ -88,35 +84,6 @@ export default function JourneySection() {
             duration: 1,
           }, 0);
 
-          educationNodes.forEach((node, index) => {
-            const position = educationNodes.length > 1
-              ? (index / (educationNodes.length - 1)) * milestoneRange
-              : 0;
-            educationStory.fromTo(node, {
-              scale: compact ? 0.86 : 0.7,
-              opacity: compact ? 0.62 : 0.42,
-            }, {
-              scale: 1,
-              opacity: 1,
-              duration: compact ? 0.24 : 0.16,
-            }, position);
-          });
-
-          educationRows.forEach((row, index) => {
-            const content = row.querySelector<HTMLElement>("[data-education-content]");
-            if (!content) return;
-            const position = educationNodes.length > 1
-              ? (index / (educationNodes.length - 1)) * milestoneRange
-              : 0;
-            educationStory.fromTo(content, {
-              x: compact ? 8 : 10,
-              opacity: compact ? 0.68 : 0.62,
-            }, {
-              x: 0,
-              opacity: 1,
-              duration: compact ? 0.24 : 0.16,
-            }, position);
-          });
         }
 
       }, el);
@@ -128,10 +95,10 @@ export default function JourneySection() {
   return (
     <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
-        <div ref={headerRef} className="fade-up flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
-          <div data-motion-item><p className="section-kicker">Personal journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">My journey so far.</h2></div>
-          <p className="story-aside max-w-sm text-sm leading-relaxed" data-motion-item>Saya masih di awal perjalanan. Sejauh ini, sekolah, proyek, dan tantangan baru ikut membentuk cara saya belajar.</p>
-        </div>
+        <Reveal className="flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
+          <div><p className="section-kicker">Personal journey</p><h2 className="mt-5 text-4xl font-semibold tracking-[-.07em] md:text-6xl">My journey so far.</h2></div>
+          <p className="story-aside max-w-sm text-sm leading-relaxed">Saya masih di awal perjalanan. Sejauh ini, sekolah, proyek, dan tantangan baru ikut membentuk cara saya belajar.</p>
+        </Reveal>
 
         <section className="mt-10" aria-labelledby="education-timeline-title">
           <div className="flex flex-col gap-2 border-b border-[rgba(27,28,24,.16)] pb-5 sm:flex-row sm:items-end sm:justify-between">
@@ -143,12 +110,14 @@ export default function JourneySection() {
           <div ref={educationRef} className="education-timeline relative mt-8 pl-9 md:pl-12">
             <span className="education-timeline-track" aria-hidden="true" />
             <span ref={educationProgressRef} className="education-timeline-progress" aria-hidden="true" />
-            <div className="space-y-3">
-              {educationPeriods.map((entry) => {
+                    <div className="space-y-3">
+              {educationPeriods.map((entry, index) => {
                 const isCurrent = "current" in entry && entry.current;
                 return (
-                  <article
+                  <Reveal
                     key={entry.level}
+                    as="article"
+                    staggerIndex={index}
                     className={`education-item grid gap-2 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6 ${isCurrent ? "education-item-current" : ""}`}
                     data-education-row
                     data-education-current={isCurrent || undefined}
@@ -171,7 +140,7 @@ export default function JourneySection() {
                         </>
                       ) : null}
                     </div>
-                  </article>
+                  </Reveal>
                 );
               })}
             </div>

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Music, ChevronLeft, ChevronRight, Check } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
+import Reveal from "./Reveal";
 
 interface Song {
   id: number;
@@ -58,13 +58,7 @@ export default function MusicSection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [nowPlaying, setNowPlaying] = useState<number | null>(null);
   const [spotifyKey, setSpotifyKey] = useState(0);
-  const scrollRef = useScrollAnim<HTMLDivElement>({
-    threshold: 0.08,
-    stagger: 0.06,
-    refreshKey: songs.length,
-    reversibleOnCompact: true,
-  });
-  const headerRef = useScrollAnim({ threshold: 0.2, reversibleOnCompact: true });
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // When background music resumes, stop Spotify by reloading the embed
   useEffect(() => {
@@ -132,15 +126,19 @@ export default function MusicSection() {
     <section id="music" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div ref={headerRef} className="fade-up text-center mb-12">
-          <p data-motion-item className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Music I’m listening to</p>
-          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
+        <div className="text-center mb-12">
+        <Reveal>
+          <p className="text-[#8290ff] text-sm font-semibold uppercase tracking-widest mb-3">Music I’m listening to</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#f5f7fa] mb-4">
             Artis <span className="text-[#8290ff]">favorit</span>
           </h2>
-          <div data-motion-item className="rgb-divider w-24 mx-auto mb-6" />
-          <p data-motion-item className="text-[#c9d0dc] max-w-md mx-auto text-base">
+        </Reveal>
+        <div className="rgb-divider w-24 mx-auto mb-6" />
+        <Reveal>
+          <p className="text-[#c9d0dc] max-w-md mx-auto text-base">
             Ts Song Still Banger,y&apos;all.
           </p>
+        </Reveal>
         </div>
 
         {/* Carousel */}
@@ -153,6 +151,7 @@ export default function MusicSection() {
             <ChevronLeft className="w-5 h-5" />
           </button>
 
+          <Reveal className="min-w-0">
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-auto overscroll-x-contain px-[max(0px,calc((100%-13rem)/2))] pb-4 snap-x snap-mandatory md:px-[max(0px,calc((100%-15rem)/2))]"
@@ -171,6 +170,7 @@ export default function MusicSection() {
               />
             ))}
           </div>
+          </Reveal>
 
           <button
             onClick={handleNext}
@@ -202,13 +202,13 @@ export default function MusicSection() {
         </div>
 
         {/* Spotify embed */}
-        <div className="mt-8">
+        <Reveal className="mt-8" media>
           <SpotifyEmbed
             song={songs[nowPlaying ?? activeIdx]}
             isSelected={nowPlaying !== null}
             resetKey={spotifyKey}
           />
-        </div>
+        </Reveal>
 
         <p className="text-center text-[#8b93a3] text-xs mt-4">
           Klik card untuk memilih lagu &bull; Music background pause saat lagu Spotify dipilih
@@ -241,7 +241,6 @@ function MusicCard({
             : "border-white/10 bg-white/[0.015] hover:border-white/25 hover:bg-white/[0.035] hover:-translate-y-0.5"
       }`}
       onClick={onClick}
-      data-motion-item
       aria-label={`${isSelected ? "Selected: " : ""}${song.title} by ${song.artist}. Select to play.`}
       aria-pressed={isSelected}
     >

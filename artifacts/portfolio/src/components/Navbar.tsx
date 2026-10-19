@@ -141,23 +141,10 @@ export default function Navbar() {
     window.addEventListener("popstate", syncNavigationState);
     updateActiveFromScroll();
     syncNavigationState();
-    const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      const intro = gsap.from("[data-nav-enter]", {
-        y: -8,
-        autoAlpha: 0,
-        duration: 0.48,
-        stagger: 0.055,
-        ease: "power2.out",
-        clearProps: "all",
-      });
-      return () => intro.kill();
-    });
     return () => {
       window.removeEventListener("hashchange", syncNavigationState);
       window.removeEventListener("popstate", syncNavigationState);
       if (hashFrame) window.cancelAnimationFrame(hashFrame);
-      media.revert();
       context.revert();
     };
   }, []);
@@ -240,7 +227,7 @@ export default function Navbar() {
         className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <a href="#home" data-nav-enter aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
+          <a href="#home" aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
             <BrandLogo size="sm" alt="" />
             <span className="flex flex-col leading-tight">
               <span className="text-[11px] font-bold uppercase tracking-[.15em] text-white">Reyhan Irza Alvano</span>
@@ -253,7 +240,6 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                data-nav-enter
                 aria-current={activeHref === link.href ? "location" : undefined}
                 className={`editorial-nav-link relative py-2 text-[11px] uppercase tracking-[.12em] transition-colors ${activeHref === link.href ? "text-white" : "text-white/55 hover:text-white"}`}
               >
@@ -261,7 +247,7 @@ export default function Navbar() {
                 {activeHref === link.href && <span className="absolute -bottom-1 left-0 h-px w-full bg-[#8290ff]" />}
               </a>
             ))}
-            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" data-nav-enter className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[10px] uppercase tracking-[.12em] text-white/75 transition-colors hover:border-[#667cff]/60 hover:text-white">
+            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[10px] uppercase tracking-[.12em] text-white/75 transition-colors hover:border-[#667cff]/60 hover:text-white">
               GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
             </a>
           </div>

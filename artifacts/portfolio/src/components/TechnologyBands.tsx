@@ -24,6 +24,7 @@ import {
 import type { IconType } from "react-icons";
 import { VscVscode } from "react-icons/vsc";
 import { gsap, ScrollTrigger } from "../lib/motion";
+import Reveal from "./Reveal";
 import "./TechnologyBands.css";
 
 type BrandLogo = { Icon: IconType };
@@ -150,7 +151,6 @@ export default function TechnologyBands() {
           if (match.conditions?.reducedMotion) return;
 
           const compact = Boolean(match.conditions?.compact);
-          const revealDistance = () => gsap.utils.clamp(16, 42, section.clientWidth * 0.035);
           const animatedTracks: AnimatedTrack[] = [];
           let resetSpeed: gsap.core.Tween | undefined;
           let sectionIsActive = false;
@@ -185,87 +185,6 @@ export default function TechnologyBands() {
             });
 
             animatedTracks.push({ tween, setSpeed });
-          });
-
-          const header = section.querySelector<HTMLElement>("[data-section-header]");
-          if (header) {
-            if (compact) {
-              gsap.fromTo(
-                header,
-                { y: 14, autoAlpha: 0 },
-                {
-                  y: 0,
-                  autoAlpha: 1,
-                  duration: 0.62,
-                  ease: "power3.out",
-                  scrollTrigger: {
-                    trigger: section,
-                    start: "top 88%",
-                    toggleActions: "play none play reverse",
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            } else {
-              gsap.fromTo(
-                header,
-                { x: () => -gsap.utils.clamp(16, 24, section.clientWidth * 0.02), autoAlpha: 0 },
-                {
-                  x: 0,
-                  autoAlpha: 1,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: section,
-                    start: "top 86%",
-                    end: "top 34%",
-                    scrub: 0.65,
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            }
-          }
-          section.querySelectorAll<HTMLElement>("[data-band-entry]").forEach((entry) => {
-            const band = entry.closest<HTMLElement>("[data-band-id]");
-            if (!band) return;
-            const direction = band.dataset.direction === "right" ? 1 : -1;
-            if (compact) {
-              gsap.fromTo(
-                entry,
-                { x: direction * 16, y: 4, scale: 0.99, autoAlpha: 0 },
-                {
-                  x: 0,
-                  y: 0,
-                  scale: 1,
-                  autoAlpha: 1,
-                  duration: 0.55,
-                  ease: "power3.out",
-                  scrollTrigger: {
-                    trigger: band,
-                    start: "top 90%",
-                    toggleActions: "play none play reverse",
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            } else {
-              gsap.fromTo(
-                entry,
-                { x: () => direction * revealDistance(), autoAlpha: 0 },
-                {
-                  x: 0,
-                  autoAlpha: 1,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: band,
-                    start: "top 92%",
-                    end: "top 48%",
-                    scrub: 0.7,
-                    invalidateOnRefresh: true,
-                  },
-                },
-              );
-            }
           });
 
           const velocityTrigger = ScrollTrigger.create({
@@ -324,7 +243,7 @@ export default function TechnologyBands() {
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
         Technologies I use
       </h2>
-      <header className="technology-bands__header" data-section-header>
+      <Reveal as="header" className="technology-bands__header">
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
             <span>01</span>
@@ -335,11 +254,11 @@ export default function TechnologyBands() {
         <p className="technology-bands__intro">
           Languages, systems, and networks behind my projects.
         </p>
-      </header>
+      </Reveal>
 
       <div className="technology-bands__rows">
         {bands.map((band) => (
-          <div
+          <Reveal
             className={`technology-band technology-band--${band.id}`}
             key={band.id}
             data-band-id={band.id}
@@ -351,7 +270,7 @@ export default function TechnologyBands() {
               <span className="technology-band__name">{band.label}</span>
             </div>
 
-            <div className="technology-band__entry" data-band-entry>
+            <div className="technology-band__entry">
               <div
                 className="technology-band__viewport"
                 role="group"
@@ -393,7 +312,7 @@ export default function TechnologyBands() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>

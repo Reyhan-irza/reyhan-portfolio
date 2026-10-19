@@ -1,13 +1,13 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
 import HeroTypingLoop from "./HeroTypingLoop";
+import Reveal from "./Reveal";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const markRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
@@ -19,66 +19,11 @@ export default function HeroSection() {
         reduced: "(prefers-reduced-motion: reduce)",
         compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
-        desktop: "(min-width: 1024px)",
       },
       (context) => {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
-        const desktop = Boolean(context.conditions?.desktop);
         const scope = gsap.context(() => {
-          const opening = gsap.timeline({
-            defaults: { ease: cubicBezierEase(0.16, 1, 0.3, 1) },
-            delay: 0.08,
-          });
-          const markStage = section.querySelector<HTMLElement>("[data-hero-mark-stage]");
-          if (desktop && markStage && markRef.current) {
-            opening
-              .fromTo(markStage, { autoAlpha: 0, scale: 0.985 }, {
-                autoAlpha: 1,
-                scale: 1,
-                duration: 0.7,
-              }, 0.1)
-              .fromTo(markRef.current, {
-                autoAlpha: 0,
-                y: 9,
-                scale: 0.965,
-                rotation: -1.5,
-              }, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-                rotation: 0,
-                duration: 0.72,
-              }, 0.24);
-          }
-          opening
-            .fromTo("[data-hero-indicator]", { scale: 0.65, opacity: 0 }, {
-              scale: 1, opacity: 1, duration: 0.36,
-            })
-            .fromTo("[data-hero-kicker]", { y: 12, opacity: 0 }, {
-              y: 0, opacity: 1, duration: 0.5,
-            }, 0.12)
-            .fromTo("[data-hero-title-line]", { yPercent: 110 }, {
-              yPercent: 0, duration: 0.8, stagger: 0.08,
-            }, 0.18)
-            .fromTo("[data-hero-bio]", { y: 12, opacity: 0 }, {
-              y: 0, opacity: 1, duration: 0.55,
-            }, 0.47)
-            .fromTo("[data-hero-callout-rule]", { scaleY: 0 }, {
-              scaleY: 1, transformOrigin: "top center", duration: 0.6,
-            }, 0.55)
-            .fromTo("[data-hero-callout-copy]", { x: -10, opacity: 0 }, {
-              x: 0, opacity: 1, duration: 0.55,
-            }, 0.62)
-            .fromTo("[data-hero-action]", { y: 12, opacity: 0 }, {
-              y: 0, opacity: 1, duration: 0.5, stagger: 0.08,
-            }, 1.1)
-            .fromTo("[data-hero-github]", { y: 10, opacity: 0 }, {
-              y: 0, opacity: 1, duration: 0.45,
-            }, 1.38)
-            .fromTo("[data-hero-rule]", { scaleX: 0 }, {
-              scaleX: 1, transformOrigin: "left center", duration: 0.8,
-            }, 0.52);
           const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
           const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
           const grid = section.querySelector<HTMLElement>(".hero-grid");
@@ -224,6 +169,7 @@ export default function HeroSection() {
       <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div data-hero-copy-depth className="relative z-10 pb-6">
+          <Reveal mount>
           <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
             <span data-hero-indicator className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             SMK Student <span className="text-white/20">/</span> Lubuk Basung, Indonesia
@@ -269,15 +215,17 @@ export default function HeroSection() {
           <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.15em] text-white/40 transition-colors hover:text-[#9da9ff]">
             GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
+          </Reveal>
         </div>
 
+        <Reveal mount media className="relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block">
         <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="Identitas visual RV">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
           <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
           <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
           <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
           <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
-          <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
+          <div className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
               alt="Monogram RV berwarna perak metalik dengan cahaya biru"
@@ -290,6 +238,7 @@ export default function HeroSection() {
           <span className="hero-corner hero-corner-a" aria-hidden="true" />
           <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
+        </Reveal>
       </div>
       <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
