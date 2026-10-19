@@ -1,10 +1,10 @@
 ---
 name: React motion standards
-description: User's required performance and choreography rules for React + TypeScript UI animations.
+description: User's required entrance motion rules for the React + TypeScript portfolio.
 ---
 
-For UI animations in this React + TypeScript project, animate only transforms and opacity; never animate layout-triggering properties. When using Framer Motion, wrap components in `LazyMotion` with `domAnimation` and use `m`. Prefer custom editorial cubic-bezier easing for reveals and spring physics (`stiffness: 300`, `damping: 24`, `mass: 0.8`) for interactive elements. Use masked vertical text reveals, parent-child stagger (`staggerChildren: 0.06`, `delayChildren: 0.1`), subtle hover/tap motion, and one-time scroll triggers with `viewport={{ once: true, margin: "-10%" }}`.
+For portfolio entrance effects, use native Framer Motion with `m` under `LazyMotion`/`domAnimation`. Hero groups enter on mount for 0.8s with no delay. Other groups reveal once at 15% visibility with a 0.1s base delay, 1s duration, opacity 0→1, and `cubic-bezier(0.22, 1, 0.36, 1)`. Copy and mixed-content groups travel 12px on desktop and 8px on phones; standalone media scales 0.98→1 without translation. Keep heading/copy/actions together, media and card collections separate, and only stagger 2–4 progression siblings by 0.1s on larger screens. Remove nonessential movement and sequencing for reduced motion. Do not layer GSAP entrance tweens on content already using a Framer reveal.
 
-**Why:** the user explicitly required these motion and mobile-performance constraints for this project.
+**Why:** the user supplied and approved portfolio-wide motion guidance that replaces conflicting legacy entrance choreography.
 
-**How to apply:** follow these when building or refactoring UI animations; preserve existing animation-library and reduced-motion conventions where compatible.
+**How to apply:** use this for new portfolio entrance work; keep continuous tracks, pinned project interactions, controls, backgrounds, dividers, and hover/press feedback separate from entrances.

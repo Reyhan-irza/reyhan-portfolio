@@ -10,7 +10,7 @@
 - [Portfolio Supabase preview DNS](portfolio-supabase-preview-dns.md) — verify the configured database host resolves before debugging its UI or changing data flows.
 - [GSAP transform ownership](gsap-transform-ownership.md) — avoid stacking CSS translation with GSAP percentage transforms on the same animated element.
 - [Mobile menu transform ownership](mobile-menu-transform-ownership.md) — keep the hamburger lines' open-state transforms under GSAP alone; legacy CSS selectors can clip the morph.
-- [React motion standards](react-motion-standards.md) — use compositor-only animation, bespoke easing, restrained choreography, and one-time viewport reveals.
+- [React motion standards](react-motion-standards.md) — use the portfolio's Framer entrance rules; keep reveals independent and avoid overlapping GSAP entrance tweens.
 - [GitHub write path](github-write-path.md) — prefer the connected GitHub App when HTTPS push auth is unavailable; keep commits scoped and update refs non-force.
 - [Portfolio audit phase gates](portfolio-audit-phase-gates.md) — finish and verify one audit phase, report it, then wait for review before continuing.
 - [Project-task completion gating](project-task-completion-gating.md) — an `IN_PROGRESS` project task may still be unassigned as the current main task and reject completion.
