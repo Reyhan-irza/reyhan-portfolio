@@ -1,5 +1,5 @@
 import { useEffect, useState, type HTMLAttributes, type ReactNode, type Ref } from "react";
-import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 type RevealProps = Omit<HTMLAttributes<HTMLElement>, "children" | "onDrag"> & {
   children?: ReactNode;
@@ -47,22 +47,20 @@ export default function Reveal({
   const entranceDelay = reduceMotion ? 0 : delay + (phone ? 0 : staggerIndex * 0.1);
 
   return (
-    <LazyMotion features={domAnimation}>
-      <MotionElement
-        className={className}
-        ref={innerRef}
-        {...attributes}
-        initial={initial}
-        {...(mount ? { animate: visible } : { whileInView: visible, viewport: { once: true, amount: tall ? 0 : amount } })}
-        transition={{
-          opacity: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
-          y: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
-          scale: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
-        }}
-      >
-        {children}
-      </MotionElement>
-    </LazyMotion>
+    <MotionElement
+      className={className}
+      ref={innerRef}
+      {...attributes}
+      initial={initial}
+      {...(mount ? { animate: visible } : { whileInView: visible, viewport: { once: true, amount: tall ? 0 : amount } })}
+      transition={{
+        opacity: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
+        y: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
+        scale: { duration: reduceMotion ? 0 : mount ? 0.8 : 1, delay: mount || reduceMotion ? 0 : entranceDelay, ease: easing },
+      }}
+    >
+      {children}
+    </MotionElement>
   );
 }
 

@@ -20,6 +20,7 @@ import { useLenis } from "../hooks/useLenis";
 import IntroAnimation from "@/components/IntroAnimation";
 import SectionBoundary from "@/components/SectionBoundary";
 import { LazyMotion, domAnimation } from "framer-motion";
+import { LazyMotion, domAnimation } from "framer-motion";
 import Reveal from "@/components/Reveal";
 
 const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
@@ -61,6 +62,7 @@ export default function Home() {
   }, []);
 
   return (
+    <LazyMotion features={domAnimation}>
     <LazyMotion features={domAnimation}>
     <div className="portfolio-shell relative min-h-[100dvh]">
       <AuroraBackground />
@@ -125,6 +127,7 @@ export default function Home() {
       <AchievementToast />
       {!introFinished && <IntroAnimation onFinish={finishIntro} />}
     </div>
+    </LazyMotion>
     </LazyMotion>
   );
 }
