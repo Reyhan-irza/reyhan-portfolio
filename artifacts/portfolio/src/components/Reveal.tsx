@@ -63,5 +63,3 @@ export default function Reveal({
     </MotionElement>
   );
 }
-
-export { easing as revealEasing };
