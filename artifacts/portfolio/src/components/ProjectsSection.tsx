@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FocusEvent, PointerEvent } from "react";
+import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { cubicBezierEase, gsap, ScrollTrigger } from "../lib/motion";
@@ -696,16 +697,16 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      {modal && (
+      {modal && createPortal(
         <div
-           className="fixed inset-0 z-[150] flex items-center justify-center bg-[#211f1b]/35 p-5 backdrop-blur-sm"
+          className="project-detail-overlay"
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"
         >
           <div
             ref={dialogRef}
-            className="project-detail-dialog modal-enter w-full max-w-xl p-6 md:p-9"
+            className="project-detail-dialog"
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
@@ -714,42 +715,61 @@ export default function ProjectsSection() {
             data-testid="project-detail-dialog"
             tabIndex={-1}
           >
-            <div className="flex items-start justify-between gap-5">
-              <div>
-                  <p className="project-detail-label">Project / 0{modal.id}</p>
-                 <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
-                  {modal.title}
-                </h3>
+            <header className="project-detail-header">
+              <div className="project-detail-heading">
+                <p className="project-detail-label">Project / 0{modal.id}</p>
+                <h3 id="project-detail-title">{modal.title}</h3>
+                <p className="project-detail-type">{modal.type}</p>
               </div>
               <button
                 ref={closeButtonRef}
                 type="button"
-                 className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
+                className="project-detail-close"
                 onClick={() => setModal(null)}
                 aria-label="Close project details"
                 data-testid="button-close-project-detail"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
-            </div>
+            </header>
 
-             <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
-                <p className="project-detail-label">About this project</p>
-               <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
-            </div>
-
-            <div className="mt-7">
-              <p className="project-detail-label">Built with</p>
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                {modal.tech.map((technology) => (
-                   <span key={technology} className="text-sm text-[#211f1b]">
-                    {technology}
-                  </span>
-                ))}
+            <figure className="project-detail-preview">
+              <div
+                className="project-detail-image-frame"
+                style={{ aspectRatio: `${modal.preview.width} / ${modal.preview.height}` }}
+              >
+                <img
+                  src={modal.preview.src}
+                  alt={modal.preview.alt}
+                  width={modal.preview.width}
+                  height={modal.preview.height}
+                  decoding="async"
+                />
+                <span className="project-detail-image-index" aria-hidden="true">0{modal.id}</span>
               </div>
+              <figcaption>
+                <span>Site capture</span>
+                <span aria-hidden="true">/</span>
+                <span>{modal.title}</span>
+              </figcaption>
+            </figure>
+
+            <div className="project-detail-content">
+              <section className="project-detail-about">
+                <p className="project-detail-label">About this project</p>
+                <p id="project-detail-description">{modal.description}</p>
+              </section>
+              <section className="project-detail-stack" aria-label={`Technologies used in ${modal.title}`}>
+                <p className="project-detail-label">Built with</p>
+                <ul>
+                  {modal.tech.map((technology) => (
+                    <li key={technology}>{technology}</li>
+                  ))}
+                </ul>
+              </section>
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <footer className="project-detail-footer">
               <a
                 href={modal.live}
                 target="_blank"
@@ -759,6 +779,7 @@ export default function ProjectsSection() {
               >
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 Visit live site
+                <ArrowUpRight className="project-detail-link-arrow" aria-hidden="true" />
               </a>
               <a
                 href={modal.github}
@@ -770,9 +791,10 @@ export default function ProjectsSection() {
                 <Github className="h-4 w-4" aria-hidden="true" />
                 GitHub
               </a>
-            </div>
+            </footer>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </section>
     </LazyMotion>
