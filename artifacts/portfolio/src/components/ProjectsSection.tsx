@@ -73,6 +73,7 @@ export default function ProjectsSection() {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
+  const skipFocusRestoreRef = useRef(false);
   const focusRestoreTimerRef = useRef<number | null>(null);
   const focusRestoreFrameRef = useRef<number | null>(null);
   const viewedRef = useRef(new Set<number>());
@@ -422,9 +423,29 @@ export default function ProjectsSection() {
     };
     window.addEventListener("keydown", handleKeyDown);
 
+    const closeForSectionNavigation = () => {
+      skipFocusRestoreRef.current = true;
+      setModal(null);
+    };
+    const handleInPageNavigation = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element) || !target.closest('a[href^="#"]')) return;
+      closeForSectionNavigation();
+    };
+    document.addEventListener("click", handleInPageNavigation, true);
+    window.addEventListener("hashchange", closeForSectionNavigation);
+    window.addEventListener("popstate", closeForSectionNavigation);
+
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("click", handleInPageNavigation, true);
+      window.removeEventListener("hashchange", closeForSectionNavigation);
+      window.removeEventListener("popstate", closeForSectionNavigation);
+      if (skipFocusRestoreRef.current) {
+        skipFocusRestoreRef.current = false;
+        return;
+      }
       const opener = openerRef.current;
       focusRestoreTimerRef.current = window.setTimeout(() => {
         focusRestoreTimerRef.current = null;
