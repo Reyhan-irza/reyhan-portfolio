@@ -77,7 +77,7 @@ export default function RoastButton() {
                 onClick={getNewRoast}
                  className="flex-1 py-2.5 rounded-xl border border-[#a43f2d]/30 text-[#a43f2d] text-sm font-medium hover:bg-[#a43f2d]/10 transition-all duration-200 flex items-center justify-center gap-2"
               >
-                <Flame className="w-4 h-4" /> Another roast
+                <Flame className="w-4 h-4" /> Roast lain
               </button>
               <button
                 onClick={() => setOpen(false)}

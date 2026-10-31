@@ -13,10 +13,13 @@ export function useLenis() {
     let lenis: Lenis | null = null;
     let ticker: ((time: number) => void) | null = null;
     let refreshFrame = 0;
-    let scrollLocked = false;
+    let resizeRefreshTimeout: number | undefined;
+    let disposed = false;
+    let scrollLocked = document.body.style.overflow === "hidden";
 
     const handleScrollLock = (event: Event) => {
-      scrollLocked = (event as CustomEvent<boolean>).detail;
+      scrollLocked =
+        (event as CustomEvent<boolean>).detail || document.body.style.overflow === "hidden";
       if (scrollLocked) lenis?.stop();
       else lenis?.start();
     };
@@ -25,8 +28,18 @@ export function useLenis() {
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
       refreshFrame = window.requestAnimationFrame(() => {
         refreshFrame = 0;
-        ScrollTrigger.refresh();
+        if (!disposed) ScrollTrigger.refresh();
       });
+    };
+
+    const scheduleBodyResizeRefresh = () => {
+      if (resizeRefreshTimeout !== undefined) {
+        window.clearTimeout(resizeRefreshTimeout);
+      }
+      resizeRefreshTimeout = window.setTimeout(() => {
+        resizeRefreshTimeout = undefined;
+        if (!disposed) scheduleRefresh();
+      }, 180);
     };
 
     const updateScrollTriggers = () => ScrollTrigger.update();
@@ -70,7 +83,7 @@ export function useLenis() {
 
     const resizeObserver = typeof ResizeObserver === "undefined"
       ? null
-      : new ResizeObserver(scheduleRefresh);
+      : new ResizeObserver(scheduleBodyResizeRefresh);
     resizeObserver?.observe(document.body);
 
     desktop.addEventListener("change", syncMotionMode);
@@ -84,6 +97,10 @@ export function useLenis() {
       window.removeEventListener("portfolio:scroll-lock", handleScrollLock);
       resizeObserver?.disconnect();
       stop(false);
+      disposed = true;
+      if (resizeRefreshTimeout !== undefined) {
+        window.clearTimeout(resizeRefreshTimeout);
+      }
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
     };
   }, []);

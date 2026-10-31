@@ -3,8 +3,8 @@ import {
   MessageSquare, Send, User, Search, SlidersHorizontal,
   ChevronLeft, ChevronRight, BadgeCheck, Loader2,
 } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
 import { supabase } from "@/lib/supabase";
+import Reveal from "./Reveal";
 
 // Table: "comments"  — fields: id, username, message, pinned, created_at
 // Table: "replies"   — fields: id, comment_id, reply_text, admin_name, created_at
@@ -30,7 +30,8 @@ function CommentText({ text }: { text: string }) {
       {isLong && (
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="text-[#a43f2d] text-xs mt-1.5 hover:text-[#843322] transition-colors"
+          className="comment-read-more text-[#a43f2d] text-xs mt-1.5 hover:text-[#843322] transition-colors"
+          aria-expanded={expanded}
         >
           {expanded ? "Sembunyikan ▲" : "Baca Selengkapnya ▼"}
         </button>
@@ -53,8 +54,6 @@ function formatTime(ts: string): string {
 }
 
 export default function CommentsSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
-  const formRef   = useScrollAnim({ threshold: 0.15, delay: 100 });
 
   const [comments,    setComments]    = useState<Comment[]>([]);
   const [replies,     setReplies]     = useState<Reply[]>([]);
@@ -71,11 +70,6 @@ export default function CommentsSection() {
   const [page,   setPage]   = useState(1);
 
   const listRef = useRef<HTMLDivElement>(null);
-  const listAnimRef = useScrollAnim<HTMLDivElement>({
-    threshold: 0.08,
-    stagger: 0.06,
-    refreshKey: `${comments.length}-${page}`,
-  });
 
   useEffect(() => {
     (async () => {
@@ -130,34 +124,37 @@ export default function CommentsSection() {
     }
 
     setSubmitting(true);
-    const { data, error: sbErr } = await supabase
+    const { error: sbErr } = await supabase
       .from("comments")
-      .insert([{ username: cleanName, message: cleanMsg }])
-      .select();
+      .insert([{ username: cleanName, message: cleanMsg }]);
 
     if (sbErr) {
       console.error("Insert error:", sbErr);
       setError(
         sbErr.code === "42501"
-          ? "Komentar tidak dapat dikirim (akses ditolak). Cek RLS Supabase."
+          ? "Supabase menolak izin INSERT (42501). Pastikan migration komentar dijalankan pada project yang dipakai situs."
           : "Gagal kirim komentar. Silakan coba lagi."
       );
       setSubmitting(false);
       return;
     }
 
-    if (data && data[0]) {
-      localStorage.setItem(RATE_KEY, Date.now().toString());
-      setComments((prev) => [data[0], ...prev]);
-      setName(""); setMessage(""); setError("");
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 4000);
-      setPage(1);
-      setTimeout(() => {
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
-      }, 150);
-    }
+    localStorage.setItem(RATE_KEY, Date.now().toString());
+    setComments((prev) => [{
+      id: -Date.now(),
+      username: cleanName,
+      message: cleanMsg,
+      pinned: false,
+      created_at: new Date().toISOString(),
+    }, ...prev]);
+    setName(""); setMessage(""); setError("");
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 4000);
+    setPage(1);
+    setTimeout(() => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+    }, 150);
     setSubmitting(false);
   };
 
@@ -168,29 +165,34 @@ export default function CommentsSection() {
       <div className="max-w-3xl mx-auto">
 
         {/* HEADER */}
-        <div ref={headerRef} className="fade-up text-center mb-14">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
-            Yoo wassup y&apos;all
+        <div className="text-center mb-14">
+        <Reveal>
+          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
+            COMMENTS
           </p>
-          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Absen-absen or <span className="text-[#a43f2d]">Something</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+            Leave a message for <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
-          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">Pesan moral</p>
+        </Reveal>
+        <div className="rgb-divider w-24 mx-auto mb-5" />
+        <Reveal>
+          <p className="text-[#6d6a62] max-w-md mx-auto text-base">Terima kasih sudah berkunjung.</p>
+        </Reveal>
         </div>
 
         {/* FORM */}
-        <div ref={formRef} className="fade-up glass neon-border rounded-2xl p-6 mb-8">
+        <Reveal className="glass neon-border rounded-2xl p-6 mb-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
+               <label htmlFor="comment-name" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
               <div className="relative">
                 <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6d6a62]" />
                 <input
+                  id="comment-name"
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (error) setError(""); }}
-                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
-                  placeholder="Nama kamu..."
+                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all"
+                  placeholder="Masukkan nama Anda..."
                   maxLength={50}
                   disabled={submitting}
                 />
@@ -198,15 +200,16 @@ export default function CommentsSection() {
             </div>
 
             <div>
-              <label className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
+               <label htmlFor="comment-message" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Pesan</label>
               <div className="relative">
                 <MessageSquare className="absolute left-3.5 top-3.5 w-4 h-4 text-[#6d6a62]" />
                 <textarea
+                  id="comment-message"
                   value={message}
                   onChange={(e) => { setMessage(e.target.value); if (error) setError(""); }}
                   rows={3}
-                   className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all resize-none"
-                  placeholder="Tulis pesan kamu..."
+                  className="w-full pl-10 pr-4 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] transition-all resize-none"
+                  placeholder="Tulis pesan untuk Reyhan..."
                   maxLength={500}
                   disabled={submitting}
                 />
@@ -214,7 +217,7 @@ export default function CommentsSection() {
               <p className="text-right text-[#6d6a62] text-[10px] mt-1">{message.length}/500</p>
             </div>
 
-            {error   && <p role="alert" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">{error}</p>}
+            {error   && <p role="status" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">{error}</p>}
             {success && <p role="status" className="text-[#a43f2d] text-xs bg-[#a43f2d]/10 border border-[#a43f2d]/20 rounded-lg px-3 py-2">Komentar berhasil dikirim.</p>}
 
             <button
@@ -226,7 +229,7 @@ export default function CommentsSection() {
               {submitting ? "Mengirim..." : "Kirim Komentar"}
             </button>
           </form>
-        </div>
+        </Reveal>
 
         {/* SEARCH + FILTER */}
         {comments.length > 0 && (
@@ -236,7 +239,7 @@ export default function CommentsSection() {
               <input
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                placeholder="Cari nama atau isi komentar..."
+                placeholder="Search names or comments..."
                  className="w-full pl-10 pr-4 py-2.5 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#211f1b] text-sm placeholder:text-[#6d6a62] focus:outline-none focus:border-[#a43f2d] transition-all"
               />
             </div>
@@ -247,40 +250,41 @@ export default function CommentsSection() {
                 onChange={(e) => { setSort(e.target.value as "newest" | "oldest"); setPage(1); }}
                  className="bg-transparent text-[#211f1b] text-sm focus:outline-none cursor-pointer"
               >
-                 <option value="newest" className="bg-[#f3efe6]">Terbaru</option>
-                 <option value="oldest" className="bg-[#f3efe6]">Terlama</option>
+                 <option value="newest" className="bg-[#f3efe6]">Newest</option>
+                 <option value="oldest" className="bg-[#f3efe6]">Oldest</option>
               </select>
             </div>
           </div>
         )}
 
+        {dataLoading && <p role="status" className="sr-only">Loading comments.</p>}
+        {!dataLoading && !dataError && comments.length > 0 && (
+          <p role="status" className="sr-only">Comments loaded.</p>
+        )}
+
         {/* LIST */}
-        <div
-          ref={(el) => {
-            listRef.current = el;
-            listAnimRef.current = el;
-          }}
-          className="flex flex-col gap-3"
+        <Reveal innerRef={listRef} className="flex flex-col gap-3" tall
+          aria-busy={dataLoading}
         >
           {dataLoading ? (
-            <div className="flex justify-center py-16">
+            <div className="flex justify-center py-16" aria-hidden="true">
                <Loader2 className="w-5 h-5 text-[#a43f2d] animate-spin" />
             </div>
           ) : dataError ? (
-             <div className="text-center py-12 text-[#a43f2d] text-sm">
+            <div role="status" className="text-center py-12 text-[#a43f2d] text-sm">
               Gagal memuat komentar. Periksa koneksi dan coba refresh.
             </div>
           ) : paginated.length === 0 ? (
-             <div className="text-center py-12 text-[#6d6a62] text-sm">
+             <div role="status" className="text-center py-12 text-[#6d6a62] text-sm">
               {search ? "Tidak ada komentar yang cocok." : "Belum ada komentar. Jadilah yang pertama!"}
             </div>
           ) : paginated.map((c) => {
             const cReplies = getReplies(c.id);
             return (
-              <div data-motion-item key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
+              <div key={c.id} className={`glass border rounded-xl p-4 hover:border-[#a43f2d] transition-colors ${c.pinned ? "border-[#a43f2d]" : "border-[rgba(33,31,27,.16)]"}`}>
                 {c.pinned && (
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Pinned</span>
+                    <span className="text-[9px] text-[#a43f2d] bg-[#a43f2d]/10 px-2 py-0.5 rounded-full border border-[#a43f2d]/20 uppercase font-bold tracking-wider">Disematkan</span>
                   </div>
                 )}
                 <div className="flex gap-3">
@@ -302,11 +306,11 @@ export default function CommentsSection() {
                     {cReplies.map((r) => (
                       <div key={r.id} className="flex gap-2.5 bg-[#a43f2d]/5 border border-[#a43f2d]/15 rounded-xl p-3">
                         <div className="w-7 h-7 rounded-full overflow-hidden border border-[rgba(33,31,27,.16)] flex-shrink-0">
-                          <img src="/profile.jpg" alt="Developer" className="w-full h-full object-cover" />
+                          <img src="/profile.jpg" alt="Pengembang" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className="text-[#a43f2d] font-semibold text-xs">{r.admin_name || "Developer"}</span>
+                            <span className="text-[#a43f2d] font-semibold text-xs">{r.admin_name || "Pengembang"}</span>
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#a43f2d]/10 border border-[#a43f2d]/20 text-[9px] font-bold text-[#a43f2d] uppercase tracking-wider">
                               <BadgeCheck className="w-2.5 h-2.5" /> DEVELOPER
                             </span>
@@ -321,7 +325,7 @@ export default function CommentsSection() {
               </div>
             );
           })}
-        </div>
+        </Reveal>
 
         {/* PAGINATION */}
         {totalPages > 1 && (
@@ -329,17 +333,24 @@ export default function CommentsSection() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Halaman komentar sebelumnya"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             </button>
-            <span className="text-[#6d6a62] text-sm tabular-nums">{page} / {totalPages}</span>
+            <span className="text-[#6d6a62] text-sm tabular-nums">
+              <span aria-hidden="true">{page} / {totalPages}</span>
+              <span role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                Halaman {page} dari {totalPages}
+              </span>
+            </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="w-9 h-9 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              aria-label="Halaman komentar berikutnya"
+              className="w-11 h-11 rounded-xl glass border border-[rgba(33,31,27,.16)] flex items-center justify-center text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a43f2d] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         )}

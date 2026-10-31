@@ -24,40 +24,41 @@ import {
 import type { IconType } from "react-icons";
 import { VscVscode } from "react-icons/vsc";
 import { gsap, ScrollTrigger } from "../lib/motion";
+import Reveal from "./Reveal";
 import "./TechnologyBands.css";
 
-type BrandLogo = { Icon: IconType; color: string };
-type ConceptIcon = { Icon: LucideIcon; color: string };
+type BrandLogo = { Icon: IconType };
+type ConceptIcon = { Icon: LucideIcon };
 
 const brandLogos: Record<string, BrandLogo> = {
-  React: { Icon: SiReact, color: "#61DAFB" },
-  TypeScript: { Icon: SiTypescript, color: "#3178C6" },
-  JavaScript: { Icon: SiJavascript, color: "#F7DF1E" },
-  HTML: { Icon: SiHtml5, color: "#E34F26" },
-  CSS: { Icon: SiCss, color: "#1572B6" },
-  "C#": { Icon: SiDotnet, color: "#512BD4" },
-  "Node.js": { Icon: SiNodedotjs, color: "#5FA04E" },
-  Git: { Icon: SiGit, color: "#F05032" },
-  GitHub: { Icon: SiGithub, color: "#A78BFA" },
-  Tailwind: { Icon: SiTailwindcss, color: "#06B6D4" },
-  Windows: { Icon: FaWindows, color: "#0078D4" },
-  Linux: { Icon: SiLinux, color: "#FCC624" },
-  Android: { Icon: SiAndroid, color: "#3DDC84" },
-  "Visual Studio": { Icon: DiVisualstudio, color: "#5C2D91" },
-  "VS Code": { Icon: VscVscode, color: "#007ACC" },
-  "Kali Linux": { Icon: SiKalilinux, color: "#79B8FF" },
-  Debian: { Icon: SiDebian, color: "#E34B67" },
-  MikroTik: { Icon: SiMikrotik, color: "#38BDF8" },
-  Cisco: { Icon: SiCisco, color: "#00BCEB" },
+  React: { Icon: SiReact },
+  TypeScript: { Icon: SiTypescript },
+  JavaScript: { Icon: SiJavascript },
+  HTML: { Icon: SiHtml5 },
+  CSS: { Icon: SiCss },
+  "C#": { Icon: SiDotnet },
+  "Node.js": { Icon: SiNodedotjs },
+  Git: { Icon: SiGit },
+  GitHub: { Icon: SiGithub },
+  Tailwind: { Icon: SiTailwindcss },
+  Windows: { Icon: FaWindows },
+  Linux: { Icon: SiLinux },
+  Android: { Icon: SiAndroid },
+  "Visual Studio": { Icon: DiVisualstudio },
+  "VS Code": { Icon: VscVscode },
+  "Kali Linux": { Icon: SiKalilinux },
+  Debian: { Icon: SiDebian },
+  MikroTik: { Icon: SiMikrotik },
+  Cisco: { Icon: SiCisco },
 };
 
 const conceptIcons: Record<string, ConceptIcon> = {
-  Termux: { Icon: Terminal, color: "#34D399" },
-  Router: { Icon: Router, color: "#F97316" },
-  Switch: { Icon: Network, color: "#22D3EE" },
-  VLAN: { Icon: Layers3, color: "#C4B5FD" },
-  "TCP/IP": { Icon: Cable, color: "#FB7185" },
-  "Network Infrastructure": { Icon: Waypoints, color: "#FBBF24" },
+  Termux: { Icon: Terminal },
+  Router: { Icon: Router },
+  Switch: { Icon: Network },
+  VLAN: { Icon: Layers3 },
+  "TCP/IP": { Icon: Cable },
+  "Network Infrastructure": { Icon: Waypoints },
 };
 
 function TechnologyLogo({ name }: { name: string }) {
@@ -65,7 +66,7 @@ function TechnologyLogo({ name }: { name: string }) {
   if (brand) {
     const Icon = brand.Icon;
     return (
-      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: brand.color }}>
+      <span className="technology-band__mark" aria-hidden="true">
         <Icon aria-hidden="true" focusable="false" />
       </span>
     );
@@ -75,7 +76,7 @@ function TechnologyLogo({ name }: { name: string }) {
   if (concept) {
     const Icon = concept.Icon;
     return (
-      <span className="technology-band__mark" role="img" aria-label={name} style={{ color: concept.color }}>
+      <span className="technology-band__mark" aria-hidden="true">
         <Icon aria-hidden="true" focusable="false" strokeWidth={1.8} />
       </span>
     );
@@ -98,28 +99,28 @@ const bands: readonly TechnologyBand[] = [
   {
     id: "build",
     number: "01",
-    label: "BUILD",
+    label: "PENGEMBANGAN",
     direction: "left",
-    duration: 30,
-    mobileDuration: 36,
+    duration: 27,
+    mobileDuration: 18,
     technologies: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "C#", "Node.js", "Git", "GitHub", "Tailwind"],
   },
   {
     id: "system",
     number: "02",
-    label: "SYSTEM",
+    label: "SISTEM",
     direction: "right",
-    duration: 36,
-    mobileDuration: 42,
+    duration: 33,
+    mobileDuration: 23,
     technologies: ["Windows", "Linux", "Android", "Visual Studio", "VS Code", "Termux", "Kali Linux", "Debian"],
   },
   {
     id: "network",
     number: "03",
-    label: "NETWORK",
+    label: "JARINGAN",
     direction: "left",
-    duration: 42,
-    mobileDuration: 48,
+    duration: 39,
+    mobileDuration: 28,
     technologies: ["MikroTik", "Cisco", "Router", "Switch", "VLAN", "TCP/IP", "Network Infrastructure"],
   },
 ];
@@ -150,9 +151,14 @@ export default function TechnologyBands() {
           if (match.conditions?.reducedMotion) return;
 
           const compact = Boolean(match.conditions?.compact);
-          const revealDistance = () => gsap.utils.clamp(16, 42, section.clientWidth * 0.035);
           const animatedTracks: AnimatedTrack[] = [];
           let resetSpeed: gsap.core.Tween | undefined;
+          let sectionIsActive = false;
+          const syncTrackPlayback = () => {
+            animatedTracks.forEach(({ tween }) => {
+              tween.paused(!sectionIsActive || document.hidden);
+            });
+          };
 
           section.querySelectorAll<HTMLElement>("[data-band-track]").forEach((track) => {
             const bandElement = track.closest<HTMLElement>("[data-band-id]");
@@ -181,60 +187,20 @@ export default function TechnologyBands() {
             animatedTracks.push({ tween, setSpeed });
           });
 
-          const header = section.querySelector<HTMLElement>("[data-section-header]");
-          if (header) {
-            gsap.fromTo(
-              header,
-              { x: () => -gsap.utils.clamp(16, 24, section.clientWidth * 0.02), autoAlpha: 0 },
-              {
-                x: 0,
-                autoAlpha: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: section,
-                  start: "top 86%",
-                  end: "top 34%",
-                  scrub: 0.65,
-                  invalidateOnRefresh: true,
-                },
-              },
-            );
-          }
-          section.querySelectorAll<HTMLElement>("[data-band-entry]").forEach((entry) => {
-            const band = entry.closest<HTMLElement>("[data-band-id]");
-            if (!band) return;
-            const direction = band.dataset.direction === "right" ? 1 : -1;
-            gsap.fromTo(
-              entry,
-              { x: () => direction * revealDistance(), autoAlpha: 0 },
-              {
-                x: 0,
-                autoAlpha: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: band,
-                  start: "top 92%",
-                  end: "top 48%",
-                  scrub: 0.7,
-                  invalidateOnRefresh: true,
-                },
-              },
-            );
-          });
-
           const velocityTrigger = ScrollTrigger.create({
             trigger: section,
             start: "top bottom",
             end: "bottom top",
             onToggle: (self) => {
+              sectionIsActive = self.isActive;
               if (!self.isActive) {
                 resetSpeed?.kill();
                 resetSpeed = undefined;
               }
-              animatedTracks.forEach(({ tween, setSpeed }) => {
-                tween.paused(!self.isActive);
+              animatedTracks.forEach(({ setSpeed }) => {
                 if (!self.isActive) setSpeed(1);
               });
+              syncTrackPlayback();
             },
             onUpdate: (self) => {
               const velocity = Math.abs(self.getVelocity());
@@ -248,9 +214,12 @@ export default function TechnologyBands() {
             },
           });
 
-          animatedTracks.forEach(({ tween }) => tween.paused(!velocityTrigger.isActive));
+          sectionIsActive = velocityTrigger.isActive;
+          document.addEventListener("visibilitychange", syncTrackPlayback);
+          syncTrackPlayback();
 
           return () => {
+            document.removeEventListener("visibilitychange", syncTrackPlayback);
             resetSpeed?.kill();
             velocityTrigger.kill();
             animatedTracks.forEach(({ tween }) => tween.kill());
@@ -274,22 +243,22 @@ export default function TechnologyBands() {
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
         Technologies I use
       </h2>
-      <header className="technology-bands__header" data-section-header>
+      <Reveal as="header" className="technology-bands__header">
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
             <span>01</span>
             <span aria-hidden="true">/</span>
-            <span>TOOLS IN MOTION</span>
+            <span>TEKNOLOGI YANG DIGUNAKAN</span>
           </p>
         </div>
         <p className="technology-bands__intro">
-          Languages, systems and networks behind the work.
+          Languages, systems, and networks behind my projects.
         </p>
-      </header>
+      </Reveal>
 
       <div className="technology-bands__rows">
         {bands.map((band) => (
-          <div
+          <Reveal
             className={`technology-band technology-band--${band.id}`}
             key={band.id}
             data-band-id={band.id}
@@ -301,7 +270,7 @@ export default function TechnologyBands() {
               <span className="technology-band__name">{band.label}</span>
             </div>
 
-            <div className="technology-band__entry" data-band-entry>
+            <div className="technology-band__entry">
               <div
                 className="technology-band__viewport"
                 role="group"
@@ -311,7 +280,7 @@ export default function TechnologyBands() {
                   {[0, 1].map((copy) => (
                     <ul
                       className="technology-band__sequence"
-                      aria-label={copy === 0 ? `${band.label} technologies` : undefined}
+                      aria-label={copy === 0 ? `Teknologi ${band.label.toLowerCase()}` : undefined}
                       aria-hidden={copy === 1}
                       key={copy}
                     >
@@ -334,6 +303,7 @@ export default function TechnologyBands() {
                             onPointerLeave={() => setPressedTechnology(null)}
                           >
                             <TechnologyLogo name={technology} />
+                            <span className="technology-band__technology-name">{technology}</span>
                           </li>
                         );
                       })}
@@ -342,7 +312,7 @@ export default function TechnologyBands() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
