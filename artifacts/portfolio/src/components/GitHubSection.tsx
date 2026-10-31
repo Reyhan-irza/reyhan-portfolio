@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Github, Star, GitFork, ExternalLink, Code2 } from "lucide-react";
-import { useScrollAnim } from "../hooks/useScrollAnim";
 import { SkeletonGitHubCard } from "./SkeletonCard";
+import Reveal from "./Reveal";
 
 const GITHUB_USERNAME = "Reyhan-irza";
 
@@ -41,49 +41,47 @@ function formatDate(dateStr: string) {
   if (days < 30) return `${days} days ago`;
   if (days < 365) {
     const months = Math.floor(days / 30);
-    return `${months} ${months === 1 ? "month" : "months"} ago`;
+    return `${months} months ago`;
   }
   const years = Math.floor(days / 365);
-  return `${years} ${years === 1 ? "year" : "years"} ago`;
+  return `${years} years ago`;
 }
 
-function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
-  const ref = useScrollAnim<HTMLAnchorElement>({ threshold: 0.1, delay });
+function RepoCard({ repo }: { repo: Repo }) {
   const langColor = repo.language ? (LANG_COLORS[repo.language] || "bg-[#a43f2d]") : null;
 
   return (
     <a
-      ref={ref}
       href={repo.html_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="fade-up glass border border-[rgba(33,31,27,.16)] rounded-2xl p-5 flex flex-col gap-3 hover:border-[#a43f2d] hover:-translate-y-1 transition-all duration-300 group"
+      className="glass border border-[rgba(33,31,27,.16)] rounded-2xl p-5 flex flex-col gap-3 hover:border-[#a43f2d] hover:-translate-y-1 transition-all duration-300 group"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <Code2 className="w-4 h-4 text-[#a43f2d] flex-shrink-0" />
-          <span className="text-[#211f1b] font-semibold text-sm truncate group-hover:text-[#a43f2d] transition-colors">
+          <span className="text-[#211f1b] font-semibold text-base truncate group-hover:text-[#a43f2d] transition-colors">
             {repo.name}
           </span>
         </div>
         <ExternalLink className="w-3.5 h-3.5 text-[#6d6a62] group-hover:text-[#a43f2d] transition-colors flex-shrink-0 mt-0.5" />
       </div>
 
-      <p className="text-[#6d6a62] text-xs leading-relaxed flex-1 line-clamp-2">
-        {repo.description || "No description available."}
+      <p className="text-[#6d6a62] text-sm leading-relaxed flex-1 line-clamp-3">
+        {repo.description || "No description provided."}
       </p>
 
       {repo.topics.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {repo.topics.slice(0, 3).map((t) => (
-            <span key={t} className="px-2 py-0.5 text-[10px] rounded-full bg-[#a43f2d]/10 border border-[#a43f2d]/20 text-[#a43f2d]">
+            <span key={t} className="px-2 py-0.5 text-xs rounded-full bg-[#a43f2d]/10 border border-[#a43f2d]/20 text-[#a43f2d]">
               {t}
             </span>
           ))}
         </div>
       )}
 
-      <div className="flex items-center gap-4 text-[#6d6a62] text-xs">
+      <div className="flex items-center gap-4 text-[#6d6a62] text-sm">
         {repo.language && langColor && (
           <span className="flex items-center gap-1.5">
             <span className={`w-2.5 h-2.5 rounded-full ${langColor}`} />
@@ -107,17 +105,10 @@ function RepoCard({ repo, delay }: { repo: Repo; delay: number }) {
 }
 
 export default function GitHubSection() {
-  const headerRef = useScrollAnim({ threshold: 0.2 });
   const [repos,   setRepos]   = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(false);
   const [stats,   setStats]   = useState<{ public_repos: number; followers: number; following: number } | null>(null);
-  const statsRef = useScrollAnim<HTMLDivElement>({
-    threshold: 0.18,
-    stagger: 0.08,
-    distance: 14,
-    refreshKey: stats ? "loaded" : "pending",
-  });
 
   useEffect(() => {
     let alive = true;
@@ -141,48 +132,66 @@ export default function GitHubSection() {
     return () => { alive = false; };
   }, []);
 
-  if (!loading && error) return null;
-
   return (
     <section id="github" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
 
-        <div ref={headerRef} className="fade-up text-center mb-14">
-          <p data-motion-item className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Code / projects</p>
-          <h2 data-motion-item className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
+        <div className="text-center mb-14">
+          <Reveal>
+          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Code / projects</p>
+          <h2 className="portfolio-section-heading font-bold text-[#211f1b] mb-4">
             GitHub
           </h2>
-          <div data-motion-item className="rgb-divider w-24 mx-auto mb-5" />
-          <p data-motion-item className="text-[#6d6a62] max-w-md mx-auto text-base">
-            Some of the repositories and experiments I’ve been working on.
+          </Reveal>
+          <div className="rgb-divider w-24 mx-auto mb-5" />
+          <Reveal>
+          <p className="text-[#6d6a62] max-w-md mx-auto text-lg leading-relaxed">
+            A few repositories and experiments I’m working on.
           </p>
+          </Reveal>
         </div>
 
         {/* Stats bar */}
         {stats && (
-          <div ref={statsRef} className="flex justify-center gap-6 md:gap-10 mb-10">
+          <Reveal className="flex justify-center gap-6 md:gap-10 mb-10">
             {[
-              { label: "Repositories", value: stats.public_repos },
-              { label: "Followers",    value: stats.followers    },
-              { label: "Following",    value: stats.following    },
+              { label: "Repositori", value: stats.public_repos },
+              { label: "Pengikut",    value: stats.followers    },
+              { label: "Mengikuti",    value: stats.following    },
             ].map(({ label, value }) => (
-              <div key={label} data-motion-item className="text-center">
+              <div key={label} className="text-center">
                 <p className="text-2xl font-black text-[#a43f2d] tabular-nums">{value}</p>
-                <p className="text-[#6d6a62] text-xs mt-0.5">{label}</p>
+                <p className="text-[#6d6a62] text-sm mt-0.5">{label}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         )}
 
         {/* Repo grid */}
+        <div aria-busy={loading}>
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => <SkeletonGitHubCard key={i} />)}
           </div>
+        ) : error ? (
+          <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
+            Data GitHub belum bisa dimuat. Tautan profil tetap tersedia di bawah.
+          </p>
+        ) : repos.length === 0 ? (
+          <p role="status" className="border border-white/10 px-5 py-6 text-sm text-neutral-400">
+            No public repositories to show.
+          </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {repos.map((r, i) => <RepoCard key={r.id} repo={r} delay={i * 60} />)}
-          </div>
+          <Reveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" tall>
+            {repos.map((r) => <RepoCard key={r.id} repo={r} />)}
+          </Reveal>
+        )}
+        </div>
+        {loading && <p role="status" className="sr-only">Loading public GitHub repositories.</p>}
+        {!loading && !error && repos.length > 0 && (
+          <p role="status" className="sr-only">
+            {repos.length} repositori publik berhasil dimuat.
+          </p>
         )}
 
         <div className="mt-8 flex justify-center">

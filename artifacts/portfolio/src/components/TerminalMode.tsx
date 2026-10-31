@@ -11,19 +11,19 @@ interface HistoryItem {
 
 const COMMANDS: Record<string, () => string> = {
   help: () =>
-    `Available commands:\n\n  whoami    About me\n  skills    Tools in my projects\n  projects  Selected projects\n  roadmap   What I’m working on\n  contact   Get in touch\n  music     Currently listening\n  ls        List sections\n  pwd       Current directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
+    `Available commands:\n\n  whoami    About me\n  skills    Project technologies\n  projects  Selected projects\n  roadmap   Current focus\n  contact   Get in touch\n  music     Currently listening\n  ls        List portfolio sections\n  pwd       Print working directory\n  date      Current date/time\n  clear     Clear terminal\n  exit      Close terminal`,
 
   whoami: () =>
-    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Student Developer              │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nI learn by building websites and small\ndigital tools, then improving them as\nI learn more about systems and\nnetworking.\n\nYou can find my projects throughout\nthis portfolio.`,
+    `┌─────────────────────────────────┐\n│  Reyhan Irza Alvano             │\n│  Pelajar · Pengembang web       │\n│  Lubuk Basung, Indonesia        │\n└─────────────────────────────────┘\n\nMinat saya pada komputer tumbuh\nsekitar 2015. Dari Python scripts dan\nWhatsApp bots, saya lanjut mempelajari\ncoding, AI, dan teknologi web.\n\nSaya terus membangun proyek sambil\nmengejar tujuan menjadi pengembang\nweb full-stack dengan pemahaman AI kuat.`,
 
   skills: () =>
-    `TOOLS IN MY PROJECTS\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThese tools show up in different\nprojects. I’m still learning as I build.`,
+    `PROJECT TECHNOLOGIES\n\n  React\n  TypeScript\n  Tailwind CSS\n  GSAP / ScrollTrigger\n  Lenis\n  Supabase\n\nThese technologies appear across\nprojects I’ve built.`,
 
   projects: () =>
-    `Featured projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → See full list: scroll to #projects`,
+    `Selected projects:\n\n  [01] TJKT                       Live\n  [02] VIREON Library             Live\n  [03] Reyhan WhatsApp Portfolio  Live\n\n  → View all: scroll to #projects`,
 
   roadmap: () =>
-    `What I’m working on:\n\n  Keep learning\n  Build useful things\n  See where it goes\n\nI don’t have everything planned out yet.\nI’m figuring it out as I go.`,
+    `Fokus saya sekarang:\n\n  Terus belajar\n  Terus membangun\n  Menjadi pengembang web full-stack\n\nSaya ingin memiliki pemahaman praktik\nAI yang kuat sambil mengembangkan\nkemampuan web.`,
 
   future: () => COMMANDS.roadmap(),
 

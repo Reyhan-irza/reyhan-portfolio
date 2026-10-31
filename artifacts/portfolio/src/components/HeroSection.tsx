@@ -1,11 +1,14 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
+import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
+import HeroTypingLoop from "./HeroTypingLoop";
+import Reveal from "./Reveal";
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const markRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -20,129 +23,119 @@ export default function HeroSection() {
       (context) => {
         if (context.conditions?.reduced) return;
         const compact = Boolean(context.conditions?.compact);
-        const cleanups: Array<() => void> = [];
         const scope = gsap.context(() => {
-          const opening = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.08 });
-          opening
-            .fromTo("[data-hero-item]", { y: compact ? 10 : 19, opacity: 0 }, {
-              y: 0, opacity: 1, duration: compact ? 0.48 : 0.7, stagger: compact ? 0.045 : 0.07,
-              clearProps: "transform,opacity",
-            })
-            .fromTo("[data-hero-rule]", { scaleX: 0 }, {
-              scaleX: 1, transformOrigin: "left center", duration: 0.8, clearProps: "transform",
-            }, 0.12);
-          const scrollRange = {
-            trigger: section,
-            start: "top top",
-            end: "bottom top",
-            scrub: compact ? 0.35 : 0.7,
-            invalidateOnRefresh: true,
-          };
           const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
           const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
           const grid = section.querySelector<HTMLElement>(".hero-grid");
+          const kicker = section.querySelector<HTMLElement>("[data-hero-kicker]");
+          const orbit = section.querySelector<HTMLElement>("[data-hero-orbit]");
+          const axisX = section.querySelector<HTMLElement>("[data-hero-axis-x]");
+          const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
+          const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
+          // The opening is a hand-off: the name holds while the personal note
+          // moves forward, then the whole composition gently yields to the page.
+          const story = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "bottom top",
+              scrub: compact ? 0.2 : 0.72,
+              invalidateOnRefresh: true,
+            },
+          });
 
+          story.addLabel("hold", 0);
           if (title) {
-            gsap.to(title, {
-              y: compact ? -10 : -30,
-              scale: compact ? 0.985 : 0.95,
-              opacity: 0.88,
+            story.to(title, {
+              y: compact ? -4 : -12,
+              scale: compact ? 0.998 : 0.985,
+              opacity: compact ? 0.98 : 0.94,
               transformOrigin: "left center",
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.3 : 0.62 },
-            });
+              duration: 0.48,
+            }, "hold");
           }
           if (lead) {
-            gsap.to(lead, {
-              y: compact ? -5 : -14,
-              opacity: 0.78,
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.25 : 0.5 },
-            });
+            story.to(lead, {
+              y: compact ? -2 : -5,
+              opacity: compact ? 0.98 : 0.92,
+              duration: 0.48,
+            }, "hold+=0.08");
+          }
+          if (kicker) {
+            story.to(kicker, {
+              x: compact ? -1 : -5,
+              opacity: compact ? 0.98 : 0.88,
+              duration: 0.48,
+            }, "hold");
           }
           if (grid) {
-            gsap.to(grid, {
-              yPercent: compact ? 5 : 15,
-              opacity: compact ? 0.28 : 0.62,
-              ease: "none",
-              scrollTrigger: { ...scrollRange, scrub: compact ? 0.35 : 0.75 },
-            });
+            story.to(grid, {
+              yPercent: compact ? 1 : 3,
+              opacity: compact ? 0.5 : 0.58,
+              duration: 0.48,
+            }, "hold");
           }
-          if (markRef.current && !compact) {
-            gsap.to(markRef.current, {
-              y: -28,
-              rotate: 5,
-              scale: 1.08,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: "bottom top",
-                scrub: 0.8,
-                invalidateOnRefresh: true,
-              },
-            });
+          if (orbit && !compact) {
+            story.fromTo(orbit, { rotate: -5 }, { rotate: 12, duration: 0.48 }, "hold");
           }
-          gsap.fromTo("[data-hero-orbit]", { rotate: -5 }, {
-            rotate: 24,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo("[data-hero-axis-x]", { scaleX: 0.12, opacity: 0.2 }, {
-            scaleX: 1,
-            opacity: 1,
-            transformOrigin: "center center",
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.3 : 0.65,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo("[data-hero-axis-y]", { scaleY: 0.12, opacity: 0.2 }, {
-            scaleY: 1,
-            opacity: 1,
-            transformOrigin: "center center",
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.3 : 0.65,
-              invalidateOnRefresh: true,
-            },
-          });
-          if (!compact && window.matchMedia("(pointer: fine)").matches) {
-            section.querySelectorAll<HTMLElement>("[data-hero-magnetic]").forEach((button) => {
-              const moveX = gsap.quickTo(button, "x", { duration: 0.24, ease: "power3.out" });
-              const moveY = gsap.quickTo(button, "y", { duration: 0.24, ease: "power3.out" });
-              const onMove = (event: PointerEvent) => {
-                const bounds = button.getBoundingClientRect();
-                moveX((event.clientX - bounds.left - bounds.width / 2) * 0.07);
-                moveY((event.clientY - bounds.top - bounds.height / 2) * 0.07);
-              };
-              const reset = () => { moveX(0); moveY(0); };
-              button.addEventListener("pointermove", onMove);
-              button.addEventListener("pointerleave", reset);
-              button.addEventListener("blur", reset);
-              cleanups.push(() => {
-                button.removeEventListener("pointermove", onMove);
-                button.removeEventListener("pointerleave", reset);
-                button.removeEventListener("blur", reset);
-              });
-            });
+          if (axisX && !compact) {
+            story.fromTo(axisX, {
+              scaleX: 0.72,
+              opacity: 0.5,
+              transformOrigin: "center center",
+            }, {
+              scaleX: 1,
+              opacity: 0.72,
+              duration: 0.38,
+            }, "hold+=0.06");
           }
+          if (axisY && !compact) {
+            story.fromTo(axisY, {
+              scaleY: 0.72,
+              opacity: 0.5,
+              transformOrigin: "center center",
+            }, {
+              scaleY: 1,
+              opacity: 0.72,
+              duration: 0.34,
+            }, "hold+=0.1");
+          }
+
+          story.addLabel("release", 0.56);
+          if (title) {
+            story.to(title, {
+              y: compact ? -8 : -25,
+              scale: compact ? 0.994 : 0.96,
+              opacity: compact ? 0.92 : 0.76,
+              duration: 0.44,
+            }, "release");
+          }
+          if (lead) {
+            story.to(lead, {
+              y: compact ? -5 : -16,
+              opacity: compact ? 0.94 : 0.78,
+              duration: 0.44,
+            }, "release");
+          }
+          if (kicker) {
+            story.to(kicker, {
+              x: compact ? -3 : -12,
+              opacity: compact ? 0.92 : 0.68,
+              duration: 0.44,
+            }, "release");
+          }
+          if (grid) {
+            story.to(grid, { yPercent: compact ? 3 : 10, opacity: 0.2, duration: 0.44 }, "release");
+          }
+          if (orbit && !compact) {
+            story.to(orbit, { rotate: 28, opacity: 0.36, duration: 0.44 }, "release");
+          }
+          if (axisX && !compact) story.to(axisX, { opacity: 0.32, duration: 0.44 }, "release");
+          if (axisY && !compact) story.to(axisY, { opacity: 0.32, duration: 0.44 }, "release");
+          if (scrollCue) story.to(scrollCue, { opacity: 0, duration: 0.28 }, "release+=0.08");
         }, section);
         return () => {
-          cleanups.forEach((cleanup) => cleanup());
           scope.revert();
         };
       },
@@ -161,64 +154,78 @@ export default function HeroSection() {
       <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
-          <p data-hero-item className="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[.2em] text-[#aab2c2] md:text-xs">
-            <span className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
-            Student Developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
+          <Reveal mount>
+          <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[.17em] text-[#aab2c2] md:text-sm">
+            <span data-hero-indicator className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
+            SMK Student <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
           <div data-hero-title-depth>
-            <h1 data-hero-item className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
-              REYHAN
-              <br />
-              IRZA
-              <br />
-              <span className="hero-name-accent">ALVANO<span className="text-[#8b6cff]">.</span></span>
+            <h1 className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
+              <span className="block overflow-hidden"><span data-hero-title-line className="block">REYHAN</span></span>
+              <span className="block overflow-hidden"><span data-hero-title-line className="block">IRZA</span></span>
+              <span className="block overflow-hidden"><span data-hero-title-line className="hero-name-accent block">ALVANO<span className="text-[#8b6cff]">.</span></span></span>
             </h1>
           </div>
           <div data-hero-rule className="hero-rule mt-9 h-px w-full origin-left bg-white/15 md:mt-12" />
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
-              <p data-hero-item className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                I’m a student developer who learns by building. I make websites, digital tools, and small experiments, then improve them as I go.
+              <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
+                Halo, saya Reyhan. Rasa penasaran saya pada komputer tumbuh saat sering mampir ke warnet sekitar 2015. Sekarang saya belajar web lewat proyek: mencoba ide, menemukan yang perlu diperbaiki, lalu mencoba lagi.
               </p>
             </div>
-            <p data-hero-item className="max-w-[220px] border-l border-[#667cff]/55 pl-4 text-xs leading-relaxed text-[#8b93a3]">
-              I mostly work with React and TypeScript while learning more about systems, networking, and how things work behind the interface.
+            <p className="relative max-w-[250px] pl-4 text-sm leading-relaxed text-[#8b93a3] md:text-base">
+              <span data-hero-callout-rule className="absolute inset-y-0 left-0 w-px origin-top bg-[#667cff]/55" aria-hidden="true" />
+              <span data-hero-callout-copy className="block">
+                <span aria-hidden="true">
+                  Belakangan ini, saya juga mendalami:
+                  <br />
+                  <HeroTypingLoop />
+                </span>
+                <span className="sr-only">
+                  Belakangan ini, saya juga mendalami web, TypeScript, Tailwind, dan AI lewat proyek di waktu luang.
+                </span>
+              </span>
             </p>
           </div>
-          <div data-hero-item className="mt-9 flex flex-wrap items-center gap-3">
-            <button type="button" data-hero-magnetic onClick={() => scrollTo("#projects")} className="hero-primary inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
-              Explore my work <ArrowDown className="h-4 w-4" aria-hidden="true" />
-            </button>
-            <button type="button" data-hero-magnetic onClick={() => scrollTo("#contact")} className="hero-secondary inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
-              Say hello <MoveUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </button>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <LazyMotion features={domAnimation}>
+              <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
+                Explore my work <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+              </m.button>
+              <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
+                Say hello <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+              </m.button>
+            </LazyMotion>
           </div>
-          <a data-hero-item href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.15em] text-white/40 transition-colors hover:text-[#9da9ff]">
+          <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.15em] text-white/50 transition-colors hover:text-[#9da9ff]">
             GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
+          </Reveal>
         </div>
 
-        <aside className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="RV geometric identity">
+        <Reveal mount media className="relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block">
+        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="Identitas visual RV">
           <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
           <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
           <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
           <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
           <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
-          <div ref={markRef} className="hero-mark-image absolute inset-[13%]">
+          <div className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
-              alt="Metallic silver RV monogram with cool-blue edge lighting"
+              alt="Monogram RV berwarna perak metalik dengan cahaya biru"
               fetchPriority="high"
               className="h-full w-full"
             />
           </div>
-          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identity / 01</div>
+          <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identitas / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
           <span className="hero-corner hero-corner-a" aria-hidden="true" />
           <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
+        </Reveal>
       </div>
-      <a href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
+      <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
       </a>
     </section>

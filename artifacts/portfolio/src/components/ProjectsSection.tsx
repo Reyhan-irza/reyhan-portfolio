@@ -1,9 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { PointerEvent } from "react";
+import type { FocusEvent, PointerEvent } from "react";
+import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
+import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+import Reveal from "./Reveal";
 
+// Product previews are direct captures of the linked public sites, not recreated UI.
 const projects = [
   {
     id: 1,
@@ -15,6 +19,12 @@ const projects = [
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/tjkt-homepage.webp`,
+      width: 1440,
+      height: 1000,
+      alt: "TJKT department website homepage with its school identity and networking-program information.",
+    },
     accent: "TJKT",
   },
   {
@@ -27,6 +37,12 @@ const projects = [
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/vireon-library.webp`,
+      width: 1440,
+      height: 857,
+      alt: "VIREON Library landing page with a library-management dashboard preview and workflow summary.",
+    },
     accent: "VIREON",
   },
   {
@@ -39,6 +55,12 @@ const projects = [
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
+    preview: {
+      src: `${import.meta.env.BASE_URL}project-previews/reyhan-portfolio.webp`,
+      width: 1440,
+      height: 857,
+      alt: "Reyhan Irza Alvano portfolio homepage captured from the public WhatsApp-related portfolio site.",
+    },
     accent: "REYHAN",
   },
 ] as const;
@@ -46,17 +68,27 @@ const projects = [
 type Project = (typeof projects)[number];
 
 export default function ProjectsSection() {
+  const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
+  const progressFillRef = useRef<HTMLSpanElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
+  const skipFocusRestoreRef = useRef(false);
+  const focusRestoreTimerRef = useRef<number | null>(null);
+  const focusRestoreFrameRef = useRef<number | null>(null);
   const viewedRef = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
   const [activeProject, setActiveProject] = useState(0);
   const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
+  const [focusedProject, setFocusedProject] = useState<number | null>(null);
   const [modal, setModal] = useState<Project | null>(null);
+
+  const updatePinnedStoryActive = (active: boolean) => {
+    setPinnedStoryActive(active);
+  };
 
   const updateActiveProject = (index: number) => {
     const next = Math.max(0, Math.min(projects.length - 1, index));
@@ -70,20 +102,21 @@ export default function ProjectsSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
+    let restoreProjectFrame = 0;
     media.add(
       {
         reduced: "(prefers-reduced-motion: reduce)",
-        compact: "(max-width: 767px)",
         wide: "(min-width: 768px)",
         desktop: "(min-width: 1024px)",
       },
       (mediaContext) => {
         if (mediaContext.conditions?.reduced) return;
-        const compact = Boolean(mediaContext.conditions?.compact);
         let resizeObserver: ResizeObserver | undefined;
+        let refreshFrame = 0;
+        let sizedTrack: HTMLElement | null = null;
+        let horizontalStoryPinned = false;
         const context = gsap.context(() => {
           const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
-
           const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
           const track = section.querySelector<HTMLElement>("[data-project-track]");
           const stage = section.querySelector<HTMLElement>("[data-project-stage]");
@@ -92,6 +125,7 @@ export default function ProjectsSection() {
           );
 
           if (hasHorizontalStory && viewport && track && stage) {
+            sizedTrack = track;
             const setSlideWidth = () => {
               track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
             };
@@ -99,6 +133,7 @@ export default function ProjectsSection() {
 
             const slideWidth = () => viewport.clientWidth;
             const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const panelStep = 1 / (rows.length - 1);
             const horizontalStory = gsap.to(track, {
               x: () => -travelDistance(),
               ease: "none",
@@ -110,101 +145,70 @@ export default function ProjectsSection() {
                 pin: stage,
                 pinSpacing: true,
                 scrub: 0.8,
+                snap: {
+                  snapTo: (progress) => {
+                    const focusedRow = document.activeElement instanceof HTMLElement
+                      ? document.activeElement.closest<HTMLElement>("[data-project-row]")
+                      : null;
+                    const focusedIndex = Number(focusedRow?.dataset.projectIndex);
+                    if (
+                      section.contains(focusedRow) &&
+                      Number.isInteger(focusedIndex) &&
+                      focusedIndex >= 0 &&
+                      focusedIndex < rows.length
+                    ) {
+                      return focusedIndex * panelStep;
+                    }
+                    return Math.round(progress / panelStep) * panelStep;
+                  },
+                  directional: false,
+                  inertia: false,
+                  delay: 0.12,
+                  duration: { min: 0.2, max: 0.48 },
+                  ease: "power2.inOut",
+                },
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
-                onEnter: () => setPinnedStoryActive(true),
-                onEnterBack: () => setPinnedStoryActive(true),
+                onEnter: () => {
+                  horizontalStoryPinned = true;
+                  updatePinnedStoryActive(true);
+                },
+                onEnterBack: () => {
+                  horizontalStoryPinned = true;
+                  updatePinnedStoryActive(true);
+                },
                 onUpdate: (self) => {
+                  progressFillRef.current?.style.setProperty(
+                    "--project-story-progress",
+                    String(self.progress),
+                  );
                   const progressAcrossSlides = self.progress * travelDistance();
                   const nextIndex = Math.min(
                     rows.length - 1,
-                    Math.floor(progressAcrossSlides / slideWidth()),
+                    Math.round(progressAcrossSlides / slideWidth()),
                   );
                   updateActiveProject(nextIndex);
                 },
                 onLeaveBack: () => {
-                  setPinnedStoryActive(false);
+                  progressFillRef.current?.style.setProperty("--project-story-progress", "0");
+                  horizontalStoryPinned = false;
+                  updatePinnedStoryActive(false);
                   updateActiveProject(0);
+                },
+                onLeave: () => {
+                  horizontalStoryPinned = false;
+                  updatePinnedStoryActive(false);
                 },
               },
             });
 
-            rows.forEach((row) => {
-              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-              const wordmark = row.querySelector<HTMLElement>("[data-project-wordmark-motion]");
-              if (!visual || !copy) return;
-
-              gsap.fromTo(visual, {
-                clipPath: "inset(7% 8% 7% 0%)",
-                scale: 0.94,
-              }, {
-                clipPath: "inset(0% 0% 0% 0%)",
-                scale: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: row,
-                  containerAnimation: horizontalStory,
-                  start: "left 86%",
-                  end: "left 28%",
-                  scrub: 0.55,
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              gsap.fromTo(copy, {
-                x: 34,
-                opacity: 0.18,
-              }, {
-                x: 0,
-                opacity: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: row,
-                  containerAnimation: horizontalStory,
-                  start: "left 82%",
-                  end: "left 30%",
-                  scrub: 0.45,
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
-              if (geometry) {
-                gsap.to(geometry, {
-                  yPercent: -5,
-                  xPercent: 3,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    containerAnimation: horizontalStory,
-                    start: "left right",
-                    end: "right left",
-                    scrub: 0.7,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
-
-              if (wordmark) {
-                gsap.fromTo(wordmark, { xPercent: 12 }, {
-                  xPercent: -9,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    containerAnimation: horizontalStory,
-                    start: "left right",
-                    end: "right left",
-                    scrub: 0.8,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
-            });
-
             resizeObserver = new ResizeObserver(() => {
               setSlideWidth();
-              ScrollTrigger.refresh();
+              if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+              refreshFrame = window.requestAnimationFrame(() => {
+                refreshFrame = 0;
+                ScrollTrigger.refresh();
+              });
             });
             resizeObserver.observe(viewport);
           }
@@ -214,88 +218,70 @@ export default function ProjectsSection() {
               const visual = row.querySelector<HTMLElement>("[data-project-visual]");
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
-
-              const entrance = gsap.timeline({
-                scrollTrigger: {
-                  trigger: row,
-                  start: compact ? "top 86%" : "top 80%",
-                  toggleActions: "play none play reverse",
-                  invalidateOnRefresh: true,
+              const projectIndex = Number(row.dataset.projectIndex);
+              ScrollTrigger.create({
+                trigger: row,
+                start: "top center",
+                end: "bottom center",
+                onEnter: () => updateActiveProject(projectIndex),
+                onEnterBack: () => updateActiveProject(projectIndex),
+                onLeaveBack: () => {
+                  if (projectIndex === 0) updateActiveProject(0);
                 },
               });
-
-              entrance
-                .fromTo(
-                  visual,
-                  { x: compact ? 10 : 18, opacity: 0, scale: compact ? 1 : 0.992 },
-                  {
-                    x: 0,
-                    opacity: 1,
-                    scale: 1,
-                    duration: compact ? 0.48 : 0.62,
-                    ease: "power3.out",
-                  },
-                )
-                .fromTo(
-                  copy,
-                  { y: compact ? 8 : 16, opacity: 0 },
-                  {
-                    y: 0,
-                    opacity: 1,
-                    duration: compact ? 0.42 : 0.56,
-                    ease: "power3.out",
-                  },
-                  compact ? 0.06 : 0.1,
-                );
-
-              const geometry = visual.querySelector<HTMLElement>(".project-visual-grid");
-              if (geometry) {
-                gsap.to(geometry, {
-                  yPercent: compact ? -3 : -9,
-                  xPercent: compact ? 0 : 2,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: row,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: compact ? 0.45 : 0.8,
-                    invalidateOnRefresh: true,
-                  },
-                });
-              }
             });
           }
 
-          gsap.fromTo(
-            "[data-project-heading]",
-            { y: compact ? 10 : 20, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: compact ? 0.5 : 0.68,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: section,
-                start: "top 84%",
-                toggleActions: "play none play reverse",
-                invalidateOnRefresh: true,
-              },
-            },
-          );
         }, section);
         return () => {
+          if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
+          const shouldRestoreProject = Boolean(
+            sizedTrack &&
+            horizontalStoryPinned &&
+            (window.innerWidth < 1024 || window.matchMedia("(prefers-reduced-motion: reduce)").matches),
+          );
+          const projectIndex = activeProjectRef.current;
           resizeObserver?.disconnect();
-          setPinnedStoryActive(false);
+          if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+          sizedTrack?.style.removeProperty("--project-slide-width");
+          progressFillRef.current?.style.removeProperty("--project-story-progress");
+          updatePinnedStoryActive(false);
           context.revert();
+          if (shouldRestoreProject) {
+            const activeRow = section.querySelector<HTMLElement>(
+              `[data-project-row][data-project-index="${projectIndex}"]`,
+            );
+            if (activeRow) {
+              restoreProjectFrame = window.requestAnimationFrame(() => {
+                restoreProjectFrame = 0;
+                if (!activeRow.isConnected) return;
+                const targetTop = activeRow.getBoundingClientRect().top + window.scrollY - 96;
+                window.scrollTo({ top: Math.max(0, targetTop), behavior: "instant" });
+                ScrollTrigger.refresh();
+              });
+            }
+          }
         };
       },
     );
 
-    return () => media.revert();
+    return () => {
+      if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
+      media.revert();
+    };
   }, []);
 
   useEffect(() => {
     if (!modal) return;
+
+    if (focusRestoreTimerRef.current !== null) {
+      window.clearTimeout(focusRestoreTimerRef.current);
+      focusRestoreTimerRef.current = null;
+    }
+    if (focusRestoreFrameRef.current !== null) {
+      window.cancelAnimationFrame(focusRestoreFrameRef.current);
+      focusRestoreFrameRef.current = null;
+    }
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -331,10 +317,37 @@ export default function ProjectsSection() {
     };
     window.addEventListener("keydown", handleKeyDown);
 
+    const closeForSectionNavigation = () => {
+      skipFocusRestoreRef.current = true;
+      setModal(null);
+    };
+    const handleInPageNavigation = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element) || !target.closest('a[href^="#"]')) return;
+      closeForSectionNavigation();
+    };
+    document.addEventListener("click", handleInPageNavigation, true);
+    window.addEventListener("hashchange", closeForSectionNavigation);
+    window.addEventListener("popstate", closeForSectionNavigation);
+
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
-      openerRef.current?.focus();
+      document.removeEventListener("click", handleInPageNavigation, true);
+      window.removeEventListener("hashchange", closeForSectionNavigation);
+      window.removeEventListener("popstate", closeForSectionNavigation);
+      if (skipFocusRestoreRef.current) {
+        skipFocusRestoreRef.current = false;
+        return;
+      }
+      const opener = openerRef.current;
+      focusRestoreTimerRef.current = window.setTimeout(() => {
+        focusRestoreTimerRef.current = null;
+        focusRestoreFrameRef.current = window.requestAnimationFrame(() => {
+          focusRestoreFrameRef.current = null;
+          if (opener?.isConnected) opener.focus({ preventScroll: true });
+        });
+      }, reduceMotion ? 0 : 240);
     };
   }, [modal]);
 
@@ -365,6 +378,11 @@ export default function ProjectsSection() {
     }
   };
 
+  const focusedElementIndex =
+    document.activeElement instanceof HTMLElement
+      ? Number(document.activeElement.closest<HTMLElement>("[data-project-row]")?.dataset.projectIndex)
+      : Number.NaN;
+
   const openDetails = (project: Project, trigger: HTMLButtonElement) => {
     openerRef.current = trigger;
     markViewed(project);
@@ -385,6 +403,7 @@ export default function ProjectsSection() {
   };
 
   return (
+    <LazyMotion features={domAnimation}>
     <section
       ref={sectionRef}
       id="projects"
@@ -392,28 +411,30 @@ export default function ProjectsSection() {
       data-testid="section-projects"
     >
       <div className="relative z-10 mx-auto max-w-6xl">
-        <div
-          data-project-heading
+        <Reveal
           className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              Things I’ve actually
-              <br />
-               <span className="text-[#a43f2d]">built.</span>
+              <span className="block overflow-hidden"><span className="block">Yang benar-benar</span></span>
+              <span className="block overflow-hidden"><span className="text-[#a43f2d] block">I’ve built.</span></span>
             </h2>
           </div>
-          <p className="projects-intro text-sm md:mb-1 md:text-base">
-            Three projects with different goals: a school department website, a
-            digital library, and my own portfolio.
+          <p data-project-intro className="projects-intro text-base md:mb-1 md:text-lg">
+            Tiga proyek dengan tujuan berbeda: situs jurusan sekolah, perpustakaan digital, dan portofolio pribadi.
           </p>
-        </div>
+        </Reveal>
 
         <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
             <div className="sticky top-32 flex items-start gap-5">
               <div className="project-rail relative h-24 w-px">
+                <span
+                  ref={progressFillRef}
+                  className="project-story-progress-fill absolute inset-0 block w-px"
+                  aria-hidden="true"
+                />
                 <span
                   ref={markerRef}
                   className="project-rail-marker absolute -left-[3px] top-0 block h-6 w-[5px]"
@@ -431,28 +452,57 @@ export default function ProjectsSection() {
           <div className="project-stage-content">
             <div data-project-track-viewport className="project-track-viewport">
               <div data-project-track className="project-track">
-                {projects.map((project, index) => (
-                  <article
-                key={project.id}
-                data-project-row
-                tabIndex={0}
-                className="project-row"
-                onMouseEnter={() => updateActiveProject(index)}
-                onFocus={() => updateActiveProject(index)}
-                onTouchStart={() => updateActiveProject(index)}
-                data-testid={`project-${project.id}`}
-                aria-labelledby={`project-title-${project.id}`}
-                aria-hidden={pinnedStoryActive && activeProject !== index}
-                inert={pinnedStoryActive && activeProject !== index}
-              >
+                {projects.map((project, index) => {
+                  const focusWithinRow =
+                    focusedProject === index || focusedElementIndex === index;
+                  return (
+                    <article
+                      key={project.id}
+                      data-project-row
+                      data-project-index={index}
+                      data-active-project={activeProject === index ? "true" : "false"}
+                      tabIndex={0}
+                      className="project-row"
+                      onFocus={(event: FocusEvent<HTMLElement>) => {
+                        const row = event.currentTarget;
+                        setFocusedProject(index);
+                        const story = ScrollTrigger.getById("portfolio-project-story");
+                        if (story?.isActive && row.dataset.activeProject !== "true") {
+                          const panelProgress = index / (projects.length - 1);
+                          window.scrollTo({
+                            top: story.start + (story.end - story.start) * panelProgress,
+                            behavior: "auto",
+                          });
+                        }
+                      }}
+                      onBlur={(event: FocusEvent<HTMLElement>) => {
+                        if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                        if (dialogRef.current?.contains(event.relatedTarget as Node | null)) return;
+                        setFocusedProject((current) => current === index ? null : current);
+                      }}
+                      data-testid={`project-${project.id}`}
+                      aria-labelledby={`project-title-${project.id}`}
+                      aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
+                      inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
+                    >
+                <Reveal className="min-w-0" media>
                 <div
                   data-project-visual
-                  className="project-visual"
+                  className="project-visual project-visual--screenshot"
                   onPointerMove={handlePointerMove}
                   data-testid={`project-visual-${project.id}`}
                 >
+                  <img
+                    className="project-screenshot"
+                    src={project.preview.src}
+                    alt={project.preview.alt}
+                    width={project.preview.width}
+                    height={project.preview.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div className="project-visual-grid" aria-hidden="true" />
-                  <span className="project-stamp">Live build</span>
+                  <span className="project-stamp">Cuplikan situs</span>
                   <span className="project-number" aria-hidden="true">
                     0{project.id}
                   </span>
@@ -474,7 +524,9 @@ export default function ProjectsSection() {
                     </span>
                   </span>
                 </div>
+                </Reveal>
 
+                <Reveal className="min-w-0" tall>
                 <div data-project-copy>
                   <p className="project-type">{project.type}</p>
                   <h3 id={`project-title-${project.id}`} className="project-name">
@@ -482,7 +534,7 @@ export default function ProjectsSection() {
                   </h3>
                   <p className="project-copy">{project.description}</p>
 
-                  <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
+                  <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
                     {project.tech.map((technology) => (
                       <li key={technology} className="project-tech">
                         {technology}
@@ -491,55 +543,72 @@ export default function ProjectsSection() {
                   </ul>
 
                   <div className="project-actions">
-                    <a
+                    <m.a
                       href={project.live}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-link"
                       data-testid={`link-live-${project.id}`}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                    <a
+                    </m.a>
+                    <m.a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-link project-link--quiet"
                       data-testid={`link-github-${project.id}`}
                       aria-label={`Open ${project.title} GitHub repository`}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
                       <Github className="h-4 w-4" aria-hidden="true" />
-                      <span className="sr-only">GitHub repository</span>
-                    </a>
-                    <button
+                      <span className="sr-only">Repositori GitHub</span>
+                    </m.a>
+                    <m.button
                       type="button"
                       onClick={(event) => openDetails(project, event.currentTarget)}
                       className="project-link project-link--quiet"
                       data-testid={`button-details-${project.id}`}
-                      aria-label={`Read more about ${project.title}`}
+                      aria-label={`Baca selengkapnya tentang ${project.title}`}
+                      whileHover={reduceMotion ? undefined : { y: -2 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     >
-                      Details <span aria-hidden="true">+</span>
-                    </button>
+                      Detail <span aria-hidden="true">+</span>
+                    </m.button>
                   </div>
                 </div>
-                  </article>
-                ))}
+                </Reveal>
+                    </article>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {modal && (
-        <div
-           className="fixed inset-0 z-[150] flex items-center justify-center bg-[#211f1b]/35 p-5 backdrop-blur-sm"
+      {createPortal(
+        <AnimatePresence>
+        {modal && <m.div
+          key="project-detail-overlay"
+          className="project-detail-overlay"
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.18, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div
+          <m.div
             ref={dialogRef}
-            className="project-detail-dialog modal-enter w-full max-w-xl p-6 md:p-9"
+            className="project-detail-dialog"
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
@@ -547,43 +616,66 @@ export default function ProjectsSection() {
             onClick={(event) => event.stopPropagation()}
             data-testid="project-detail-dialog"
             tabIndex={-1}
+            initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 0.99 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.995 }}
+            transition={{ duration: reduceMotion ? 0.01 : 0.22, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex items-start justify-between gap-5">
-              <div>
+            <header className="project-detail-header">
+              <div className="project-detail-heading">
                 <p className="project-detail-label">Project / 0{modal.id}</p>
-                 <h3 id="project-detail-title" className="mt-3 text-3xl font-semibold tracking-[-0.06em] text-[#211f1b] md:text-5xl">
-                  {modal.title}
-                </h3>
+                <h3 id="project-detail-title">{modal.title}</h3>
+                <p className="project-detail-type">{modal.type}</p>
               </div>
               <button
                 ref={closeButtonRef}
                 type="button"
-                 className="flex h-10 w-10 shrink-0 items-center justify-center border border-[rgba(33,31,27,.16)] text-[#6d6a62] transition-colors hover:text-[#211f1b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#a43f2d]"
+                className="project-detail-close"
                 onClick={() => setModal(null)}
-                aria-label="Close project note"
+                aria-label="Close project details"
                 data-testid="button-close-project-detail"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
-            </div>
+            </header>
 
-             <div className="mt-8 border-t border-[rgba(33,31,27,.16)] pt-6">
-              <p className="project-detail-label">About this project</p>
-               <p id="project-detail-description" className="mt-3 text-base leading-7 text-[#6d6a62]">{modal.description}</p>
-            </div>
-
-            <div className="mt-7">
-              <p className="project-detail-label">Built with</p>
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                {modal.tech.map((technology) => (
-                   <span key={technology} className="text-sm text-[#211f1b]">
-                    {technology}
-                  </span>
-                ))}
+            <figure className="project-detail-preview">
+              <div
+                className="project-detail-image-frame"
+                style={{ aspectRatio: `${modal.preview.width} / ${modal.preview.height}` }}
+              >
+                <img
+                  src={modal.preview.src}
+                  alt={modal.preview.alt}
+                  width={modal.preview.width}
+                  height={modal.preview.height}
+                  decoding="async"
+                />
+                <span className="project-detail-image-index" aria-hidden="true">0{modal.id}</span>
               </div>
+              <figcaption>
+                <span>Site capture</span>
+                <span aria-hidden="true">/</span>
+                <span>{modal.title}</span>
+              </figcaption>
+            </figure>
+
+            <div className="project-detail-content">
+              <section className="project-detail-about">
+                <p className="project-detail-label">About this project</p>
+                <p id="project-detail-description">{modal.description}</p>
+              </section>
+              <section className="project-detail-stack" aria-label={`Technologies used in ${modal.title}`}>
+                <p className="project-detail-label">Built with</p>
+                <ul>
+                  {modal.tech.map((technology) => (
+                    <li key={technology}>{technology}</li>
+                  ))}
+                </ul>
+              </section>
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <footer className="project-detail-footer">
               <a
                 href={modal.live}
                 target="_blank"
@@ -593,6 +685,7 @@ export default function ProjectsSection() {
               >
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                 Visit live site
+                <ArrowUpRight className="project-detail-link-arrow" aria-hidden="true" />
               </a>
               <a
                 href={modal.github}
@@ -604,10 +697,13 @@ export default function ProjectsSection() {
                 <Github className="h-4 w-4" aria-hidden="true" />
                 GitHub
               </a>
-            </div>
-          </div>
-        </div>
+            </footer>
+          </m.div>
+        </m.div>}
+        </AnimatePresence>,
+        document.body,
       )}
     </section>
+    </LazyMotion>
   );
 }

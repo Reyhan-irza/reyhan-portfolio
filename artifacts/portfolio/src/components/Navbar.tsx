@@ -5,9 +5,9 @@ import BrandLogo from "./BrandLogo";
 
 const navLinks = [
   { label: "About", href: "#about" },
-  { label: "Work", href: "#projects" },
+  { label: "Projects", href: "#projects" },
   { label: "Journey", href: "#journey" },
-  { label: "Recognition", href: "#achievement" },
+  { label: "Awards", href: "#achievement" },
   { label: "Activity", href: "#github" },
   { label: "Contact", href: "#contact" },
 ];
@@ -16,12 +16,13 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("");
+  const hashActiveHref = useRef<string | null>(null);
   const isOpenRef = useRef(isOpen);
   isOpenRef.current = isOpen;
   const navRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
-  const menuTimelineRef = useRef<{ play: () => unknown; reverse: () => unknown } | null>(null);
+  const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const previouslyOpen = useRef(false);
 
   useEffect(() => {
@@ -44,8 +45,7 @@ export default function Navbar() {
     if (!isOpen) return;
     const panel = panelRef.current;
     const focusables = () => {
-      const inPanel = Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
-      return [...inPanel, ...(menuTriggerRef.current ? [menuTriggerRef.current] : [])];
+      return Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
     };
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -54,8 +54,13 @@ export default function Navbar() {
       }
       if (event.key !== "Tab") return;
       const items = focusables();
-        if (!items.length) return;
-        if (event.shiftKey && document.activeElement === items[0]) {
+      if (!items.length) return;
+      if (!panel?.contains(document.activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? items[items.length - 1] : items[0]).focus();
+        return;
+      }
+      if (event.shiftKey && document.activeElement === items[0]) {
         event.preventDefault();
         items[items.length - 1].focus();
       } else if (!event.shiftKey && document.activeElement === items[items.length - 1]) {
@@ -99,41 +104,79 @@ export default function Navbar() {
   useLayoutEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
+    const sections = ["#home", ...navLinks.map(({ href }) => href)].flatMap((href) => {
+      const section = document.querySelector<HTMLElement>(href);
+      return section ? [{ href, section }] : [];
+    });
+    const updateActiveFromScroll = () => {
+      if (hashActiveHref.current && window.location.hash === hashActiveHref.current) {
+        setActiveHref(hashActiveHref.current);
+        return;
+      }
+      hashActiveHref.current = null;
+      const activationLine = window.innerHeight * 0.56;
+      let nextHref = "";
+      for (const { href, section } of sections) {
+        if (section.getBoundingClientRect().top > activationLine) break;
+        nextHref = href;
+      }
+      setActiveHref(nextHref);
+    };
+    const clearHashSelection = () => {
+      if (isOpenRef.current || !hashActiveHref.current) return;
+      hashActiveHref.current = null;
+      updateActiveFromScroll();
+    };
+    const handleScrollKey = (event: KeyboardEvent) => {
+      if (!["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) return;
+      if (event.target instanceof HTMLElement && (
+        event.target.isContentEditable || event.target.matches("input, textarea, select, button, [role='button']")
+      )) return;
+      clearHashSelection();
+    };
+    const syncNavigationState = () => {
+      const target = sections.find(({ href }) => href === window.location.hash);
+      if (target) {
+        hashActiveHref.current = target.href;
+        setActiveHref(target.href);
+      } else {
+        hashActiveHref.current = null;
+        updateActiveFromScroll();
+      }
+    };
     const context = gsap.context(() => {
-      navLinks.forEach(({ href }) => {
-        const section = document.querySelector<HTMLElement>(href);
-        if (!section) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top 56%",
-          end: "bottom 44%",
-          onEnter: () => setActiveHref(href),
-          onEnterBack: () => setActiveHref(href),
-        });
+      ScrollTrigger.create({
+        id: "portfolio-active-navigation",
+        trigger: document.documentElement,
+        start: 0,
+        end: "max",
+        onUpdate: updateActiveFromScroll,
+        onRefresh: updateActiveFromScroll,
       });
     }, nav);
-    const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      const intro = gsap.from("[data-nav-enter]", {
-        y: -8,
-        autoAlpha: 0,
-        duration: 0.48,
-        stagger: 0.055,
-        ease: "power2.out",
-        clearProps: "all",
-      });
-      return () => intro.kill();
-    });
+    window.addEventListener("wheel", clearHashSelection, { passive: true });
+    window.addEventListener("touchmove", clearHashSelection, { passive: true });
+    window.addEventListener("keydown", handleScrollKey);
+    window.addEventListener("hashchange", syncNavigationState);
+    window.addEventListener("popstate", syncNavigationState);
+    updateActiveFromScroll();
+    syncNavigationState();
     return () => {
-      media.revert();
+      window.removeEventListener("wheel", clearHashSelection);
+      window.removeEventListener("touchmove", clearHashSelection);
+      window.removeEventListener("keydown", handleScrollKey);
+      window.removeEventListener("hashchange", syncNavigationState);
+      window.removeEventListener("popstate", syncNavigationState);
       context.revert();
     };
   }, []);
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
-    if (!panel) return;
+    const trigger = menuTriggerRef.current;
+    if (!panel || !trigger) return;
     const targets = panel.querySelectorAll<HTMLElement>("[data-menu-item]");
+    const glyphLines = trigger.querySelectorAll<HTMLElement>(".mobile-menu-line");
     const media = gsap.matchMedia();
     media.add(
       {
@@ -144,21 +187,41 @@ export default function Navbar() {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
           gsap.set(panel, { xPercent: 105, autoAlpha: 0 });
-          gsap.set(targets, { x: 14, autoAlpha: 0 });
+          gsap.set(targets, { x: 18, y: 3, autoAlpha: 0 });
+          gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true })
             .to(panel, {
               xPercent: 0,
               autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.54,
-              ease: "power3.inOut",
+              duration: reduced ? 0.01 : 0.62,
+              ease: "power4.out",
             })
             .to(targets, {
               x: 0,
+              y: 0,
               autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.34,
-              stagger: reduced ? 0 : 0.045,
-              ease: "power2.out",
-            }, reduced ? 0 : 0.15);
+              duration: reduced ? 0.01 : 0.42,
+              stagger: reduced ? 0 : 0.052,
+              ease: "power3.out",
+            }, reduced ? 0 : 0.18)
+            .to(glyphLines[0], {
+              y: 5,
+              rotation: 45,
+              duration: reduced ? 0.01 : 0.32,
+              ease: "power3.inOut",
+            }, 0)
+            .to(glyphLines[1], {
+              scaleX: 0,
+              autoAlpha: 0,
+              duration: reduced ? 0.01 : 0.2,
+              ease: "power2.in",
+            }, 0)
+            .to(glyphLines[2], {
+              y: -5,
+              rotation: -45,
+              duration: reduced ? 0.01 : 0.32,
+              ease: "power3.inOut",
+            }, 0);
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
@@ -182,15 +245,15 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
-        aria-label="Primary navigation"
+        aria-label="Main navigation"
         className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
-          <a href="#home" data-nav-enter aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
+          <a href="#home" aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
             <BrandLogo size="sm" alt="" />
             <span className="flex flex-col leading-tight">
-              <span className="text-[11px] font-bold uppercase tracking-[.15em] text-white">Reyhan Irza Alvano</span>
-              <span className="mt-1 text-[9px] uppercase tracking-[.2em] text-white/45">Student Developer</span>
+              <span className="text-xs font-bold uppercase tracking-[.13em] text-white">Reyhan Irza Alvano</span>
+              <span className="mt-1 text-[10px] uppercase tracking-[.16em] text-white/50">Student · Web Developer</span>
             </span>
           </a>
 
@@ -199,15 +262,14 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                data-nav-enter
                 aria-current={activeHref === link.href ? "location" : undefined}
-                className={`editorial-nav-link relative py-2 text-[11px] uppercase tracking-[.12em] transition-colors ${activeHref === link.href ? "text-white" : "text-white/55 hover:text-white"}`}
+                className={`editorial-nav-link relative py-2 text-xs uppercase tracking-[.11em] transition-colors ${activeHref === link.href ? "text-white" : "text-white/65 hover:text-white"}`}
               >
                 {link.label}
                 {activeHref === link.href && <span className="absolute -bottom-1 left-0 h-px w-full bg-[#8290ff]" />}
               </a>
             ))}
-            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" data-nav-enter className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[10px] uppercase tracking-[.12em] text-white/75 transition-colors hover:border-[#667cff]/60 hover:text-white">
+            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[11px] uppercase tracking-[.1em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
               GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
             </a>
           </div>
@@ -237,7 +299,7 @@ export default function Navbar() {
         aria-label="Close navigation"
         tabIndex={isOpen ? 0 : -1}
         onClick={closeMenu}
-        className={`nav-scrim fixed inset-0 z-[48] bg-[#02040a]/75 backdrop-blur-sm transition-opacity ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`nav-scrim fixed inset-0 z-[48] bg-[#02040a]/75 transition-opacity ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
       />
       <aside
         ref={panelRef}
@@ -247,11 +309,11 @@ export default function Navbar() {
         aria-labelledby="mobile-navigation-title"
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
-        className="mobile-nav-panel fixed inset-y-0 right-0 z-[49] flex w-[min(88vw,410px)] flex-col border-l border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
+        className="mobile-nav-panel fixed inset-0 z-[49] flex w-full flex-col border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
         style={{ visibility: "hidden" } as CSSProperties}
         inert={!isOpen}
       >
-        <p id="mobile-navigation-title" className="mb-4 font-mono text-[10px] uppercase tracking-[.22em] text-[#8190ff]">Navigate / portfolio</p>
+        <p id="mobile-navigation-title" className="mb-4 font-mono text-xs uppercase tracking-[.18em] text-[#8190ff]">Explore / portfolio</p>
         <div className="h-px bg-white/10" />
         <nav className="mt-5 flex flex-col">
           {navLinks.map((link, index) => (
