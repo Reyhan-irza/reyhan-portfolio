@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/lib/themeContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Home from "@/pages/Home";
+import MotionFallback from "@/components/MotionFallback";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -37,7 +38,7 @@ function Router() {
 
 function App() {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary fallback={<MotionFallback />}>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
