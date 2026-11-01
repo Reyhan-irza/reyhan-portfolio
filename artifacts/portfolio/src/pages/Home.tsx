@@ -1,5 +1,4 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import AuroraBackground from "@/components/AuroraBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TechnologyBands from "@/components/TechnologyBands";
@@ -63,11 +62,10 @@ export default function Home() {
   return (
     <LazyMotion features={domAnimation}>
     <div className="portfolio-shell relative min-h-[100dvh]">
-      <AuroraBackground />
       <a className="skip-to-content" href="#main-content">Skip to content</a>
       <Navbar />
       <main id="main-content" className="relative z-10">
-        <HeroSection />
+        <HeroSection ready={introFinished} />
         <TechnologyBands />
         <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
           <Reveal className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
