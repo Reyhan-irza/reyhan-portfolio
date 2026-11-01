@@ -167,7 +167,7 @@ export default function CommentsSection() {
             COMMENTS
           </p>
           <h2 className="text-3xl md:text-5xl font-bold text-[#211f1b] mb-4">
-            Leave a message for <span className="text-[#a43f2d]">Reyhan</span>
+            Tinggalkan pesan untuk <span className="text-[#a43f2d]">Reyhan</span>
           </h2>
         </Reveal>
         <div className="rgb-divider w-24 mx-auto mb-5" />

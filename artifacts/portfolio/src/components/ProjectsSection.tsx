@@ -15,7 +15,7 @@ const projects = [
     title: "TJKT",
     type: "Department website",
     description:
-      "A website introducing the TJKT department at SMK Negeri 2 Lubuk Basung, including its activities and identity.",
+      "Website pengenalan jurusan TJKT di SMK Negeri 2 Lubuk Basung, merangkum identitas jurusan dan kegiatannya.",
     live: "https://tjkt-tech.vercel.app",
     github: "https://github.com/Reyhan-irza/TJKT",
     tech: ["React", "TypeScript", "GSAP", "ScrollTrigger", "Lenis"],
@@ -33,7 +33,7 @@ const projects = [
     title: "VIREON Library",
     type: "Digital library",
     description:
-      "A digital library system for managing books, members, loans, and reports.",
+      "Perpustakaan digital untuk mengelola buku, anggota, peminjaman, dan laporan dalam satu alur.",
     live: "https://vireon-lib.vercel.app",
     github: "https://github.com/Reyhan-irza/Library",
     tech: ["React", "TypeScript", "Supabase", "GSAP"],
@@ -51,7 +51,7 @@ const projects = [
     title: "Reyhan WhatsApp Portfolio",
     type: "Personal portfolio",
     description:
-      "A personal portfolio built around my WhatsApp-related work and experiments.",
+      "Portofolio personal yang merangkum karya dan eksperimen saya seputar WhatsApp.",
     live: "https://reyhan-watsap-portfolio.vercel.app",
     github: "https://github.com/Reyhan-irza/reyhan-portfolio",
     tech: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
@@ -219,15 +219,15 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               const projectIndex = Number(row.dataset.projectIndex);
-              gsap.fromTo(copy, { y: 38 }, { y: 0, ease: "none",
-                scrollTrigger: { trigger: row, start: "top 90%", end: "center 55%", scrub: .85 },
+              gsap.fromTo(copy, { y: 28 }, { y: 0, ease: "none",
+                scrollTrigger: { trigger: copy, start: "top 100%", end: "top 72%", scrub: .35 },
               });
               // The screenshot settles into its frame while the description stays still.
               // Separate targets prevent the Reveal wrapper and ScrollTrigger competing.
               const screenshot = visual.querySelector(".project-screenshot");
-              if (screenshot) gsap.fromTo(screenshot, { scale: 1.18, yPercent: 6 }, {
+              if (screenshot) gsap.fromTo(screenshot, { scale: 1.12, yPercent: 3 }, {
                 scale: 1, yPercent: 0, ease: "none",
-                scrollTrigger: { trigger: visual, start: "top 95%", end: "bottom 35%", scrub: .9 },
+                scrollTrigger: { trigger: visual, start: "top 100%", end: "center 48%", scrub: .4 },
               });
               ScrollTrigger.create({
                 trigger: row,
@@ -495,7 +495,7 @@ export default function ProjectsSection() {
                       aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                       inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                     >
-                <Reveal className="min-w-0" media>
+                <div className="min-w-0">
                 <div
                   data-project-visual
                   className="project-visual project-visual--screenshot"
@@ -534,9 +534,9 @@ export default function ProjectsSection() {
                     </span>
                   </span>
                 </div>
-                </Reveal>
+                </div>
 
-                <Reveal className="min-w-0" tall>
+                <div className="min-w-0">
                 <div data-project-copy>
                   <p className="project-type">{project.type}</p>
                   <h3 id={`project-title-${project.id}`} className="project-name">
@@ -593,7 +593,7 @@ export default function ProjectsSection() {
                     </m.button>
                   </div>
                 </div>
-                </Reveal>
+                </div>
                     </article>
                   );
                 })}
