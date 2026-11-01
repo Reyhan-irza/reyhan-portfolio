@@ -33,6 +33,23 @@ export default function Home() {
   const bottomFired = useRef(false);
   const visitFired  = useRef(false);
 
+  useLayoutEffect(() => {
+    if (!introFinished) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const context = gsap.context(() => {
+        document.querySelectorAll<HTMLElement>(".portfolio-section-heading, .projects-title").forEach((heading) => {
+          gsap.fromTo(heading, { x: -16 }, {
+            x: 0, ease: "none",
+            scrollTrigger: { trigger: heading, start: "top bottom", end: "top 65%", scrub: .35 },
+          });
+        });
+      });
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, [introFinished]);
+
   /* Keep the existing bottom-of-page achievement, but let GSAP own the trigger. */
   useLayoutEffect(() => {
     const el = footerRef.current;
@@ -71,18 +88,18 @@ export default function Home() {
           <Reveal className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
             <div className="proof-item">
               <span className="proof-index">01</span>
-              <strong>Three projects I’ve built</strong>
+              <strong>Tiga proyek, tiga kebutuhan</strong>
               <span>TJKT, VIREON Library and Reyhan WhatsApp Portfolio.</span>
             </div>
             <div className="proof-item">
               <span className="proof-index">02</span>
-              <strong>Web development practice</strong>
-              <span>Exploring code, AI, and web technologies.</span>
+              <strong>Belajar lewat eksperimen</strong>
+              <span>Kode, AI, dan teknologi web dalam proyek sehari-hari.</span>
             </div>
             <div className="proof-item">
               <span className="proof-index">03</span>
-              <strong>Competition results</strong>
-              <span>CTF Competition · 2nd place; LKS IT Software Solution For Business · 1st place.</span>
+              <strong>Pengalaman kompetisi</strong>
+              <span>Juara 2 CTF; Juara 1 LKS IT Software Solution For Business.</span>
             </div>
           </Reveal>
         </section>

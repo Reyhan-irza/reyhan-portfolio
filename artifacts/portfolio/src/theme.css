@@ -183,3 +183,41 @@ body { background: var(--canvas); }
  .portfolio-shell .hero-scroll-cue { position: static; margin-top: 2.5rem; width: fit-content; }
  .portfolio-shell .rv-intro-stage { max-width: 100%; }
 }
+
+/* The opening holds a single identity composition until the film has exited. */
+.hero-section[data-hero-ready="false"] > * { visibility: hidden; }
+.portfolio-shell .hero-content { gap: clamp(2rem, 5vw, 6rem); }
+.portfolio-shell .hero-identity-frame { align-self: stretch; display: grid; align-items: center; background: var(--panel); border-top: 1px solid var(--rule); }
+.portfolio-shell .hero-mark-stage { border: 0; }
+.portfolio-shell .hero-mark-image { inset: 8%; }
+.portfolio-shell .hero-section h1 { font-size: clamp(4rem, 8.8vw, 9rem); line-height: .93; letter-spacing: -.065em; }
+.portfolio-shell .hero-name-accent { color: var(--signal); }
+.portfolio-shell [data-hero-kicker] { font-family: 'Manrope', sans-serif; text-transform: none; font-size: .8rem; letter-spacing: 0; }
+.portfolio-shell .hero-section [data-hero-bio] { max-width: 36ch; }
+.portfolio-shell .proof-strip { padding-block: 2.5rem; }
+.portfolio-shell .proof-item { padding-block: 1.5rem; }
+.portfolio-shell .projects-section { padding-block: clamp(4rem, 8vw, 7rem); }
+.portfolio-shell .projects-section > div > div:first-child { margin-bottom: clamp(2.5rem, 6vw, 5rem); }
+.portfolio-shell .project-stamp { background: #101113; padding: .4rem .65rem; color: #f3f3ef; }
+.portfolio-shell .project-wordmark { display: none; }
+.portfolio-shell .project-visual--screenshot { border-radius: 2px; }
+.portfolio-shell :is(.project-type,.section-kicker,.projects-kicker) { font-family: 'Manrope', sans-serif; letter-spacing: .035em; text-transform: none; }
+.portfolio-shell .secondary-archive { border-top: 2px solid var(--rule); }
+.portfolio-shell .secondary-archive summary { padding-block: 1.75rem; }
+:root[data-theme="light"] { --canvas: #e8edf4; --panel: #ced9e8; --panel-raised: #f5f7fb; --rule: #a0afc3; --signal-wash: #d2ddef; }
+:root[data-theme="light"] .portfolio-shell .hero-section { background: var(--canvas); }
+:root[data-theme="light"] .portfolio-shell .projects-section { background: var(--panel); }
+@media (max-width: 1023px) {
+  .portfolio-shell .hero-content { display: block; }
+  .portfolio-shell .hero-identity-frame { position: absolute; top: -.75rem; right: 0; width: 5rem; height: 5rem; border: 0; background: transparent; }
+  .portfolio-shell .hero-mark-stage > div:not(.hero-mark-image) { display: none; }
+  .portfolio-shell [data-hero-kicker] { max-width: calc(100% - 6rem); min-height: 4rem; flex-wrap: wrap; align-content: center; gap: .35rem; margin-bottom: 2rem; }
+  .portfolio-shell .hero-section h1 { font-size: clamp(3.5rem, 14vw, 7rem); }
+}
+@media (max-width: 767px) {
+  .portfolio-shell .project-row { gap: 1.5rem; padding-block: 0 3.5rem; }
+  .portfolio-shell .project-visual { min-height: 0; aspect-ratio: 1.32; }
+  .portfolio-shell .project-name { font-size: clamp(1.8rem, 8vw, 2.8rem); line-height: 1.06; }
+  .portfolio-shell .project-copy { font-size: 1rem; line-height: 1.65; }
+  .portfolio-shell .hero-section { padding-bottom: 2.5rem; }
+}

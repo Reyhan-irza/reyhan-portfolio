@@ -30,6 +30,8 @@ export default function AchievementToast() {
   useEffect(() => {
     const handler = (e: Event) => {
       const detail = (e as CustomEvent<Achievement>).detail;
+      // Passive reading should not interrupt the work on screen.
+      if (["target", "rocket", "trophy", "book"].includes(detail.icon)) return;
       const id = nextId++;
       setToasts((prev) => [...prev, { ...detail, id, leaving: false }]);
       setTimeout(() => {

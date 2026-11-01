@@ -15,7 +15,7 @@ export default function AboutSection() {
         <Reveal className="story-intro grid gap-8 md:grid-cols-[.72fr_1fr] md:gap-20">
           <div>
             <p className="section-kicker">01 / About</p>
-            <h2 className="portfolio-section-heading mt-5 max-w-md font-semibold tracking-[-.07em] text-[#1b1c18]">Still learning. Still building.</h2>
+            <h2 className="portfolio-section-heading mt-5 max-w-md font-semibold tracking-[-.07em] text-[#1b1c18]">Belajar lewat karya.</h2>
           </div>
           <div>
             <p className="story-lead max-w-2xl text-lg leading-relaxed md:text-xl">

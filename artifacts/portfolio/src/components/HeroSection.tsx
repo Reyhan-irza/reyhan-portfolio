@@ -4,7 +4,6 @@ import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { gsap } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
 import HeroTypingLoop from "./HeroTypingLoop";
-import Reveal from "./Reveal";
 
 export default function HeroSection({ ready = true }: { ready?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -174,12 +173,12 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
   };
 
   return (
-    <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
+    <section ref={sectionRef} id="home" data-hero-ready={ready} inert={!ready} aria-hidden={!ready} className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
-          <Reveal mount>
+          <div className="hero-editorial">
           <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[.17em] text-[#aab2c2] md:text-sm">
-            SMK Student <span className="text-white/20">/</span> Lubuk Basung, Indonesia
+            Student developer <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
           <div data-hero-title-depth>
             <h1 className="max-w-[950px] text-[clamp(3.7rem,11.1vw,10.5rem)] font-extrabold leading-[.78] tracking-[-.095em] text-[#f5f7fa]">
@@ -192,7 +191,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
             <div data-hero-lead-depth>
               <p data-hero-bio className="max-w-[660px] text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] tracking-[-.045em] text-[#c9d0dc]">
-                Halo, saya Reyhan. Rasa penasaran saya pada komputer tumbuh saat sering mampir ke warnet sekitar 2015. Sekarang saya belajar web lewat proyek: mencoba ide, menemukan yang perlu diperbaiki, lalu mencoba lagi.
+                Saya Reyhan. Mengolah rasa penasaran menjadi website yang bisa dipakai, dari ide pertama sampai detail interaksinya.
               </p>
             </div>
             <p className="relative max-w-[250px] pl-4 text-sm leading-relaxed text-[#8b93a3] md:text-base">
@@ -222,11 +221,11 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.15em] text-white/50 transition-colors hover:text-[#9da9ff]">
             GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </a>
-          </Reveal>
+          </div>
         </div>
 
-        <Reveal mount media className="relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block">
-        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="Identitas visual RV">
+        <div className="hero-identity-frame">
+        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto aspect-square w-full max-w-[520px]" aria-label="Identitas visual RV">
           <div className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
@@ -238,7 +237,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identitas / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
         </aside>
-        </Reveal>
+        </div>
       </div>
       <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Kenali lebih dekat <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
