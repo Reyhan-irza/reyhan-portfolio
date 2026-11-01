@@ -42,10 +42,10 @@ export default function Reveal({
   }, []);
 
   const MotionElement = ({ div: m.div, article: m.article, header: m.header, section: m.section, li: m.li })[as] as React.ComponentType<any>;
-  const initial = reduceMotion ? false : media ? { opacity: 0, scale: 0.98 } : { opacity: 0, y: phone ? 8 : 12 };
+  const initial = reduceMotion ? false : media ? { opacity: 0, scale: 0.96 } : { opacity: 0, y: phone ? 16 : 28 };
   const visible = reduceMotion ? { opacity: 1, y: 0, scale: 1 } : media ? { opacity: 1, scale: 1 } : { opacity: 1, y: 0 };
-  const entranceDelay = reduceMotion ? 0 : delay + (phone ? 0 : staggerIndex * 0.1);
-  const revealDuration = reduceMotion ? 0 : mount ? 0.8 : phone ? 0.7 : 0.8;
+  const entranceDelay = reduceMotion ? 0 : Math.min(.3, delay + staggerIndex * .07);
+  const revealDuration = reduceMotion ? 0 : media ? 1.05 : phone ? .7 : .85;
 
   return (
     <MotionElement

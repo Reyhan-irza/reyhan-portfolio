@@ -1,14 +1,31 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
 import HeroTypingLoop from "./HeroTypingLoop";
 import Reveal from "./Reveal";
 
-export default function HeroSection() {
+export default function HeroSection({ ready = true }: { ready?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
+
+  useLayoutEffect(() => {
+    if (!ready || !sectionRef.current) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const scope = gsap.context(() => {
+        gsap.fromTo("[data-hero-title-line]", { yPercent: 105 }, {
+          yPercent: 0, duration: 1.15, stagger: .12, ease: "power4.out", clearProps: "transform",
+        });
+        gsap.fromTo(".hero-mark-image", { scale: .88, rotation: -6, opacity: 0 }, {
+          scale: 1, rotation: 0, opacity: 1, duration: 1.6, ease: "power3.out", clearProps: "transform,opacity",
+        });
+      }, sectionRef);
+      return () => scope.revert();
+    });
+    return () => media.revert();
+  }, [ready]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -32,6 +49,7 @@ export default function HeroSection() {
           const axisX = section.querySelector<HTMLElement>("[data-hero-axis-x]");
           const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
           const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
+          const mark = section.querySelector<HTMLElement>("[data-hero-mark-stage]");
           // The opening is a hand-off: the name holds while the personal note
           // moves forward, then the whole composition gently yields to the page.
           const story = gsap.timeline({
@@ -46,10 +64,16 @@ export default function HeroSection() {
           });
 
           story.addLabel("hold", 0);
+          if (mark && !compact) {
+            story.fromTo(mark, { y: 0, rotateY: -7 }, {
+              y: -100, rotateY: 7, scale: 1.07, duration: 1,
+              transformOrigin: "center center",
+            }, 0);
+          }
           if (title) {
             story.to(title, {
-              y: compact ? -4 : -12,
-              scale: compact ? 0.998 : 0.985,
+              y: compact ? -10 : -36,
+              scale: compact ? 0.995 : 0.97,
               opacity: compact ? 0.98 : 0.94,
               transformOrigin: "left center",
               duration: 0.48,
@@ -105,8 +129,8 @@ export default function HeroSection() {
           story.addLabel("release", 0.56);
           if (title) {
             story.to(title, {
-              y: compact ? -8 : -25,
-              scale: compact ? 0.994 : 0.96,
+              y: compact ? -24 : -90,
+              scale: compact ? 0.985 : 0.92,
               opacity: compact ? 0.92 : 0.76,
               duration: 0.44,
             }, "release");
@@ -151,12 +175,10 @@ export default function HeroSection() {
 
   return (
     <section ref={sectionRef} id="home" className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
-      <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
           <Reveal mount>
           <p data-hero-kicker className="mb-8 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[.17em] text-[#aab2c2] md:text-sm">
-            <span data-hero-indicator className="h-1.5 w-1.5 bg-[#7586ff]" aria-hidden="true" />
             SMK Student <span className="text-white/20">/</span> Lubuk Basung, Indonesia
           </p>
           <div data-hero-title-depth>
@@ -190,7 +212,7 @@ export default function HeroSection() {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <LazyMotion features={domAnimation}>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Explore my work <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+                View selected projects <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
               </m.button>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
                 Say hello <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
@@ -205,11 +227,6 @@ export default function HeroSection() {
 
         <Reveal mount media className="relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block">
         <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto hidden aspect-square w-full max-w-[520px] lg:block" aria-label="Identitas visual RV">
-          <div className="hero-mark-frame absolute inset-[8%] border border-white/[.08]" />
-          <div className="hero-mark-frame hero-mark-frame-inner absolute inset-[20%] border border-[#667cff]/20" />
-          <div data-hero-axis-y className="hero-mark-cross absolute left-1/2 top-[5%] h-[90%] w-px bg-white/[.08]" />
-          <div data-hero-axis-x className="hero-mark-cross absolute left-[5%] top-1/2 h-px w-[90%] bg-white/[.08]" />
-          <div data-hero-orbit className="hero-orbit absolute inset-[14%] border border-dashed border-white/[.14]" />
           <div className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
@@ -220,8 +237,6 @@ export default function HeroSection() {
           </div>
           <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identitas / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>
-          <span className="hero-corner hero-corner-a" aria-hidden="true" />
-          <span className="hero-corner hero-corner-b" aria-hidden="true" />
         </aside>
         </Reveal>
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger } from "../lib/motion";
 import BrandLogo from "./BrandLogo";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -274,6 +275,8 @@ export default function Navbar() {
             </a>
           </div>
 
+          <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button
             ref={menuTriggerRef}
             type="button"
@@ -291,6 +294,7 @@ export default function Navbar() {
               <span className="mobile-menu-line mobile-menu-line-bottom" />
             </span>
           </button>
+          </div>
         </div>
       </nav>
 
