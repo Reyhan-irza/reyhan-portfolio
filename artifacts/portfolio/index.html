@@ -10,7 +10,17 @@
     <meta name="author" content="Reyhan Irza Alvano" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#05070b" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        let saved;
+        try { saved = localStorage.getItem('rv-theme'); } catch {}
+        const theme = saved === 'light' || saved === 'dark' ? saved : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <meta name="application-name" content="Reyhan Irza Alvano" />
     <link rel="canonical" href="https://reyhan-watsap-portfolio.vercel.app/" />
 
