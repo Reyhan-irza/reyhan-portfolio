@@ -1,0 +1,160 @@
+/* RV mineral palette. Semantic tokens also reach dialogs rendered in body portals. */
+:root {
+  --canvas: #101113;
+  --panel: #191b1e;
+  --panel-raised: #23262b;
+  --ink-primary: #f3f3ef;
+  --ink-secondary: #c4c6cb;
+  --ink-muted: #a0a5ae;
+  --signal: #9baeff;
+  --signal-ink: #101525;
+  --rule: #383c43;
+  --signal-wash: #222b42;
+  --rv-bg: var(--canvas);
+  --rv-text: var(--ink-primary);
+}
+:root[data-theme="light"] {
+  --canvas: #f4f3ef;
+  --panel: #eae9e4;
+  --panel-raised: #fffefa;
+  --ink-primary: #202226;
+  --ink-secondary: #414750;
+  --ink-muted: #5c626c;
+  --signal: #304fa8;
+  --signal-ink: #ffffff;
+  --rule: #cdcec9;
+  --signal-wash: #e1e7f7;
+}
+body { background: var(--canvas); }
+.portfolio-shell {
+  --rv-bg: var(--canvas);
+  --rv-surface: var(--panel);
+  --rv-surface-raised: var(--panel-raised);
+  --rv-text: var(--ink-primary);
+  --rv-secondary: var(--ink-secondary);
+  --rv-muted: var(--ink-muted);
+  --rv-blue: var(--signal);
+  --rv-violet: var(--signal);
+  --rv-border: var(--rule);
+  --rv-blue-wash: var(--signal-wash);
+  --rv-violet-wash: var(--signal-wash);
+  --muted-ink: var(--ink-muted);
+  --rv-display: 'Outfit', 'Manrope', sans-serif;
+}
+.portfolio-shell::after { content: none; }
+.portfolio-shell .hero-section { background: var(--canvas); }
+.portfolio-shell h1,
+.portfolio-shell .projects-title,
+.portfolio-shell .project-name { font-family: 'Outfit', 'Manrope', sans-serif; }
+.portfolio-shell h1 { font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 600; letter-spacing: -.075em; line-height: .9; }
+.portfolio-shell .hero-content { min-height: min(48rem, calc(100svh - 12rem)); }
+.portfolio-shell .hero-section [data-hero-bio] { font-size: clamp(1.05rem, 1.6vw, 1.4rem); }
+.portfolio-shell .hero-name-accent { color: var(--ink-muted); }
+.portfolio-shell [data-hero-kicker] { letter-spacing: .04em; }
+.portfolio-shell [data-hero-title-line] { padding-bottom: .06em; }
+.portfolio-shell .hero-mark-image { inset: 0; filter: none; }
+.portfolio-shell .hero-mark-stage { border-bottom: 1px solid var(--rule); }
+.portfolio-shell .hero-mark-stage:hover .hero-mark-image img { transform: none; }
+.portfolio-shell .hero-primary { background: var(--signal); color: var(--signal-ink); }
+.portfolio-shell .hero-primary:hover { background: var(--ink-primary); color: var(--canvas); }
+.portfolio-shell .hero-secondary { color: var(--ink-primary); border-color: var(--rule); }
+.portfolio-shell .hero-secondary:hover { color: var(--signal); border-color: var(--signal); }
+.portfolio-shell .hero-rule { background: var(--rule); }
+.portfolio-shell .hero-typing-loop { color: var(--ink-primary); }
+.portfolio-shell .editorial-nav.nav-blur { background: var(--canvas); border-color: var(--rule); backdrop-filter: none; }
+.portfolio-shell .mobile-nav-panel { background: var(--canvas); }
+.portfolio-shell .editorial-nav .mobile-menu-trigger { background: var(--panel); color: var(--ink-primary); border-color: var(--rule); }
+.portfolio-shell .editorial-nav .mobile-menu-trigger:is(:hover,:focus-visible,.is-open) { background: var(--panel-raised); color: var(--signal); }
+.theme-toggle {
+  display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0;
+  color: var(--ink-primary); background: transparent; border: 1px solid var(--rule);
+  transition: background-color .2s, border-color .2s;
+}
+.theme-toggle span { display: flex; }
+.theme-toggle:hover { background: var(--panel); border-color: var(--ink-muted); }
+.theme-toggle:active { background: var(--signal-wash); }
+.portfolio-shell :is(a[href],button,summary,select,[role="button"]) { cursor: pointer; }
+.portfolio-shell :is(a,button,summary,input,textarea,select):focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+.portfolio-shell :is(button,select):disabled { cursor: not-allowed; }
+.portfolio-shell :is(.proof-item,.contact-list,.contact-item,.contact-icon,.contact-arrow,.contact-cta-arrow,.secondary-archive,.secondary-archive-tools) { border-color: var(--rule); }
+.portfolio-shell :is(.section-kicker,.proof-index,.projects-kicker,.project-type,.contact-kicker,.journey-year) { color: var(--signal) !important; }
+.portfolio-shell :is(.story-notes,.story-note,.achievement-milestone-card,.award-record,#about article,.glass) {
+  background: var(--panel) !important; color: var(--ink-primary); border-color: var(--rule) !important; box-shadow: none !important; backdrop-filter: none;
+}
+.portfolio-shell .award-record::before { content: none; }
+.portfolio-shell .story-note::before { content: none; }
+.portfolio-shell :is(.story-lead,.story-aside,.contact-description,.contact-icon,.contact-label,.contact-cta-eyebrow,.secondary-archive-tools-label) { color: var(--ink-secondary); }
+.portfolio-shell :is(.contact-handle,.contact-cta-title,.secondary-archive summary) { color: var(--ink-primary); }
+.portfolio-shell .secondary-archive summary span:last-child { color: var(--ink-muted); }
+.portfolio-shell .contact-primary-cta { background: var(--signal-wash); border-color: var(--rule); }
+.portfolio-shell .contact-link:hover { background: var(--panel); }
+.portfolio-shell .contact-link:hover :is(.contact-label,.contact-icon,.contact-arrow) { color: var(--signal); }
+.portfolio-shell .education-current-badge { color: var(--signal); border-color: var(--signal); }
+.portfolio-shell .education-item-current { background: var(--signal-wash); }
+.portfolio-shell .education-item[data-education-active="true"] .education-node { box-shadow: 0 0 0 4px var(--canvas); }
+.portfolio-shell :is(.journey-timeline-progress,.education-timeline-progress,.award-evidence-line) { background: var(--signal); }
+.portfolio-shell .projects-section {
+  --project-paper: var(--ink-primary); --project-muted: var(--ink-secondary);
+  --project-acid: var(--signal); --project-coral: var(--signal); --project-ink: var(--signal-ink);
+  background: var(--panel);
+}
+.portfolio-shell .projects-section::before,
+.portfolio-shell .project-visual::after,
+.portfolio-shell .project-stamp::before { content: none; }
+.portfolio-shell .project-visual { background: #101113 !important; box-shadow: none; }
+.portfolio-shell .project-screenshot { opacity: 1; }
+.portfolio-shell :is(.project-stamp,.project-wordmark) { color: #f3f3ef; }
+.portfolio-shell .project-link { background: var(--signal-wash); border-color: var(--rule); }
+.portfolio-shell .project-link:hover { background: var(--signal); color: var(--signal-ink) !important; }
+.portfolio-shell .project-link--quiet { background: transparent; }
+.portfolio-shell .project-link--quiet:hover { background: var(--panel-raised); color: var(--ink-primary) !important; }
+.project-detail-dialog {
+  --detail-bg: var(--panel-raised); --detail-text: var(--ink-primary);
+  --detail-secondary: var(--ink-secondary); --detail-muted: var(--ink-muted);
+  --detail-line: var(--rule); --detail-accent: var(--signal);
+  background: var(--panel-raised);
+}
+.portfolio-shell .technology-bands {
+  --tb-bg: var(--canvas); --tb-surface: var(--panel); --tb-text: var(--ink-primary);
+  --tb-secondary: var(--ink-secondary); --tb-muted: var(--ink-muted);
+  --tb-blue: var(--signal); --tb-violet: var(--signal); --tb-rule: var(--rule);
+  background-image: none;
+}
+.portfolio-shell .technology-bands::before { content: none; }
+.portfolio-shell :is(.portfolio-closing-zone,.portfolio-closing-footer) { background: var(--canvas); }
+
+/* Legacy content utilities map to roles, so archive features share the same theme. */
+.portfolio-shell :is([class*="text-white"],[class*="text-[#f5f7fa]"],[class*="text-[#211f1b]"],[class*="text-[#1b1c18]"],[class*="text-[#e8e7dc]"]) { color: var(--ink-primary) !important; }
+.portfolio-shell :is([class*="text-white/"],[class*="text-[#c9d0dc]"],[class*="text-[#aab2c2]"],[class*="text-[#8b93a3]"],[class*="text-[#6d6a62]"],[class*="text-[#65675f]"],[class*="text-[#77796e]"],[class*="text-[#94978f]"]) { color: var(--ink-secondary) !important; }
+.portfolio-shell :is(.text-neutral-200,.text-neutral-400,.text-neutral-500,.text-neutral-700) { color: var(--ink-muted); }
+.portfolio-shell :is([class*="text-[#a43f2d]"],[class*="text-[#aeb8ff]"],[class*="text-[#8290ff]"],[class*="text-[#8190ff]"],[class*="text-[#8491ff]"],[class*="text-[#aab4ff]"],[class*="text-[#8a98ff]"],[class*="text-[#8b6cff]"],[class*="text-[#7887fa]"]) { color: var(--signal) !important; }
+.portfolio-shell :is([class*="bg-[#f3f0e8]"],[class*="bg-[#f3efe6]"],[class*="bg-[#e8e1d4]"],[style*="#f3efe6"],[style*="#e8e1d4"]) { background-color: var(--panel) !important; }
+.portfolio-shell :is([class*="border-white"],[class*="border-[rgba(33,31,27"]) { border-color: var(--rule) !important; }
+.portfolio-shell [class*="bg-[#211f1b]"] { background-color: var(--signal) !important; }
+.portfolio-shell [class*="text-[#f3efe6]"] { color: var(--signal-ink) !important; }
+.portfolio-shell :is(input,textarea,select) { color: var(--ink-primary); background-color: var(--panel-raised); border-color: var(--rule); }
+.portfolio-shell :is(input,textarea)::placeholder { color: var(--ink-muted); }
+.portfolio-shell #music .music-card[aria-pressed="true"] { background-color: var(--signal-wash) !important; border-color: var(--signal) !important; box-shadow: none !important; }
+.portfolio-shell .animate-ping { animation: none; display: none; }
+.portfolio-shell [data-testid="availability-status"] .animate-pulse { animation: none; }
+
+/* The identity film is deliberately a dark stage in either reading theme. */
+.portfolio-shell .rv-intro {
+  --ink-primary: #f3f3ef; --ink-secondary: #c4c6cb; --ink-muted: #a0a5ae;
+  --signal: #9baeff; --rv-text: #f3f3ef; --rv-secondary: #c4c6cb;
+  background: #101113;
+}
+@media (max-width: 639px) {
+  .portfolio-shell .hero-scroll-cue { translate: none; min-height: 44px; }
+  .portfolio-shell .editorial-nav > div { gap: .75rem; }
+  .portfolio-shell .editorial-nav > div > a { gap: .5rem; }
+  .portfolio-shell .editorial-nav > div > a span span:first-child { font-size: 10px; letter-spacing: .025em; }
+  .portfolio-shell .editorial-nav > div > a span span:last-child { font-size: 9px; letter-spacing: .025em; }
+  .portfolio-shell .hero-section { padding-top: 7.5rem; }
+  .portfolio-shell h1 { font-size: clamp(3.5rem, 14.2vw, 5.5rem); }
+  .portfolio-shell .hero-content { min-height: auto; }
+  .portfolio-shell .hero-section { min-height: auto; padding-bottom: 5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle { transition: none; }
+}
