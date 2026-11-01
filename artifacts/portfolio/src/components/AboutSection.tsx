@@ -19,7 +19,7 @@ export default function AboutSection() {
           </div>
           <div>
             <p className="story-lead max-w-2xl text-lg leading-relaxed md:text-xl">
-              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar lewat proyek: mencoba ide, menemukan masalah, lalu memperbaikinya—satu langkah kecil setiap kali.
+              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar lewat proyek: mencoba ide, menemukan masalah, lalu memperbaikinya satu langkah setiap kali.
             </p>
             <p className="story-aside mt-5 max-w-2xl text-base leading-relaxed">Kalau kamu suka melihat proses di balik sebuah karya, semoga cerita ini menyenangkan untuk diikuti.</p>
           </div>
