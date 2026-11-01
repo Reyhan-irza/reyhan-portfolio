@@ -80,11 +80,11 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
 
           if (compact) {
             timeline
-              .fromTo(pieces, { autoAlpha: 0, y: 8, scale: 0.985 }, {
+              .fromTo(pieces, { autoAlpha: 0, x: (i: number) => (i - 1) * 32, y: (i: number) => i === 1 ? 22 : -18, rotation: (i: number) => (i - 1) * 8, scale: 0.9 }, {
                 autoAlpha: 1,
-                y: 0,
+                x: 0, y: 0, rotation: 0,
                 scale: 1,
-                duration: 0.48,
+                duration: 0.62,
                 stagger: 0.12,
                 ease: "power2.out",
               }, 0)
