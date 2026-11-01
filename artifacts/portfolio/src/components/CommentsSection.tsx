@@ -79,7 +79,7 @@ export default function CommentsSection() {
         supabase.from("comments").select("*").order("created_at", { ascending: false }),
         supabase.from("replies").select("*").order("created_at", { ascending: true }),
       ]);
-      if (cmtRes.error || repRes.error) {
+      if (cmtRes.error) {
         console.error("Supabase load error:", cmtRes.error || repRes.error);
         setDataError(true);
       }
@@ -124,14 +124,16 @@ export default function CommentsSection() {
     }
 
     setSubmitting(true);
-    const { error: sbErr } = await supabase
+    const { data: savedComment, error: sbErr } = await supabase
       .from("comments")
-      .insert([{ username: cleanName, message: cleanMsg }]);
+      .insert([{ username: cleanName, message: cleanMsg }])
+      .select("id, username, message, pinned, created_at")
+      .single();
 
-    if (sbErr) {
+    if (sbErr || !savedComment) {
       console.error("Insert error:", sbErr);
       setError(
-        sbErr.code === "42501"
+        sbErr?.code === "42501"
           ? "Supabase menolak izin INSERT (42501). Pastikan migration komentar dijalankan pada project yang dipakai situs."
           : "Gagal kirim komentar. Silakan coba lagi."
       );
@@ -139,14 +141,8 @@ export default function CommentsSection() {
       return;
     }
 
-    localStorage.setItem(RATE_KEY, Date.now().toString());
-    setComments((prev) => [{
-      id: -Date.now(),
-      username: cleanName,
-      message: cleanMsg,
-      pinned: false,
-      created_at: new Date().toISOString(),
-    }, ...prev]);
+    try { localStorage.setItem(RATE_KEY, Date.now().toString()); } catch { /* Storage is optional. */ }
+    setComments((prev) => [savedComment, ...prev.filter(c => c.id !== savedComment.id)]);
     setName(""); setMessage(""); setError("");
     setSuccess(true);
     setTimeout(() => setSuccess(false), 4000);
