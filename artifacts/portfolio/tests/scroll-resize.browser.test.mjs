@@ -154,6 +154,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     hasTouch: true,
     reducedMotion: "no-preference",
   });
+  await mockServices(phoneContext);
   const phonePage = await phoneContext.newPage();
   const pageErrors = [];
   phonePage.on("pageerror", (error) => pageErrors.push(error.message));
@@ -302,6 +303,29 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     assert.equal(reversed.opacity, 1, 'Reading text remains visible');
   });
 
+  await t.test("reading reveals respond to live reduced-motion changes", async () => {
+    const note = phonePage.locator(".story-note").first();
+    const positionBeforeNote = () => note.evaluate((element) =>
+      element.getBoundingClientRect().top + scrollY
+      - new DOMMatrix(getComputedStyle(element).transform).m42 - 800);
+
+    for (let cycle = 0; cycle < 2; cycle += 1) {
+      await phonePage.emulateMedia({ reducedMotion: "reduce" });
+      await settleLayout(phonePage);
+      await scrollInstantly(phonePage, await positionBeforeNote());
+      await phonePage.waitForFunction(() =>
+        getComputedStyle(document.querySelector(".story-note")).transform === "none");
+      await assertVisibleBox(note, "Reduced-motion reading surface");
+
+      await phonePage.emulateMedia({ reducedMotion: "no-preference" });
+      await settleLayout(phonePage);
+      await scrollInstantly(phonePage, await positionBeforeNote());
+      await phonePage.waitForFunction(() =>
+        new DOMMatrix(getComputedStyle(document.querySelector(".story-note")).transform).m42 > 3);
+      await assertVisibleBox(note, "Restored reading motion");
+    }
+  });
+
   await phoneContext.close();
 
   await t.test("desktop project story still pins while scrolling", async () => {
@@ -310,6 +334,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       hasTouch: true,
       reducedMotion: "no-preference",
     });
+    await mockServices(desktopContext);
     const desktopPage = await desktopContext.newPage();
     desktopPage.on("pageerror", (error) => pageErrors.push(error.message));
     await desktopPage.goto(baseUrl, { waitUntil: "domcontentloaded" });
