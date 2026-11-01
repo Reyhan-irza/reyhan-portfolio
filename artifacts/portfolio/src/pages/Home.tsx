@@ -104,9 +104,9 @@ export default function Home() {
           </Reveal>
         </section>
         <SectionBoundary variant="trace" />
-        <AboutSection />
         <ProjectsSection />
         <SectionBoundary variant="return" />
+        <AboutSection />
         <JourneySection />
         <AwardSection />
         <RoadmapSection />

@@ -12,7 +12,7 @@ export default function SecondaryArchive() {
       <MusicSection />
       <CommentsSection />
       <div className="secondary-archive-tools" aria-label="Portfolio extras">
-        <span className="secondary-archive-tools-label">Small extras</span>
+        <span className="secondary-archive-tools-label">Sisi lain portfolio</span>
         <RoastButton />
         <TerminalMode />
         <MusicController />

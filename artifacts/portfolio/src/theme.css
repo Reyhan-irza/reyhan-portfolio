@@ -186,6 +186,30 @@ body { background: var(--canvas); }
 
 /* The opening holds a single identity composition until the film has exited. */
 .hero-section[data-hero-ready="false"] > * { visibility: hidden; }
+.portfolio-shell .hero-section [data-hero-bio], .portfolio-shell :is(.story-lead,.project-copy) { font-family: 'Manrope', sans-serif; letter-spacing: -.015em; line-height: 1.65; }
+.portfolio-shell :is(.portfolio-section-heading,.portfolio-award-heading) { font-family: 'Outfit', sans-serif; }
+.portfolio-shell #about .story-notes { display: block; border-bottom: 0; background: transparent !important; }
+.portfolio-shell #about .story-note { display: grid; grid-template-columns: 3rem minmax(0,.8fr) minmax(0,1.2fr); gap: 2rem; padding: 2rem 0; border: 0; border-bottom: 1px solid var(--rule); background: transparent !important; }
+.portfolio-shell .story-note > div svg { display: none; }
+.portfolio-shell .story-note h3, .portfolio-shell .story-note p { margin: 0; max-width: 50ch; }
+.portfolio-shell .story-note h3 { font-family: 'Outfit', sans-serif; }
+.portfolio-shell .story-note > div { justify-content: flex-start; padding-top: .4rem; }
+.portfolio-shell .secondary-archive-content { background: var(--panel); padding: 0 clamp(1rem,3vw,2.5rem); }
+.portfolio-shell .secondary-archive-content > section { padding: 3rem 0; border-bottom: 1px solid var(--rule); }
+.portfolio-shell .secondary-archive-content .text-center { text-align: left; }
+.portfolio-shell .secondary-archive-content .mx-auto { margin-left: 0; }
+.portfolio-shell .secondary-archive-content h2 { font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.045em; }
+.portfolio-shell .secondary-archive-content .rgb-divider { display: none; }
+.portfolio-shell .secondary-archive-content :is(.glass,.music-card) { background: var(--panel-raised) !important; border-radius: 4px; box-shadow: none; }
+.portfolio-shell .secondary-archive-tools { padding: 2rem 0; gap: 1rem; }
+.portfolio-shell .secondary-archive-tools-label { font: 500 .85rem 'Manrope', sans-serif; letter-spacing: 0; text-transform: none; }
+.portfolio-shell :is(#about,#journey,#roadmap) { padding-block: clamp(3.5rem,7vw,6rem); }
+.portfolio-shell .editorial-divider { margin-block: 0; }
+@media (max-width: 767px) {
+  .portfolio-shell #about .story-note { grid-template-columns: 2rem minmax(0,1fr); gap: .75rem 1rem; padding-block: 1.75rem; }
+  .portfolio-shell .story-note p { grid-column: 2; }
+  .portfolio-shell .secondary-archive summary { align-items: flex-start; gap: .5rem; flex-direction: column; }
+}
 .portfolio-shell .hero-content { gap: clamp(2rem, 5vw, 6rem); }
 .portfolio-shell .hero-identity-frame { align-self: stretch; display: grid; align-items: center; background: var(--panel); border-top: 1px solid var(--rule); }
 .portfolio-shell .hero-mark-stage { border: 0; }
