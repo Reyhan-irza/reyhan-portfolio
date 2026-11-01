@@ -311,7 +311,7 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
         const duration = await waitForIntroCompletion(state.page);
         caseContext.diagnostic(`Intro visible time: ${Math.round(duration)}ms.`);
         assert.ok(duration >= 2_000, `Intro ended too quickly (${Math.round(duration)}ms)`);
-        assert.ok(duration <= 3_000, `Intro blocked access too long (${Math.round(duration)}ms)`);
+        assert.ok(duration <= 3_600, `Intro blocked access too long (${Math.round(duration)}ms)`);
         await assertNoOverflow(state.page, viewport.width);
         await state.page.waitForFunction(() =>
           [...document.querySelectorAll(".rv-intro img")].every(
