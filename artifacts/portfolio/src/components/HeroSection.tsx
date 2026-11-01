@@ -58,7 +58,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
               trigger: section,
               start: "top top",
               end: "bottom top",
-              scrub: compact ? 0.2 : 0.72,
+              scrub: compact ? 0.85 : 0.9,
               invalidateOnRefresh: true,
             },
           });
@@ -72,7 +72,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           }
           if (title) {
             story.to(title, {
-              y: compact ? -10 : -36,
+              y: compact ? -26 : -36,
               scale: compact ? 0.995 : 0.97,
               opacity: compact ? 0.98 : 0.94,
               transformOrigin: "left center",
@@ -129,15 +129,15 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           story.addLabel("release", 0.56);
           if (title) {
             story.to(title, {
-              y: compact ? -24 : -90,
-              scale: compact ? 0.985 : 0.92,
+              y: compact ? -72 : -90,
+              scale: compact ? 0.94 : 0.92,
               opacity: compact ? 0.92 : 0.76,
               duration: 0.44,
             }, "release");
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -5 : -16,
+              y: compact ? -28 : -16,
               opacity: compact ? 0.94 : 0.78,
               duration: 0.44,
             }, "release");
@@ -212,10 +212,10 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <LazyMotion features={domAnimation}>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                View selected projects <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+                Lihat karya saya <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
               </m.button>
               <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
-                Say hello <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                Hubungi saya <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
               </m.button>
             </LazyMotion>
           </div>
@@ -241,7 +241,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
         </Reveal>
       </div>
       <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
-        Scroll to explore <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
+        Kenali lebih dekat <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
       </a>
     </section>
   );

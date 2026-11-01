@@ -273,6 +273,29 @@ test("journey and both certificates stay visible and usable with reduced motion"
     } finally { await themeContext.close(); }
   });
 
+  await t.test("mobile intro fits, typing changes, and music controls remain inside their card", async () => {
+    const motionContext = await browser.newContext({ reducedMotion: "no-preference", viewport: { width: 390, height: 844 } });
+    await mockServices(motionContext);
+    try {
+      const mobile = await motionContext.newPage();
+      await mobile.goto(baseUrl);
+      await mobile.locator('.rv-intro-name').waitFor();
+      for (const width of [320, 390]) {
+        await mobile.setViewportSize({ width, height: 844 });
+        const name = await mobile.locator('.rv-intro-name').boundingBox();
+        assert.ok(name.x >= 0 && name.x + name.width <= width, 'intro name fits viewport');
+      }
+      await mobile.getByRole('button', { name: 'Skip introduction' }).click();
+      await mobile.waitForFunction(() => document.querySelector('.hero-typing-loop')?.textContent.trim().length > 3);
+      const first = await mobile.locator('.hero-typing-loop').textContent();
+      await mobile.waitForFunction(value => document.querySelector('.hero-typing-loop')?.textContent !== value, first);
+      await mobile.locator('.secondary-archive summary').click();
+      const slider = mobile.getByRole('slider', { name: 'Volume' });
+      const bounds = await slider.boundingBox();
+      assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 320, 'volume stays inside viewport');
+    } finally { await motionContext.close(); }
+  });
+
   await t.test("theme toggle remains functional when localStorage is blocked", async () => {
     const blockedContext = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light" });
     await mockServices(blockedContext);

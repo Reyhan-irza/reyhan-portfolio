@@ -45,7 +45,7 @@ export default function Reveal({
   const initial = reduceMotion ? false : media ? { opacity: 0, scale: 0.96 } : { opacity: 0, y: phone ? 16 : 28 };
   const visible = reduceMotion ? { opacity: 1, y: 0, scale: 1 } : media ? { opacity: 1, scale: 1 } : { opacity: 1, y: 0 };
   const entranceDelay = reduceMotion ? 0 : Math.min(.3, delay + staggerIndex * .07);
-  const revealDuration = reduceMotion ? 0 : media ? 1.05 : phone ? .7 : .85;
+  const revealDuration = reduceMotion ? 0 : media ? 1.05 : phone ? 1 : 1.05;
 
   return (
     <MotionElement

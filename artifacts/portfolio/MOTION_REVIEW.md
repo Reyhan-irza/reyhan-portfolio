@@ -5,7 +5,7 @@ Scope: this frontend update, reviewed against the requested anti-slop direction 
 ## Verification
 
 - PASS: workspace typecheck and all workspace production builds.
-- PASS: 22 browser tests, including intro skip/Escape, reduced motion, asset failure recovery, hidden-tab pause/resume, CPU throttling, short-screen menu, resize, desktop project pinning, certificates, rating recovery and render fallback.
+- PASS: 23 browser tests, including intro skip/Escape, reduced motion, asset failure recovery, hidden-tab pause/resume, CPU throttling, short-screen menu, resize, desktop project pinning, certificates, rating recovery and render fallback.
 - PASS: new theme tests cover system changes before an explicit preference, reload persistence, keyboard activation, cross-tab synchronization and blocked theme storage.
 - PASS: both themes checked at 320, 390, 768 and 1280 px; no horizontal page overflow; theme control at least 44 x 44 px.
 - PASS: project detail opens and Escape closes its body portal in both themes.
@@ -14,10 +14,16 @@ Scope: this frontend update, reviewed against the requested anti-slop direction 
 ## Anti-slop delivery review
 
 - Hard gate PASS for changed controls and motion: native named toggle, visible focus, keyboard operation, reduced-motion handling, cleanup on media changes and preserved intro escape routes. Theme state never depends on successful storage writes. No new claims, testimonials, logos or invented content.
-- Purpose gate PASS: palette, type, layout and motion reasons are recorded in `DESIGN.md`. Removed the ambient aurora, hero grid/orbit, decorative indicator and endless typing loop. Existing RV artwork and real project screenshots remain the focal visuals.
+- Purpose gate PASS: palette, type, layout and motion reasons are recorded in `DESIGN.md`. Removed the ambient aurora, hero grid/orbit, decorative indicator while retaining the requested typing loop. Existing RV artwork and real project screenshots remain the focal visuals.
 - Liveliness PASS: ENERGY 2 / RHYTHM 3 / MOTION 3. The intro hands off to a staggered name reveal; the name and monogram move at different depths; mobile screenshots settle with scroll; desktop preserves the horizontal project sequence. Forms and reading copy remain stable.
 - Craftsmanship PASS for this change: a single semantic palette supplies both reading themes and project portals; no dependency or deployment configuration change; existing features preserved; no generated build output included.
 
 ## Limits
 
 Automated browser tests mock external services and font requests to avoid production writes and network flakiness. Mobile test screenshots therefore exercise fallback fonts; desktop cloud preview also checked the actual web fonts. The local preview has no production Supabase credentials, so service-error states were inspected there and rating success was tested with mocks. This is not a full accessibility certification or a claim of measured real-device frame rates or Core Web Vitals. Vite still reports the existing nonblocking large-chunk warning. Review the Vercel preview before merging.
+
+
+## Mobile and palette correction
+The previous hero h1 selector also styled the intro name, overriding its responsive size. Hero size rules now target only the hero section; intro name and location wrap within the viewport. The original typing loop is restored with its reduced-motion summary and hidden-tab pause. Light mode uses silver-blue layered surfaces aligned with the RV artwork. Music bars and volume controls share the theme and shrink inside their card. Mobile logo pieces now assemble from distinct directions; hero depth and project screenshot/copy scroll travel are stronger without pinning the phone viewport. Regression tests cover intro bounds at 320/390, changing typing text, and volume bounds. All 23 browser tests and workspace builds/typecheck passed. Live service writes and real-device frame rate remain unverified.
+
+Follow-up pacing: mobile intro exit now fades over 650 ms after a longer reading hold. Hero/project scrub catch-up is 850–900 ms; section dividers scrub continuously in both directions. Entrance reveals last about one second. The mixed-language project heading is now “Dari ide jadi karya.” All 23 tests passed after this revision.

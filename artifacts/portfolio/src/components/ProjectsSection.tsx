@@ -219,12 +219,15 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               const projectIndex = Number(row.dataset.projectIndex);
+              gsap.fromTo(copy, { y: 38 }, { y: 0, ease: "none",
+                scrollTrigger: { trigger: row, start: "top 90%", end: "center 55%", scrub: .85 },
+              });
               // The screenshot settles into its frame while the description stays still.
               // Separate targets prevent the Reveal wrapper and ScrollTrigger competing.
               const screenshot = visual.querySelector(".project-screenshot");
-              if (screenshot) gsap.fromTo(screenshot, { scale: 1.08, yPercent: 3 }, {
+              if (screenshot) gsap.fromTo(screenshot, { scale: 1.18, yPercent: 6 }, {
                 scale: 1, yPercent: 0, ease: "none",
-                scrollTrigger: { trigger: visual, start: "top 95%", end: "center 45%", scrub: .45 },
+                scrollTrigger: { trigger: visual, start: "top 95%", end: "bottom 35%", scrub: .9 },
               });
               ScrollTrigger.create({
                 trigger: row,
@@ -424,8 +427,8 @@ export default function ProjectsSection() {
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              <span className="block overflow-hidden"><span className="block">Yang benar-benar</span></span>
-              <span className="block overflow-hidden"><span className="text-[#a43f2d] block">I’ve built.</span></span>
+              <span className="block overflow-hidden"><span className="block">Dari ide</span></span>
+              <span className="block overflow-hidden"><span className="text-[#a43f2d] block">jadi karya.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-base md:mb-1 md:text-lg">

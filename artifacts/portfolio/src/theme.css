@@ -14,15 +14,15 @@
   --rv-text: var(--ink-primary);
 }
 :root[data-theme="light"] {
-  --canvas: #f4f3ef;
-  --panel: #eae9e4;
-  --panel-raised: #fffefa;
+  --canvas: #e9edf5;
+  --panel: #dce3ef;
+  --panel-raised: #f5f7fc;
   --ink-primary: #202226;
   --ink-secondary: #414750;
   --ink-muted: #5c626c;
   --signal: #304fa8;
   --signal-ink: #ffffff;
-  --rule: #cdcec9;
+  --rule: #b9c6db;
   --signal-wash: #e1e7f7;
 }
 body { background: var(--canvas); }
@@ -46,7 +46,7 @@ body { background: var(--canvas); }
 .portfolio-shell h1,
 .portfolio-shell .projects-title,
 .portfolio-shell .project-name { font-family: 'Outfit', 'Manrope', sans-serif; }
-.portfolio-shell h1 { font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 600; letter-spacing: -.075em; line-height: .9; }
+.portfolio-shell .hero-section h1 { font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 600; letter-spacing: -.075em; line-height: .9; }
 .portfolio-shell .hero-content { min-height: min(48rem, calc(100svh - 12rem)); }
 .portfolio-shell .hero-section [data-hero-bio] { font-size: clamp(1.05rem, 1.6vw, 1.4rem); }
 .portfolio-shell .hero-name-accent { color: var(--ink-muted); }
@@ -151,10 +151,35 @@ body { background: var(--canvas); }
   .portfolio-shell .editorial-nav > div > a span span:first-child { font-size: 10px; letter-spacing: .025em; }
   .portfolio-shell .editorial-nav > div > a span span:last-child { font-size: 9px; letter-spacing: .025em; }
   .portfolio-shell .hero-section { padding-top: 7.5rem; }
-  .portfolio-shell h1 { font-size: clamp(3.5rem, 14.2vw, 5.5rem); }
+  .portfolio-shell .hero-section h1 { font-size: clamp(3.5rem, 14.2vw, 5.5rem); }
   .portfolio-shell .hero-content { min-height: auto; }
   .portfolio-shell .hero-section { min-height: auto; padding-bottom: 5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle { transition: none; }
+}
+
+/* Scoped identity and controls: avoid letting hero typography leak into the film. */
+.portfolio-shell .rv-intro-content { max-width: calc(100vw - 2rem); }
+.portfolio-shell .rv-intro-identity { width: 100%; padding-inline: .5rem; }
+.portfolio-shell .rv-intro-name { font-size: clamp(1.4rem, 5.8vw, 2.4rem); line-height: 1.12; white-space: normal; overflow-wrap: anywhere; letter-spacing: -.045em; }
+.portfolio-shell .rv-intro-kicker { font-size: clamp(.5rem, 1.8vw, .66rem); white-space: normal; }
+.theme-toggle { border-radius: 50%; background: var(--panel); }
+.portfolio-shell .hero-typing-loop { display: inline-block; min-height: 1.6em; min-width: 20ch; color: var(--signal); }
+.portfolio-shell .music-visualizer-bar { background-color: var(--signal); min-width: 0; border-radius: 2px; }
+.portfolio-shell .portfolio-music-controller input[type="range"] { min-width: 0; width: 100%; accent-color: var(--signal); background: transparent; }
+.portfolio-shell .portfolio-music-controller button { min-width: 36px; min-height: 36px; }
+:root[data-theme="light"] .portfolio-shell .hero-section {
+  background: radial-gradient(ellipse at 90% 12%, #a7bde366, transparent 60%), linear-gradient(145deg, #f2f5fb, #d9e2f1);
+}
+:root[data-theme="light"] .portfolio-shell .technology-bands { background: linear-gradient(180deg, #e9edf5, #dce3ef); }
+:root[data-theme="light"] .portfolio-shell .projects-section { background: linear-gradient(160deg, #d3deef, #e6ebf5 65%); }
+:root[data-theme="light"] .portfolio-shell :is(.portfolio-closing-zone,.portfolio-closing-footer) { background: #dce3ef; }
+:root[data-theme="light"] .portfolio-shell .editorial-nav.nav-blur { background: #e9edf5f5; }
+.portfolio-shell .portfolio-music-controller :is([class*="bg-[#a43f2d]"],[class*="border-[#a43f2d]"]) { background-color: var(--signal-wash); border-color: var(--rule); }
+.portfolio-shell .portfolio-music-controller .music-visualizer-bar { background-color: var(--signal); }
+@media (max-width: 767px) {
+ .portfolio-shell .projects-title { font-size: clamp(2.6rem, 12vw, 4.25rem); line-height: .98; }
+ .portfolio-shell .hero-scroll-cue { position: static; margin-top: 2.5rem; width: fit-content; }
+ .portfolio-shell .rv-intro-stage { max-width: 100%; }
 }
