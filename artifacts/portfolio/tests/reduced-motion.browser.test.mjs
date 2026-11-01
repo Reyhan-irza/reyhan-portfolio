@@ -229,6 +229,73 @@ test("journey and both certificates stay visible and usable with reduced motion"
     assert.equal(await selectedStar.getAttribute("aria-pressed"), "true");
   });
 
+  await t.test("themes follow the system, persist an explicit choice, and sync across tabs", async () => {
+    const themeContext = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light", viewport: { width: 390, height: 844 } });
+    await mockServices(themeContext);
+    try {
+      const first = await themeContext.newPage();
+      const second = await themeContext.newPage();
+      await first.goto(baseUrl);
+      await second.goto(baseUrl);
+      const toggle = first.getByRole("button", { name: "Dark mode", exact: true });
+      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
+      await first.emulateMedia({ colorScheme: "dark" });
+      await first.waitForFunction(() => document.documentElement.dataset.theme === "dark");
+      await toggle.click();
+      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
+      await first.reload();
+      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
+      await toggle.press("Space");
+      await second.waitForFunction(() => document.documentElement.dataset.theme === "dark");
+      assert.equal(await toggle.getAttribute("aria-pressed"), "true");
+      for (const theme of ["dark", "light"]) {
+        if (theme === "light") await toggle.click();
+        for (const width of [320, 390, 768, 1280]) {
+          await first.setViewportSize({ width, height: 900 });
+          const layout = await first.evaluate(() => ({
+            width: document.documentElement.scrollWidth, viewport: innerWidth,
+            target: document.querySelector('.theme-toggle').getBoundingClientRect().toJSON(),
+          }));
+          assert.ok(layout.width <= layout.viewport + 1, `${theme}/${width}: no horizontal overflow`);
+          assert.ok(layout.target.width >= 44 && layout.target.height >= 44, "Theme toggle meets touch target size");
+          if (process.env.PORTFOLIO_SCREENSHOT_DIR) {
+            await first.screenshot({ path: path.join(process.env.PORTFOLIO_SCREENSHOT_DIR, `${theme}-${width}.png`), fullPage: true });
+          }
+        }
+        await first.getByRole("button", { name: "Baca selengkapnya tentang TJKT", exact: true }).click();
+        const dialog = first.locator('.project-detail-dialog');
+        await dialog.waitFor({ state: "visible" });
+        const colors = await dialog.evaluate(el => ({ bg: getComputedStyle(el).backgroundColor, text: getComputedStyle(el).color }));
+        assert.notEqual(colors.bg, colors.text, `${theme}: portal inherits distinct foreground/background`);
+        await first.keyboard.press("Escape");
+        await dialog.waitFor({ state: "detached" });
+      }
+    } finally { await themeContext.close(); }
+  });
+
+  await t.test("theme toggle remains functional when localStorage is blocked", async () => {
+    const blockedContext = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light" });
+    await mockServices(blockedContext);
+    await blockedContext.addInitScript(() => {
+      const originalGet = Storage.prototype.getItem;
+      const originalSet = Storage.prototype.setItem;
+      Storage.prototype.getItem = function(key) {
+        if (key === 'rv-theme') throw new DOMException('Blocked', 'SecurityError');
+        return originalGet.call(this, key);
+      };
+      Storage.prototype.setItem = function(key, value) {
+        if (key === 'rv-theme') throw new DOMException('Blocked', 'SecurityError');
+        return originalSet.call(this, key, value);
+      };
+    });
+    try {
+      const blockedPage = await blockedContext.newPage();
+      await blockedPage.goto(baseUrl);
+      await blockedPage.getByRole('button', { name: 'Dark mode', exact: true }).click();
+      await blockedPage.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+    } finally { await blockedContext.close(); }
+  });
+
   await t.test("a rendering failure leaves the static portfolio reachable", async () => {
     const fallbackContext = await browser.newContext({ reducedMotion: "reduce" });
     try {
