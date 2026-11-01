@@ -93,37 +93,37 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
                 scale: 0.99,
                 duration: 0.28,
                 ease: "sine.inOut",
-              }, 0.76)
+              }, 0.9)
               .to(finalLogo, {
                 autoAlpha: 1,
                 scale: 1,
                 duration: 0.42,
                 ease: "power2.out",
-              }, 0.76)
+              }, 0.9)
               .to(identity[0], {
                 autoAlpha: 1,
                 y: 0,
                 duration: 0.3,
                 ease: "power2.out",
-              }, 1.02)
+              }, 1.08)
               .to(identity[1], {
                 autoAlpha: 1,
                 y: 0,
                 duration: 0.38,
                 ease: "power2.out",
-              }, 1.16)
+              }, 1.28)
               .to(identity.slice(2), {
                 autoAlpha: 1,
                 y: 0,
                 duration: 0.3,
                 stagger: 0.12,
                 ease: "power2.out",
-              }, 1.48)
+              }, 1.65)
               .to(element, {
                 autoAlpha: 0,
-                duration: 0.42,
+                duration: 0.65,
                 ease: "power2.inOut",
-              }, 2.04);
+              }, 2.35);
           } else {
             timeline
               .addLabel("signal", 0)
