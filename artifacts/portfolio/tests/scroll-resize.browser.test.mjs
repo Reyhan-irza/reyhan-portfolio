@@ -281,6 +281,27 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     await assertVisibleBox(secondAward, "2026 award card after resize");
   });
 
+  await t.test("reading reveals reverse with scroll and settle without hiding text", async () => {
+    await phonePage.setViewportSize({ width: 390, height: 844 });
+    await settleLayout(phonePage);
+    const note = phonePage.locator('.story-note').first();
+    const top = await note.evaluate(el => el.getBoundingClientRect().top + scrollY - new DOMMatrix(getComputedStyle(el).transform).m42);
+    const read = () => note.evaluate(el => ({ y: new DOMMatrix(getComputedStyle(el).transform).m42, opacity: Number(getComputedStyle(el).opacity) }));
+    await scrollInstantly(phonePage, top - 800);
+    await phonePage.waitForTimeout(500);
+    const entering = await read();
+    await scrollInstantly(phonePage, top - 500);
+    await phonePage.waitForTimeout(500);
+    const settled = await read();
+    await scrollInstantly(phonePage, top - 800);
+    await phonePage.waitForTimeout(500);
+    const reversed = await read();
+    assert.ok(entering.y > settled.y + 3, 'Entrance follows scroll position');
+    assert.ok(Math.abs(settled.y) < 1, 'Text settles before the reading zone');
+    assert.ok(Math.abs(reversed.y - entering.y) < 2, 'Reverse scroll returns to the same pose');
+    assert.equal(reversed.opacity, 1, 'Reading text remains visible');
+  });
+
   await phoneContext.close();
 
   await t.test("desktop project story still pins while scrolling", async () => {
