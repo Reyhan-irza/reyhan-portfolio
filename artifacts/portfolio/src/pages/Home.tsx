@@ -39,9 +39,9 @@ export default function Home() {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
         document.querySelectorAll<HTMLElement>(".portfolio-section-heading, .projects-title").forEach((heading) => {
-          gsap.fromTo(heading, { x: -16 }, {
+          gsap.fromTo(heading, { x: -28 }, {
             x: 0, ease: "none",
-            scrollTrigger: { trigger: heading, start: "top bottom", end: "top 65%", scrub: .35 },
+            scrollTrigger: { trigger: heading, start: "top bottom", end: "top 62%", scrub: .22 },
           });
         });
       });
