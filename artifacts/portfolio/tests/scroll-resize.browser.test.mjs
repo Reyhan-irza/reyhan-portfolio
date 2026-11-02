@@ -297,8 +297,8 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     await scrollInstantly(phonePage, top - 800);
     await phonePage.waitForTimeout(500);
     const reversed = await read();
-    assert.ok(entering.y > settled.y + 3, 'Entrance follows scroll position');
-    assert.ok(Math.abs(settled.y) < 1, 'Text settles before the reading zone');
+    assert.ok(entering.y > settled.y + 28, 'Phone entrance has visible travel, not a barely perceptible nudge');
+    assert.ok(Math.abs(settled.y) < 1, `Text settles before the reading zone: ${JSON.stringify({entering, settled, reversed})}`);
     assert.ok(Math.abs(reversed.y - entering.y) < 2, 'Reverse scroll returns to the same pose');
     assert.equal(reversed.opacity, 1, 'Reading text remains visible');
   });
@@ -324,6 +324,61 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
         new DOMMatrix(getComputedStyle(document.querySelector(".story-note")).transform).m42 > 3);
       await assertVisibleBox(note, "Restored reading motion");
     }
+  });
+
+  await t.test("mobile project depth follows both scroll directions and respects reduced motion", async () => {
+    const visual = phonePage.locator('[data-project-visual]').first();
+    const image = visual.locator('.project-screenshot');
+    const top = await phonePage.locator('[data-project-row]').first().evaluate(el => el.getBoundingClientRect().top + scrollY);
+    const pose = () => image.evaluate(el => {
+      const matrix = new DOMMatrix(getComputedStyle(el).transform);
+      return { scale: matrix.a, y: matrix.m42 };
+    });
+    await scrollInstantly(phonePage, top - 730);
+    const entering = await pose();
+    await scrollInstantly(phonePage, top - 240);
+    const reading = await pose();
+    assert.ok(entering.scale - reading.scale > .06, `Screenshot depth should be visible over a phone swipe: ${JSON.stringify({top, entering, reading})}`);
+    await phonePage.waitForTimeout(300);
+    const settled = await pose();
+    assert.ok(Math.abs(settled.y - reading.y) < 1, 'Screenshot must settle promptly after the gesture');
+    await scrollInstantly(phonePage, top - 730);
+    const reversed = await pose();
+    assert.ok(Math.abs(reversed.scale - entering.scale) < .015, 'Reverse scroll returns to the same screenshot scale');
+    assert.ok(Math.abs(reversed.y - entering.y) < 2, 'Reverse scroll returns to the same screenshot position');
+    await phonePage.emulateMedia({ reducedMotion: 'reduce' });
+    await settleLayout(phonePage);
+    assert.equal(await image.evaluate(el => getComputedStyle(el).transform), 'none');
+    assert.equal(await visual.evaluate(el => getComputedStyle(el).transform), 'none');
+    await phonePage.emulateMedia({ reducedMotion: 'no-preference' });
+    await settleLayout(phonePage);
+    await scrollInstantly(phonePage, top - 730);
+    assert.ok((await pose()).scale > 1.08, 'Project motion must restart when reduced motion is turned off on a phone');
+  });
+
+  await t.test("mobile address-bar height changes do not reset scroll triggers", async () => {
+    await scrollInstantly(phonePage, 1000);
+    await phonePage.waitForTimeout(700);
+    await phonePage.evaluate(async () => {
+      const { ScrollTrigger } = await import('/src/lib/motion.ts');
+      window.__mobileRefreshes = 0;
+      window.__countMobileRefresh = () => { window.__mobileRefreshes += 1; };
+      ScrollTrigger.addEventListener('refresh', window.__countMobileRefresh);
+    });
+    const before = await phonePage.evaluate(() => scrollY);
+    await phonePage.setViewportSize({ width: 390, height: 790 });
+    await phonePage.waitForTimeout(600);
+    assert.equal(await phonePage.evaluate(() => window.__mobileRefreshes), 0, 'Small height-only changes should not reset all animated poses');
+    assert.ok(Math.abs(await phonePage.evaluate(() => scrollY) - before) < 3, 'Viewport chrome must not jump the document');
+    await phonePage.setViewportSize({ width: 430, height: 790 });
+    await phonePage.waitForTimeout(600);
+    assert.ok(await phonePage.evaluate(() => window.__mobileRefreshes) > 0, 'Real width changes must still refresh layout');
+    await phonePage.evaluate(async () => {
+      const { ScrollTrigger } = await import('/src/lib/motion.ts');
+      ScrollTrigger.removeEventListener('refresh', window.__countMobileRefresh);
+      delete window.__countMobileRefresh;
+      delete window.__mobileRefreshes;
+    });
   });
 
   await phoneContext.close();
