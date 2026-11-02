@@ -62,7 +62,7 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
             {
               autoAlpha: 0.45,
               x: compact ? 0 : settings.fromX,
-              scaleX: compact ? 0.35 : settings.fromScale,
+              scaleX: compact ? 0 : settings.fromScale,
               transformOrigin: settings.origin,
             },
             {

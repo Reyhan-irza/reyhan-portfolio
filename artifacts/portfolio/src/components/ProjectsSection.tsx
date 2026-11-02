@@ -438,8 +438,8 @@ export default function ProjectsSection() {
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
-              <span className="block overflow-hidden"><span className="block">Dari ide</span></span>
-              <span className="block overflow-hidden"><span className="text-[#a43f2d] block">jadi karya.</span></span>
+              <span className="block overflow-hidden"><span data-heading-line className="block">Dari ide</span></span>
+              <span className="block overflow-hidden"><span data-heading-line className="text-[#a43f2d] block">jadi karya.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-base md:mb-1 md:text-lg">
