@@ -3,6 +3,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Mobile browser chrome changes viewport height during a swipe. Recalculating
+// every trigger then resets scrubbed poses mid-gesture; real width/orientation
+// changes and content resizes still refresh normally.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 export function cubicBezierEase(
   x1: number,
   y1: number,

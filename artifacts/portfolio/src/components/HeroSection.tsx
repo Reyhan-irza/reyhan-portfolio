@@ -57,7 +57,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
               trigger: section,
               start: "top top",
               end: "bottom top",
-              scrub: compact ? 0.85 : 0.9,
+              scrub: compact ? 0.22 : 0.65,
               invalidateOnRefresh: true,
             },
           });
@@ -71,8 +71,8 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           }
           if (title) {
             story.to(title, {
-              y: compact ? -26 : -36,
-              scale: compact ? 0.995 : 0.97,
+              y: compact ? -48 : -36,
+              scale: 0.97,
               opacity: compact ? 0.98 : 0.94,
               transformOrigin: "left center",
               duration: 0.48,
@@ -80,7 +80,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           }
           if (lead) {
             story.to(lead, {
-              y: compact ? -2 : -5,
+              y: compact ? 14 : -5,
               opacity: compact ? 0.98 : 0.92,
               duration: 0.48,
             }, "hold+=0.08");
@@ -128,8 +128,8 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           story.addLabel("release", 0.56);
           if (title) {
             story.to(title, {
-              y: compact ? -72 : -90,
-              scale: compact ? 0.94 : 0.92,
+              y: compact ? -96 : -90,
+              scale: compact ? 0.91 : 0.92,
               opacity: compact ? 0.92 : 0.76,
               duration: 0.44,
             }, "release");

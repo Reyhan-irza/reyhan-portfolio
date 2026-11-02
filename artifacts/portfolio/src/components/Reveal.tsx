@@ -22,11 +22,12 @@ export default function Reveal({ children, as = "div", media = false, tall = fal
     const queries = gsap.matchMedia();
     queries.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
-        // Keep reading surfaces visible and settle before they reach the reading zone.
-        gsap.fromTo(element, media ? { scale: .975 } : { y: 20 }, {
-          ...(media ? { scale: 1 } : { y: 0 }), ease: "none",
-          scrollTrigger: { trigger: element, start: "top bottom", end: "top 78%",
-            scrub: .3, invalidateOnRefresh: true },
+        // Give the entrance enough travel to read on a phone, then hold still
+        // in the reading zone. Never hide text or interpolate the whole page.
+        gsap.fromTo(element, media ? { y: 36, scale: .94 } : { y: 48 }, {
+          ...(media ? { y: 0, scale: 1 } : { y: 0 }), ease: "none",
+          scrollTrigger: { trigger: element, start: "top bottom", end: "top 66%",
+            scrub: .22, invalidateOnRefresh: true },
         });
       }, element);
       return () => context.revert();

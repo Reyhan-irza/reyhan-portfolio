@@ -106,6 +106,7 @@ export default function ProjectsSection() {
     media.add(
       {
         reduced: "(prefers-reduced-motion: reduce)",
+        motion: "(prefers-reduced-motion: no-preference)",
         wide: "(min-width: 768px)",
         desktop: "(min-width: 1024px)",
       },
@@ -219,16 +220,26 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               const projectIndex = Number(row.dataset.projectIndex);
-              gsap.fromTo(copy, { y: 28 }, { y: 0, ease: "none",
-                scrollTrigger: { trigger: copy, start: "top 100%", end: "top 72%", scrub: .35 },
+              gsap.fromTo(copy, { y: 44 }, { y: 0, ease: "none",
+                scrollTrigger: { trigger: copy, start: "top 100%", end: "top 62%", scrub: .22 },
               });
-              // The screenshot settles into its frame while the description stays still.
-              // Separate targets prevent the Reveal wrapper and ScrollTrigger competing.
+              // The frame rises into view, while its screenshot has a longer
+              // reversible depth pass. Each transform has exactly one owner.
+              gsap.fromTo(visual, { y: 48, scale: .96 }, {
+                y: 0, scale: 1, ease: "none",
+                scrollTrigger: { trigger: visual, start: "top bottom", end: "top 58%", scrub: .22 },
+              });
               const screenshot = visual.querySelector(".project-screenshot");
-              if (screenshot) gsap.fromTo(screenshot, { scale: 1.12, yPercent: 3 }, {
-                scale: 1, yPercent: 0, ease: "none",
-                scrollTrigger: { trigger: visual, start: "top 100%", end: "center 48%", scrub: .4 },
-              });
+              if (screenshot) {
+                gsap.timeline({
+                  defaults: { ease: "none" },
+                  scrollTrigger: { trigger: visual, start: "top bottom", end: "bottom top", scrub: .22 },
+                })
+                  .fromTo(screenshot, { scale: 1.18, yPercent: 5 }, {
+                    scale: 1.02, yPercent: 0, duration: .55,
+                  })
+                  .to(screenshot, { scale: 1.12, yPercent: -3, duration: .45 });
+              }
               ScrollTrigger.create({
                 trigger: row,
                 start: "top center",
