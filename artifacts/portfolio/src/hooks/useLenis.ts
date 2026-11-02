@@ -15,6 +15,7 @@ export function useLenis() {
     let refreshFrame = 0;
     let resizeRefreshTimeout: number | undefined;
     let disposed = false;
+    let pendingRefresh = false;
     let scrollLocked = document.body.style.overflow === "hidden";
 
     const handleScrollLock = (event: Event) => {
@@ -25,11 +26,20 @@ export function useLenis() {
     };
 
     const scheduleRefresh = () => {
+      pendingRefresh = true;
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
       refreshFrame = window.requestAnimationFrame(() => {
         refreshFrame = 0;
-        if (!disposed) ScrollTrigger.refresh();
+        if (disposed || ScrollTrigger.isScrolling()) return;
+        pendingRefresh = false;
+        ScrollTrigger.refresh(true);
       });
+    };
+
+    // Lazy archive content and font changes can alter page height during a
+    // gesture. Measure after momentum stops rather than reset poses mid-swipe.
+    const refreshAfterScroll = () => {
+      if (pendingRefresh) scheduleRefresh();
     };
 
     const scheduleBodyResizeRefresh = () => {
@@ -85,6 +95,10 @@ export function useLenis() {
       ? null
       : new ResizeObserver(scheduleBodyResizeRefresh);
     resizeObserver?.observe(document.body);
+    ScrollTrigger.addEventListener("scrollEnd", refreshAfterScroll);
+    document.fonts?.ready.then(() => {
+      if (!disposed) scheduleRefresh();
+    });
 
     desktop.addEventListener("change", syncMotionMode);
     reducedMotion.addEventListener("change", syncMotionMode);
@@ -96,6 +110,7 @@ export function useLenis() {
       reducedMotion.removeEventListener("change", syncMotionMode);
       window.removeEventListener("portfolio:scroll-lock", handleScrollLock);
       resizeObserver?.disconnect();
+      ScrollTrigger.removeEventListener("scrollEnd", refreshAfterScroll);
       stop(false);
       disposed = true;
       if (resizeRefreshTimeout !== undefined) {
