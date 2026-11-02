@@ -62,7 +62,7 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
             {
               autoAlpha: 0.45,
               x: compact ? 0 : settings.fromX,
-              scaleX: compact ? Math.max(settings.fromScale, 0.82) : settings.fromScale,
+              scaleX: compact ? 0.35 : settings.fromScale,
               transformOrigin: settings.origin,
             },
             {
@@ -75,7 +75,7 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
                 trigger: boundary,
                 start: "top 95%",
                 end: "top 40%",
-                scrub: .8,
+                scrub: compact ? .22 : .5,
                 invalidateOnRefresh: true,
               },
             },

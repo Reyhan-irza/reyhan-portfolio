@@ -26,7 +26,7 @@ export default function AwardSection() {
         className="award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
         tall
       >
-        <div className="flex flex-col justify-between gap-8">
+        <Reveal className="flex flex-col justify-between gap-8">
           <div>
             <p className="section-kicker">Award / 2025</p>
             <p className="mt-2 text-sm text-white/55">Competition result</p>
@@ -50,9 +50,9 @@ export default function AwardSection() {
             </p>
           </div>
           <p className="max-w-[42ch] text-base leading-relaxed text-white/65">Saya menjadi satu-satunya perwakilan sekolah di LKS IT Software Solution For Business 2025 dan meraih Juara I tingkat Kabupaten Agam.</p>
-        </div>
+        </Reveal>
 
-        <div className="min-w-0">
+        <Reveal className="min-w-0" media>
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="section-kicker">Certificate / 2025</p>
@@ -99,11 +99,11 @@ export default function AwardSection() {
               Unduh PDF
             </a>
           </div>
-        </div>
+        </Reveal>
       </Reveal>
 
       <Reveal className="award-record mx-auto mt-8 grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10" tall>
-        <div className="flex flex-col justify-between gap-8">
+        <Reveal className="flex flex-col justify-between gap-8">
           <div>
             <p className="section-kicker">Award / 2026</p>
             <p className="mt-2 text-sm text-white/55">Apresiasi inovasi digital</p>
@@ -129,9 +129,9 @@ export default function AwardSection() {
           <p className="max-w-[42ch] text-base leading-relaxed text-white/65">
             Sertifikat penghargaan atas pengembangan Aplikasi Pustaka Digital.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="min-w-0">
+        <Reveal className="min-w-0" media>
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="section-kicker">Certificate / August 2026</p>
@@ -178,7 +178,7 @@ export default function AwardSection() {
               Unduh sertifikat
             </a>
           </div>
-        </div>
+        </Reveal>
       </Reveal>
 
       <section
