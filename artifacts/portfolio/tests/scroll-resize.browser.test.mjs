@@ -381,6 +381,72 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     });
   });
 
+  await t.test("section titles reveal before supporting copy and reverse as one scene", async () => {
+    await phonePage.setViewportSize({ width: 390, height: 844 });
+    // Let the debounced body resize and safe refresh finish before recording
+    // absolute positions from the previous test's different viewport width.
+    await phonePage.waitForTimeout(750);
+    const scene = phonePage.locator('#about .story-intro');
+    const top = await scene.evaluate(el => el.getBoundingClientRect().top + scrollY);
+    const pose = () => scene.evaluate(el => {
+      const heading = el.querySelector('h2');
+      const copy = el.querySelector('.story-lead');
+      const eyebrow = el.querySelector('.section-kicker');
+      return {
+        rootY: new DOMMatrix(getComputedStyle(el).transform).m42,
+        headingY: new DOMMatrix(getComputedStyle(heading).transform).m42,
+        clip: parseFloat(getComputedStyle(heading).clipPath.match(/inset\(([\d.]+)/)?.[1] ?? '0'),
+        copyY: new DOMMatrix(getComputedStyle(copy).transform).m42,
+        copyOpacity: Number(getComputedStyle(copy).opacity),
+        eyebrowOpacity: Number(getComputedStyle(eyebrow).opacity),
+      };
+    });
+    await scrollInstantly(phonePage, top - 700);
+    const entering = await pose();
+    assert.ok(entering.clip > 50, `Title should visibly open from its mask: ${JSON.stringify(entering)}`);
+    assert.ok(entering.eyebrowOpacity > entering.copyOpacity + .2, 'Eyebrow leads supporting copy');
+    assert.equal(entering.rootY, 0, 'Scroll scene is measured from a stationary container');
+    await scrollInstantly(phonePage, top - 300);
+    const settled = await pose();
+    assert.ok(settled.clip < 1 && Math.abs(settled.headingY) < 1, 'Full title is readable in the reading zone');
+    assert.ok(settled.copyOpacity > .99 && Math.abs(settled.copyY) < 1, 'Supporting copy settles fully');
+    await scrollInstantly(phonePage, top - 700);
+    const reversed = await pose();
+    assert.ok(Math.abs(reversed.clip - entering.clip) < 2, `Title mask reverses to the same pose: ${JSON.stringify({entering, reversed})}`);
+    await phonePage.emulateMedia({ reducedMotion: 'reduce' });
+    await settleLayout(phonePage);
+    assert.equal(await scene.locator('h2').evaluate(el => getComputedStyle(el).clipPath), 'none');
+    assert.equal((await pose()).copyOpacity, 1, 'Reduced motion must expose supporting copy immediately');
+    await phonePage.emulateMedia({ reducedMotion: 'no-preference' });
+    await phonePage.setViewportSize({ width: 320, height: 740 });
+    await settleLayout(phonePage);
+    const narrowTop = await scene.evaluate(el => el.getBoundingClientRect().top + scrollY);
+    await scrollInstantly(phonePage, narrowTop - 250);
+    assert.ok((await pose()).clip < 1, 'Title still settles after narrow-screen text reflow');
+    assert.equal(await phonePage.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  });
+
+  await t.test("project title lines open in sequence and remain readable with reduced motion", async () => {
+    await phonePage.setViewportSize({ width: 390, height: 844 });
+    await settleLayout(phonePage);
+    const title = phonePage.locator('.projects-title');
+    const top = await title.evaluate(el => el.parentElement.parentElement.getBoundingClientRect().top + scrollY);
+    const offsets = () => title.locator('[data-heading-line]').evaluateAll(lines =>
+      lines.map(el => new DOMMatrix(getComputedStyle(el).transform).m42 / el.getBoundingClientRect().height));
+    await scrollInstantly(phonePage, top - 640);
+    const entering = await offsets();
+    assert.ok(entering[1] - entering[0] > .1, 'Second title line follows the first');
+    await scrollInstantly(phonePage, top - 300);
+    assert.ok((await offsets()).every(value => Math.abs(value) < .01), 'Both title lines settle');
+    await scrollInstantly(phonePage, top - 640);
+    const reversed = await offsets();
+    assert.ok(reversed.every((value, index) => Math.abs(value - entering[index]) < .03), 'Line choreography reverses with scroll');
+    await phonePage.emulateMedia({ reducedMotion: 'reduce' });
+    await settleLayout(phonePage);
+    assert.ok((await offsets()).every(value => value === 0), 'Reduced motion leaves both lines unmasked');
+    await phonePage.emulateMedia({ reducedMotion: 'no-preference' });
+  });
+
   await phoneContext.close();
 
   await t.test("desktop project story still pins while scrolling", async () => {

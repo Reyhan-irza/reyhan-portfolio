@@ -33,23 +33,6 @@ export default function Home() {
   const bottomFired = useRef(false);
   const visitFired  = useRef(false);
 
-  useLayoutEffect(() => {
-    if (!introFinished) return;
-    const media = gsap.matchMedia();
-    media.add("(prefers-reduced-motion: no-preference)", () => {
-      const context = gsap.context(() => {
-        document.querySelectorAll<HTMLElement>(".portfolio-section-heading, .projects-title").forEach((heading) => {
-          gsap.fromTo(heading, { x: -28 }, {
-            x: 0, ease: "none",
-            scrollTrigger: { trigger: heading, start: "top bottom", end: "top 62%", scrub: .22 },
-          });
-        });
-      });
-      return () => context.revert();
-    });
-    return () => media.revert();
-  }, [introFinished]);
-
   /* Keep the existing bottom-of-page achievement, but let GSAP own the trigger. */
   useLayoutEffect(() => {
     const el = footerRef.current;
