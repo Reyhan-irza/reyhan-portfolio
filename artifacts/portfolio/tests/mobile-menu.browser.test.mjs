@@ -87,13 +87,14 @@ async function assertActiveMobileSection(page, href, context) {
 }
 
 test("mobile navigation stays reachable and contains scrolling on short screens", { timeout: 60_000 }, async () => {
-  const port = await findOpenPort();
-  const baseUrl = `http://127.0.0.1:${port}`;
+  const port = process.env.PORTFOLIO_BUILD_DIRECTORY ? 0 : await findOpenPort();
+  const baseUrl = process.env.PORTFOLIO_BUILD_DIRECTORY ? "http://localhost:4173" : `http://127.0.0.1:${port}`;
   const vitePath = path.join(portfolioRoot, "node_modules/vite/bin/vite.js");
   const viteEnv = { ...process.env, PORT: String(port), BASE_PATH: "/" };
   delete viteEnv.REPL_ID;
 
   let output = "";
+  if (!process.env.PORTFOLIO_BUILD_DIRECTORY) {
   viteProcess = spawn(process.execPath, [
     vitePath,
     "--config",
@@ -107,6 +108,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
   viteProcess.stdout.setEncoding("utf8").on("data", (chunk) => { output += chunk; });
   viteProcess.stderr.setEncoding("utf8").on("data", (chunk) => { output += chunk; });
   await waitForServer(baseUrl, () => output);
+  }
 
   browser = await chromium.launch({
     executablePath: findChromium(),

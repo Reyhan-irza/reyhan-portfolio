@@ -3,7 +3,7 @@ import type { FocusEvent, PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger, MOTION } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
 
@@ -76,9 +76,8 @@ export default function ProjectsSection() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const skipFocusRestoreRef = useRef(false);
-  const focusRestoreTimerRef = useRef<number | null>(null);
-  const focusRestoreFrameRef = useRef<number | null>(null);
   const viewedRef = useRef(new Set<number>());
+  const revealedProjects = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
   const [activeProject, setActiveProject] = useState(0);
@@ -125,6 +124,23 @@ export default function ProjectsSection() {
             mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1,
           );
 
+          const revealCard = (row: HTMLElement, index: number, containerAnimation?: gsap.core.Tween) => {
+            if (revealedProjects.current.has(index)) return;
+            const screenshot = row.querySelector(".project-screenshot");
+            const scene = gsap.timeline({
+              defaults: { duration: MOTION.reveal, ease: MOTION.ease },
+              scrollTrigger: {
+                trigger: row, start: containerAnimation ? "left 88%" : MOTION.start,
+                once: true, ...(containerAnimation ? { containerAnimation } : {}),
+              },
+              onComplete: () => { revealedProjects.current.add(index); row.dataset.cardRevealed = "true"; },
+            });
+            scene.fromTo(Array.from(row.children), { y: MOTION.cardY, opacity: 0 }, {
+              y: 0, opacity: 1, stagger: MOTION.stagger, clearProps: "transform,opacity",
+            });
+            if (screenshot) scene.fromTo(screenshot, { scale: 1.1 }, { scale: 1, clearProps: "transform" }, 0);
+          };
+
           if (hasHorizontalStory && viewport && track && stage) {
             sizedTrack = track;
             const setSlideWidth = () => {
@@ -134,7 +150,6 @@ export default function ProjectsSection() {
 
             const slideWidth = () => viewport.clientWidth;
             const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-            const panelStep = 1 / (rows.length - 1);
             const horizontalStory = gsap.to(track, {
               x: () => -travelDistance(),
               ease: "none",
@@ -145,29 +160,7 @@ export default function ProjectsSection() {
                 end: () => `+=${travelDistance() + window.innerWidth * 0.22}`,
                 pin: stage,
                 pinSpacing: true,
-                scrub: 0.8,
-                snap: {
-                  snapTo: (progress) => {
-                    const focusedRow = document.activeElement instanceof HTMLElement
-                      ? document.activeElement.closest<HTMLElement>("[data-project-row]")
-                      : null;
-                    const focusedIndex = Number(focusedRow?.dataset.projectIndex);
-                    if (
-                      section.contains(focusedRow) &&
-                      Number.isInteger(focusedIndex) &&
-                      focusedIndex >= 0 &&
-                      focusedIndex < rows.length
-                    ) {
-                      return focusedIndex * panelStep;
-                    }
-                    return Math.round(progress / panelStep) * panelStep;
-                  },
-                  directional: false,
-                  inertia: false,
-                  delay: 0.12,
-                  duration: { min: 0.2, max: 0.48 },
-                  ease: "power2.inOut",
-                },
+                scrub: true,
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
                 onEnter: () => {
@@ -203,6 +196,8 @@ export default function ProjectsSection() {
               },
             });
 
+            rows.forEach((row, index) => revealCard(row, index, index === 0 ? undefined : horizontalStory));
+
             resizeObserver = new ResizeObserver(() => {
               setSlideWidth();
               if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
@@ -220,26 +215,7 @@ export default function ProjectsSection() {
               const copy = row.querySelector<HTMLElement>("[data-project-copy]");
               if (!visual || !copy) return;
               const projectIndex = Number(row.dataset.projectIndex);
-              gsap.fromTo(copy, { y: 44 }, { y: 0, ease: "none",
-                scrollTrigger: { trigger: copy, start: "top 100%", end: "top 62%", scrub: .22 },
-              });
-              // The frame rises into view, while its screenshot has a longer
-              // reversible depth pass. Each transform has exactly one owner.
-              gsap.fromTo(visual, { y: 48, scale: .96 }, {
-                y: 0, scale: 1, ease: "none",
-                scrollTrigger: { trigger: visual, start: "top bottom", end: "top 58%", scrub: .22 },
-              });
-              const screenshot = visual.querySelector(".project-screenshot");
-              if (screenshot) {
-                gsap.timeline({
-                  defaults: { ease: "none" },
-                  scrollTrigger: { trigger: visual, start: "top bottom", end: "bottom top", scrub: .22 },
-                })
-                  .fromTo(screenshot, { scale: 1.18, yPercent: 5 }, {
-                    scale: 1.02, yPercent: 0, duration: .55,
-                  })
-                  .to(screenshot, { scale: 1.12, yPercent: -3, duration: .45 });
-              }
+              revealCard(row, projectIndex);
               ScrollTrigger.create({
                 trigger: row,
                 start: "top center",
@@ -295,15 +271,6 @@ export default function ProjectsSection() {
   useEffect(() => {
     if (!modal) return;
 
-    if (focusRestoreTimerRef.current !== null) {
-      window.clearTimeout(focusRestoreTimerRef.current);
-      focusRestoreTimerRef.current = null;
-    }
-    if (focusRestoreFrameRef.current !== null) {
-      window.cancelAnimationFrame(focusRestoreFrameRef.current);
-      focusRestoreFrameRef.current = null;
-    }
-
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
@@ -357,18 +324,7 @@ export default function ProjectsSection() {
       document.removeEventListener("click", handleInPageNavigation, true);
       window.removeEventListener("hashchange", closeForSectionNavigation);
       window.removeEventListener("popstate", closeForSectionNavigation);
-      if (skipFocusRestoreRef.current) {
-        skipFocusRestoreRef.current = false;
-        return;
-      }
-      const opener = openerRef.current;
-      focusRestoreTimerRef.current = window.setTimeout(() => {
-        focusRestoreTimerRef.current = null;
-        focusRestoreFrameRef.current = window.requestAnimationFrame(() => {
-          focusRestoreFrameRef.current = null;
-          if (opener?.isConnected) opener.focus({ preventScroll: true });
-        });
-      }, reduceMotion ? 0 : 240);
+
     };
   }, [modal]);
 
@@ -379,7 +335,7 @@ export default function ProjectsSection() {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const tween = gsap.to(marker, {
         y: activeProject * 31,
-        duration: 0.28,
+        duration: MOTION.text,
         ease: "power3.out",
         overwrite: true,
       });
@@ -480,6 +436,7 @@ export default function ProjectsSection() {
                     <article
                       key={project.id}
                       data-project-row
+                      data-reveal-group
                       data-project-index={index}
                       data-active-project={activeProject === index ? "true" : "false"}
                       tabIndex={0}
@@ -615,10 +572,14 @@ export default function ProjectsSection() {
       </div>
 
       {createPortal(
-        <AnimatePresence>
+        <AnimatePresence onExitComplete={() => {
+          if (skipFocusRestoreRef.current) { skipFocusRestoreRef.current = false; return; }
+          if (openerRef.current?.isConnected) openerRef.current.focus({ preventScroll: true });
+        }}>
         {modal && <m.div
           key="project-detail-overlay"
           className="project-detail-overlay"
+          data-lenis-prevent
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger, MOTION } from "../lib/motion";
+import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
 import ThemeToggle from "./ThemeToggle";
 
@@ -24,13 +25,18 @@ export default function Navbar() {
   const panelRef = useRef<HTMLElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const pendingTarget = useRef<string | null>(null);
+  const reducedRef = useRef(false);
+  const staticMenuRef = useRef<((open: boolean) => void) | null>(null);
   const previouslyOpen = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 32);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const trigger = ScrollTrigger.create({ start: 32, end: "max",
+      onToggle: (self) => setScrolled(self.isActive),
+      onRefresh: () => setScrolled(window.scrollY > 32),
+    });
+    setScrolled(window.scrollY > 32);
+    return () => trigger.kill();
   }, []);
 
   useEffect(() => {
@@ -109,6 +115,7 @@ export default function Navbar() {
       const section = document.querySelector<HTMLElement>(href);
       return section ? [{ href, section }] : [];
     });
+    sections.sort((a, b) => (a.section.compareDocumentPosition(b.section) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1);
     const updateActiveFromScroll = () => {
       if (hashActiveHref.current && window.location.hash === hashActiveHref.current) {
         setActiveHref(hashActiveHref.current);
@@ -187,47 +194,47 @@ export default function Navbar() {
       (context) => {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
-          gsap.set(panel, { xPercent: 105, autoAlpha: 0 });
-          gsap.set(targets, { x: 18, y: 3, autoAlpha: 0 });
+          reducedRef.current = reduced;
+          staticMenuRef.current = null;
+          if (reduced) {
+            // Static mode avoids a cached translation after a live preference change.
+            const apply = (open: boolean) => {
+              gsap.set(panel, { display: open ? "flex" : "none", x: 0, y: 0, xPercent: 0, yPercent: 0 });
+              gsap.set(targets, { x: 0, y: 0, opacity: 1, visibility: "visible" });
+              gsap.set(glyphLines[0], { y: open ? 5 : 0, rotation: open ? 45 : 0 });
+              gsap.set(glyphLines[1], { scaleX: open ? 0 : 1, opacity: open ? 0 : 1 });
+              gsap.set(glyphLines[2], { y: open ? -5 : 0, rotation: open ? -45 : 0 });
+            };
+            staticMenuRef.current = apply;
+            apply(isOpenRef.current);
+            return;
+          }
+          const finishClose = () => {
+            gsap.set(panel, { display: "none" });
+            const target = pendingTarget.current;
+            pendingTarget.current = null;
+            if (target) scrollToSection(target);
+          };
+          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: 0, yPercent: -100 });
           gsap.set(glyphLines, { transformOrigin: "center center" });
-          const timeline = gsap.timeline({ paused: true })
-            .to(panel, {
-              xPercent: 0,
-              autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.62,
-              ease: "power4.out",
+          const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
+            .set(panel, { display: "flex" })
+            .fromTo(panel, { yPercent: reduced ? 0 : -100 }, {
+              yPercent: 0, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase,
             })
-            .to(targets, {
-              x: 0,
-              y: 0,
-              autoAlpha: 1,
-              duration: reduced ? 0.01 : 0.42,
-              stagger: reduced ? 0 : 0.052,
-              ease: "power3.out",
-            }, reduced ? 0 : 0.18)
-            .to(glyphLines[0], {
-              y: 5,
-              rotation: 45,
-              duration: reduced ? 0.01 : 0.32,
-              ease: "power3.inOut",
-            }, 0)
-            .to(glyphLines[1], {
-              scaleX: 0,
-              autoAlpha: 0,
-              duration: reduced ? 0.01 : 0.2,
-              ease: "power2.in",
-            }, 0)
-            .to(glyphLines[2], {
-              y: -5,
-              rotation: -45,
-              duration: reduced ? 0.01 : 0.32,
-              ease: "power3.inOut",
-            }, 0);
+            .fromTo(targets, { y: reduced ? 0 : MOTION.y, opacity: reduced ? 1 : 0 }, {
+              y: 0, opacity: 1, duration: reduced ? 0 : MOTION.text,
+              stagger: reduced ? 0 : MOTION.stagger, ease: MOTION.ease,
+            }, reduced ? 0 : "-=0.35")
+            .to(glyphLines[0], { y: 5, rotation: 45, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0)
+            .to(glyphLines[1], { scaleX: 0, opacity: 0, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0)
+            .to(glyphLines[2], { y: -5, rotation: -45, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0);
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
         return () => {
           menuTimelineRef.current = null;
+          staticMenuRef.current = null;
           scope.revert();
         };
       },
@@ -236,8 +243,19 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (isOpen) menuTimelineRef.current?.play();
-    else menuTimelineRef.current?.reverse();
+    if (reducedRef.current) {
+      staticMenuRef.current?.(isOpen);
+      if (!isOpen) {
+        const target = pendingTarget.current;
+        pendingTarget.current = null;
+        if (target) scrollToSection(target);
+      }
+      return;
+    }
+    const timeline = menuTimelineRef.current;
+    if (!timeline) return;
+    if (isOpen) { pendingTarget.current = null; timeline.timeScale(1).play(); }
+    else timeline.timeScale(1.4).reverse();
   }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
@@ -246,8 +264,15 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
+        data-menu-open={isOpen}
+        onClick={(event) => {
+          const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+          if (link && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+            event.preventDefault(); scrollToSection(link.hash);
+          }
+        }}
         aria-label="Main navigation"
-        className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-all duration-500 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
+        className={`editorial-nav fixed inset-x-0 top-0 ${isOpen ? "z-[51]" : "z-40"} transition-opacity duration-700 ${scrolled ? "nav-blur py-3" : "bg-transparent py-5"}`}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#home" aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
@@ -308,13 +333,14 @@ export default function Navbar() {
       <aside
         ref={panelRef}
         id="mobile-navigation"
+        data-lenis-prevent
         role="dialog"
         aria-modal="true"
         aria-labelledby="mobile-navigation-title"
         aria-label="Mobile navigation"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-0 z-[49] flex w-full flex-col border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
-        style={{ visibility: "hidden" } as CSSProperties}
+        style={{ display: "none" } as CSSProperties}
         inert={!isOpen}
       >
         <p id="mobile-navigation-title" className="mb-4 font-mono text-xs uppercase tracking-[.18em] text-[#8190ff]">Explore / portfolio</p>
@@ -324,7 +350,9 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              onClick={closeMenu}
+              onClick={(event) => {
+                event.preventDefault(); pendingTarget.current = link.href; closeMenu();
+              }}
               tabIndex={isOpen ? 0 : -1}
               aria-current={activeHref === link.href ? "location" : undefined}
               data-menu-item

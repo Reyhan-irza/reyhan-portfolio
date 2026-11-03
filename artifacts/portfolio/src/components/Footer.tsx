@@ -1,3 +1,4 @@
+import { scrollToSection } from "../lib/scroll";
 import { Settings } from "lucide-react";
 import { useLocation } from "wouter";
 import Reveal from "./Reveal";
@@ -18,13 +19,7 @@ export default function Footer() {
     { label: "Contact",  href: "#contact"  },
   ];
 
-  const scroll = (href: string) => {
-    const el = document.querySelector(href);
-    if (el) {
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-    }
-  };
+  const scroll = scrollToSection;
 
   return (
     <footer className="portfolio-closing-footer relative overflow-hidden border-t border-neutral-800/60 px-6 pb-8 pt-10 md:pt-12">

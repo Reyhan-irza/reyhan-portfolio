@@ -1,179 +1,39 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
-import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { gsap } from "../lib/motion";
+import { gsap, MOTION } from "../lib/motion";
+import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
 import HeroTypingLoop from "./HeroTypingLoop";
 
 export default function HeroSection({ ready = true }: { ready?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
-
   useLayoutEffect(() => {
-    if (!ready || !sectionRef.current) return;
+    const section = sectionRef.current;
+    if (!ready || !section) return;
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
-      const scope = gsap.context(() => {
-        gsap.fromTo("[data-hero-title-line]", { yPercent: 105 }, {
-          yPercent: 0, duration: 1.15, stagger: .12, ease: "power4.out", clearProps: "transform",
+      const context = gsap.context(() => {
+        gsap.timeline({ defaults: { ease: MOTION.ease } })
+          .fromTo(".hero-mark-image", { scale: 1.15, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1.6, clearProps: "transform,opacity" })
+          .fromTo("[data-hero-title-line]", { y: MOTION.cardY, opacity: 0 },
+            { y: 0, opacity: 1, duration: MOTION.reveal, stagger: MOTION.stagger, clearProps: "transform,opacity" }, "<")
+          .fromTo("[data-hero-kicker], [data-hero-lead-depth], [data-hero-callout-copy], [data-hero-action], [data-hero-github]",
+            { y: MOTION.y, opacity: 0 }, { y: 0, opacity: 1, duration: MOTION.text, stagger: MOTION.stagger, clearProps: "transform,opacity" }, "-=0.7")
+          .fromTo(document.querySelector(".editorial-nav"), { opacity: 0 },
+            { opacity: 1, duration: MOTION.text, clearProps: "opacity" });
+        // Adapt the PRD background parallax to the existing RV identity visual.
+        gsap.to("[data-hero-bg]", { yPercent: 20, ease: "none",
+          scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
         });
-        gsap.fromTo(".hero-mark-image", { scale: .88, rotation: -6, opacity: 0 }, {
-          scale: 1, rotation: 0, opacity: 1, duration: 1.6, ease: "power3.out", clearProps: "transform,opacity",
-        });
-      }, sectionRef);
-      return () => scope.revert();
+      }, section);
+      return () => context.revert();
     });
     return () => media.revert();
   }, [ready]);
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const media = gsap.matchMedia();
-    media.add(
-      {
-        reduced: "(prefers-reduced-motion: reduce)",
-        compact: "(max-width: 767px)",
-        wide: "(min-width: 768px)",
-      },
-      (context) => {
-        if (context.conditions?.reduced) return;
-        const compact = Boolean(context.conditions?.compact);
-        const scope = gsap.context(() => {
-          const title = section.querySelector<HTMLElement>("[data-hero-title-depth]");
-          const lead = section.querySelector<HTMLElement>("[data-hero-lead-depth]");
-          const grid = section.querySelector<HTMLElement>(".hero-grid");
-          const kicker = section.querySelector<HTMLElement>("[data-hero-kicker]");
-          const orbit = section.querySelector<HTMLElement>("[data-hero-orbit]");
-          const axisX = section.querySelector<HTMLElement>("[data-hero-axis-x]");
-          const axisY = section.querySelector<HTMLElement>("[data-hero-axis-y]");
-          const scrollCue = section.querySelector<HTMLElement>("[data-hero-scroll-cue]");
-          const mark = section.querySelector<HTMLElement>("[data-hero-mark-stage]");
-          // The opening is a hand-off: the name holds while the personal note
-          // moves forward, then the whole composition gently yields to the page.
-          const story = gsap.timeline({
-            defaults: { ease: "none" },
-            scrollTrigger: {
-              trigger: section,
-              start: "top top",
-              end: "bottom top",
-              scrub: compact ? 0.22 : 0.65,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          story.addLabel("hold", 0);
-          if (mark && !compact) {
-            story.fromTo(mark, { y: 0, rotateY: -7 }, {
-              y: -100, rotateY: 7, scale: 1.07, duration: 1,
-              transformOrigin: "center center",
-            }, 0);
-          }
-          if (title) {
-            story.to(title, {
-              y: compact ? -48 : -36,
-              scale: 0.97,
-              opacity: compact ? 0.98 : 0.94,
-              transformOrigin: "left center",
-              duration: 0.48,
-            }, "hold");
-          }
-          if (lead) {
-            story.to(lead, {
-              y: compact ? 14 : -5,
-              opacity: compact ? 0.98 : 0.92,
-              duration: 0.48,
-            }, "hold+=0.08");
-          }
-          if (kicker) {
-            story.to(kicker, {
-              x: compact ? -1 : -5,
-              opacity: compact ? 0.98 : 0.88,
-              duration: 0.48,
-            }, "hold");
-          }
-          if (grid) {
-            story.to(grid, {
-              yPercent: compact ? 1 : 3,
-              opacity: compact ? 0.5 : 0.58,
-              duration: 0.48,
-            }, "hold");
-          }
-          if (orbit && !compact) {
-            story.fromTo(orbit, { rotate: -5 }, { rotate: 12, duration: 0.48 }, "hold");
-          }
-          if (axisX && !compact) {
-            story.fromTo(axisX, {
-              scaleX: 0.72,
-              opacity: 0.5,
-              transformOrigin: "center center",
-            }, {
-              scaleX: 1,
-              opacity: 0.72,
-              duration: 0.38,
-            }, "hold+=0.06");
-          }
-          if (axisY && !compact) {
-            story.fromTo(axisY, {
-              scaleY: 0.72,
-              opacity: 0.5,
-              transformOrigin: "center center",
-            }, {
-              scaleY: 1,
-              opacity: 0.72,
-              duration: 0.34,
-            }, "hold+=0.1");
-          }
-
-          story.addLabel("release", 0.56);
-          if (title) {
-            story.to(title, {
-              y: compact ? -96 : -90,
-              scale: compact ? 0.91 : 0.92,
-              opacity: compact ? 0.92 : 0.76,
-              duration: 0.44,
-            }, "release");
-          }
-          if (lead) {
-            story.to(lead, {
-              y: compact ? -28 : -16,
-              opacity: compact ? 0.94 : 0.78,
-              duration: 0.44,
-            }, "release");
-          }
-          if (kicker) {
-            story.to(kicker, {
-              x: compact ? -3 : -12,
-              opacity: compact ? 0.92 : 0.68,
-              duration: 0.44,
-            }, "release");
-          }
-          if (grid) {
-            story.to(grid, { yPercent: compact ? 3 : 10, opacity: 0.2, duration: 0.44 }, "release");
-          }
-          if (orbit && !compact) {
-            story.to(orbit, { rotate: 28, opacity: 0.36, duration: 0.44 }, "release");
-          }
-          if (axisX && !compact) story.to(axisX, { opacity: 0.32, duration: 0.44 }, "release");
-          if (axisY && !compact) story.to(axisY, { opacity: 0.32, duration: 0.44 }, "release");
-          if (scrollCue) story.to(scrollCue, { opacity: 0, duration: 0.28 }, "release+=0.08");
-        }, section);
-        return () => {
-          scope.revert();
-        };
-      },
-    );
-    return () => media.revert();
-  }, []);
-
-  const scrollTo = (id: string) => {
-    document.querySelector(id)?.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-    });
-  };
-
   return (
-    <section ref={sectionRef} id="home" data-hero-ready={ready} inert={!ready} aria-hidden={!ready} className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
+    <section ref={sectionRef} id="home" data-hero data-hero-ready={ready} inert={!ready} aria-hidden={!ready} className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
       <div className="hero-content relative z-10 mx-auto grid min-h-[calc(100svh-11rem)] max-w-[1440px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(300px,.66fr)]">
         <div className="relative z-10 pb-6">
           <div className="hero-editorial">
@@ -209,14 +69,14 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
             </p>
           </div>
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <LazyMotion features={domAnimation}>
-              <m.button type="button" data-hero-action onClick={() => scrollTo("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
+
+              <button type="button" data-hero-action onClick={() => scrollToSection("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
                 Lihat karya saya <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
-              </m.button>
-              <m.button type="button" data-hero-action onClick={() => scrollTo("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white" whileHover={reduceMotion ? undefined : { scale: 1.01 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
+              </button>
+              <button type="button" data-hero-action onClick={() => scrollToSection("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
                 Hubungi saya <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-              </m.button>
-            </LazyMotion>
+              </button>
+
           </div>
           <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.15em] text-white/50 transition-colors hover:text-[#9da9ff]">
             GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -225,7 +85,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
         </div>
 
         <div className="hero-identity-frame">
-        <aside data-hero-mark-stage className="hero-mark-stage relative mx-auto aspect-square w-full max-w-[520px]" aria-label="Identitas visual RV">
+        <aside data-hero-bg data-hero-mark-stage className="hero-mark-stage relative mx-auto aspect-square w-full max-w-[520px]" aria-label="Identitas visual RV">
           <div className="hero-mark-image absolute inset-[13%]">
             <BrandLogo
               size="custom"
@@ -239,7 +99,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
         </aside>
         </div>
       </div>
-      <a data-hero-scroll-cue href="#technology-bands" className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
+      <a data-hero-scroll-cue href="#technology-bands" onClick={(event) => { event.preventDefault(); scrollToSection("#technology-bands"); }} className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Kenali lebih dekat <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
       </a>
     </section>

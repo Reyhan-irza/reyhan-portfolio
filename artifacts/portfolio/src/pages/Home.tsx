@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useSectionTheme } from "../hooks/useSectionTheme";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TechnologyBands from "@/components/TechnologyBands";
@@ -24,8 +25,9 @@ import Reveal from "@/components/Reveal";
 const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
 
 export default function Home() {
-  useLenis();
+  useSectionTheme();
   const [introFinished, setIntroFinished] = useState(false);
+  useLenis(introFinished);
   const [archiveVisited, setArchiveVisited] = useState(false);
   const finishIntro = useCallback(() => setIntroFinished(true), []);
 

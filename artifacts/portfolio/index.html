@@ -13,6 +13,7 @@
     <meta name="color-scheme" content="light dark" />
     <script>
       (() => {
+        document.documentElement.classList.add("js");
         let saved;
         try { saved = localStorage.getItem('rv-theme'); } catch {}
         const theme = saved === 'light' || saved === 'dark' ? saved : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
