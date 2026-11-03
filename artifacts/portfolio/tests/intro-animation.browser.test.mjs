@@ -83,14 +83,14 @@ async function createTrackedPage(viewport, options = {}) {
     const item = { origin: url.origin, path: url.pathname, failure };
     if (failure === "net::ERR_ABORTED") cancelledRequests.push(item);
     else failedRequests.push(item);
-    if (url.pathname.includes("/brand/rv-")) introAssetFailures.push(item);
+    if ((url.pathname.includes("/brand/rv-") || url.pathname.includes("/brand/cinematic/"))) introAssetFailures.push(item);
   });
   page.on("response", (response) => {
     if (response.status() >= 400) {
       const url = new URL(response.url());
       const error = { status: response.status(), origin: url.origin, path: url.pathname };
       httpErrors.push(error);
-      if (url.pathname.includes("/brand/rv-")) introAssetFailures.push(error);
+      if ((url.pathname.includes("/brand/rv-") || url.pathname.includes("/brand/cinematic/"))) introAssetFailures.push(error);
     }
   });
   await page.addInitScript(() => {
@@ -140,7 +140,7 @@ async function waitForVisibleIntroCopySnapshot(page, timeout = 8_000) {
       const intro = document.querySelector(".rv-intro");
       const copy = Array.from(intro?.querySelectorAll("[data-intro-copy]") ?? []);
       return intro
-        && copy.length === 4
+        && copy.length === 2
         && Number.parseFloat(getComputedStyle(intro).opacity) >= 0.95
         && copy.every((element) => {
           const style = getComputedStyle(element);
@@ -181,7 +181,7 @@ async function waitForVisibleIntroCopySnapshot(page, timeout = 8_000) {
 }
 
 function assertCopyFitsViewport(snapshot, fontLabel) {
-  assert.equal(snapshot.copy.length, 4, `${fontLabel}: expected all intro copy`);
+  assert.equal(snapshot.copy.length, 2, `${fontLabel}: expected all intro copy`);
   for (const item of snapshot.copy) {
     assert.ok(item.text.length > 0, `${fontLabel}: copy text should be present`);
     assert.equal(item.visibility, "visible", `${fontLabel}: copy should be visible`);
@@ -312,8 +312,8 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
 
         const duration = await waitForIntroCompletion(state.page);
         caseContext.diagnostic(`Intro visible time: ${Math.round(duration)}ms.`);
-        assert.ok(duration >= 2_000, `Intro ended too quickly (${Math.round(duration)}ms)`);
-        assert.ok(duration <= 3_600, `Intro blocked access too long (${Math.round(duration)}ms)`);
+        assert.ok(duration >= 4_500, `Intro ended too quickly (${Math.round(duration)}ms)`);
+        assert.ok(duration <= 6_500, `Intro blocked access too long (${Math.round(duration)}ms)`);
         await assertNoOverflow(state.page, viewport.width);
         await state.page.waitForFunction(() =>
           [...document.querySelectorAll(".rv-intro img")].every(
@@ -342,7 +342,7 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       await assertNoOverflow(state.page, 390);
       const duration = await waitForIntroCompletion(state.page);
       caseContext.diagnostic(`Intro completed after viewport changes in ${Math.round(duration)}ms.`);
-      assert.ok(duration <= 5_000, `Resize should not leave the intro stuck (${Math.round(duration)}ms)`);
+      assert.ok(duration <= 6_500, `Resize should not leave the intro stuck (${Math.round(duration)}ms)`);
       assert.equal(await state.page.evaluate(() => document.body.style.overflow), "");
       await assertClean(state, caseContext);
     } finally {
@@ -370,9 +370,9 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
   await t.test("an intro image failure releases the page instead of trapping the visitor", async () => {
     const state = await createTrackedPage({ width: 390, height: 844 });
     try {
-      await state.page.route("**/brand/rv-piece-01.webp", (route) => route.abort());
+      await state.page.route("**/brand/cinematic/p1.webp", (route) => route.abort());
       const failedAsset = state.page.waitForEvent("requestfailed", {
-        predicate: (request) => request.url().endsWith("/brand/rv-piece-01.webp"),
+        predicate: (request) => request.url().endsWith("/brand/cinematic/p1.webp"),
       });
       await state.page.goto(baseUrl, { waitUntil: "domcontentloaded" });
       await failedAsset;
@@ -386,7 +386,7 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       assert.notEqual(await state.page.locator("main#main-content").count(), 0);
       assert.deepEqual(state.pageErrors, []);
       assert.equal(
-        state.introAssetFailures.filter((failure) => failure.path.endsWith("/brand/rv-piece-01.webp")).length,
+        state.introAssetFailures.filter((failure) => failure.path.endsWith("/brand/cinematic/p1.webp")).length,
         1,
         "The test should verify the intentionally failed asset",
       );
@@ -401,9 +401,9 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       await state.page.goto(baseUrl, { waitUntil: "domcontentloaded" });
       await state.page.locator(".rv-intro").waitFor({ state: "visible" });
       assert.equal(
-        await state.page.evaluate(() => document.activeElement?.classList.contains("rv-intro")),
+        await state.page.evaluate(() => document.activeElement?.classList.contains("rv-intro-skip")),
         true,
-        "The intro dialog should receive initial focus",
+        "Skip should receive initial focus inside the dialog",
       );
       await state.page.keyboard.press("Tab");
       assert.equal(
@@ -426,7 +426,7 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       await state.page.locator(".rv-intro").waitFor({ state: "visible" });
       const replayDuration = await waitForIntroCompletion(state.page);
       caseContext.diagnostic(`Route re-entry intro visible time: ${Math.round(replayDuration)}ms.`);
-      assert.ok(replayDuration >= 2_000 && replayDuration <= 3_500);
+      assert.ok(replayDuration >= 4_500 && replayDuration <= 6_500);
       await assertNoOverflow(state.page, 390);
       await assertClean(state, caseContext);
     } finally {
@@ -457,7 +457,7 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       });
       const duration = await waitForIntroCompletion(state.page);
       caseContext.diagnostic(`Elapsed wall time including synthetic hidden interval: ${Math.round(duration)}ms.`);
-      assert.ok(duration >= 2_000, `Intro should resume rather than jump to completion (${Math.round(duration)}ms)`);
+      assert.ok(duration >= 4_500, `Intro should resume rather than jump to completion (${Math.round(duration)}ms)`);
       await assertNoOverflow(state.page, 360);
       await assertClean(state, caseContext);
     } finally {
@@ -474,8 +474,8 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
       await state.page.locator(".rv-intro").waitFor({ state: "visible" });
       const duration = await waitForIntroCompletion(state.page, 10_000);
       caseContext.diagnostic(`Intro visible time at CPU throttling 4x: ${Math.round(duration)}ms.`);
-      assert.ok(duration >= 2_000, `Intro ended too quickly under throttling (${Math.round(duration)}ms)`);
-      assert.ok(duration <= 4_000, `Intro did not complete under throttling (${Math.round(duration)}ms)`);
+      assert.ok(duration >= 4_500, `Intro ended too quickly under throttling (${Math.round(duration)}ms)`);
+      assert.ok(duration <= 7_000, `Intro did not complete under throttling (${Math.round(duration)}ms)`);
       await assertNoOverflow(state.page, 390);
       await assertClean(state, caseContext);
     } finally {

@@ -287,10 +287,10 @@ test("journey and both certificates stay visible and usable with reduced motion"
     try {
       const mobile = await motionContext.newPage();
       await mobile.goto(baseUrl);
-      await mobile.locator('.rv-intro-name').waitFor();
+      await mobile.locator('#rv-intro .name').waitFor();
       for (const width of [320, 390]) {
         await mobile.setViewportSize({ width, height: 844 });
-        const name = await mobile.locator('.rv-intro-name').boundingBox();
+        const name = await mobile.locator('#rv-intro .name').boundingBox();
         assert.ok(name.x >= 0 && name.x + name.width <= width, 'intro name fits viewport');
       }
       await mobile.getByRole('button', { name: 'Skip introduction' }).click();

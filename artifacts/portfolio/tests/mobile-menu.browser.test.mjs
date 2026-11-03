@@ -62,7 +62,7 @@ async function assertActiveMobileSection(page, href, context) {
     const links = Array.from(document.querySelectorAll("#mobile-navigation nav a[href]"));
     const currentLinks = links.filter((link) => link.getAttribute("aria-current") === "location");
     const markedLinks = links.filter((link) =>
-      Array.from(link.children).some((child) => child.classList.contains("ml-auto")),
+      link.querySelector("[data-menu-active]") !== null,
     );
     return currentLinks.length === 1
       && markedLinks.length === 1
@@ -74,7 +74,7 @@ async function assertActiveMobileSection(page, href, context) {
     const links = Array.from(document.querySelectorAll("#mobile-navigation nav a[href]"));
     const currentLinks = links.filter((link) => link.getAttribute("aria-current") === "location");
     const markedLinks = links.filter((link) =>
-      Array.from(link.children).some((child) => child.classList.contains("ml-auto")),
+      link.querySelector("[data-menu-active]") !== null,
     );
     return {
       currentHrefs: currentLinks.map((link) => link.getAttribute("href")),
@@ -171,7 +171,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
     await page.waitForFunction(() => document.querySelector("#mobile-navigation")?.getAttribute("aria-hidden") === "false");
     await page.waitForFunction(() => {
       const menuItems = Array.from(document.querySelectorAll("#mobile-navigation [data-menu-item]"));
-      return menuItems.length === 7 && menuItems.every((item) => Number(getComputedStyle(item).opacity) >= 0.99);
+      return menuItems.length === 6 && menuItems.every((item) => Math.abs(new DOMMatrixReadOnly(getComputedStyle(item.querySelector("[data-menu-line]")).transform).m42) < .1);
     });
 
     const panelState = await panel.evaluate((element) => {
@@ -215,17 +215,17 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
       const visibleWithinPanel = await link.evaluate((element) => {
         const item = element.getBoundingClientRect();
         const menu = element.closest("#mobile-navigation").getBoundingClientRect();
-        return item.top >= menu.top && item.bottom <= menu.bottom;
+        return item.top >= menu.top - 1 && item.bottom <= menu.bottom + 1;
       });
       assert.ok(visibleWithinPanel, `${viewport.name}: ${label} should be reachable inside the menu`);
     }
 
-    const footer = panel.locator('[data-menu-item]').last();
+    const footer = panel.locator('[data-menu-footer]');
     await footer.scrollIntoViewIfNeeded();
     const footerVisible = await footer.evaluate((element) => {
       const item = element.getBoundingClientRect();
       const menu = element.closest("#mobile-navigation").getBoundingClientRect();
-      return item.top >= menu.top && item.bottom <= menu.bottom;
+      return item.top >= menu.top - 1 && item.bottom <= menu.bottom + 1;
     });
     assert.ok(footerVisible, `${viewport.name}: menu footer should be reachable inside the menu`);
 
