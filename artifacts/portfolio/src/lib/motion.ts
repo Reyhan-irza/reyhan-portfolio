@@ -33,3 +33,8 @@ export function cubicBezierEase(
 }
 
 export { gsap, ScrollTrigger };
+/** Shared PRD motion tokens; phase-specific exceptions live beside their timelines. */
+export const MOTION = {
+  ease: "power3.out", menuEase: "power4.inOut", reveal: 0.9, text: 0.7,
+  menu: 0.9, y: 40, cardY: 60, stagger: 0.07, start: "top 88%", lerp: 0.1,
+} as const;
