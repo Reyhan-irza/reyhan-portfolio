@@ -160,7 +160,7 @@
   width: max-content;
   min-width: max-content;
   align-items: center;
-  will-change: transform;
+  animation: technology-marquee 25s linear infinite;
 }
 
 .technology-band__sequence {
@@ -374,3 +374,7 @@
     transition: none;
   }
 }
+
+@keyframes technology-marquee { to { transform: translateX(-50%); } }
+.technology-band[data-direction="right"] .technology-band__track { animation-direction: reverse; }
+.technology-band__viewport:is(:hover, :focus-within) .technology-band__track { animation-play-state: paused; }

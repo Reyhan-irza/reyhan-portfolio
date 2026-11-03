@@ -1,5 +1,5 @@
 import { createElement, useLayoutEffect, useRef, type HTMLAttributes, type ReactNode, type Ref } from "react";
-import { gsap } from "../lib/motion";
+import { gsap, MOTION } from "../lib/motion";
 
 type RevealProps = Omit<HTMLAttributes<HTMLElement>, "children" | "onDrag"> & {
   children?: ReactNode;
@@ -16,64 +16,39 @@ type RevealProps = Omit<HTMLAttributes<HTMLElement>, "children" | "onDrag"> & {
 export default function Reveal({ children, as = "div", media = false, tall = false,
   mount = false, innerRef, delay = 0, amount = .15, staggerIndex = 0, ...attributes }: RevealProps) {
   const node = useRef<HTMLElement | null>(null);
+  const completed = useRef(false);
   useLayoutEffect(() => {
     const element = node.current;
     if (!element || mount || tall) return;
-    const queries = gsap.matchMedia();
-    queries.add("(prefers-reduced-motion: no-preference)", () => {
+    const group = Boolean(element.querySelector("h2"));
+    if (group) {
+      element.removeAttribute("data-reveal");
+      element.setAttribute("data-reveal-group", "");
+    }
+    const targets = group ? Array.from(element.children) : [element];
+    const mediaQuery = gsap.matchMedia();
+    mediaQuery.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, (match) => {
+      if (match.conditions?.reduced || completed.current) {
+        element.dataset.revealed = "true";
+        return;
+      }
       const context = gsap.context(() => {
-        const heading = element.querySelector<HTMLElement>("h2");
-        if (heading) {
-          // Section introductions are one scene: eyebrow, masked title, then
-          // supporting copy. The stationary root owns the trigger so animated
-          // children never change the geometry used to measure scroll progress.
-          const paragraphs = Array.from(element.querySelectorAll<HTMLElement>("p"));
-          const eyebrow = paragraphs.find((paragraph) =>
-            Boolean(paragraph.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING));
-          const copy = paragraphs.filter((paragraph) => paragraph !== eyebrow);
-          const lines = heading.querySelectorAll<HTMLElement>("[data-heading-line]");
-          const scene = gsap.timeline({
-            defaults: { ease: "none" },
-            scrollTrigger: {
-              trigger: element,
-              start: "top 94%",
-              end: "top 48%",
-              scrub: .22,
-              invalidateOnRefresh: true,
-            },
-          });
-          if (eyebrow) scene.fromTo(eyebrow, { y: 12, opacity: .35 }, {
-            y: 0, opacity: 1, duration: .25,
-          }, 0);
-          if (lines.length) {
-            scene.fromTo(lines, { yPercent: 110 }, {
-              yPercent: 0, duration: .5, stagger: .1,
-            }, .08);
-          } else {
-            scene.fromTo(heading, { y: 28, clipPath: "inset(100% 0% 0% 0%)" }, {
-              y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: .6,
-            }, .08);
-          }
-          if (copy.length) scene.fromTo(copy, { y: 24, opacity: .3 }, {
-            y: 0, opacity: 1, duration: .45, stagger: .08,
-          }, .3);
-          return;
-        }
-        // Give the entrance enough travel to read on a phone, then hold still
-        // in the reading zone. Never hide text or interpolate the whole page.
-        gsap.fromTo(element, media ? { y: 36, scale: .94 } : { y: 48 }, {
-          ...(media ? { y: 0, scale: 1 } : { y: 0 }), ease: "none",
-          scrollTrigger: { trigger: element, start: "top bottom", end: "top 66%",
-            scrub: .22, invalidateOnRefresh: true },
+        gsap.fromTo(targets, { y: MOTION.y, opacity: 0 }, {
+          y: 0, opacity: 1, duration: MOTION.reveal, ease: MOTION.ease,
+          stagger: group ? MOTION.stagger : 0,
+          scrollTrigger: { trigger: element, start: MOTION.start, once: true },
+          onComplete: () => { completed.current = true; element.dataset.revealed = "true"; },
+          clearProps: "transform,opacity",
         });
       }, element);
       return () => context.revert();
     });
-    return () => queries.revert();
-  }, [media, mount, tall]);
+    return () => mediaQuery.revert();
+  }, [mount, tall]);
 
   return createElement(as, {
     ...attributes,
+    "data-reveal": mount || tall ? undefined : "",
     ref: (element: HTMLElement | null) => {
       node.current = element;
       if (typeof innerRef === "function") innerRef(element as HTMLDivElement | null);

@@ -1,41 +1,11 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap } from "../lib/motion";
+import { gsap, MOTION } from "../lib/motion";
 
 type BoundaryStyle = "trace" | "return" | "resolve";
 
 interface SectionBoundaryProps {
   variant: BoundaryStyle;
 }
-
-const transitionSettings: Record<BoundaryStyle, {
-  fromX: number;
-  fromScale: number;
-  origin: string;
-  duration: number;
-  ease: string;
-}> = {
-  trace: {
-    fromX: -14,
-    fromScale: 0.72,
-    origin: "left center",
-    duration: 0.68,
-    ease: "power3.out",
-  },
-  return: {
-    fromX: 14,
-    fromScale: 0.78,
-    origin: "right center",
-    duration: 0.56,
-    ease: "power2.out",
-  },
-  resolve: {
-    fromX: 0,
-    fromScale: 0,
-    origin: "center center",
-    duration: 0.78,
-    ease: "power3.inOut",
-  },
-};
 
 export default function SectionBoundary({ variant }: SectionBoundaryProps) {
   const boundaryRef = useRef<HTMLDivElement>(null);
@@ -45,47 +15,16 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
     if (!boundary) return;
 
     const media = gsap.matchMedia();
-    media.add(
-      {
-        reduced: "(prefers-reduced-motion: reduce)",
-        compact: "(max-width: 767px)",
-        motion: "(prefers-reduced-motion: no-preference)",
-      },
-      (context) => {
-        if (context.conditions?.reduced || !context.conditions?.motion) return;
-
-        const settings = transitionSettings[variant];
-        const compact = Boolean(context.conditions?.compact);
-        const scope = gsap.context(() => {
-          gsap.fromTo(
-            boundary,
-            {
-              autoAlpha: 0.45,
-              x: compact ? 0 : settings.fromX,
-              scaleX: compact ? 0 : settings.fromScale,
-              transformOrigin: settings.origin,
-            },
-            {
-              autoAlpha: 1,
-              x: 0,
-              scaleX: 1,
-              duration: settings.duration,
-              ease: "none",
-              scrollTrigger: {
-                trigger: boundary,
-                start: "top 95%",
-                end: "top 40%",
-                scrub: compact ? .22 : .5,
-                invalidateOnRefresh: true,
-              },
-            },
-          );
-        }, boundary);
-
-        return () => scope.revert();
-      },
-    );
-
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const context = gsap.context(() => {
+        gsap.fromTo(boundary, { scaleX: 0, opacity: 0, transformOrigin: "center" }, {
+          scaleX: 1, opacity: 1, duration: MOTION.reveal, ease: MOTION.ease,
+          scrollTrigger: { trigger: boundary, start: MOTION.start, once: true },
+          clearProps: "transform,opacity",
+        });
+      }, boundary);
+      return () => context.revert();
+    });
     return () => media.revert();
   }, [variant]);
 

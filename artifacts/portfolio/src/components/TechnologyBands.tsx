@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Cable, Layers3, Network, Router, Terminal, Waypoints } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { DiVisualstudio } from "react-icons/di";
@@ -23,7 +23,6 @@ import {
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 import { VscVscode } from "react-icons/vsc";
-import { gsap, ScrollTrigger } from "../lib/motion";
 import Reveal from "./Reveal";
 import "./TechnologyBands.css";
 
@@ -90,8 +89,6 @@ type TechnologyBand = {
   number: string;
   label: string;
   direction: "left" | "right";
-  duration: number;
-  mobileDuration: number;
   technologies: readonly string[];
 };
 
@@ -101,8 +98,6 @@ const bands: readonly TechnologyBand[] = [
     number: "01",
     label: "PENGEMBANGAN",
     direction: "left",
-    duration: 27,
-    mobileDuration: 18,
     technologies: ["React", "TypeScript", "JavaScript", "HTML", "CSS", "C#", "Node.js", "Git", "GitHub", "Tailwind"],
   },
   {
@@ -110,8 +105,6 @@ const bands: readonly TechnologyBand[] = [
     number: "02",
     label: "SISTEM",
     direction: "right",
-    duration: 33,
-    mobileDuration: 23,
     technologies: ["Windows", "Linux", "Android", "Visual Studio", "VS Code", "Termux", "Kali Linux", "Debian"],
   },
   {
@@ -119,123 +112,15 @@ const bands: readonly TechnologyBand[] = [
     number: "03",
     label: "JARINGAN",
     direction: "left",
-    duration: 39,
-    mobileDuration: 28,
     technologies: ["MikroTik", "Cisco", "Router", "Switch", "VLAN", "TCP/IP", "Network Infrastructure"],
   },
 ];
 
-type AnimatedTrack = {
-  tween: gsap.core.Tween;
-  setSpeed: (value: number) => void;
-};
-
 export default function TechnologyBands() {
-  const sectionRef = useRef<HTMLElement>(null);
   const [pressedTechnology, setPressedTechnology] = useState<{ bandId: string; name: string } | null>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const context = gsap.context(() => {
-      const media = gsap.matchMedia();
-      media.add(
-        {
-          reducedMotion: "(prefers-reduced-motion: reduce)",
-          standardMotion: "(prefers-reduced-motion: no-preference)",
-          compact: "(max-width: 760px)",
-          wide: "(min-width: 761px)",
-        },
-        (match) => {
-          if (match.conditions?.reducedMotion) return;
-
-          const compact = Boolean(match.conditions?.compact);
-          const animatedTracks: AnimatedTrack[] = [];
-          let resetSpeed: gsap.core.Tween | undefined;
-          let sectionIsActive = false;
-          const syncTrackPlayback = () => {
-            animatedTracks.forEach(({ tween }) => {
-              tween.paused(!sectionIsActive || document.hidden);
-            });
-          };
-
-          section.querySelectorAll<HTMLElement>("[data-band-track]").forEach((track) => {
-            const bandElement = track.closest<HTMLElement>("[data-band-id]");
-            const band = bands.find((item) => item.id === bandElement?.dataset.bandId);
-            if (!band) return;
-
-            const speed = { value: 1 };
-            const reverse = band.direction === "right";
-            const tween = gsap.fromTo(
-              track,
-              { xPercent: reverse ? -50 : 0 },
-              {
-                xPercent: reverse ? 0 : -50,
-                duration: compact ? band.mobileDuration : band.duration,
-                ease: "none",
-                repeat: -1,
-                paused: true,
-              },
-            );
-            const setSpeed = gsap.quickTo(speed, "value", {
-              duration: 0.42,
-              ease: "power2.out",
-              onUpdate: () => tween.timeScale(speed.value),
-            });
-
-            animatedTracks.push({ tween, setSpeed });
-          });
-
-          const velocityTrigger = ScrollTrigger.create({
-            trigger: section,
-            start: "top bottom",
-            end: "bottom top",
-            onToggle: (self) => {
-              sectionIsActive = self.isActive;
-              if (!self.isActive) {
-                resetSpeed?.kill();
-                resetSpeed = undefined;
-              }
-              animatedTracks.forEach(({ setSpeed }) => {
-                if (!self.isActive) setSpeed(1);
-              });
-              syncTrackPlayback();
-            },
-            onUpdate: (self) => {
-              const velocity = Math.abs(self.getVelocity());
-              if (velocity < 24) return;
-              const multiplier = gsap.utils.clamp(1, 1.78, 1 + (velocity / 3000) * 0.78);
-              animatedTracks.forEach(({ setSpeed }) => setSpeed(multiplier));
-              resetSpeed?.kill();
-              resetSpeed = gsap.delayedCall(0.18, () => {
-                animatedTracks.forEach(({ setSpeed }) => setSpeed(1));
-              });
-            },
-          });
-
-          sectionIsActive = velocityTrigger.isActive;
-          document.addEventListener("visibilitychange", syncTrackPlayback);
-          syncTrackPlayback();
-
-          return () => {
-            document.removeEventListener("visibilitychange", syncTrackPlayback);
-            resetSpeed?.kill();
-            velocityTrigger.kill();
-            animatedTracks.forEach(({ tween }) => tween.kill());
-          };
-        },
-      );
-
-      return () => media.revert();
-    }, section);
-
-    return () => context.revert();
-  }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="technology-bands"
       className="technology-bands"
       aria-labelledby="technology-bands-title"
