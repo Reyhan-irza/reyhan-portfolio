@@ -3037,7 +3037,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .portfolio-shell .project-detail-dialog span { color: var(--rv-secondary); }
 .portfolio-shell .project-detail-dialog h3 { color: var(--rv-text) !important; }
 
-.portfolio-shell .editorial-nav { transition: transform .42s cubic-bezier(.22,1,.36,1), background-color .3s ease, padding .3s ease; }
+.portfolio-shell .editorial-nav { transition: opacity .7s ease; }
 .portfolio-shell .editorial-nav-link[aria-current="location"] { color: var(--rv-text); }
 .portfolio-shell .mobile-nav-panel {
   border-color: var(--rv-border);
