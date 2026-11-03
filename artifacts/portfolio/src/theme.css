@@ -282,3 +282,30 @@ body { background: var(--canvas); }
   [data-reveal], [data-reveal-group], [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
   .typing-cursor { display: none; }
 }
+
+/* Motion scene masks and distinct transform owners. */
+.motion-heading-line { padding-bottom: .08em; margin-bottom: -.08em; }
+.motion-heading-line-mask { overflow: clip; }
+.portfolio-shell .project-image-depth { position: absolute; inset: -3% 0; }
+.portfolio-shell .project-image-depth .project-screenshot { object-fit: cover; opacity: 1; }
+.portfolio-shell .mobile-nav-panel [data-menu-item] { overflow: hidden; flex-shrink: 0; font-size: clamp(1.5rem,5.7vw,2.5rem); font-weight: 400; letter-spacing: -.04em; }
+.portfolio-shell .mobile-nav-panel > * { flex-shrink: 0; }
+.portfolio-shell .menu-line-inner { display:flex; width:100%; align-items:center; gap:1.25rem; }
+.portfolio-shell .mobile-nav-panel { box-shadow:none; }
+.portfolio-shell :is(#projects,#achievement,#github)[data-section-theme] { border-radius:1.5rem; }
+.portfolio-shell .hero-identity-frame { contain:paint; }
+@media(max-width:1023px) {
+  .portfolio-shell .hero-identity-frame { width:clamp(6rem,22vw,10rem);height:clamp(6rem,22vw,10rem);top:-1rem; }
+}
+@media(max-width:767px) {
+  .portfolio-shell .hero-section h1 > span { padding-bottom:.09em;margin-bottom:-.09em; }
+}
+@media(max-height:719px) and (min-width:1024px) {
+  .portfolio-shell [data-project-track] { display:block;width:100%;transform:none!important; }
+  .portfolio-shell .project-row { width:100%;flex:none; }
+  .portfolio-shell [data-project-track-viewport] { overflow:visible; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .motion-reading-line { opacity:1!important; }
+  .project-image-depth { transform:none!important; }
+}
