@@ -26,7 +26,7 @@ export default function Footer() {
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
         <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
-          <Reveal>
+          <Reveal mount>
           <div>
             <button
               onClick={() => scroll("#home")}

@@ -31,7 +31,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="contact-section relative px-4 py-20 sm:px-6 md:py-28">
       <div className="contact-layout mx-auto max-w-6xl">
-        <Reveal as="header" className="contact-intro">
+        <Reveal mount as="header" className="contact-intro">
           <p className="section-kicker contact-kicker mb-4">06 / Contact</p>
           <h2 className="contact-title portfolio-section-heading font-semibold tracking-[-.06em] text-white">
             Let's talk.
@@ -47,7 +47,7 @@ export default function ContactSection() {
               <ContactRow key={contact.id} contact={contact} />
             ))}
           </ul>
-          <Reveal>
+          <Reveal mount>
           <a
             className="contact-primary-cta"
             href="mailto:irzanour@gmail.com"
@@ -71,7 +71,7 @@ function ContactRow({ contact }: { contact: (typeof contacts)[0] }) {
   const Icon = contact.icon;
 
   return (
-    <Reveal as="li" className="contact-item">
+    <Reveal mount as="li" className="contact-item">
       <a
         href={contact.href}
         target="_blank"

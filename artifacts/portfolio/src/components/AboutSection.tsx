@@ -26,7 +26,7 @@ export default function AboutSection() {
         </Reveal>
         <div className="story-notes mt-16 grid gap-px border-y border-[rgba(255,255,255,.12)] bg-[rgba(255,255,255,.12)] md:grid-cols-2">
           {notes.map(({ icon: Icon, label, text }, index) => (
-            <Reveal key={label} as="article" className="story-note p-7 md:p-9" staggerIndex={index}>
+            <Reveal mount key={label} as="article" className="story-note p-7 md:p-9" staggerIndex={index}>
               <div className="flex items-start justify-between gap-5">
                  <Icon className="h-5 w-5 text-[#a43f2d]" aria-hidden="true" />
                 <span className="font-mono text-[10px] text-[#77796e]">0{index + 1}</span>

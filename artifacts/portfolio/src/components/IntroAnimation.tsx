@@ -1,366 +1,152 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "../lib/motion";
-import { BRAND_LOGO_INTRO_SRC } from "./BrandLogo";
+import "./intro.css";
 
-interface IntroAnimationProps {
-  onFinish: () => void;
-}
+interface IntroAnimationProps { onFinish: () => void; onReveal: () => void }
+const asset = (name: string) => `${import.meta.env.BASE_URL}brand/cinematic/${name}.webp`;
+const name = "REYHAN IRZA ALVANO";
 
-export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
-  const introRef = useRef<HTMLDivElement>(null);
+/** Rey's supplied film, integrated without its mock homepage or global controller. */
+export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
-  const finishHandlerRef = useRef(onFinish);
-  finishHandlerRef.current = onFinish;
-
+  const finishRef = useRef<() => void>(() => {});
   useLayoutEffect(() => {
-    const element = introRef.current;
-    if (!element) return;
-    const pieces = Array.from(element.querySelectorAll<HTMLImageElement>("[data-intro-piece]"));
-    const finalLogo = element.querySelector<HTMLElement>("[data-intro-final]");
-    const sweep = element.querySelector<HTMLElement>("[data-intro-sweep]");
-    const identity = Array.from(element.querySelectorAll<HTMLElement>("[data-intro-copy]"));
-    const identityGroup = element.querySelector<HTMLElement>("[data-intro-identity]");
-    const orbit = element.querySelector<HTMLElement>("[data-intro-orbit]");
-    const frame = element.querySelector<HTMLElement>("[data-intro-frame]");
-    const scan = element.querySelector<HTMLElement>("[data-intro-scan]");
-    const flash = element.querySelector<HTMLElement>("[data-intro-flash]");
-    if (!finalLogo || !sweep || !identityGroup || !orbit || !frame || !scan || !flash || pieces.length !== 3) return;
-
-    let finished = false;
-    let safetyTimer: number | undefined;
-    const finishIntro = () => {
-      if (finished) return;
-      finished = true;
-      onFinish();
-    };
-    finishHandlerRef.current = finishIntro;
-
-    element.focus({ preventScroll: true });
+    const root = rootRef.current;
+    if (!root) return;
+    let finished = false, disposed = false, revealed = false;
+    let timer = 0, decodeTimer = 0;
+    let timeline: gsap.core.Timeline | undefined;
+    const q = (s: string) => root.querySelector<HTMLElement>(s)!;
+    const logo = q('.logo'), stage = q('.stage'), full = q('.full');
+    const pieces = Array.from(root.querySelectorAll<HTMLImageElement>('.piece'));
+    const chars = Array.from(root.querySelectorAll<HTMLElement>('.ch'));
+    const nav = document.querySelector<HTMLElement>('.editorial-nav');
+    const navLogo = nav?.querySelector<HTMLImageElement>('a img');
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: true }));
-    const media = gsap.matchMedia();
-    media.add(
-      {
-        reduced: "(prefers-reduced-motion: reduce)",
-        standard: "(prefers-reduced-motion: no-preference)",
-      },
-      (context) => {
-        const isReduced = Boolean(context.conditions?.reduced);
-        const compact = window.matchMedia("(max-width: 640px)").matches;
-        const distance = Math.min(compact ? 76 : 142, Math.max(compact ? 36 : 76, element.clientWidth * 0.16));
-
-        if (isReduced) {
-          finishIntro();
-          return;
-        }
-
-        try {
-          gsap.set(element, compact
-            ? { autoAlpha: 1 }
-            : { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-          gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
-          gsap.set(finalLogo, compact
-            ? { autoAlpha: 0, scale: 0.985, rotation: 0 }
-            : { autoAlpha: 0, scale: 0.94, rotation: -2 });
-          gsap.set(sweep, { autoAlpha: 0, xPercent: -130 });
-          gsap.set(identity, compact
-            ? { autoAlpha: 0, y: 8 }
-            : { autoAlpha: 0, y: 22, filter: "blur(7px)" });
-          gsap.set(orbit, { autoAlpha: 0, scale: 0.82, rotation: -18 });
-          gsap.set(frame, { autoAlpha: 0, scale: 0.92, rotation: 8 });
-          gsap.set(scan, { autoAlpha: 0, scaleX: 0, transformOrigin: "left center" });
-          gsap.set(flash, { autoAlpha: 0, scale: 0.7 });
-
-          const timeline = gsap.timeline({
-            delay: compact ? 0.04 : 0.08,
-            onComplete: finishIntro,
-            defaults: { overwrite: "auto", ease: "power3.out" },
-          });
-
-          if (compact) {
-            timeline
-              .fromTo(pieces, { autoAlpha: 0, x: (i: number) => (i - 1) * 32, y: (i: number) => i === 1 ? 22 : -18, rotation: (i: number) => (i - 1) * 8, scale: 0.9 }, {
-                autoAlpha: 1,
-                x: 0, y: 0, rotation: 0,
-                scale: 1,
-                duration: 0.62,
-                stagger: 0.12,
-                ease: "power2.out",
-              }, 0)
-              .to(pieces, {
-                autoAlpha: 0,
-                scale: 0.99,
-                duration: 0.28,
-                ease: "sine.inOut",
-              }, 0.9)
-              .to(finalLogo, {
-                autoAlpha: 1,
-                scale: 1,
-                duration: 0.42,
-                ease: "power2.out",
-              }, 0.9)
-              .to(identity[0], {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.3,
-                ease: "power2.out",
-              }, 1.08)
-              .to(identity[1], {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.38,
-                ease: "power2.out",
-              }, 1.28)
-              .to(identity.slice(2), {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.3,
-                stagger: 0.12,
-                ease: "power2.out",
-              }, 1.65)
-              .to(element, {
-                autoAlpha: 0,
-                duration: 0.65,
-                ease: "power2.inOut",
-              }, 2.35);
-          } else {
-            timeline
-              .addLabel("signal", 0)
-              .to(orbit, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.9 }, "signal")
-              .to(frame, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.74, ease: "power2.out" }, 0.1)
-              .addLabel("assembly", 0.18)
-              .fromTo(pieces[0], {
-                x: -distance,
-                y: -distance * 0.58,
-                rotation: -16,
-                scale: 0.82,
-                autoAlpha: 0,
-              }, {
-                x: 0,
-                y: 0,
-                rotation: 0,
-                scale: 1,
-                autoAlpha: 1,
-                duration: 0.7,
-                ease: "power4.out",
-              }, "assembly")
-              .fromTo(pieces[1], {
-                x: -distance * 0.76,
-                y: distance * 0.62,
-                rotation: 15,
-                scale: 0.84,
-                autoAlpha: 0,
-              }, {
-                x: 0,
-                y: 0,
-                rotation: 0,
-                scale: 1,
-                autoAlpha: 1,
-                duration: 0.7,
-                ease: "power4.out",
-              }, "assembly+=0.3")
-              .fromTo(pieces[2], {
-                x: distance,
-                y: -distance * 0.2,
-                rotation: 17,
-                scale: 0.82,
-                autoAlpha: 0,
-              }, {
-                x: 0,
-                y: 0,
-                rotation: 0,
-                scale: 1,
-                autoAlpha: 1,
-                duration: 0.72,
-                ease: "power4.out",
-              }, "assembly+=0.56")
-              .addLabel("lockup", 1.48)
-              .to(scan, { autoAlpha: 0.8, scaleX: 1, duration: 0.42, ease: "power2.inOut" }, "lockup-=0.14")
-              .to(pieces, { scale: 1.035, duration: 0.18, ease: "power2.out" }, "lockup")
-              .to(flash, { autoAlpha: 0.72, scale: 1.08, duration: 0.1, ease: "power2.out" }, "lockup+=0.08")
-              .to(flash, { autoAlpha: 0, scale: 1.3, duration: 0.36, ease: "power2.out" }, "lockup+=0.18")
-              .to(pieces, { autoAlpha: 0, scale: 0.985, duration: 0.22, ease: "power2.inOut" }, "lockup+=0.18")
-              .to(finalLogo, {
-                autoAlpha: 1,
-                scale: 1,
-                rotation: 0,
-                duration: 0.46,
-                ease: "power2.out",
-              }, "lockup+=0.18")
-              .fromTo(sweep, { xPercent: -130, autoAlpha: 0 }, {
-                xPercent: 130,
-                autoAlpha: 1,
-                duration: 0.62,
-                ease: "power2.inOut",
-              }, "lockup+=0.38")
-              .to(sweep, { autoAlpha: 0, duration: 0.1 }, "lockup+=0.9")
-              .to(scan, { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }, "lockup+=0.2")
-              .addLabel("introduction", "lockup+=0.48")
-              .to(identity[0], {
-                autoAlpha: 1,
-                y: 0,
-                filter: "blur(0px)",
-                duration: 0.42,
-              }, "introduction")
-              .to(identity.slice(1), {
-                autoAlpha: 1,
-                y: 0,
-                filter: "blur(0px)",
-                duration: 0.5,
-                stagger: 0.1,
-              }, "introduction+=0.12")
-              .to(finalLogo, { scale: 1.025, duration: 0.26, ease: "power1.inOut" }, "introduction+=0.62")
-              .to(finalLogo, { scale: 1, duration: 0.26, ease: "power2.out" }, "introduction+=0.88")
-              .addLabel("reveal", "introduction+=1.2")
-              .to(identityGroup, { y: -16, scale: 0.97, duration: 0.5, ease: "power2.inOut" }, "reveal")
-              .to(element, {
-                clipPath: "inset(0% 0% 100% 0%)",
-                duration: 0.5,
-                ease: "power3.inOut",
-              }, "reveal")
-              .to(element, { autoAlpha: 0, duration: 0.02 }, "reveal+=0.5");
-
-            timeline.timeScale(1.15);
-          }
-
-          const clearSafetyTimer = () => {
-            if (safetyTimer !== undefined) {
-              window.clearTimeout(safetyTimer);
-              safetyTimer = undefined;
-            }
-          };
-          const scheduleSafetyTimer = () => {
-            clearSafetyTimer();
-            if (!document.hidden) {
-              safetyTimer = window.setTimeout(finishIntro, compact ? 3600 : 5200);
-            }
-          };
-          const resumeWhenVisible = () => {
-            if (document.hidden) {
-              timeline.pause();
-              clearSafetyTimer();
-            } else if (timeline.progress() < 1) {
-              timeline.play();
-              scheduleSafetyTimer();
-            }
-          };
-          document.addEventListener("visibilitychange", resumeWhenVisible);
-          if (document.hidden) timeline.pause();
-          else scheduleSafetyTimer();
-          return () => {
-            document.removeEventListener("visibilitychange", resumeWhenVisible);
-            clearSafetyTimer();
-            timeline.kill();
-          };
-        } catch {
-          finishIntro();
-          return;
-        }
-      },
-    );
-
-    return () => {
-      media.revert();
+    const previousNavInert = nav?.inert ?? false;
+    const previousLogoVisibility = navLogo?.style.visibility ?? '';
+    const reveal = () => { if (!revealed && !disposed) { revealed = true; onReveal(); } };
+    const finish = () => {
+      if (finished || disposed) return;
+      finished = true; window.clearTimeout(timer); window.clearTimeout(decodeTimer);
+      timeline?.pause(); reveal();
+      if (navLogo) navLogo.style.visibility = previousLogoVisibility;
       document.body.style.overflow = previousOverflow;
-      window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
-      finishHandlerRef.current = onFinish;
-    };
-  }, [onFinish]);
-
-  const requestFinish = () => finishHandlerRef.current();
-
-  return (
-    <div
-      ref={introRef}
-      className="rv-intro fixed inset-0 z-[100] flex items-center justify-center"
-      tabIndex={-1}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="intro-name"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") requestFinish();
-        if (event.key === "Tab") {
-          event.preventDefault();
-          skipRef.current?.focus();
+      if (nav) nav.inert = previousNavInert;
+      window.dispatchEvent(new CustomEvent('portfolio:scroll-lock'));
+      onFinish();
+      // Focus after React removes the modal and releases main's inert state.
+      requestAnimationFrame(() => {
+        const main = document.querySelector<HTMLElement>('#main-content');
+        if (main && (!document.activeElement || document.activeElement === document.body || root.contains(document.activeElement))) {
+          main.setAttribute('tabindex', '-1'); main.focus({ preventScroll: true });
         }
-      }}
-    >
-      <div className="rv-intro-backdrop absolute inset-0" aria-hidden="true" />
-      <button ref={skipRef} type="button" className="rv-intro-skip absolute inline-flex min-h-11 items-center" onClick={requestFinish} aria-label="Skip introduction">
-        Skip
-      </button>
-      <div className="rv-intro-content z-10 text-center">
-        <div className="rv-intro-stage grid place-items-center" aria-hidden="true">
-          <span data-intro-orbit className="rv-intro-orbit absolute inset-[8%]" />
-          <span data-intro-frame className="rv-intro-frame absolute inset-0" aria-hidden="true">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-              <polygon points="50,1 99,50 50,99 1,50" />
-            </svg>
-          </span>
-          <span data-intro-flash className="rv-intro-flash absolute inset-0" />
-          <span data-intro-scan className="rv-intro-scan absolute left-[17%] right-[17%] top-1/2" />
-          <div className="rv-intro-assembly">
-            <img
-              data-intro-piece
-              className="rv-intro-piece rv-intro-piece--one"
-              src={`${import.meta.env.BASE_URL}brand/rv-piece-01.webp`}
-              alt=""
-              decoding="async"
-              fetchPriority="high"
-              onError={requestFinish}
-              draggable={false}
-            />
-            <img
-              data-intro-piece
-              className="rv-intro-piece rv-intro-piece--two"
-              src={`${import.meta.env.BASE_URL}brand/rv-piece-02.webp`}
-              alt=""
-              decoding="async"
-              fetchPriority="high"
-              onError={requestFinish}
-              draggable={false}
-            />
-            <img
-              data-intro-piece
-              className="rv-intro-piece rv-intro-piece--three"
-              src={`${import.meta.env.BASE_URL}brand/rv-piece-03.webp`}
-              alt=""
-              decoding="async"
-              fetchPriority="high"
-              onError={requestFinish}
-              draggable={false}
-            />
-            <div data-intro-final className="rv-intro-final">
-              <img
-                className="rv-intro-final-mark"
-                src={BRAND_LOGO_INTRO_SRC}
-                width={568}
-                height={347}
-                alt=""
-                decoding="async"
-                fetchPriority="high"
-                onError={requestFinish}
-                draggable={false}
-              />
-              <span
-                data-intro-sweep
-                className="rv-intro-light-sweep"
-                style={{
-                  maskImage: `url("${BRAND_LOGO_INTRO_SRC}")`,
-                  WebkitMaskImage: `url("${BRAND_LOGO_INTRO_SRC}")`,
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <div data-intro-identity className="rv-intro-identity">
-          <p data-intro-copy className="rv-intro-kicker">STUDENT DEVELOPER / LUBUK BASUNG, INDONESIA</p>
-          <h1 id="intro-name" data-intro-copy className="rv-intro-name">Reyhan Irza Alvano</h1>
-          <p data-intro-copy className="rv-intro-role">Student Developer · SMK</p>
-          <p data-intro-copy className="rv-intro-story">Selamat datang di portofolio saya.</p>
-        </div>
-      </div>
+      });
+    };
+    finishRef.current = finish;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduced.matches) { finish(); return; }
+    document.body.style.overflow = 'hidden';
+    if (nav) nav.inert = true;
+    if (navLogo) navLogo.style.visibility = 'hidden';
+    window.dispatchEvent(new CustomEvent('portfolio:scroll-lock'));
+    skipRef.current?.focus({ preventScroll: true });
+    const context = gsap.context(() => {
+      gsap.set(q('.vig'), { opacity: 0 });
+      gsap.set(q('.hair'), { scaleX: 0 });
+      gsap.set(q('.rule'), { scaleX: 0 });
+      gsap.set(chars, { yPercent: 115 });
+      gsap.set(q('.sub'), { opacity: 0, y: 10 });
+      gsap.set(pieces[0], { xPercent: -46, yPercent: -26 });
+      gsap.set(pieces[1], { xPercent: -34, yPercent: 60 });
+      gsap.set(pieces[2], { xPercent: 46, yPercent: -40 });
+      const t = gsap.timeline({ paused: true, onComplete: finish });
+      timeline = t;
+      const labels = { stage: 0, fragments: .4, tension: 1.2, assemble: 1.5, impact: 2.1, type: 2.5, handoff: 3.95 };
+      Object.entries(labels).forEach(([label, at]) => t.addLabel(label, at));
+      t.to(q('.vig'), { opacity: 1, duration: 1.2, ease: 'power1.out' }, 'stage')
+        .to(q('.hair'), { scaleX: 1, duration: .9, ease: 'expo.inOut' }, .1);
+      [[-10,-6],[-8,12],[10,-8]].forEach(([x,y], i) => {
+        t.to(pieces[i], { xPercent: x, yPercent: y, duration: .85, ease: 'power3.out' }, .4+i*.1)
+          .to(pieces[i], { opacity: 1, duration: .35, ease: 'none' }, .4+i*.1);
+      });
+      t.to(q('.hair'), { opacity: 0, duration: .4, ease: 'power1.in' }, 'tension')
+        .to(stage, { scale: 1.02, duration: .9, ease: 'power1.in' }, 'tension');
+      [1,0,2].forEach((index, i) => t.to(pieces[index], {
+        xPercent: 0, yPercent: 0, duration: .5, ease: 'power4.in',
+      }, 1.5+i*.05));
+      t.set(full, { opacity: 1 }, 'impact').set(pieces, { opacity: 0 }, 'impact')
+        .fromTo(stage, { scale: 1.045 }, { scale: 1, duration: .9, ease: 'power3.out', immediateRender: false }, 'impact')
+        .to(q('.glow'), { opacity: .9, duration: .08, ease: 'power2.out' }, 'impact')
+        .to(q('.glow'), { opacity: .3, duration: 1.3, ease: 'power2.out' }, 2.18)
+        .set(q('.sheen'), { opacity: 1 }, 'impact')
+        .fromTo(q('.sheen i'), { xPercent: -150 }, { xPercent: 420, duration: .75, ease: 'power2.inOut', immediateRender: false }, 'impact')
+        .to(q('.sheen'), { opacity: 0, duration: .12 }, 2.82)
+        .to(logo, { yPercent: -7, scale: .9, duration: 1, ease: 'power3.inOut' }, 'type')
+        .to(q('.rule'), { scaleX: 1, duration: .8, ease: 'expo.inOut' }, 2.65)
+        .to(chars, { yPercent: 0, duration: .75, ease: 'power4.out', stagger: .02 }, 2.76)
+        .to(q('.sub'), { opacity: 1, y: 0, duration: .6, ease: 'power2.out' }, 3.2)
+        .to(q('.type'), { opacity: 0, y: -10, duration: .45, ease: 'power2.in' }, 'handoff')
+        .to(q('.glow'), { opacity: 0, duration: .6, ease: 'power2.out' }, 'handoff');
+      // Read both rectangles together before the tween changes either transform.
+      let dock = { x: 0, y: 0, scale: .1 };
+      t.call(() => {
+        const r = logo.getBoundingClientRect(), n = navLogo?.getBoundingClientRect();
+        if (n) dock = {
+          x: Number(gsap.getProperty(logo, 'x')) + n.left+n.width/2-r.left-r.width/2,
+          y: Number(gsap.getProperty(logo, 'y')) + n.top+n.height/2-r.top-r.height/2,
+          scale: Number(gsap.getProperty(logo, 'scale')) * n.width/r.width,
+        };
+        root.dataset.phase = 'handoff';
+      }, [], 'handoff')
+        .to(logo, { x: () => dock.x, y: () => dock.y, scale: () => dock.scale, duration: .9, ease: 'power3.inOut' }, 'handoff')
+        .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1)
+        .call(reveal, [], 4.4);
+    }, root);
+    const arm = () => { window.clearTimeout(timer); if (!document.hidden) timer = window.setTimeout(finish, 12000); };
+    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { timeline?.play(); arm(); } };
+    const preference = () => { if (reduced.matches) finish(); };
+    const resize = () => { if ((timeline?.time() ?? 0) >= 3.95) finish(); };
+    document.addEventListener('visibilitychange', visibility);
+    reduced.addEventListener('change', preference);
+    window.addEventListener('resize', resize);
+    arm();
+    Promise.race([
+      Promise.all(Array.from(root.querySelectorAll('img')).map(img => img.decode())),
+      new Promise((_, reject) => { decodeTimer = window.setTimeout(() => reject(new Error('Intro assets unavailable')), 1500); }),
+    ]).then(() => {
+      window.clearTimeout(decodeTimer);
+      if (!disposed && !finished && !document.hidden) timeline?.play(0);
+    }).catch(finish);
+    return () => {
+      disposed = true; window.clearTimeout(timer); window.clearTimeout(decodeTimer);
+      document.removeEventListener('visibilitychange', visibility);
+      reduced.removeEventListener('change', preference);
+      window.removeEventListener('resize', resize);
+      context.revert();
+      document.body.style.overflow = previousOverflow;
+      if (nav) nav.inert = previousNavInert;
+      if (navLogo) navLogo.style.visibility = previousLogoVisibility;
+      window.dispatchEvent(new CustomEvent('portfolio:scroll-lock'));
+    };
+  }, [onFinish, onReveal]);
+  return <div id="rv-intro" className="rv-intro" ref={rootRef} role="dialog" aria-modal="true"
+    aria-label="Reyhan Irza Alvano — logo intro" data-phase="play" onKeyDown={event => {
+      if (event.key === 'Escape') finishRef.current();
+      if (event.key === 'Tab') { event.preventDefault(); skipRef.current?.focus(); }
+    }}>
+    <div className="bg" /><div className="vig" /><div className="hair" />
+    <div className="logo" aria-hidden="true"><div className="stage">
+      <div className="glow" />
+      {[1,2,3].map(i => <img key={i} className={`piece p${i}`} data-intro-piece src={asset(`p${i}`)} alt="" fetchPriority="high" draggable={false} onError={() => finishRef.current()} />)}
+      <img className="full" data-intro-final src={asset('full')} alt="" fetchPriority="high" draggable={false} onError={() => finishRef.current()} />
+      <div className="sheen" style={{ maskImage: `url("${asset('full')}")`, WebkitMaskImage: `url("${asset('full')}")` }}><i /></div>
+    </div></div>
+    <div className="type" data-intro-identity><div className="rule" />
+      <p className="name" data-intro-copy aria-label="Reyhan Irza Alvano"><span className="chars" aria-hidden="true">{Array.from(name).map((c,i) => <span className="ch" key={i}>{c === ' ' ? '\u00a0' : c}</span>)}</span></p>
+      <p className="sub" data-intro-copy>Creative Developer</p>
     </div>
-  );
+    <div className="ctrl"><button ref={skipRef} className="rv-btn rv-intro-skip" type="button" aria-label="Skip introduction" onClick={() => finishRef.current()}>Skip intro</button></div>
+  </div>;
 }

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
 
@@ -22,6 +22,7 @@ export default function JourneySection() {
   const educationRef = useRef<HTMLDivElement>(null);
   const educationProgressRef = useRef<HTMLSpanElement>(null);
   const didFire = useRef(false);
+  const educationEntered = useRef(false);
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -48,6 +49,11 @@ export default function JourneySection() {
         if (!mediaContext.conditions?.reduced && education && educationProgress) {
           const compact = Boolean(mediaContext.conditions?.compact);
           const educationRows = gsap.utils.toArray<HTMLElement>("[data-education-row]", education);
+          if (!educationEntered.current) gsap.from(educationRows, {
+            x: 24, opacity: 0, duration: SCENE.detail, stagger: .09, ease: SCENE.ease,
+            scrollTrigger: { trigger: education, start: "clamp(top 88%)", once: true },
+            onComplete: () => { educationEntered.current = true; }, clearProps: "transform,opacity",
+          });
           const setActiveMilestone = (progress: number) => {
             const activeIndex = Math.min(
               educationRows.length - 1,
@@ -117,7 +123,7 @@ export default function JourneySection() {
                   <Reveal
                     key={entry.level}
                     as="article"
-                    staggerIndex={index}
+                    mount
                     className={`education-item grid gap-2 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6 ${isCurrent ? "education-item-current" : ""}`}
                     data-education-row
                     data-education-current={isCurrent || undefined}

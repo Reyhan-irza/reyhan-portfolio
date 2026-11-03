@@ -3,7 +3,7 @@ import type { FocusEvent, PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
-import { gsap, ScrollTrigger, MOTION } from "../lib/motion";
+import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
 
@@ -107,7 +107,7 @@ export default function ProjectsSection() {
         reduced: "(prefers-reduced-motion: reduce)",
         motion: "(prefers-reduced-motion: no-preference)",
         wide: "(min-width: 768px)",
-        desktop: "(min-width: 1024px)",
+        desktop: "(min-width: 1024px) and (min-height: 720px)",
       },
       (mediaContext) => {
         if (mediaContext.conditions?.reduced) return;
@@ -125,20 +125,23 @@ export default function ProjectsSection() {
           );
 
           const revealCard = (row: HTMLElement, index: number, containerAnimation?: gsap.core.Tween) => {
+            const visual = row.querySelector<HTMLElement>("[data-project-visual]");
+            const depth = row.querySelector<HTMLElement>("[data-project-depth]");
+            const copy = row.querySelector<HTMLElement>("[data-project-copy]");
+            if (!visual || !depth || !copy) return;
+            gsap.fromTo(depth, { yPercent: 7, scale: 1.14 }, { yPercent: -7, scale: 1.05, ease: "none",
+              scrollTrigger: { trigger: row, start: containerAnimation ? "left right" : "clamp(top bottom)",
+                end: containerAnimation ? "right left" : "clamp(bottom top)", scrub: SCENE.scrub,
+                invalidateOnRefresh: true, ...(containerAnimation ? { containerAnimation } : {}) } });
             if (revealedProjects.current.has(index)) return;
-            const screenshot = row.querySelector(".project-screenshot");
-            const scene = gsap.timeline({
-              defaults: { duration: MOTION.reveal, ease: MOTION.ease },
-              scrollTrigger: {
-                trigger: row, start: containerAnimation ? "left 88%" : MOTION.start,
-                once: true, ...(containerAnimation ? { containerAnimation } : {}),
-              },
-              onComplete: () => { revealedProjects.current.add(index); row.dataset.cardRevealed = "true"; },
-            });
-            scene.fromTo(Array.from(row.children), { y: MOTION.cardY, opacity: 0 }, {
-              y: 0, opacity: 1, stagger: MOTION.stagger, clearProps: "transform,opacity",
-            });
-            if (screenshot) scene.fromTo(screenshot, { scale: 1.1 }, { scale: 1, clearProps: "transform" }, 0);
+            const scene = gsap.timeline({ defaults: { ease: SCENE.ease }, scrollTrigger: {
+              trigger: row, start: containerAnimation ? "left 90%" : "clamp(top 88%)", once: true,
+              ...(containerAnimation ? { containerAnimation } : {}),
+            }, onComplete: () => { revealedProjects.current.add(index); row.dataset.cardRevealed = "true"; } });
+            scene.fromTo(visual, { clipPath: "inset(14% 0% 14% 0%)", y: 36 },
+              { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 1.15, clearProps: "clipPath,transform" }, 0)
+              .fromTo(Array.from(copy.children), { y: 24, opacity: 0 },
+                { y: 0, opacity: 1, duration: .8, stagger: .08, clearProps: "transform,opacity" }, .18);
           };
 
           if (hasHorizontalStory && viewport && track && stage) {
@@ -160,7 +163,7 @@ export default function ProjectsSection() {
                 end: () => `+=${travelDistance() + window.innerWidth * 0.22}`,
                 pin: stage,
                 pinSpacing: true,
-                scrub: true,
+                scrub: SCENE.scrub,
                 anticipatePin: 1,
                 invalidateOnRefresh: true,
                 onEnter: () => {
@@ -335,7 +338,7 @@ export default function ProjectsSection() {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const tween = gsap.to(marker, {
         y: activeProject * 31,
-        duration: MOTION.text,
+        duration: SCENE.detail,
         ease: "power3.out",
         overwrite: true,
       });
@@ -470,7 +473,8 @@ export default function ProjectsSection() {
                   onPointerMove={handlePointerMove}
                   data-testid={`project-visual-${project.id}`}
                 >
-                  <img
+                  <div data-project-depth className="project-image-depth">
+                <img
                     className="project-screenshot"
                     src={project.preview.src}
                     alt={project.preview.alt}
@@ -479,6 +483,7 @@ export default function ProjectsSection() {
                     loading="lazy"
                     decoding="async"
                   />
+                </div>
                   <div className="project-visual-grid" aria-hidden="true" />
                   <span className="project-stamp">Cuplikan situs</span>
                   <span className="project-number" aria-hidden="true">
