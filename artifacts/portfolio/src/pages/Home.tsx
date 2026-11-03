@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEditorialScenes } from "../hooks/useEditorialScenes";
 import { useSectionTheme } from "../hooks/useSectionTheme";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -26,10 +27,13 @@ const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
 
 export default function Home() {
   useSectionTheme();
+  useEditorialScenes();
   const [introFinished, setIntroFinished] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
+  const revealHero = useCallback(() => setHeroReady(true), []);
   useLenis(introFinished);
   const [archiveVisited, setArchiveVisited] = useState(false);
-  const finishIntro = useCallback(() => setIntroFinished(true), []);
+  const finishIntro = useCallback(() => { setHeroReady(true); setIntroFinished(true); }, []);
 
   const footerRef   = useRef<HTMLDivElement>(null);
   const bottomFired = useRef(false);
@@ -66,8 +70,8 @@ export default function Home() {
     <div className="portfolio-shell relative min-h-[100dvh]">
       <a className="skip-to-content" href="#main-content">Skip to content</a>
       <Navbar />
-      <main id="main-content" className="relative z-10">
-        <HeroSection ready={introFinished} />
+      <main inert={!introFinished} id="main-content" className="relative z-10">
+        <HeroSection ready={heroReady} />
         <TechnologyBands />
         <section id="proof" className="proof-strip px-6" aria-label="Portfolio overview">
           <Reveal className="mx-auto grid max-w-6xl grid-cols-1 border-y border-[rgba(33,31,27,.16)] sm:grid-cols-3">
@@ -123,7 +127,7 @@ export default function Home() {
         <Footer />
         </div>
       <AchievementToast />
-      {!introFinished && <IntroAnimation onFinish={finishIntro} />}
+      {!introFinished && <IntroAnimation onReveal={revealHero} onFinish={finishIntro} />}
     </div>
     </LazyMotion>
   );
