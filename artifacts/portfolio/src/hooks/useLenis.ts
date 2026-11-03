@@ -1,122 +1,60 @@
 import { useEffect } from "react";
-import Lenis from "lenis";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { ScrollTrigger } from "../lib/motion";
+import { startSmoothScroll, stopSmoothScroll, syncScrollLock } from "../lib/scroll";
 
-/**
- * Adds a restrained desktop-only scroll interpolation layer.
- * Touch devices retain native scrolling so momentum and accessibility stay intact.
- */
-export function useLenis() {
+export function useLenis(enabled = true) {
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = window.matchMedia("(min-width: 769px) and (pointer: fine)");
-    let lenis: Lenis | null = null;
-    let ticker: ((time: number) => void) | null = null;
-    let refreshFrame = 0;
-    let resizeRefreshTimeout: number | undefined;
-    let disposed = false;
-    let pendingRefresh = false;
-    let scrollLocked = document.body.style.overflow === "hidden";
-
-    const handleScrollLock = (event: Event) => {
-      scrollLocked =
-        (event as CustomEvent<boolean>).detail || document.body.style.overflow === "hidden";
-      if (scrollLocked) lenis?.stop();
-      else lenis?.start();
-    };
-
-    const scheduleRefresh = () => {
-      pendingRefresh = true;
-      if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
-      refreshFrame = window.requestAnimationFrame(() => {
-        refreshFrame = 0;
+    if (!enabled) return;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0, disposed = false, pending = false;
+    const refresh = () => {
+      pending = true;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
         if (disposed || ScrollTrigger.isScrolling()) return;
-        pendingRefresh = false;
+        pending = false;
         ScrollTrigger.refresh(true);
       });
     };
-
-    // Lazy archive content and font changes can alter page height during a
-    // gesture. Measure after momentum stops rather than reset poses mid-swipe.
-    const refreshAfterScroll = () => {
-      if (pendingRefresh) scheduleRefresh();
+    const afterScroll = () => { if (pending) refresh(); };
+    const sync = () => {
+      if (reduced.matches) stopSmoothScroll(); else startSmoothScroll();
+      syncScrollLock(); refresh();
     };
-
-    const scheduleBodyResizeRefresh = () => {
-      if (resizeRefreshTimeout !== undefined) {
-        window.clearTimeout(resizeRefreshTimeout);
-      }
-      resizeRefreshTimeout = window.setTimeout(() => {
-        resizeRefreshTimeout = undefined;
-        if (!disposed) scheduleRefresh();
-      }, 180);
-    };
-
-    const updateScrollTriggers = () => ScrollTrigger.update();
-
-    const stop = (refresh = true) => {
-      if (!lenis) return;
-      lenis.off("scroll", updateScrollTriggers);
-      if (ticker) gsap.ticker.remove(ticker);
-      ticker = null;
-      lenis.destroy();
-      lenis = null;
-      gsap.ticker.lagSmoothing(500, 33);
-      if (refresh) scheduleRefresh();
-    };
-
-    const start = () => {
-      if (lenis || reducedMotion.matches || !desktop.matches) return;
-
-      const instance = new Lenis({
-        duration: 0.82,
-        smoothWheel: true,
-        syncTouch: false,
-      });
-      lenis = instance;
-      if (scrollLocked) instance.stop();
-      ticker = (time) => instance.raf(time * 1000);
-
-      instance.on("scroll", updateScrollTriggers);
-      gsap.ticker.lagSmoothing(0);
-      gsap.ticker.add(ticker);
-      scheduleRefresh();
-    };
-
-    const syncMotionMode = () => {
-      if (reducedMotion.matches || !desktop.matches) {
-        stop();
-        return;
-      }
-      start();
-    };
-
-    const resizeObserver = typeof ResizeObserver === "undefined"
-      ? null
-      : new ResizeObserver(scheduleBodyResizeRefresh);
-    resizeObserver?.observe(document.body);
-    ScrollTrigger.addEventListener("scrollEnd", refreshAfterScroll);
-    document.fonts?.ready.then(() => {
-      if (!disposed) scheduleRefresh();
+    // Observe existing intro/menu/modal locks, not every body color tween.
+    let overflow = document.body.style.overflow;
+    const lockObserver = new MutationObserver(() => {
+      if (overflow === document.body.style.overflow) return;
+      overflow = document.body.style.overflow;
+      syncScrollLock();
     });
-
-    desktop.addEventListener("change", syncMotionMode);
-    reducedMotion.addEventListener("change", syncMotionMode);
-    window.addEventListener("portfolio:scroll-lock", handleScrollLock);
-    syncMotionMode();
-
-    return () => {
-      desktop.removeEventListener("change", syncMotionMode);
-      reducedMotion.removeEventListener("change", syncMotionMode);
-      window.removeEventListener("portfolio:scroll-lock", handleScrollLock);
-      resizeObserver?.disconnect();
-      ScrollTrigger.removeEventListener("scrollEnd", refreshAfterScroll);
-      stop(false);
-      disposed = true;
-      if (resizeRefreshTimeout !== undefined) {
-        window.clearTimeout(resizeRefreshTimeout);
+    lockObserver.observe(document.body, { attributes: true, attributeFilter: ["style"] });
+    let width = document.body.offsetWidth, height = document.body.offsetHeight;
+    const resizeObserver = new ResizeObserver(() => {
+      const nextWidth = document.body.offsetWidth, nextHeight = document.body.offsetHeight;
+      if (width !== nextWidth || height !== nextHeight) {
+        width = nextWidth; height = nextHeight; refresh();
       }
-      if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
+    });
+    resizeObserver.observe(document.body);
+    const imageLoaded = (event: Event) => { if (event.target instanceof HTMLImageElement) refresh(); };
+    document.addEventListener("load", imageLoaded, true);
+    window.addEventListener("load", refresh);
+    window.addEventListener("portfolio:scroll-lock", syncScrollLock);
+    ScrollTrigger.addEventListener("scrollEnd", afterScroll);
+    reduced.addEventListener("change", sync);
+    document.fonts.ready.then(() => { if (!disposed) refresh(); });
+    sync();
+    return () => {
+      disposed = true; cancelAnimationFrame(frame);
+      lockObserver.disconnect(); resizeObserver.disconnect();
+      document.removeEventListener("load", imageLoaded, true);
+      window.removeEventListener("load", refresh);
+      window.removeEventListener("portfolio:scroll-lock", syncScrollLock);
+      ScrollTrigger.removeEventListener("scrollEnd", afterScroll);
+      reduced.removeEventListener("change", sync);
+      stopSmoothScroll();
+      // Each component reverts its own ScrollTriggers, including on route changes.
     };
-  }, []);
+  }, [enabled]);
 }
