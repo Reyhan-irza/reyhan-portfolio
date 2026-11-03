@@ -27,6 +27,7 @@ export default function Navbar() {
   const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const pendingTarget = useRef<string | null>(null);
   const reducedRef = useRef(false);
+  const staticMenuRef = useRef<((open: boolean) => void) | null>(null);
   const previouslyOpen = useRef(false);
 
   useEffect(() => {
@@ -194,13 +195,27 @@ export default function Navbar() {
         const reduced = Boolean(context.conditions?.reduced);
         const scope = gsap.context(() => {
           reducedRef.current = reduced;
+          staticMenuRef.current = null;
+          if (reduced) {
+            // Static mode avoids a cached translation after a live preference change.
+            const apply = (open: boolean) => {
+              gsap.set(panel, { display: open ? "flex" : "none", x: 0, y: 0, xPercent: 0, yPercent: 0 });
+              gsap.set(targets, { x: 0, y: 0, opacity: 1, visibility: "visible" });
+              gsap.set(glyphLines[0], { y: open ? 5 : 0, rotation: open ? 45 : 0 });
+              gsap.set(glyphLines[1], { scaleX: open ? 0 : 1, opacity: open ? 0 : 1 });
+              gsap.set(glyphLines[2], { y: open ? -5 : 0, rotation: open ? -45 : 0 });
+            };
+            staticMenuRef.current = apply;
+            apply(isOpenRef.current);
+            return;
+          }
           const finishClose = () => {
             gsap.set(panel, { display: "none" });
             const target = pendingTarget.current;
             pendingTarget.current = null;
             if (target) scrollToSection(target);
           };
-          gsap.set(panel, { display: "none", yPercent: reduced ? 0 : -100 });
+          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: 0, yPercent: -100 });
           gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
             .set(panel, { display: "flex" })
@@ -219,6 +234,7 @@ export default function Navbar() {
         }, panel);
         return () => {
           menuTimelineRef.current = null;
+          staticMenuRef.current = null;
           scope.revert();
         };
       },
@@ -227,19 +243,19 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (reducedRef.current) {
+      staticMenuRef.current?.(isOpen);
+      if (!isOpen) {
+        const target = pendingTarget.current;
+        pendingTarget.current = null;
+        if (target) scrollToSection(target);
+      }
+      return;
+    }
     const timeline = menuTimelineRef.current;
     if (!timeline) return;
-    if (isOpen) {
-      pendingTarget.current = null;
-      if (reducedRef.current) timeline.progress(1).play();
-      else timeline.timeScale(1).play();
-    } else if (reducedRef.current) {
-      timeline.reverse(0);
-      if (panelRef.current) panelRef.current.style.display = "none";
-      const target = pendingTarget.current;
-      pendingTarget.current = null;
-      if (target) scrollToSection(target);
-    } else timeline.timeScale(1.4).reverse();
+    if (isOpen) { pendingTarget.current = null; timeline.timeScale(1).play(); }
+    else timeline.timeScale(1.4).reverse();
   }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
