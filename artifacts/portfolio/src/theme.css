@@ -245,3 +245,40 @@ body { background: var(--canvas); }
   .portfolio-shell .project-copy { font-size: 1rem; line-height: 1.65; }
   .portfolio-shell .hero-section { padding-bottom: 2.5rem; }
 }
+
+/* Scoped existing palettes keep adjacent sections readable during the body transition. */
+.portfolio-shell [data-section-theme][data-theme="dark"],
+.portfolio-shell #mobile-navigation,
+.portfolio-shell .editorial-nav[data-menu-open="true"] {
+  --canvas: #101113; --panel: #191b1e; --panel-raised: #23262b;
+  --ink-primary: #f3f3ef; --ink-secondary: #c4c6cb; --ink-muted: #a0a5ae;
+  --signal: #9baeff; --signal-ink: #101525; --rule: #383c43; --signal-wash: #222b42;
+}
+.portfolio-shell [data-section-theme][data-theme="light"] {
+  --canvas: #e8edf4; --panel: #ced9e8; --panel-raised: #f5f7fb;
+  --ink-primary: #202226; --ink-secondary: #414750; --ink-muted: #5c626c;
+  --signal: #304fa8; --signal-ink: #ffffff; --rule: #a0afc3; --signal-wash: #d2ddef;
+}
+.portfolio-shell [data-section-theme] {
+  --rv-bg: var(--canvas); --rv-surface: var(--panel); --rv-surface-raised: var(--panel-raised);
+  --rv-text: var(--ink-primary); --rv-secondary: var(--ink-secondary); --rv-muted: var(--ink-muted);
+  --rv-blue: var(--signal); --rv-violet: var(--signal); --rv-border: var(--rule);
+  --rv-blue-wash: var(--signal-wash); --rv-violet-wash: var(--signal-wash); --muted-ink: var(--ink-muted);
+}
+:root .portfolio-shell [data-section-theme] { color: var(--ink-primary); background: var(--canvas); }
+.portfolio-shell :is(#projects, #achievement, #github)[data-section-theme] { border-radius: 1.5rem 1.5rem 0 0; }
+.portfolio-shell #mobile-navigation { background: var(--canvas); }
+.portfolio-shell .hero-identity-frame { overflow: hidden; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .project-row[data-card-revealed="true"] .project-screenshot { transition: transform .6s cubic-bezier(.22,1,.36,1); }
+  .project-row[data-card-revealed="true"] .project-visual:hover .project-screenshot { transform: scale(1.04); }
+  .project-link svg { transition: transform .6s cubic-bezier(.22,1,.36,1); }
+  .project-link:hover svg { transform: translate(3px,-3px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal]:not([data-revealed="true"]) { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-reveal-group], [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
+  .typing-cursor { display: none; }
+}
