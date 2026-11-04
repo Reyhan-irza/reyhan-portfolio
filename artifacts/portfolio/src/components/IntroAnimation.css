@@ -5,7 +5,6 @@
   z-index: 100;
   overflow: hidden;
   color: #e9edf5;
-  background: #07080b;
   contain: layout paint;
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
   box-sizing: border-box;
@@ -13,9 +12,7 @@
 
 #rv-intro *,
 #rv-intro *::before,
-#rv-intro *::after {
-  box-sizing: border-box;
-}
+#rv-intro *::after { box-sizing: border-box; }
 
 #rv-intro .rv-intro-backdrop,
 #rv-intro .rv-intro-vignette,
@@ -24,7 +21,6 @@
   inset: 0;
   pointer-events: none;
 }
-
 #rv-intro .rv-intro-backdrop { background: #07080b; }
 #rv-intro .rv-intro-vignette {
   background: radial-gradient(ellipse at 50% 52%, rgba(26,40,84,.28), rgba(7,8,11,0) 62%);
@@ -43,7 +39,6 @@
   display: flex;
   gap: 8px;
 }
-
 #rv-intro .rv-intro-button {
   appearance: none;
   min-height: 40px;
@@ -59,20 +54,9 @@
   cursor: pointer;
   transition: background .2s, border-color .2s;
 }
-#rv-intro .rv-intro-button:hover {
-  background: rgba(255,255,255,.09);
-  border-color: rgba(190,205,255,.5);
-}
-#rv-intro .rv-intro-button:focus-visible {
-  outline: 2px solid #6f95ff;
-  outline-offset: 3px;
-}
-#rv-intro .rv-intro-button--primary {
-  color: #07080b;
-  background: #e9edf5;
-  border-color: #e9edf5;
-  font-weight: 600;
-}
+#rv-intro .rv-intro-button:hover { background: rgba(255,255,255,.09); border-color: rgba(190,205,255,.5); }
+#rv-intro .rv-intro-button:focus-visible { outline: 2px solid #6f95ff; outline-offset: 3px; }
+#rv-intro .rv-intro-button--primary { color: #07080b; background: #e9edf5; border-color: #e9edf5; font-weight: 600; }
 #rv-intro .rv-intro-button--primary:hover { background: #fff; }
 
 #rv-intro .rv-intro-logo {
@@ -84,11 +68,7 @@
   margin: calc(var(--rv-intro-size) / -2) 0 0 calc(var(--rv-intro-size) / -2);
   will-change: transform;
 }
-#rv-intro .rv-intro-stage {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-}
+#rv-intro .rv-intro-stage { position: absolute; inset: 0; will-change: transform; }
 #rv-intro .rv-intro-glow {
   position: absolute;
   left: 2%;
@@ -109,11 +89,8 @@
 #rv-intro .rv-intro-piece--one { left: 5.9%; top: 27.9%; width: 56.4%; }
 #rv-intro .rv-intro-piece--two { left: 13.2%; top: 42.7%; width: 45%; }
 #rv-intro .rv-intro-piece--three { left: 47.4%; top: 27.9%; width: 47.4%; }
-#rv-intro .rv-intro-final {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-}
+
+#rv-intro .rv-intro-final { position: absolute; inset: 0; opacity: 0; }
 #rv-intro .rv-intro-final-mark {
   display: block;
   width: 100%;
@@ -132,15 +109,15 @@
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
 }
-#rv-intro .rv-intro-sheen::after {
+#rv-intro .rv-intro-sheen-bar {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   width: 26%;
   background: linear-gradient(100deg, transparent, rgba(205,222,255,.6), transparent);
-  content: "";
 }
+
 #rv-intro .rv-intro-identity {
   position: absolute;
   top: calc(50% + var(--rv-intro-size) * .2);
@@ -152,11 +129,12 @@
 #rv-intro .rv-intro-identity p,
 #rv-intro .rv-intro-identity h1 { font-family: inherit; }
 #rv-intro .rv-intro-kicker {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: #8b93a5;
   font-size: clamp(9px, 2.6vw, 11px);
-  letter-spacing: .22em;
+  letter-spacing: .34em;
   text-transform: uppercase;
+  padding-left: .34em;
 }
 #rv-intro .rv-intro-name {
   margin: 0;
@@ -171,14 +149,17 @@
   margin: 10px 0 0;
   color: #8b93a5;
   font-size: clamp(9px, 2.6vw, 11px);
-  letter-spacing: .2em;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  padding-left: .34em;
 }
-#rv-intro .rv-intro-story { letter-spacing: .04em; }
+#rv-intro .rv-intro-story { letter-spacing: .04em; text-transform: none; padding-left: 0; }
 
 @media (max-width: 420px) {
   #rv-intro .rv-intro-button { padding-inline: 11px; letter-spacing: .1em; }
   #rv-intro .rv-intro-name { letter-spacing: .24em; }
-  #rv-intro .rv-intro-kicker { letter-spacing: .14em; }
+  #rv-intro .rv-intro-kicker,
+  #rv-intro .rv-intro-role { letter-spacing: .14em; padding-left: .14em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
