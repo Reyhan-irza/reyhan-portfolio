@@ -14,110 +14,195 @@ const INTRO_COPY = [
   "Selamat datang di portofolio saya.",
 ];
 
+const BRAND = `${import.meta.env.BASE_URL}brand/`;
+
+// Timeline map (seconds). Total ≈ 4.3s.
+const T = { fragments: 0.15, tension: 0.75, assemble: 1.0, impact: 1.6, type: 1.95, exit: 3.3 };
+
 export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
   const introRef = useRef<HTMLDivElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
-  const finishHandlerRef = useRef(onFinish);
-  finishHandlerRef.current = onFinish;
+  const onFinishRef = useRef(onFinish);
+  const finishedRef = useRef(false);
+  const finishRef = useRef<() => void>(() => {});
+
+  // Always call the latest onFinish without re-running the animation effect.
+  useLayoutEffect(() => {
+    onFinishRef.current = onFinish;
+  });
 
   useLayoutEffect(() => {
-    const element = introRef.current;
-    if (!element) return;
+    const root = introRef.current;
+    if (!root) return;
 
-    const pieces = Array.from(element.querySelectorAll<HTMLElement>("[data-intro-piece]"));
-    const logo = element.querySelector<HTMLElement>("[data-intro-final]");
-    const sheen = element.querySelector<HTMLElement>("[data-intro-sheen]");
-    const copy = Array.from(element.querySelectorAll<HTMLElement>("[data-intro-copy]"));
-    const glow = element.querySelector<HTMLElement>("[data-intro-glow]");
-    if (!logo || !sheen || !glow || pieces.length !== 3 || copy.length !== 4) return;
-
-    let finished = false;
-    let safetyTimer: number | undefined;
-    let timeline: ReturnType<typeof gsap.timeline> | undefined;
-    let onVisibilityChange: (() => void) | undefined;
-    const finishIntro = () => {
-      if (finished) return;
-      finished = true;
-      onFinish();
+    const finish = () => {
+      if (finishedRef.current) return;
+      finishedRef.current = true;
+      onFinishRef.current();
     };
-    finishHandlerRef.current = finishIntro;
+    finishRef.current = finish;
 
-    element.focus({ preventScroll: true });
+    root.focus({ preventScroll: true });
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: true }));
+    const unlock = () => {
+      document.body.style.overflow = previousOverflow;
+      window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
+    };
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
-      finishIntro();
-    } else {
-      try {
-        gsap.set(pieces, { autoAlpha: 0, x: 0, y: 0, rotation: 0, scale: 1 });
-        gsap.set(logo, { autoAlpha: 0, scale: 0.94, rotation: -2 });
-        gsap.set(sheen, { autoAlpha: 0, xPercent: -130 });
-        gsap.set(copy, { autoAlpha: 0, y: 16, filter: "blur(5px)" });
-        gsap.set(glow, { autoAlpha: 0, scale: 0.8 });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finish();
+      return unlock;
+    }
 
-        timeline = gsap.timeline({
-          delay: 0.06,
-          onComplete: finishIntro,
-          defaults: { overwrite: "auto", ease: "power3.out" },
-        });
-        timeline
-          .to(glow, { autoAlpha: 1, scale: 1, duration: 0.72 }, 0)
-          .fromTo(pieces[0], { autoAlpha: 0, x: -72, y: -35, rotation: -12, scale: 0.88 }, {
-            autoAlpha: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: 0.7, ease: "power4.out",
-          }, 0.12)
-          .fromTo(pieces[1], { autoAlpha: 0, x: -44, y: 40, rotation: 12, scale: 0.88 }, {
-            autoAlpha: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: 0.68, ease: "power4.out",
-          }, 0.38)
-          .fromTo(pieces[2], { autoAlpha: 0, x: 70, y: -20, rotation: 14, scale: 0.88 }, {
-            autoAlpha: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: 0.7, ease: "power4.out",
-          }, 0.58)
-          .to(pieces, { autoAlpha: 0, scale: 0.985, duration: 0.24, ease: "power2.inOut" }, 1.18)
-          .to(logo, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.48, ease: "power2.out" }, 1.18)
-          .fromTo(sheen, { xPercent: -130, autoAlpha: 0 }, {
-            xPercent: 130, autoAlpha: 1, duration: 0.64, ease: "power2.inOut",
-          }, 1.45)
-          .to(sheen, { autoAlpha: 0, duration: 0.12 }, 2.0)
-          .to(copy, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.38, stagger: 0.12 }, 1.68)
-          .to(logo, { scale: 1.025, duration: 0.22, ease: "power1.inOut" }, 2.08)
-          .to(logo, { scale: 1, duration: 0.22, ease: "power2.out" }, 2.3)
-          .to(element, { autoAlpha: 0, duration: 0.48, ease: "power2.inOut" }, 2.48);
+    const q = <E extends HTMLElement>(selector: string) => root.querySelector<E>(selector);
+    const pieces = Array.from(root.querySelectorAll<HTMLElement>("[data-intro-piece]"));
+    const copy = Array.from(root.querySelectorAll<HTMLElement>("[data-intro-copy]"));
+    const [p1, p2, p3] = pieces;
+    const logo = q(".rv-intro-logo");
+    const stage = q(".rv-intro-stage");
+    const vignette = q(".rv-intro-vignette");
+    const hairline = q(".rv-intro-hairline");
+    const glow = q("[data-intro-glow]");
+    const final = q("[data-intro-final]");
+    const mark = q("[data-intro-mark]");
+    const backdrop = q(".rv-intro-backdrop");
+    const target = document.querySelector<HTMLElement>("[data-intro-logo-target], .portfolio-nav-logo");
+    const sheen = q("[data-intro-sheen]");
+    const bar = q("[data-intro-sheen-bar]");
+    if (!p1 || !p2 || !p3 || !logo || !stage || !vignette || !hairline || !glow || !final || !mark || !backdrop || !sheen || !bar || copy.length !== 4) {
+      finish();
+      return unlock;
+    }
 
-        const scheduleSafetyTimer = () => {
-          if (safetyTimer !== undefined) window.clearTimeout(safetyTimer);
-          if (!document.hidden) safetyTimer = window.setTimeout(finishIntro, 3600);
-        };
-        onVisibilityChange = () => {
-          if (document.hidden) {
-            timeline?.pause();
-            if (safetyTimer !== undefined) window.clearTimeout(safetyTimer);
-            safetyTimer = undefined;
-          } else if (timeline && timeline.progress() < 1) {
-            timeline.play();
-            scheduleSafetyTimer();
-          }
-        };
-        document.addEventListener("visibilitychange", onVisibilityChange);
-        if (document.hidden) timeline.pause();
-        else scheduleSafetyTimer();
-      } catch {
-        finishIntro();
+    let cancelled = false;
+    let started = false;
+    let failsafe: number | undefined;
+    let tl: ReturnType<typeof gsap.timeline> | undefined;
+
+    const armFailsafe = () => {
+      window.clearTimeout(failsafe);
+      if (!tl) return;
+      failsafe = window.setTimeout(finish, (tl.duration() - tl.time() + 3) * 1000);
+    };
+    const onVisibility = () => {
+      if (!started || !tl) return;
+      if (document.hidden) {
+        tl.pause();
+        window.clearTimeout(failsafe);
+      } else {
+        tl.play();
+        armFailsafe();
       }
+    };
+
+    try {
+      // Initial state. Pieces start far away along their own diagonals (percent of own size → responsive).
+      gsap.set(pieces, { opacity: 0 });
+      gsap.set(p1, { xPercent: -46, yPercent: -26 });
+      gsap.set(p2, { xPercent: -34, yPercent: 60 });
+      gsap.set(p3, { xPercent: 46, yPercent: -40 });
+      gsap.set([final, glow, sheen, vignette], { opacity: 0 });
+      gsap.set(bar, { xPercent: -150 });
+      gsap.set(hairline, { scaleX: 0, opacity: 1, transformOrigin: "50% 50%" });
+      gsap.set(copy, { opacity: 0, y: 14 });
+      gsap.set(logo, { yPercent: 0, scale: 1 });
+      gsap.set(stage, { scale: 1 });
+
+      tl = gsap.timeline({ paused: true, onComplete: finish, defaults: { overwrite: false } });
+      Object.entries(T).forEach(([label, time]) => tl!.addLabel(label, time));
+
+      // 1 · anticipation
+      tl.to(vignette, { opacity: 1, duration: 1, ease: "power1.out" }, 0)
+        .to(hairline, { scaleX: 1, duration: 0.7, ease: "expo.inOut" }, 0.05);
+
+      // 2 · fragment entrance: decelerate into a hover offset on the same line they'll lock along
+      const enter = (el: HTMLElement, x: number, y: number, at: string) =>
+        tl!
+          .to(el, { xPercent: x, yPercent: y, duration: 0.75, ease: "power3.out" }, at)
+          .to(el, { opacity: 1, duration: 0.3, ease: "none" }, at);
+      enter(p1, -10, -6, "fragments");
+      enter(p2, -8, 12, "fragments+=.08");
+      enter(p3, 10, -8, "fragments+=.16");
+      tl.to(hairline, { opacity: 0, duration: 0.35, ease: "power1.in" }, "tension")
+        .to(stage, { scale: 1.02, duration: T.impact - T.tension, ease: "power1.in" }, "tension");
+
+      // 3 · precision assembly: continue the same direction, accelerating into lock
+      const lock = (el: HTMLElement, at: string) =>
+        tl!.to(el, { xPercent: 0, yPercent: 0, duration: 0.5, ease: "power4.in" }, at);
+      lock(p2, "assemble");
+      lock(p1, "assemble+=.05");
+      lock(p3, "assemble+=.1");
+
+      // 4 · impact: complete logo replaces the pieces on the exact frame of the last lock
+      tl.set(final, { opacity: 1 }, "impact")
+        .set(pieces, { opacity: 0 }, "impact")
+        .fromTo(stage, { scale: 1.045 }, { scale: 1, duration: 0.9, ease: "power3.out", immediateRender: false }, "impact")
+        .to(glow, { opacity: 0.9, duration: 0.08, ease: "power2.out" }, "impact")
+        .to(glow, { opacity: 0.3, duration: 1.3, ease: "power2.out" }, "impact+=.08")
+        .set(sheen, { opacity: 1 }, "impact")
+        .fromTo(bar, { xPercent: -150 }, { xPercent: 420, duration: 0.7, ease: "power2.inOut", immediateRender: false }, "impact")
+        .to(sheen, { opacity: 0, duration: 0.12 }, "impact+=.68");
+
+      // 5 · identity (opacity + translate only, no blur filters)
+      tl.to(logo, { yPercent: -7, scale: 0.9, duration: 1, ease: "power3.inOut" }, "type")
+        .to(copy, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.1 }, "type+=.2");
+
+      // 6 · handoff: the mark itself flies to the real navbar logo (measured at the moment it starts,
+      // from the visible mark, not from the square stage), then the overlay disappears.
+      const fly = () => {
+        const m = mark.getBoundingClientRect();
+        const n = target ? target.getBoundingClientRect() : null;
+        if (!n || !n.width || !n.height || !m.width) return { dx: 0, dy: 0, k: 1 };
+        return {
+          dx: n.left + n.width / 2 - (m.left + m.width / 2),
+          dy: n.top + n.height / 2 - (m.top + m.height / 2),
+          k: Math.min(n.width / m.width, n.height / m.height),
+        };
+      };
+      tl.to(copy, { opacity: 0, y: -10, duration: 0.35, ease: "power2.in" }, "exit")
+        .to(glow, { opacity: 0, duration: 0.5, ease: "power2.out" }, "exit")
+        .to(logo, {
+          x: () => Number(gsap.getProperty(logo, "x")) + fly().dx,
+          y: () => Number(gsap.getProperty(logo, "y")) + fly().dy,
+          scale: () => Number(gsap.getProperty(logo, "scale")) * fly().k,
+          yPercent: 0,
+          duration: 0.8,
+          ease: "power3.inOut",
+        }, "exit")
+        .to([backdrop, vignette], { opacity: 0, duration: 0.7, ease: "power2.inOut" }, "exit+=.15")
+        .set(root, { pointerEvents: "none" }, "exit+=.3")
+        .to(root, { opacity: 0, duration: 0.2, ease: "power1.out" }, "exit+=.8");
+
+      document.addEventListener("visibilitychange", onVisibility);
+
+      // Wait for decoded images (max 1.5s) so decoding never happens mid-animation.
+      const images = Array.from(root.querySelectorAll("img"));
+      Promise.race([
+        Promise.all(images.map((img) => img.decode().catch(() => undefined))),
+        new Promise((resolve) => window.setTimeout(resolve, 1500)),
+      ]).then(() => {
+        if (cancelled || finishedRef.current || !tl) return;
+        started = true;
+        if (document.hidden) return; // onVisibility starts it when the tab returns
+        tl.play(0);
+        armFailsafe();
+      });
+    } catch {
+      finish();
     }
 
     return () => {
-      timeline?.kill();
-      if (safetyTimer !== undefined) window.clearTimeout(safetyTimer);
-      if (onVisibilityChange) document.removeEventListener("visibilitychange", onVisibilityChange);
-      document.body.style.overflow = previousOverflow;
-      window.dispatchEvent(new CustomEvent("portfolio:scroll-lock", { detail: false }));
-      finishHandlerRef.current = onFinish;
+      cancelled = true;
+      tl?.kill();
+      window.clearTimeout(failsafe);
+      document.removeEventListener("visibilitychange", onVisibility);
+      unlock();
     };
-  }, [onFinish]);
+  }, []);
 
-  const requestFinish = () => finishHandlerRef.current();
+  const requestFinish = () => finishRef.current();
 
   return (
     <div
@@ -150,12 +235,14 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       <div className="rv-intro-logo" aria-hidden="true">
         <div className="rv-intro-stage">
           <div className="rv-intro-glow" data-intro-glow />
-          <img data-intro-piece className="rv-intro-piece rv-intro-piece--one" src={`${import.meta.env.BASE_URL}brand/rv-piece-01.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
-          <img data-intro-piece className="rv-intro-piece rv-intro-piece--two" src={`${import.meta.env.BASE_URL}brand/rv-piece-02.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
-          <img data-intro-piece className="rv-intro-piece rv-intro-piece--three" src={`${import.meta.env.BASE_URL}brand/rv-piece-03.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
+          <img data-intro-piece className="rv-intro-piece rv-intro-piece--one" src={`${BRAND}rv-piece-01.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
+          <img data-intro-piece className="rv-intro-piece rv-intro-piece--two" src={`${BRAND}rv-piece-02.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
+          <img data-intro-piece className="rv-intro-piece rv-intro-piece--three" src={`${BRAND}rv-piece-03.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
           <div data-intro-final className="rv-intro-final">
-            <img className="rv-intro-final-mark" src={BRAND_LOGO_INTRO_SRC} width={568} height={347} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
-            <span data-intro-sheen className="rv-intro-sheen" style={{ maskImage: `url("${BRAND_LOGO_INTRO_SRC}")`, WebkitMaskImage: `url("${BRAND_LOGO_INTRO_SRC}")` }} />
+            <img data-intro-mark className="rv-intro-final-mark" src={BRAND_LOGO_INTRO_SRC} width={568} height={347} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
+            <span data-intro-sheen className="rv-intro-sheen" style={{ maskImage: `url("${BRAND_LOGO_INTRO_SRC}")`, WebkitMaskImage: `url("${BRAND_LOGO_INTRO_SRC}")` }}>
+              <span data-intro-sheen-bar className="rv-intro-sheen-bar" />
+            </span>
           </div>
         </div>
       </div>
