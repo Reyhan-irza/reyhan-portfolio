@@ -1,0 +1,186 @@
+#rv-intro {
+  --rv-intro-size: min(108vw, 720px, 112vh);
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  color: #e9edf5;
+  background: #07080b;
+  contain: layout paint;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+#rv-intro *,
+#rv-intro *::before,
+#rv-intro *::after {
+  box-sizing: border-box;
+}
+
+#rv-intro .rv-intro-backdrop,
+#rv-intro .rv-intro-vignette,
+#rv-intro .rv-intro-hairline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#rv-intro .rv-intro-backdrop { background: #07080b; }
+#rv-intro .rv-intro-vignette {
+  background: radial-gradient(ellipse at 50% 52%, rgba(26,40,84,.28), rgba(7,8,11,0) 62%);
+}
+#rv-intro .rv-intro-hairline {
+  inset: 50% 12% auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(150,180,255,.55), transparent);
+}
+
+#rv-intro .rv-intro-controls {
+  position: absolute;
+  z-index: 3;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  display: flex;
+  gap: 8px;
+}
+
+#rv-intro .rv-intro-button {
+  appearance: none;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(190,205,255,.28);
+  border-radius: 999px;
+  color: #e9edf5;
+  background: rgba(255,255,255,.03);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+#rv-intro .rv-intro-button:hover {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(190,205,255,.5);
+}
+#rv-intro .rv-intro-button:focus-visible {
+  outline: 2px solid #6f95ff;
+  outline-offset: 3px;
+}
+#rv-intro .rv-intro-button--primary {
+  color: #07080b;
+  background: #e9edf5;
+  border-color: #e9edf5;
+  font-weight: 600;
+}
+#rv-intro .rv-intro-button--primary:hover { background: #fff; }
+
+#rv-intro .rv-intro-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--rv-intro-size);
+  height: var(--rv-intro-size);
+  margin: calc(var(--rv-intro-size) / -2) 0 0 calc(var(--rv-intro-size) / -2);
+  will-change: transform;
+}
+#rv-intro .rv-intro-stage {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+#rv-intro .rv-intro-glow {
+  position: absolute;
+  left: 2%;
+  top: 22%;
+  width: 96%;
+  height: 58%;
+  background: radial-gradient(closest-side, rgba(70,120,255,.22), rgba(70,120,255,0));
+  opacity: 0;
+}
+#rv-intro .rv-intro-piece {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+  will-change: transform, opacity;
+}
+#rv-intro .rv-intro-piece--one { left: 5.9%; top: 27.9%; width: 56.4%; }
+#rv-intro .rv-intro-piece--two { left: 13.2%; top: 42.7%; width: 45%; }
+#rv-intro .rv-intro-piece--three { left: 47.4%; top: 27.9%; width: 47.4%; }
+#rv-intro .rv-intro-final {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+#rv-intro .rv-intro-final-mark {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+#rv-intro .rv-intro-sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+#rv-intro .rv-intro-sheen::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26%;
+  background: linear-gradient(100deg, transparent, rgba(205,222,255,.6), transparent);
+  content: "";
+}
+#rv-intro .rv-intro-identity {
+  position: absolute;
+  top: calc(50% + var(--rv-intro-size) * .2);
+  right: 0;
+  left: 0;
+  padding: 0 12px;
+  text-align: center;
+}
+#rv-intro .rv-intro-identity p,
+#rv-intro .rv-intro-identity h1 { font-family: inherit; }
+#rv-intro .rv-intro-kicker {
+  margin: 0 0 12px;
+  color: #8b93a5;
+  font-size: clamp(9px, 2.6vw, 11px);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+#rv-intro .rv-intro-name {
+  margin: 0;
+  color: #e9edf5;
+  font-size: clamp(11px, 4.2vw, 21px);
+  font-weight: 500;
+  letter-spacing: .34em;
+  line-height: 1.25;
+}
+#rv-intro .rv-intro-role,
+#rv-intro .rv-intro-story {
+  margin: 10px 0 0;
+  color: #8b93a5;
+  font-size: clamp(9px, 2.6vw, 11px);
+  letter-spacing: .2em;
+}
+#rv-intro .rv-intro-story { letter-spacing: .04em; }
+
+@media (max-width: 420px) {
+  #rv-intro .rv-intro-button { padding-inline: 11px; letter-spacing: .1em; }
+  #rv-intro .rv-intro-name { letter-spacing: .24em; }
+  #rv-intro .rv-intro-kicker { letter-spacing: .14em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #rv-intro .rv-intro-button { transition: none; }
+}
