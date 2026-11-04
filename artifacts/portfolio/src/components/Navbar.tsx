@@ -276,7 +276,7 @@ export default function Navbar() {
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 md:px-10">
           <a href="#home" aria-current={activeHref === "#home" ? "location" : undefined} aria-label="Reyhan Irza Alvano, home" className="group flex items-center gap-3">
-            <BrandLogo size="sm" alt="" />
+            <BrandLogo size="sm" alt="" className="portfolio-nav-logo" />
             <span className="flex flex-col leading-tight">
               <span className="text-xs font-bold uppercase tracking-[.13em] text-white">Reyhan Irza Alvano</span>
               <span className="mt-1 text-[10px] uppercase tracking-[.16em] text-white/50">Student · Web Developer</span>
