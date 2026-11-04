@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "../lib/motion";
-import { BRAND_LOGO_INTRO_SRC } from "./BrandLogo";
+import { BRAND_LOGO_SRC } from "./BrandLogo";
 import "./IntroAnimation.css";
 
 interface IntroAnimationProps {
@@ -62,16 +62,16 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
     const [p1, p2, p3] = pieces;
     const logo = q(".rv-intro-logo");
     const stage = q(".rv-intro-stage");
+    const backdrop = q(".rv-intro-backdrop");
     const vignette = q(".rv-intro-vignette");
     const hairline = q(".rv-intro-hairline");
     const glow = q("[data-intro-glow]");
     const final = q("[data-intro-final]");
-    const mark = q("[data-intro-mark]");
-    const backdrop = q(".rv-intro-backdrop");
-    const target = document.querySelector<HTMLElement>("[data-intro-logo-target], .portfolio-nav-logo");
     const sheen = q("[data-intro-sheen]");
     const bar = q("[data-intro-sheen-bar]");
-    if (!p1 || !p2 || !p3 || !logo || !stage || !vignette || !hairline || !glow || !final || !mark || !backdrop || !sheen || !bar || copy.length !== 4) {
+    const target = document.querySelector<HTMLElement>(".portfolio-nav-logo");
+
+    if (!p1 || !p2 || !p3 || !logo || !stage || !backdrop || !vignette || !hairline || !glow || !final || !sheen || !bar || copy.length !== 4) {
       finish();
       return unlock;
     }
@@ -107,7 +107,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       gsap.set(bar, { xPercent: -150 });
       gsap.set(hairline, { scaleX: 0, opacity: 1, transformOrigin: "50% 50%" });
       gsap.set(copy, { opacity: 0, y: 14 });
-      gsap.set(logo, { yPercent: 0, scale: 1 });
+      gsap.set(logo, { x: 0, y: 0, yPercent: 0, scale: 1 });
       gsap.set(stage, { scale: 1 });
 
       tl = gsap.timeline({ paused: true, onComplete: finish, defaults: { overwrite: false } });
@@ -117,7 +117,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       tl.to(vignette, { opacity: 1, duration: 1, ease: "power1.out" }, 0)
         .to(hairline, { scaleX: 1, duration: 0.7, ease: "expo.inOut" }, 0.05);
 
-      // 2 · fragment entrance: decelerate into a hover offset on the same line they'll lock along
+      // 2 · fragment entrance: decelerate into a hover offset on the same line they will lock along
       const enter = (el: HTMLElement, x: number, y: number, at: string) =>
         tl!
           .to(el, { xPercent: x, yPercent: y, duration: 0.75, ease: "power3.out" }, at)
@@ -135,7 +135,7 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       lock(p1, "assemble+=.05");
       lock(p3, "assemble+=.1");
 
-      // 4 · impact: complete logo replaces the pieces on the exact frame of the last lock
+      // 4 · impact: the complete logo replaces the pieces on the exact frame of the last lock
       tl.set(final, { opacity: 1 }, "impact")
         .set(pieces, { opacity: 0 }, "impact")
         .fromTo(stage, { scale: 1.045 }, { scale: 1, duration: 0.9, ease: "power3.out", immediateRender: false }, "impact")
@@ -149,16 +149,16 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
       tl.to(logo, { yPercent: -7, scale: 0.9, duration: 1, ease: "power3.inOut" }, "type")
         .to(copy, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.1 }, "type+=.2");
 
-      // 6 · handoff: the mark itself flies to the real navbar logo (measured at the moment it starts,
-      // from the visible mark, not from the square stage), then the overlay disappears.
+      // 6 · handoff: the logo flies onto the real navbar logo. Both are the same square image,
+      // so square-to-square gives an exact landing. Measured at the moment the flight starts.
       const fly = () => {
-        const m = mark.getBoundingClientRect();
+        const m = logo.getBoundingClientRect();
         const n = target ? target.getBoundingClientRect() : null;
-        if (!n || !n.width || !n.height || !m.width) return { dx: 0, dy: 0, k: 1 };
+        if (!n || !n.width || !m.width) return { dx: 0, dy: 0, k: 1 };
         return {
           dx: n.left + n.width / 2 - (m.left + m.width / 2),
           dy: n.top + n.height / 2 - (m.top + m.height / 2),
-          k: Math.min(n.width / m.width, n.height / m.height),
+          k: n.width / m.width,
         };
       };
       tl.to(copy, { opacity: 0, y: -10, duration: 0.35, ease: "power2.in" }, "exit")
@@ -239,8 +239,8 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           <img data-intro-piece className="rv-intro-piece rv-intro-piece--two" src={`${BRAND}rv-piece-02.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
           <img data-intro-piece className="rv-intro-piece rv-intro-piece--three" src={`${BRAND}rv-piece-03.webp`} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
           <div data-intro-final className="rv-intro-final">
-            <img data-intro-mark className="rv-intro-final-mark" src={BRAND_LOGO_INTRO_SRC} width={568} height={347} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
-            <span data-intro-sheen className="rv-intro-sheen" style={{ maskImage: `url("${BRAND_LOGO_INTRO_SRC}")`, WebkitMaskImage: `url("${BRAND_LOGO_INTRO_SRC}")` }}>
+            <img className="rv-intro-final-mark" src={BRAND_LOGO_SRC} width={640} height={640} alt="" decoding="async" fetchPriority="high" onError={requestFinish} draggable={false} />
+            <span data-intro-sheen className="rv-intro-sheen" style={{ maskImage: `url("${BRAND_LOGO_SRC}")`, WebkitMaskImage: `url("${BRAND_LOGO_SRC}")` }}>
               <span data-intro-sheen-bar className="rv-intro-sheen-bar" />
             </span>
           </div>
