@@ -16,7 +16,7 @@ const INTRO_COPY = [
 
 const BRAND = `${import.meta.env.BASE_URL}brand/`;
 
-// Timeline map (seconds). Total ≈ 4.3s.
+// Timeline map (seconds). Total ≈ 4.15s.
 const T = { fragments: 0.15, tension: 0.75, assemble: 1.0, impact: 1.6, type: 1.95, exit: 3.3 };
 
 export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
@@ -145,8 +145,9 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
         .fromTo(bar, { xPercent: -150 }, { xPercent: 420, duration: 0.7, ease: "power2.inOut", immediateRender: false }, "impact")
         .to(sheen, { opacity: 0, duration: 0.12 }, "impact+=.68");
 
-      // 5 · identity (opacity + translate only, no blur filters)
-      tl.to(logo, { yPercent: -7, scale: 0.9, duration: 1, ease: "power3.inOut" }, "type")
+      // 5 · identity (opacity + translate only, no blur filters).
+      // The logo shift uses pixels (not yPercent) so the handoff can measure it exactly.
+      tl.to(logo, { y: () => -logo.offsetHeight * 0.07, scale: 0.9, duration: 1, ease: "power3.inOut" }, "type")
         .to(copy, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.1 }, "type+=.2");
 
       // 6 · handoff: the logo flies onto the real navbar logo. Both are the same square image,
@@ -167,13 +168,11 @@ export default function IntroAnimation({ onFinish }: IntroAnimationProps) {
           x: () => Number(gsap.getProperty(logo, "x")) + fly().dx,
           y: () => Number(gsap.getProperty(logo, "y")) + fly().dy,
           scale: () => Number(gsap.getProperty(logo, "scale")) * fly().k,
-          yPercent: 0,
           duration: 0.8,
           ease: "power3.inOut",
         }, "exit")
         .to([backdrop, vignette], { opacity: 0, duration: 0.7, ease: "power2.inOut" }, "exit+=.15")
-        .set(root, { pointerEvents: "none" }, "exit+=.3")
-        .to(root, { opacity: 0, duration: 0.2, ease: "power1.out" }, "exit+=.8");
+        .set(root, { pointerEvents: "none" }, "exit+=.3");
 
       document.addEventListener("visibilitychange", onVisibility);
 
