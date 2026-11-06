@@ -2,7 +2,7 @@ import { Code2, Database, Layout, Workflow } from "lucide-react";
 import Reveal from "./Reveal";
 
 const notes = [
-  { icon: Layout, label: "Mulanya, dari warnet", text: "Sekitar 2015, saya sering mampir ke warnet. Dari sana tumbuh rasa penasaran pada komputer, meski waktu itu saya belum punya komputer sendiri." },
+  { icon: Layout, label: "Mulanya, dari kecanduan warnet main point blank", text: "Sekitar 2015-an, saya sering main ke warnet bareng temen. Terus lebih penasaran lebih ke komputer terus mendalamin, ya mulai fokusnya pas SMK ngasah skill coding." },
   { icon: Database, label: "Mencoba hal pertama", text: "Selama pandemi, saya mencoba berbagai kegiatan online untuk mendapat penghasilan tambahan. Di perjalanan itu saya berkenalan dengan Python, scripts, dan WhatsApp bots." },
   { icon: Workflow, label: "Berani belajar sambil jalan", text: "Pada 2025, saya mulai mengeksplorasi coding dan AI, lalu mengikuti LKS IT Software Solution For Business tanpa pengalaman belajar C#. Saya menjadi satu-satunya perwakilan sekolah dan meraih Juara I tingkat Kabupaten Agam." },
   { icon: Code2, label: "Masih banyak yang ingin dipelajari", text: "Setelah LKS, saya memperdalam HTML, CSS, JavaScript, dan C#. Pada 2026, saya mulai mengeksplorasi AI-assisted development dengan Replit Agent, TypeScript, dan Tailwind. Saya terus membangun proyek di waktu luang, dengan tujuan menjadi pengembang web full-stack yang punya pemahaman AI kuat." },
@@ -19,7 +19,7 @@ export default function AboutSection() {
           </div>
           <div>
             <p className="story-lead max-w-2xl text-lg leading-relaxed md:text-xl">
-              Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar lewat proyek: mencoba ide, menemukan masalah, lalu memperbaikinya satu langkah setiap kali.
+     Haloo, saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Saya belajar lewat proyek: mencoba ide, menemukan masalah, lalu memperbaikinya satu langkah setiap kali.
             </p>
             <p className="story-aside mt-5 max-w-2xl text-base leading-relaxed">Kalau kamu suka melihat proses di balik sebuah karya, semoga cerita ini menyenangkan untuk diikuti.</p>
           </div>
