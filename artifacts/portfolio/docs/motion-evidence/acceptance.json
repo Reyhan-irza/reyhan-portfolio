@@ -1,0 +1,50 @@
+{
+  "fontMode": "System fonts in fixtures; live preview checked separately",
+  "results": [
+    {
+      "width": 360,
+      "height": 844,
+      "overflow": "pass",
+      "reverse": "pass",
+      "stopped": "pass",
+      "reducedMotion": "pass",
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": "pass",
+      "reverse": "pass",
+      "stopped": "pass",
+      "reducedMotion": "pass",
+      "errors": []
+    },
+    {
+      "width": 430,
+      "height": 844,
+      "overflow": "pass",
+      "reverse": "pass",
+      "stopped": "pass",
+      "reducedMotion": "pass",
+      "errors": []
+    },
+    {
+      "width": 768,
+      "height": 844,
+      "overflow": "pass",
+      "reverse": "pass",
+      "stopped": "pass",
+      "reducedMotion": "pass",
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "overflow": "pass",
+      "reverse": "pass",
+      "stopped": "pass",
+      "reducedMotion": "pass",
+      "errors": []
+    }
+  ]
+}
