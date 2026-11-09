@@ -406,6 +406,8 @@ test("mobile intro pacing, accessibility, visibility, and re-entry", { timeout: 
         "Skip should receive initial focus inside the dialog",
       );
       await state.page.keyboard.press("Tab");
+      assert.equal(await state.page.getByRole("button", { name: "Enter", exact: true }).evaluate(el => el === document.activeElement), true);
+      await state.page.keyboard.press("Tab");
       assert.equal(
         await state.page.evaluate(() => document.activeElement?.classList.contains("rv-intro-skip")),
         true,
