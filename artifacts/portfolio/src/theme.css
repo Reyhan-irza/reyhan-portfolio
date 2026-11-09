@@ -286,8 +286,8 @@ body { background: var(--canvas); }
 /* Motion scene masks and distinct transform owners. */
 .motion-heading-line { padding-bottom: .08em; margin-bottom: -.08em; }
 .motion-heading-line-mask { overflow: clip; }
-.portfolio-shell .project-image-depth { position: absolute; inset: -3% 0; }
-.portfolio-shell .project-image-depth .project-screenshot { object-fit: cover; opacity: 1; }
+.portfolio-shell .project-image-depth { position: absolute; inset: -3% 6.5%; }
+.portfolio-shell .project-image-depth .project-screenshot { object-fit: contain; opacity: 1; }
 .portfolio-shell .mobile-nav-panel [data-menu-item] { overflow: hidden; flex-shrink: 0; font-size: clamp(1.5rem,5.7vw,2.5rem); font-weight: 400; letter-spacing: -.04em; }
 .portfolio-shell .mobile-nav-panel > * { flex-shrink: 0; }
 .portfolio-shell .menu-line-inner { display:flex; width:100%; align-items:center; gap:1.25rem; }
@@ -309,3 +309,9 @@ body { background: var(--canvas); }
   .motion-reading-line { opacity:1!important; }
   .project-image-depth { transform:none!important; }
 }
+
+/* GSAP owns navigation opacity during the logo handoff. */
+.portfolio-shell .editorial-nav { transition: none; }
+
+/* Keep the outgoing page readable under the sliding menu edge. */
+.portfolio-shell .nav-scrim { background: rgb(2 4 10 / 12%); }
