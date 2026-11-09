@@ -22,7 +22,7 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
     const pieces = Array.from(root.querySelectorAll<HTMLImageElement>('.piece'));
     const chars = Array.from(root.querySelectorAll<HTMLElement>('.ch'));
     const nav = document.querySelector<HTMLElement>('.editorial-nav');
-    const navLogo = nav?.querySelector<HTMLImageElement>('a img');
+    const navLogo = nav?.querySelector<HTMLImageElement>('.portfolio-nav-logo');
     const previousOverflow = document.body.style.overflow;
     const previousNavInert = nav?.inert ?? false;
     const previousLogoVisibility = navLogo?.style.visibility ?? '';
@@ -134,7 +134,12 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
   return <div id="rv-intro" className="rv-intro" ref={rootRef} role="dialog" aria-modal="true"
     aria-label="Reyhan Irza Alvano — logo intro" data-phase="play" onKeyDown={event => {
       if (event.key === 'Escape') finishRef.current();
-      if (event.key === 'Tab') { event.preventDefault(); skipRef.current?.focus(); }
+      if (event.key === 'Tab') {
+        const buttons = event.currentTarget.querySelectorAll<HTMLButtonElement>('button');
+        const first = buttons[0], last = buttons[buttons.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
     }}>
     <div className="bg" /><div className="vig" /><div className="hair" />
     <div className="logo" aria-hidden="true"><div className="stage">
@@ -147,6 +152,7 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       <p className="name" data-intro-copy aria-label="Reyhan Irza Alvano"><span className="chars" aria-hidden="true">{Array.from(name).map((c,i) => <span className="ch" key={i}>{c === ' ' ? '\u00a0' : c}</span>)}</span></p>
       <p className="sub" data-intro-copy>Creative Developer</p>
     </div>
-    <div className="ctrl"><button ref={skipRef} className="rv-btn rv-intro-skip" type="button" aria-label="Skip introduction" onClick={() => finishRef.current()}>Skip intro</button></div>
+    <div className="ctrl"><button ref={skipRef} className="rv-btn rv-intro-skip" type="button" aria-label="Skip introduction" onClick={() => finishRef.current()}>Skip intro</button>
+      <button className="rv-btn primary" type="button" onClick={() => finishRef.current()}>Enter</button></div>
   </div>;
 }
