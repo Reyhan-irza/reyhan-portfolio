@@ -327,7 +327,13 @@ body { background: var(--canvas); }
 .work-index__cycle span::after { content:''; width:1.2em; height:1px; background:var(--rule); }
 .portfolio-shell .projects-title .project-heading-accent { font-family:'RV Editorial',Georgia,serif; font-style:italic; font-weight:500; letter-spacing:-.055em; }
 .project-aperture,.project-aperture__mask { overflow:clip; }
-.portfolio-shell .project-name { overflow:clip; }
+.portfolio-shell .project-name { overflow:clip; font-family:'RV Work Display',sans-serif; font-weight:600; letter-spacing:-.022em; }
+.project-rail-marker { transition:none; }
+@media (min-width:768px) and (max-width:1023px) {
+  .portfolio-shell .projects-heading { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1.75rem; }
+  .portfolio-shell .project-row { min-height:0; padding-block:clamp(2rem,5vw,3rem); gap:clamp(1.6rem,4vw,3rem); }
+  .portfolio-shell .project-actions { flex-wrap:wrap; }
+}
 .portfolio-shell [data-project-name] { display:block; padding-bottom:.1em; }
 .portfolio-shell #github .github-heading { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); align-items:end; gap:2rem; margin-bottom:0; padding-bottom:clamp(1.25rem,3vw,2.5rem); border-bottom:1px solid var(--rule); text-align:left; }
 .portfolio-shell #github .github-heading h2 { width:fit-content; max-width:100%; margin:.7rem 0 0; color:var(--ink-primary); font:600 clamp(3.6rem,8.8vw,7.5rem)/.98 'RV Work Display',sans-serif; letter-spacing:-.025em; }
@@ -347,5 +353,3 @@ body { background: var(--canvas); }
 @media (prefers-reduced-motion:reduce) {
   .work-index { display:none; }
 }
-
-.portfolio-shell .project-name { font-family: 'RV Work Display', sans-serif; font-weight:600; letter-spacing:-.022em; }
