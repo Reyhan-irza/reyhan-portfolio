@@ -6,6 +6,7 @@ import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "
 import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
+import { scrubBelt } from "./ScrollBelt";
 
 // Product previews are direct captures of the linked public sites, not recreated UI.
 const projects = [
@@ -106,7 +107,6 @@ export default function ProjectsSection() {
       {
         reduced: "(prefers-reduced-motion: reduce)",
         motion: "(prefers-reduced-motion: no-preference)",
-        wide: "(min-width: 768px)",
         desktop: "(min-width: 1024px) and (min-height: 720px)",
       },
       (mediaContext) => {
@@ -124,6 +124,10 @@ export default function ProjectsSection() {
             mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1,
           );
 
+          const indexBelt = section.querySelector<HTMLElement>("[data-work-belt]");
+          const indexRuler = section.querySelector<HTMLElement>("[data-work-index]");
+          if (indexBelt && indexRuler) scrubBelt(indexBelt, indexRuler, false);
+
           const revealCard = (row: HTMLElement, index: number, containerAnimation?: gsap.core.Tween) => {
             const visual = row.querySelector<HTMLElement>("[data-project-visual]");
             const depth = row.querySelector<HTMLElement>("[data-project-depth]");
@@ -133,6 +137,31 @@ export default function ProjectsSection() {
               scrollTrigger: { trigger: row, start: containerAnimation ? "left right" : "clamp(top bottom)",
                 end: containerAnimation ? "right left" : "clamp(bottom top)", scrub: SCENE.scrub,
                 invalidateOnRefresh: true, ...(containerAnimation ? { containerAnimation } : {}) } });
+            if (!hasHorizontalStory) {
+              const mask = row.querySelector<HTMLElement>("[data-card-mask]");
+              const surface = row.querySelector<HTMLElement>("[data-card-surface]");
+              const title = copy.querySelector<HTMLElement>("[data-project-name]");
+              if (!mask || !surface || !title) return;
+              // Each row owns a separate non-overlapping entry interval. The outer window travels
+              // up and its inner surface counter-travels, revealing a stationary screenshot.
+              const entry = gsap.timeline({
+                scrollTrigger: {
+                  trigger: row,
+                  start: "clamp(top 96%)",
+                  end: () => `+=${Math.min(row.offsetHeight * .76, document.documentElement.clientHeight * .55)}`,
+                  scrub: .16,
+                  invalidateOnRefresh: true,
+                },
+              });
+              entry.fromTo(mask, { yPercent: 100 }, { yPercent: 0, duration: .7, ease: "power1.out" }, 0)
+                .fromTo(surface, { yPercent: -100 }, { yPercent: 0, duration: .7, ease: "power1.out" }, 0)
+                .fromTo(title, { yPercent: 108 }, { yPercent: 0, duration: .46, ease: "power2.out" }, .36)
+                .fromTo(copy.querySelector(".project-type"), { x: 16, opacity: .35 },
+                  { x: 0, opacity: 1, duration: .4, ease: "power1.out" }, .33)
+                .fromTo(copy.querySelector(".project-copy"), { y: 14, opacity: .45 },
+                  { y: 0, opacity: 1, duration: .4, ease: "power1.out" }, .60);
+              return;
+            }
             if (revealedProjects.current.has(index)) return;
             const scene = gsap.timeline({ defaults: { ease: SCENE.ease }, scrollTrigger: {
               trigger: row, start: containerAnimation ? "left 90%" : "clamp(top 88%)", once: true,
@@ -398,13 +427,23 @@ export default function ProjectsSection() {
             <p className="projects-kicker mb-5">Selected work</p>
             <h2 className="projects-title max-w-4xl">
               <span className="block overflow-hidden"><span data-heading-line className="block">Dari ide</span></span>
-              <span className="block overflow-hidden"><span data-heading-line className="text-[#a43f2d] block">jadi karya.</span></span>
+              <span className="block overflow-hidden"><span data-heading-line className="project-heading-accent text-[#a43f2d] block">jadi karya.</span></span>
             </h2>
           </div>
           <p data-project-intro className="projects-intro text-base md:mb-1 md:text-lg">
             Tiga proyek dengan tujuan berbeda: situs jurusan sekolah, perpustakaan digital, dan portofolio pribadi.
           </p>
         </Reveal>
+
+        <div className="work-index" data-work-index aria-hidden="true">
+          <div className="work-index__track" data-work-belt>
+            {[0, 1].map(copy => (
+              <div key={copy} className="work-index__cycle">
+                {projects.map(project => <span key={project.id}>{project.title}</span>)}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
@@ -466,107 +505,107 @@ export default function ProjectsSection() {
                       aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                       inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                     >
-                <div className="min-w-0">
-                <div
-                  data-project-visual
-                  className="project-visual project-visual--screenshot"
-                  onPointerMove={handlePointerMove}
-                  data-testid={`project-visual-${project.id}`}
-                >
-                  <div data-project-depth className="project-image-depth">
-                <img
-                    className="project-screenshot"
-                    src={project.preview.src}
-                    alt={project.preview.alt}
-                    width={project.preview.width}
-                    height={project.preview.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                  <div className="project-visual-grid" aria-hidden="true" />
-                  <span className="project-stamp">Cuplikan situs</span>
-                  <span className="project-number" aria-hidden="true">
-                    0{project.id}
-                  </span>
-                  <span className="project-wordmark" aria-hidden="true">
-                    <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
-                      {project.accent === "VIREON" ? (
-                        <>
-                          VI<em>RE</em>ON
-                        </>
-                      ) : project.accent === "REYHAN" ? (
-                        <>
-                          REY<em>HAN</em>
-                        </>
-                      ) : (
-                        <>
-                          T<em>JK</em>T
-                        </>
-                      )}
-                    </span>
-                  </span>
-                </div>
-                </div>
+                      <div className="project-aperture min-w-0">
+                        <div data-card-mask className="project-aperture__mask">
+                          <div data-card-surface>
+                            <div
+                              data-project-visual
+                              className="project-visual project-visual--screenshot"
+                              onPointerMove={handlePointerMove}
+                              data-testid={`project-visual-${project.id}`}
+                            >
+                              <div data-project-depth className="project-image-depth">
+                                <img
+                                  className="project-screenshot"
+                                  src={project.preview.src}
+                                  alt={project.preview.alt}
+                                  width={project.preview.width}
+                                  height={project.preview.height}
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              </div>
+                              <div className="project-visual-grid" aria-hidden="true" />
+                              <span className="project-stamp">Cuplikan situs</span>
+                              <span className="project-number" aria-hidden="true">
+                                0{project.id}
+                              </span>
+                              <span className="project-wordmark" aria-hidden="true">
+                                <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
+                                  {project.accent === "VIREON" ? (
+                                    <>
+                                      VI<em>RE</em>ON
+                                    </>
+                                  ) : project.accent === "REYHAN" ? (
+                                    <>
+                                      REY<em>HAN</em>
+                                    </>
+                                  ) : (
+                                    <>
+                                      T<em>JK</em>T
+                                    </>
+                                  )}
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                <div className="min-w-0">
-                <div data-project-copy>
-                  <p className="project-type">{project.type}</p>
-                  <h3 id={`project-title-${project.id}`} className="project-name">
-                    {project.title}
-                  </h3>
-                  <p className="project-copy">{project.description}</p>
-
-                  <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
-                    {project.tech.map((technology) => (
-                      <li key={technology} className="project-tech">
-                        {technology}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="project-actions">
-                    <m.a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="project-link"
-                      data-testid={`link-live-${project.id}`}
-                      whileHover={reduceMotion ? undefined : { y: -2 }}
-                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    >
-                      Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </m.a>
-                    <m.a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="project-link project-link--quiet"
-                      data-testid={`link-github-${project.id}`}
-                      aria-label={`Open ${project.title} GitHub repository`}
-                      whileHover={reduceMotion ? undefined : { y: -2 }}
-                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    >
-                      <Github className="h-4 w-4" aria-hidden="true" />
-                      <span className="sr-only">Repositori GitHub</span>
-                    </m.a>
-                    <m.button
-                      type="button"
-                      onClick={(event) => openDetails(project, event.currentTarget)}
-                      className="project-link project-link--quiet"
-                      data-testid={`button-details-${project.id}`}
-                      aria-label={`Baca selengkapnya tentang ${project.title}`}
-                      whileHover={reduceMotion ? undefined : { y: -2 }}
-                      whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    >
-                      Detail <span aria-hidden="true">+</span>
-                    </m.button>
-                  </div>
-                </div>
-                </div>
+                      <div data-project-copy className="min-w-0">
+                        <p className="project-type">{project.type}</p>
+                        <h3 id={`project-title-${project.id}`} className="project-name">
+                          <span data-project-name>{project.title}</span>
+                        </h3>
+                        <p className="project-copy">{project.description}</p>
+                        <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
+                          {project.tech.map((technology) => (
+                            <li key={technology} className="project-tech">
+                              {technology}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="project-actions">
+                          <m.a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="project-link"
+                            data-testid={`link-live-${project.id}`}
+                            whileHover={reduceMotion ? undefined : { y: -2 }}
+                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                          >
+                            Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                          </m.a>
+                          <m.a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="project-link project-link--quiet project-github-link"
+                            data-testid={`link-github-${project.id}`}
+                            aria-label={`Open ${project.title} GitHub repository`}
+                            whileHover={reduceMotion ? undefined : { y: -2 }}
+                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                          >
+                            <Github className="h-4 w-4" aria-hidden="true" />
+                            <span>GitHub</span>
+                          </m.a>
+                          <m.button
+                            type="button"
+                            onClick={(event) => openDetails(project, event.currentTarget)}
+                            className="project-link project-link--quiet"
+                            data-testid={`button-details-${project.id}`}
+                            aria-label={`Baca selengkapnya tentang ${project.title}`}
+                            whileHover={reduceMotion ? undefined : { y: -2 }}
+                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                          >
+                            Detail <span aria-hidden="true">+</span>
+                          </m.button>
+                        </div>
+                      </div>
                     </article>
                   );
                 })}
@@ -678,7 +717,7 @@ export default function ProjectsSection() {
                 href={modal.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="project-link project-link--quiet"
+                className="project-link project-link--quiet project-github-link"
                 data-testid="modal-link-github"
               >
                 <Github className="h-4 w-4" aria-hidden="true" />

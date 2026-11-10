@@ -136,30 +136,23 @@ export default function GitHubSection() {
     <section id="github" className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
 
-        <div className="text-center mb-14">
-          <Reveal>
-          <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">Code / projects</p>
-          <h2 className="portfolio-section-heading font-bold text-[#211f1b] mb-4">
-            GitHub
-          </h2>
-          </Reveal>
-          <div className="rgb-divider w-24 mx-auto mb-5" />
-          <Reveal>
-          <p className="text-[#6d6a62] max-w-md mx-auto text-lg leading-relaxed">
-            A few repositories and experiments I’m working on.
-          </p>
-          </Reveal>
-        </div>
+        <Reveal as="header" className="github-heading">
+          <div>
+            <p className="section-kicker">Code / projects</p>
+            <h2 className="portfolio-section-heading">GitHub</h2>
+          </div>
+          <p className="github-description">A few repositories and experiments I’m working on.</p>
+        </Reveal>
 
         {/* Stats bar */}
         {stats && (
-          <Reveal className="flex justify-center gap-6 md:gap-10 mb-10">
+          <Reveal className="github-stats">
             {[
               { label: "Repositori", value: stats.public_repos },
               { label: "Pengikut",    value: stats.followers    },
               { label: "Mengikuti",    value: stats.following    },
             ].map(({ label, value }) => (
-              <div key={label} className="text-center">
+              <div key={label}>
                 <p className="text-2xl font-black text-[#a43f2d] tabular-nums">{value}</p>
                 <p className="text-[#6d6a62] text-sm mt-0.5">{label}</p>
               </div>
@@ -194,12 +187,12 @@ export default function GitHubSection() {
           </p>
         )}
 
-        <div className="mt-8 flex justify-center">
+        <div className="github-profile-link">
           <a
             href={`https://github.com/${GITHUB_USERNAME}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-6 py-3 rounded-xl glass border border-[rgba(33,31,27,.16)] text-[#6d6a62] hover:text-[#211f1b] hover:border-[#a43f2d] transition-all duration-300 hover:-translate-y-0.5 text-sm font-medium"
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold"
           >
             <Github className="w-4 h-4" /> View all on GitHub
           </a>

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "../lib/motion";
+import { scrubBelt } from "./ScrollBelt";
 import { Cable, Layers3, Network, Router, Terminal, Waypoints } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { DiVisualstudio } from "react-icons/di";
@@ -119,8 +121,22 @@ const bands: readonly TechnologyBand[] = [
 export default function TechnologyBands() {
   const [pressedTechnology, setPressedTechnology] = useState<{ bandId: string; name: string } | null>(null);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      section.querySelectorAll<HTMLElement>("[data-band-track]").forEach(track => {
+        const row = track.closest<HTMLElement>("[data-direction]");
+        if (row) scrubBelt(track, section, row.dataset.direction === "right");
+      });
+    });
+    return () => media.revert();
+  }, []);
+
   return (
-    <section
+    <section ref={sectionRef}
       id="technology-bands"
       className="technology-bands"
       aria-labelledby="technology-bands-title"
@@ -128,7 +144,7 @@ export default function TechnologyBands() {
       <h2 className="technology-bands__accessible-title" id="technology-bands-title">
         Technologies I use
       </h2>
-      <Reveal as="header" className="technology-bands__header">
+      <Reveal mount as="header" className="technology-bands__header">
         <div className="technology-bands__heading">
           <p className="technology-bands__eyebrow">
             <span>01</span>
@@ -143,7 +159,7 @@ export default function TechnologyBands() {
 
       <div className="technology-bands__rows">
         {bands.map((band) => (
-          <Reveal
+          <Reveal mount
             className={`technology-band technology-band--${band.id}`}
             key={band.id}
             data-band-id={band.id}
