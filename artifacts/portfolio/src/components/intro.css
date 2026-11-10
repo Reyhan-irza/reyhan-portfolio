@@ -1,0 +1,37 @@
+/* Ported from Rey’s supplied index (1).html. No prototype page/global styles. */
+#rv-intro{--bg:#07080b;--ink:#e9edf5;--mut:#8b93a5;--blue:#6f95ff;font-family:Inter,Helvetica Neue,Helvetica,Arial,sans-serif;box-sizing:border-box}
+#rv-intro *{box-sizing:border-box}
+#rv-intro{--S:min(108vw,720px,112vh);position:fixed;inset:0;z-index:100;overflow:hidden;color:var(--ink);contain:layout paint}
+#rv-intro .bg{position:absolute;inset:0;background:#07080b}
+#rv-intro .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 52%,rgba(26,40,84,.28),rgba(7,8,11,0) 62%)}
+#rv-intro .hair{position:absolute;left:12%;right:12%;top:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(150,180,255,.55),transparent);transform-origin:center}
+#rv-intro .logo{position:absolute;left:50%;top:50%;width:var(--S);height:var(--S);margin:calc(var(--S)/-2) 0 0 calc(var(--S)/-2);will-change:transform}
+#rv-intro .stage{position:absolute;inset:0;will-change:transform}
+#rv-intro .glow{position:absolute;left:2%;top:22%;width:96%;height:58%;background:radial-gradient(closest-side,rgba(70,120,255,.22),rgba(70,120,255,0));opacity:0}
+#rv-intro .piece{position:absolute;display:block;opacity:0;will-change:transform,opacity;user-select:none;-webkit-user-drag:none}
+#rv-intro .p1{left:5.9%;top:27.9%;width:56.4%}
+#rv-intro .p2{left:13.2%;top:42.7%;width:45%}
+#rv-intro .p3{left:47.4%;top:27.9%;width:47.4%}
+#rv-intro .full{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;user-select:none;-webkit-user-drag:none}
+#rv-intro .sheen{position:absolute;inset:0;overflow:hidden;opacity:0;pointer-events:none;mix-blend-mode:screen;-webkit-mask-size:100% 100%;mask-size:100% 100%}
+#rv-intro .sheen i{position:absolute;top:0;bottom:0;left:0;width:26%;background:linear-gradient(100deg,transparent,rgba(205,222,255,.6),transparent)}
+#rv-intro .type{position:absolute;left:0;right:0;top:calc(50% + var(--S)*.2);text-align:center;padding:0 12px}
+#rv-intro .rule{width:120px;height:1px;margin:0 auto 14px;background:linear-gradient(90deg,transparent,#7fa0ff,transparent);transform-origin:center}
+#rv-intro .name{margin:0;font-weight:500;font-size:clamp(11px,4.2vw,21px);letter-spacing:.34em;white-space:nowrap}
+#rv-intro .chars{display:inline-block;overflow:hidden;line-height:1;padding:.14em 0 .2em .34em}
+#rv-intro .ch{display:inline-block;will-change:transform}
+#rv-intro .sub{margin:10px 0 0;font-size:clamp(9px,2.6vw,11px);letter-spacing:.34em;color:var(--mut);text-transform:uppercase;padding-left:.34em}
+#rv-intro .ctrl{position:absolute;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));display:flex;gap:8px;z-index:3}
+#rv-intro .rv-btn{appearance:none;font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.03);
+  border:1px solid rgba(190,205,255,.28);border-radius:999px;min-height:40px;padding:0 16px;cursor:pointer;transition:background .2s,border-color .2s}
+#rv-intro .rv-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(190,205,255,.5)}
+#rv-intro .rv-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#rv-intro .rv-btn[disabled]{opacity:.4;cursor:default}
+#rv-intro .rv-btn.primary{background:#e9edf5;color:#07080b;border-color:#e9edf5;font-weight:600}
+#rv-intro .rv-btn.primary:hover{background:#fff}
+
+
+#rv-intro .ctrl .rv-btn {min-height:44px}
+@media(max-width:360px){#rv-intro .name{letter-spacing:.28em}}
+
+#rv-intro {background:transparent;min-height:0}

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
-import { gsap, MOTION } from "../lib/motion";
+import { gsap, SCENE } from "../lib/motion";
 import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
 import HeroTypingLoop from "./HeroTypingLoop";
@@ -13,19 +13,23 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
-        gsap.timeline({ defaults: { ease: MOTION.ease } })
+        gsap.timeline({ defaults: { ease: SCENE.ease } })
+          .addLabel("image", 0).addLabel("name", .18).addLabel("details", .65)
           .fromTo(".hero-mark-image", { scale: 1.15, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 1.6, clearProps: "transform,opacity" })
-          .fromTo("[data-hero-title-line]", { y: MOTION.cardY, opacity: 0 },
-            { y: 0, opacity: 1, duration: MOTION.reveal, stagger: MOTION.stagger, clearProps: "transform,opacity" }, "<")
-          .fromTo("[data-hero-kicker], [data-hero-lead-depth], [data-hero-callout-copy], [data-hero-action], [data-hero-github]",
-            { y: MOTION.y, opacity: 0 }, { y: 0, opacity: 1, duration: MOTION.text, stagger: MOTION.stagger, clearProps: "transform,opacity" }, "-=0.7")
+            { scale: 1, opacity: 1, duration: 1.5, clearProps: "transform,opacity" }, "image")
+          .fromTo("[data-hero-title-line]", { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" },
+            { yPercent: 0, rotation: 0, duration: SCENE.title, stagger: SCENE.lineStagger, clearProps: "transform" }, "name")
+          .fromTo("[data-hero-rule]", { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "name+=0.2")
+          .fromTo("[data-hero-kicker], [data-hero-bio], [data-hero-callout-copy], [data-hero-action], [data-hero-github]",
+            { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: SCENE.detail, stagger: .06, clearProps: "transform,opacity" }, "details")
           .fromTo(document.querySelector(".editorial-nav"), { opacity: 0 },
-            { opacity: 1, duration: MOTION.text, clearProps: "opacity" });
-        // Adapt the PRD background parallax to the existing RV identity visual.
-        gsap.to("[data-hero-bg]", { yPercent: 20, ease: "none",
-          scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
-        });
+            { opacity: 1, duration: .3, clearProps: "opacity" }, .15);
+        gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
+          id: "hero-depth", trigger: section, start: "top top", end: "bottom top",
+          scrub: SCENE.scrub, invalidateOnRefresh: true,
+        } }).to("[data-hero-title-depth]", { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
+          .to("[data-hero-bg]", { yPercent: 24, scale: 1.06 }, 0)
+          .to("[data-hero-scroll-cue]", { opacity: 0, y: -18, duration: .25 }, 0);
       }, section);
       return () => context.revert();
     });
@@ -68,19 +72,17 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
               </span>
             </p>
           </div>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-
-              <button type="button" data-hero-action onClick={() => scrollToSection("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
-                Lihat karya saya <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
-              </button>
-              <button type="button" data-hero-action onClick={() => scrollToSection("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
-                Hubungi saya <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-              </button>
-
+          <div className="hero-action-row mt-9 flex flex-wrap items-center gap-3">
+            <button type="button" data-hero-action onClick={() => scrollToSection("#projects")} className="hero-primary group inline-flex min-h-12 items-center gap-3 px-5 text-xs font-bold uppercase tracking-[.11em]">
+              Lihat karya saya <ArrowDown className="hero-arrow-down h-4 w-4 transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
+            </button>
+            <button type="button" data-hero-action onClick={() => scrollToSection("#contact")} className="hero-secondary group inline-flex min-h-12 items-center gap-2 px-5 text-xs uppercase tracking-[.1em] text-white/70 transition-colors hover:text-white">
+              Hubungi saya <MoveUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+            </button>
+            <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="hero-secondary inline-flex min-h-12 items-center gap-2 text-xs tracking-[.04em] text-white/50 transition-colors hover:text-[#9da9ff]">
+              GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
           </div>
-          <a data-hero-github href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.15em] text-white/50 transition-colors hover:text-[#9da9ff]">
-            GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
           </div>
         </div>
 

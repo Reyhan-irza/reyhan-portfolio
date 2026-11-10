@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap, MOTION } from "../lib/motion";
+import { gsap, SCENE } from "../lib/motion";
 
 type BoundaryStyle = "trace" | "return" | "resolve";
 
@@ -18,9 +18,9 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
         gsap.fromTo(boundary, { scaleX: 0, opacity: 0, transformOrigin: "center" }, {
-          scaleX: 1, opacity: 1, duration: MOTION.reveal, ease: MOTION.ease,
-          scrollTrigger: { trigger: boundary, start: MOTION.start, once: true },
-          clearProps: "transform,opacity",
+          scaleX: 1, opacity: 1, ease: "none", scrollTrigger: {
+            trigger: boundary, start: "clamp(top 95%)", end: "clamp(top 55%)", scrub: SCENE.scrub,
+          },
         });
       }, boundary);
       return () => context.revert();

@@ -282,3 +282,74 @@ body { background: var(--canvas); }
   [data-reveal], [data-reveal-group], [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
   .typing-cursor { display: none; }
 }
+
+/* Motion scene masks and distinct transform owners. */
+.motion-heading-line { padding-bottom: .08em; margin-bottom: -.08em; }
+.motion-heading-line-mask { overflow: clip; }
+.portfolio-shell .project-image-depth { position: absolute; inset: -3% 6.5%; }
+.portfolio-shell .project-image-depth .project-screenshot { object-fit: contain; opacity: 1; }
+.portfolio-shell .mobile-nav-panel [data-menu-item] { overflow: hidden; flex-shrink: 0; font-size: clamp(1.5rem,5.7vw,2.5rem); font-weight: 400; letter-spacing: -.04em; }
+.portfolio-shell .mobile-nav-panel > * { flex-shrink: 0; }
+.portfolio-shell .menu-line-inner { display:flex; width:100%; align-items:center; gap:1.25rem; }
+.portfolio-shell .mobile-nav-panel { box-shadow:none; }
+.portfolio-shell :is(#projects,#achievement,#github)[data-section-theme] { border-radius:1.5rem; }
+.portfolio-shell .hero-identity-frame { contain:paint; }
+@media(max-width:1023px) {
+  .portfolio-shell .hero-identity-frame { width:clamp(6rem,22vw,10rem);height:clamp(6rem,22vw,10rem);top:-1rem; }
+}
+@media(max-width:767px) {
+  .portfolio-shell .hero-section h1 > span { padding-bottom:.09em;margin-bottom:-.09em; }
+}
+@media(max-height:719px) and (min-width:1024px) {
+  .portfolio-shell [data-project-track] { display:block;width:100%;transform:none!important; }
+  .portfolio-shell .project-row { width:100%;flex:none; }
+  .portfolio-shell [data-project-track-viewport] { overflow:visible; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .motion-reading-line { opacity:1!important; }
+  .project-image-depth { transform:none!important; }
+}
+
+/* GSAP owns navigation opacity during the logo handoff. */
+.portfolio-shell .editorial-nav { transition: none; }
+
+/* Keep the outgoing page readable under the sliding menu edge. */
+.portfolio-shell .nav-scrim { background: rgb(2 4 10 / 12%); }
+
+@font-face { font-family:'RV Work Display'; src:url('./assets/type/barlow-condensed-latin-600-normal.woff2') format('woff2'); font-style:normal; font-weight:600; font-display:swap; }
+@font-face { font-family:'RV Editorial'; src:url('./assets/type/fraunces-latin-500-italic.woff2') format('woff2'); font-style:italic; font-weight:500; font-display:swap; }
+/* The work index is a text-only strip; the technology bands pair larger marks with names. */
+.work-index { overflow:clip; padding-block:clamp(.65rem,1.3vw,1.25rem); margin-block:0 clamp(2rem,5vw,4.5rem); border-block:1px solid var(--rule); }
+.work-index__track,.work-index__cycle { display:flex; width:max-content; align-items:center; }
+.work-index__cycle { flex:none; min-width:100vw; justify-content:space-between; }
+.work-index__cycle span { display:inline-flex; align-items:center; gap:.9em; padding-inline-end:.9em; color:var(--ink-primary); font:600 clamp(2rem,4.4vw,4.5rem)/1.08 'RV Work Display',sans-serif; letter-spacing:-.02em; white-space:nowrap; }
+.work-index__cycle span:nth-child(2) { font-weight:500; font-family:'RV Editorial',Georgia,serif; font-style:italic; }
+.work-index__cycle span::after { content:''; width:1.2em; height:1px; background:var(--rule); }
+.portfolio-shell .projects-title .project-heading-accent { font-family:'RV Editorial',Georgia,serif; font-style:italic; font-weight:500; letter-spacing:-.055em; }
+.project-aperture,.project-aperture__mask { overflow:clip; }
+.portfolio-shell .project-name { overflow:clip; font-family:'RV Work Display',sans-serif; font-weight:600; letter-spacing:-.022em; }
+.project-rail-marker { transition:none; }
+@media (min-width:768px) and (max-width:1023px) {
+  .portfolio-shell .projects-heading { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1.75rem; }
+  .portfolio-shell .project-row { min-height:0; padding-block:clamp(2rem,5vw,3rem); gap:clamp(1.6rem,4vw,3rem); }
+  .portfolio-shell .project-actions { flex-wrap:wrap; }
+}
+.portfolio-shell [data-project-name] { display:block; padding-bottom:.1em; }
+.portfolio-shell #github .github-heading { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); align-items:end; gap:2rem; margin-bottom:0; padding-bottom:clamp(1.25rem,3vw,2.5rem); border-bottom:1px solid var(--rule); text-align:left; }
+.portfolio-shell #github .github-heading h2 { width:fit-content; max-width:100%; margin:.7rem 0 0; color:var(--ink-primary); font:600 clamp(3.6rem,8.8vw,7.5rem)/.98 'RV Work Display',sans-serif; letter-spacing:-.025em; }
+.portfolio-shell #github .github-description { max-width:30ch; margin:0; font:italic 500 clamp(1.22rem,2vw,1.75rem)/1.32 'RV Editorial',Georgia,serif; color:var(--ink-secondary); }
+.github-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); text-align:left; margin:0 0 2rem; }
+.github-stats > div { border-bottom:1px solid var(--rule); padding:1rem .3rem 1rem 0; }
+.github-profile-link { display:flex; justify-content:flex-start; margin-top:1.1rem; }
+.portfolio-shell #home .hero-action-row [data-hero-github] { margin:0; justify-content:center; padding-inline:1.2rem; white-space:nowrap; text-transform:none; }
+.project-link.project-github-link { text-transform:none; letter-spacing:.025em; }
+@media (max-width:760px) {
+  .portfolio-shell #github .github-heading { grid-template-columns:minmax(0,1fr); gap:.8rem; }
+  .portfolio-shell #github .github-description { max-width:35ch; }
+  .portfolio-shell #home .hero-action-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center; gap:.45rem .6rem; }
+  .portfolio-shell #home .hero-action-row > * { width:100%; min-height:48px; justify-content:center; white-space:nowrap; }
+  .portfolio-shell #home .hero-action-row .hero-primary { grid-column:1/-1; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .work-index { display:none; }
+}

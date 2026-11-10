@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { gsap, ScrollTrigger, MOTION } from "../lib/motion";
+import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
 import ThemeToggle from "./ThemeToggle";
@@ -183,7 +183,8 @@ export default function Navbar() {
     const panel = panelRef.current;
     const trigger = menuTriggerRef.current;
     if (!panel || !trigger) return;
-    const targets = panel.querySelectorAll<HTMLElement>("[data-menu-item]");
+    const targets = panel.querySelectorAll<HTMLElement>("[data-menu-line]");
+    const footer = panel.querySelector<HTMLElement>("[data-menu-footer]");
     const glyphLines = trigger.querySelectorAll<HTMLElement>(".mobile-menu-line");
     const media = gsap.matchMedia();
     media.add(
@@ -200,7 +201,8 @@ export default function Navbar() {
             // Static mode avoids a cached translation after a live preference change.
             const apply = (open: boolean) => {
               gsap.set(panel, { display: open ? "flex" : "none", x: 0, y: 0, xPercent: 0, yPercent: 0 });
-              gsap.set(targets, { x: 0, y: 0, opacity: 1, visibility: "visible" });
+              gsap.set(targets, { x: 0, y: 0, yPercent: 0, rotation: 0, opacity: 1, visibility: "visible" });
+              gsap.set(footer, { opacity: 1, y: 0 });
               gsap.set(glyphLines[0], { y: open ? 5 : 0, rotation: open ? 45 : 0 });
               gsap.set(glyphLines[1], { scaleX: open ? 0 : 1, opacity: open ? 0 : 1 });
               gsap.set(glyphLines[2], { y: open ? -5 : 0, rotation: open ? -45 : 0 });
@@ -215,20 +217,20 @@ export default function Navbar() {
             pendingTarget.current = null;
             if (target) scrollToSection(target);
           };
-          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: 0, yPercent: -100 });
+          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: 100, yPercent: 0 });
           gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
             .set(panel, { display: "flex" })
-            .fromTo(panel, { yPercent: reduced ? 0 : -100 }, {
-              yPercent: 0, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase,
+            .fromTo(panel, { xPercent: 100, yPercent: 0 }, {
+              xPercent: 0, duration: SCENE.menu, ease: SCENE.curtainEase,
             })
-            .fromTo(targets, { y: reduced ? 0 : MOTION.y, opacity: reduced ? 1 : 0 }, {
-              y: 0, opacity: 1, duration: reduced ? 0 : MOTION.text,
-              stagger: reduced ? 0 : MOTION.stagger, ease: MOTION.ease,
-            }, reduced ? 0 : "-=0.35")
-            .to(glyphLines[0], { y: 5, rotation: 45, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0)
-            .to(glyphLines[1], { scaleX: 0, opacity: 0, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0)
-            .to(glyphLines[2], { y: -5, rotation: -45, duration: reduced ? 0 : MOTION.menu, ease: MOTION.menuEase }, 0);
+            .fromTo(targets, { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" }, {
+              yPercent: 0, rotation: 0, duration: SCENE.detail, stagger: SCENE.menuStagger, ease: SCENE.ease,
+            }, .24)
+            .fromTo(footer, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: SCENE.detail }, .4)
+            .to(glyphLines[0], { y: 5, rotation: 45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0)
+            .to(glyphLines[1], { scaleX: 0, opacity: 0, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0)
+            .to(glyphLines[2], { y: -5, rotation: -45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0);
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
@@ -295,7 +297,7 @@ export default function Navbar() {
                 {activeHref === link.href && <span className="absolute -bottom-1 left-0 h-px w-full bg-[#8290ff]" />}
               </a>
             ))}
-            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[11px] uppercase tracking-[.1em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
+            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 whitespace-nowrap border border-white/15 px-3 py-2 text-xs tracking-[.035em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
               GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
             </a>
           </div>
@@ -359,13 +361,14 @@ export default function Navbar() {
               className="flex min-h-[62px] items-center gap-5 border-b border-white/[.07] text-[15px] font-semibold text-white/75 transition-colors hover:text-white"
               style={{ "--menu-index": index } as CSSProperties}
             >
-              <span className="font-mono text-[10px] text-[#7887fa]">0{index + 1}</span>
+              <span data-menu-line className="menu-line-inner"><span className="font-mono text-[10px] text-[#7887fa]">0{index + 1}</span>
               {link.label}
-              {activeHref === link.href && <span className="ml-auto h-1.5 w-1.5 bg-[#8290ff]" />}
+              {activeHref === link.href && <span data-menu-active className="ml-auto h-1.5 w-1.5 bg-[#8290ff]" />}
+              </span>
             </a>
           ))}
         </nav>
-        <div data-menu-item className="mt-auto flex items-end justify-between">
+        <div data-menu-footer className="mt-auto flex items-end justify-between">
           <div>
             <p className="text-xs text-white/70">Reyhan Irza Alvano</p>
             <p className="mt-1 font-mono text-[9px] uppercase tracking-[.17em] text-white/35">Vierlykirk / Indonesia</p>

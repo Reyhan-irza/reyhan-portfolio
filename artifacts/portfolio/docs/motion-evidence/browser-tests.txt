@@ -1,0 +1,53 @@
+▶ mobile intro pacing, accessibility, visibility, and re-entry
+  ✔ 390x844: paced, completes, and stays within viewport (5858.900775ms)
+  ℹ Intro visible time: 5017ms.
+  ✔ 360x800: paced, completes, and stays within viewport (5604.565189ms)
+  ℹ Intro visible time: 4998ms.
+  ✔ resizing during the intro does not restart it or create overflow (5849.034854ms)
+  ℹ Intro completed after viewport changes in 5190ms.
+  ✔ reduced motion bypasses the intro without hiding page content (690.330618ms)
+  ✔ an intro image failure releases the page instead of trapping the visitor (869.533906ms)
+  ✔ Escape, Skip, reload, and route re-entry remain usable (7793.358197ms)
+  ℹ Route re-entry intro visible time: 4959ms.
+  ✔ intro pauses for a hidden visibilitychange and resumes when visible (6944.837453ms)
+  ℹ Elapsed wall time including synthetic hidden interval: 6013ms.
+  ✔ 4x CPU throttling does not leave the intro stuck or overflowing (8829.007352ms)
+  ℹ Intro visible time at CPU throttling 4x: 5121ms.
+✔ mobile intro pacing, accessibility, visibility, and re-entry (44013.716599ms)
+✔ mobile navigation stays reachable and contains scrolling on short screens (7098.067923ms)
+▶ PRD production motion acceptance
+  ✔ marquee continuity at 360/390/430/tablet/desktop (799.353801ms)
+  ✔ body theme follows section boundaries both ways (3911.549081ms)
+  ✔ project modal locks Lenis and restores keyboard focus (516.543009ms)
+  ✔ live reduced motion keeps menu usable and every reveal visible (1251.645998ms)
+  ✔ route cleanup releases Lenis and the body lock (5726.446915ms)
+  ✔ CPU 4x scrolling progresses without hidden reading content (12132.412453ms)
+  ℹ CPU 4x frame intervals (ms): {"median":16.699999999999818,"p95":16.80000000000109,"over50ms":6}
+✔ PRD production motion acceptance (30852.02926ms)
+▶ journey and both certificates stay visible and usable with reduced motion
+  ✔ all education rows and achievement cards are fully visible before scrolling (7.392536ms)
+  ✔ both certificate previews load and open their full-size files (996.523485ms)
+  ✔ rating submission recovers from a summary error and persists the selection (9359.817858ms)
+  ✔ themes follow the system, persist an explicit choice, and sync across tabs (3357.96441ms)
+  ✔ mobile intro fits, typing changes, and music controls remain inside their card (1409.078981ms)
+  ✔ theme toggle remains functional when localStorage is blocked (779.751228ms)
+  ﹣ a rendering failure leaves the static portfolio reachable (0.282443ms) # SKIP
+✔ journey and both certificates stay visible and usable with reduced motion (16846.739362ms)
+▶ scroll-linked sections stay aligned when phone width changes
+  ✔ hero scroll motion continues after resizing across phone layouts (1862.700085ms)
+  ✔ education progress matches the resized timeline position (1776.924772ms)
+  ✔ award content remains revealed when resizing partway through each card (2370.439814ms)
+  ✔ reveals stay visible after reverse scroll and live reduced-motion changes (2930.309272ms)
+  ✔ mobile card zoom settles once and does not reverse (2006.861995ms)
+  ﹣ mobile address-bar height changes do not reset scroll triggers (0.611063ms) # SKIP
+  ✔ headings and copy stay readable at the required viewport widths (7446.96042ms)
+  ✔ desktop project story still pins while scrolling (2480.579547ms)
+✔ scroll-linked sections stay aligned when phone width changes (22237.364027ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 126560.35934

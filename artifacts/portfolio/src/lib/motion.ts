@@ -1,7 +1,9 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 // Mobile browser chrome changes viewport height during a swipe. Recalculating
 // every trigger then resets scrubbed poses mid-gesture; real width/orientation
@@ -32,9 +34,12 @@ export function cubicBezierEase(
   };
 }
 
-export { gsap, ScrollTrigger };
+export { gsap, ScrollTrigger, SplitText };
 /** Shared PRD motion tokens; phase-specific exceptions live beside their timelines. */
 export const MOTION = {
   ease: "power3.out", menuEase: "power4.inOut", reveal: 0.9, text: 0.7,
   menu: 0.9, y: 40, cardY: 60, stagger: 0.07, start: "top 88%", lerp: 0.1,
 } as const;
+
+/** Scene timings fitted visually; these are not claimed to be IbraCode source values. */
+export const SCENE = { title: 1.05, lineStagger: .09, detail: .65, menu: .85, menuStagger: .065, scrub: .35, ease: "power3.out", curtainEase: "power4.inOut" } as const;

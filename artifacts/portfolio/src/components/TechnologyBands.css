@@ -96,22 +96,14 @@
 
 .technology-band {
   display: grid;
-  min-height: clamp(7rem, 10vw, 8.6rem);
-  grid-template-columns: clamp(6.8rem, 15vw, 12rem) minmax(0, 1fr);
+  min-height: clamp(5rem, 8vw, 7.6rem);
+  grid-template-columns: minmax(11.5rem, 15vw) minmax(0, 1fr);
   align-items: center;
   border-top: 1px solid var(--tb-rule);
 }
 
 .technology-band:last-child {
   border-bottom: 1px solid var(--tb-rule);
-}
-
-.technology-band--system {
-  transform: translateY(8px);
-}
-
-.technology-band--network {
-  transform: translateY(-5px);
 }
 
 .technology-band__label {
@@ -143,238 +135,42 @@
   letter-spacing: .09em;
 }
 
-.technology-band__entry {
-  min-width: 0;
-}
-
-.technology-band__viewport {
-  position: relative;
-  min-width: 0;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 94%, transparent);
-}
-
-.technology-band__track {
-  display: flex;
-  width: max-content;
-  min-width: max-content;
-  align-items: center;
-  animation: technology-marquee 25s linear infinite;
-}
-
+.technology-band__entry, .technology-band__viewport { min-width: 0; }
+.technology-band__viewport { position: relative; overflow: clip; mask-image: linear-gradient(90deg, transparent, #000 .55rem, #000 calc(100% - .55rem), transparent); }
+.technology-band__track { display: flex; width: max-content; align-items: center; }
 .technology-band__sequence {
-  display: flex;
-  flex: 0 0 auto;
-  width: max-content;
-  min-width: 100vw;
-  align-items: center;
-  justify-content: space-around;
-  margin: 0;
-  padding: 0 clamp(1rem, 3vw, 3.4rem);
-  list-style: none;
+  --item-gap: clamp(1.8rem, 4vw, 4rem);
+  display: flex; flex: none; width: max-content; min-width: 100vw; align-items: center;
+  justify-content: space-between; gap: var(--item-gap); padding: 0 var(--item-gap) 0 0; margin: 0; list-style: none;
 }
-
-.technology-band__item {
-  display: inline-flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .32rem;
-  width: max-content;
-  min-width: 3.25rem;
-  max-width: 8rem;
-  min-height: 2.75rem;
-  padding: .25rem .15rem;
-  box-sizing: border-box;
-  opacity: 1;
-  transition:
-    opacity .24s ease,
-    transform .32s cubic-bezier(.22, 1, .36, 1),
-    filter .24s ease;
-}
-
+.technology-band__item { display: inline-flex; flex: none; align-items: center; gap: .58em; }
 .technology-band__mark {
-  display: grid;
-  width: 1.25rem;
-  height: 1.25rem;
-  place-items: center;
-  color: var(--tb-secondary);
+  flex: none; display: grid; place-items: center; color: var(--ink-primary);
+  width: clamp(2.45rem, 4.6vw, 4.25rem); aspect-ratio: 1;
 }
-
-.technology-band__mark svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
+.technology-band__mark svg { display: block; width: 100%; height: 100%; }
 .technology-band__technology-name {
-  max-width: 7.5rem;
-  color: var(--tb-secondary);
-  font-size: .72rem;
-  line-height: 1.15;
-  text-align: center;
-  overflow-wrap: normal;
+  color: var(--ink-secondary); font: 600 clamp(1.65rem, 2.7vw, 2.85rem)/1.05 'RV Work Display',sans-serif;
+  letter-spacing: -.02em; white-space: nowrap;
 }
-
-.technology-band--system .technology-band__viewport {
-  opacity: 1;
+.technology-band--system .technology-band__technology-name { font-family: 'RV Editorial', Georgia, serif; font-style: italic; font-weight: 500; }
+.technology-band__item.is-touch-active .technology-band__mark { color: var(--signal); }
+@media (hover:hover) and (pointer:fine) { .technology-band__item:hover .technology-band__mark { color:var(--signal); } }
+.technology-bands .technology-bands__header { margin-bottom: clamp(1rem,3vw,2.5rem); }
+@media (max-width:900px) {
+  .portfolio-shell .technology-bands { padding: 2rem 1.25rem 2.35rem; }
+  .technology-bands__header { grid-template-columns:1fr; gap:.45rem; }
+  .technology-bands__intro { line-height:1.45; }
+  .technology-bands .technology-band { grid-template-columns:1fr; padding:.75rem 0 .95rem; gap:.55rem; min-height:0; }
+  .technology-band__label { gap:.4rem; }
+  .technology-band__name { font-size:.7rem; }
+  .technology-band__sequence { --item-gap:clamp(1.5rem,6vw,2.4rem); }
 }
-
-.technology-band--network .technology-band__viewport {
-  opacity: 1;
+@media (prefers-reduced-motion:reduce) {
+  .technology-band__viewport { overflow:visible; mask-image:none; }
+  .technology-band__track { display:block; width:100%; }
+  .technology-band__sequence { flex-wrap:wrap; width:100%; min-width:0; justify-content:flex-start; padding:0; gap:.85rem 1.2rem; }
+  .technology-band__sequence[aria-hidden="true"] { display:none; }
+  .technology-band__item { max-width:100%; }
+  .technology-band__technology-name { white-space:normal; overflow-wrap:anywhere; }
 }
-
-@media (hover: hover) and (pointer: fine) {
-  .technology-band__track:hover .technology-band__item {
-    opacity: .42;
-  }
-
-  .technology-band__track .technology-band__item:hover {
-    filter: drop-shadow(0 0 9px rgba(231,238,250,.24));
-    transform: scale(1.12);
-    opacity: 1;
-  }
-}
-
-.technology-band__item:active {
-  filter: brightness(1.18);
-  transform: scale(1.08);
-  opacity: 1;
-}
-
-.technology-band__item.is-touch-active {
-  filter: brightness(1.18) drop-shadow(0 0 9px rgba(231,238,250,.2));
-  transform: scale(1.08);
-  opacity: 1;
-}
-
-@media (max-width: 760px) {
-  .technology-bands {
-    padding-inline: 1.1rem;
-  }
-
-  .technology-bands__header {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .technology-bands__intro {
-    max-width: 34rem;
-  }
-
-  .technology-band {
-    min-height: 8rem;
-    grid-template-columns: 1fr;
-    gap: .85rem;
-    padding-block: 1rem;
-    transform: none;
-  }
-
-  .technology-band__label {
-    gap: .3rem;
-    padding-right: 0;
-  }
-
-  .technology-band__number,
-  .technology-band__slash {
-    font-size: .54rem;
-  }
-
-  .technology-band__name {
-    font-size: .66rem;
-    letter-spacing: .055em;
-  }
-
-  .technology-band__item {
-    width: max-content;
-    min-width: 4.25rem;
-    max-width: 8rem;
-    min-height: 3.8rem;
-    gap: .45rem;
-  }
-
-  .technology-band__mark {
-    width: 1.65rem;
-    height: 1.65rem;
-  }
-
-  .technology-band__technology-name {
-    font-size: .78rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .technology-bands {
-    padding-inline: .85rem;
-  }
-
-  .technology-band {
-    min-height: 8.25rem;
-  }
-
-  .technology-band__sequence {
-    justify-content: space-between;
-    padding-inline: .85rem;
-  }
-}
-
-@media (min-width: 761px) and (max-width: 900px) {
-  .technology-band {
-    grid-template-columns: 8.5rem minmax(0, 1fr);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .technology-band {
-    min-height: 0;
-    align-items: start;
-    padding-block: 1.35rem;
-    transform: none;
-  }
-
-  .technology-band__entry,
-  .technology-band__viewport {
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  .technology-band__track {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    transform: none !important;
-    animation: none !important;
-    will-change: auto;
-  }
-
-  .technology-band__sequence {
-    display: flex;
-    width: 100%;
-    min-width: 0;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: .7rem .15rem;
-    padding: 0;
-  }
-
-  .technology-band__sequence[aria-hidden="true"] {
-    display: none;
-  }
-
-  .technology-band__item {
-    width: max-content;
-    min-width: 4.25rem;
-    max-width: 8rem;
-    min-height: 3.8rem;
-    transition: none;
-  }
-}
-
-@keyframes technology-marquee { to { transform: translateX(-50%); } }
-.technology-band[data-direction="right"] .technology-band__track { animation-direction: reverse; }
-.technology-band__viewport:is(:hover, :focus-within) .technology-band__track { animation-play-state: paused; }

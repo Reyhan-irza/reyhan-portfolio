@@ -13,7 +13,9 @@ export function useLenis(enabled = true) {
       frame = requestAnimationFrame(() => {
         if (disposed || ScrollTrigger.isScrolling()) return;
         pending = false;
-        ScrollTrigger.refresh(true);
+        // The frame and scrollEnd already defer measurement until idle. A second
+        // resize debounce can measure the transient lines before SplitText reflows.
+        ScrollTrigger.refresh();
       });
     };
     const afterScroll = () => { if (pending) refresh(); };
