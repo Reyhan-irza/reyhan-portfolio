@@ -297,7 +297,7 @@ export default function Navbar() {
                 {activeHref === link.href && <span className="absolute -bottom-1 left-0 h-px w-full bg-[#8290ff]" />}
               </a>
             ))}
-            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-white/15 px-3 py-2 text-[11px] uppercase tracking-[.1em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
+            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 whitespace-nowrap border border-white/15 px-3 py-2 text-xs tracking-[.035em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
               GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
             </a>
           </div>

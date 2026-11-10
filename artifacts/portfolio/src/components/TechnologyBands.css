@@ -96,22 +96,14 @@
 
 .technology-band {
   display: grid;
-  min-height: clamp(7rem, 10vw, 8.6rem);
-  grid-template-columns: clamp(6.8rem, 15vw, 12rem) minmax(0, 1fr);
+  min-height: clamp(5rem, 8vw, 7.6rem);
+  grid-template-columns: minmax(11.5rem, 15vw) minmax(0, 1fr);
   align-items: center;
   border-top: 1px solid var(--tb-rule);
 }
 
 .technology-band:last-child {
   border-bottom: 1px solid var(--tb-rule);
-}
-
-.technology-band--system {
-  transform: translateY(8px);
-}
-
-.technology-band--network {
-  transform: translateY(-5px);
 }
 
 .technology-band__label {
@@ -164,9 +156,8 @@
 .technology-band--system .technology-band__technology-name { font-family: 'RV Editorial', Georgia, serif; font-style: italic; font-weight: 500; }
 .technology-band__item.is-touch-active .technology-band__mark { color: var(--signal); }
 @media (hover:hover) and (pointer:fine) { .technology-band__item:hover .technology-band__mark { color:var(--signal); } }
-.technology-bands .technology-band { min-height: clamp(5rem,8vw,7.6rem); transform: none; }
 .technology-bands .technology-bands__header { margin-bottom: clamp(1rem,3vw,2.5rem); }
-@media (max-width:760px) {
+@media (max-width:900px) {
   .portfolio-shell .technology-bands { padding: 2rem 1.25rem 2.35rem; }
   .technology-bands__header { grid-template-columns:1fr; gap:.45rem; }
   .technology-bands__intro { line-height:1.45; }

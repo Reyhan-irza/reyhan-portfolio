@@ -421,7 +421,7 @@ export default function ProjectsSection() {
     >
       <div className="relative z-10 mx-auto max-w-6xl">
         <Reveal
-          className="mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
+          className="projects-heading mb-20 flex flex-col gap-8 md:mb-28 md:flex-row md:items-end md:justify-between"
         >
           <div>
             <p className="projects-kicker mb-5">Selected work</p>
