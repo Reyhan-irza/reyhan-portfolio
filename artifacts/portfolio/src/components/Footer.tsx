@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import Reveal from "./Reveal";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
+import ClosingMarquee from "./ClosingMarquee";
 import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
@@ -90,6 +91,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <ClosingMarquee />
     </footer>
   );
 }

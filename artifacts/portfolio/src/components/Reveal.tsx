@@ -33,23 +33,33 @@ export default function Reveal({ children, as = "div", media = false, tall = fal
       }
       const context = gsap.context(() => {
         const finish = () => { completed.current = true; element.dataset.revealed = "true"; };
-        if (heading) SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,
-          linesClass: "motion-heading-line", onSplit: split => {
-            if (completed.current) return gsap.set(split.lines, { yPercent: 0 });
-            const scene = gsap.timeline({ defaults: { ease: SCENE.ease }, onComplete: finish,
-              scrollTrigger: { trigger: element, start: "clamp(top 88%)", once: true } });
-            scene.from(split.lines, { yPercent: 110, rotation: 2, transformOrigin: "0% 100%",
-              duration: SCENE.title, stagger: SCENE.lineStagger, clearProps: "transform" }, 0);
+        if (heading) {
+          const revealLines = (lines: Element[]) => {
+            const scene = gsap.timeline({
+              defaults: { ease: SCENE.ease },
+              scrollTrigger: { trigger: element, start: "clamp(top 92%)",
+                toggleActions: "play none none reverse" },
+              onComplete: () => { element.dataset.headingOpen = "true"; },
+              onUpdate: function () {
+                if (this.progress() < 1 && element.hasAttribute("data-heading-open")) delete element.dataset.headingOpen;
+              },
+            });
+            scene.fromTo(lines, { yPercent: 108, rotation: 1.3, transformOrigin: "0% 100%" },
+              { yPercent: 0, rotation: 0, duration: SCENE.title, stagger: SCENE.lineStagger }, 0);
             const copy = element.querySelectorAll("p");
-            if (copy.length) scene.fromTo(copy, { y: 16, opacity: 0 }, { y: 0, opacity: 1,
-              duration: SCENE.detail, stagger: .07, clearProps: "transform,opacity" }, .2);
+            if (copy.length) scene.fromTo(copy, { y: 16, opacity: .15 },
+              { y: 0, opacity: 1, duration: SCENE.detail, stagger: .09 }, .28);
             return scene;
-          },
-        });
+          };
+          const authored = Array.from(heading.querySelectorAll("[data-heading-line]"));
+          if (authored.length) revealLines(authored);
+          else SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,
+            linesClass: "motion-heading-line", onSplit: split => revealLines(split.lines) });
+        }
         else gsap.fromTo(element, { opacity: 0 }, { opacity: 1, duration: SCENE.detail, ease: SCENE.ease,
           scrollTrigger: { trigger: element, start: "clamp(top 90%)", once: true }, onComplete: finish, clearProps: "opacity" });
       }, element);
-      return () => context.revert();
+      return () => { context.revert(); delete element.dataset.headingOpen; };
     });
     return () => mediaQuery.revert();
   }, [mount, tall]);

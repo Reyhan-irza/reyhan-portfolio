@@ -3,7 +3,6 @@ import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
-import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -32,7 +31,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const trigger = ScrollTrigger.create({ start: 32, end: "max",
-      onToggle: (self) => setScrolled(self.isActive),
+      onToggle: (self) => setScrolled(self.scroll() > 32),
       onRefresh: () => setScrolled(window.scrollY > 32),
     });
     setScrolled(window.scrollY > 32);
@@ -303,7 +302,6 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-          <ThemeToggle />
           <button
             ref={menuTriggerRef}
             type="button"

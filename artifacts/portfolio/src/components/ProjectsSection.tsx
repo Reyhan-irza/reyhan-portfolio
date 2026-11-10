@@ -1,12 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { FocusEvent, PointerEvent } from "react";
+import type { PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
-import { scrubBelt } from "./ScrollBelt";
 
 // Product previews are direct captures of the linked public sites, not recreated UI.
 const projects = [
@@ -78,17 +77,10 @@ export default function ProjectsSection() {
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const skipFocusRestoreRef = useRef(false);
   const viewedRef = useRef(new Set<number>());
-  const revealedProjects = useRef(new Set<number>());
   const didAchieve = useRef(false);
   const activeProjectRef = useRef(0);
   const [activeProject, setActiveProject] = useState(0);
-  const [pinnedStoryActive, setPinnedStoryActive] = useState(false);
-  const [focusedProject, setFocusedProject] = useState<number | null>(null);
   const [modal, setModal] = useState<Project | null>(null);
-
-  const updatePinnedStoryActive = (active: boolean) => {
-    setPinnedStoryActive(active);
-  };
 
   const updateActiveProject = (index: number) => {
     const next = Math.max(0, Math.min(projects.length - 1, index));
@@ -102,202 +94,39 @@ export default function ProjectsSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
-    let restoreProjectFrame = 0;
-    media.add(
-      {
-        reduced: "(prefers-reduced-motion: reduce)",
-        motion: "(prefers-reduced-motion: no-preference)",
-        desktop: "(min-width: 1024px) and (min-height: 720px)",
-      },
-      (mediaContext) => {
-        if (mediaContext.conditions?.reduced) return;
-        let resizeObserver: ResizeObserver | undefined;
-        let refreshFrame = 0;
-        let sizedTrack: HTMLElement | null = null;
-        let horizontalStoryPinned = false;
-        const context = gsap.context(() => {
-          const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
-          const viewport = section.querySelector<HTMLElement>("[data-project-track-viewport]");
-          const track = section.querySelector<HTMLElement>("[data-project-track]");
-          const stage = section.querySelector<HTMLElement>("[data-project-stage]");
-          const hasHorizontalStory = Boolean(
-            mediaContext.conditions?.desktop && viewport && track && stage && rows.length > 1,
-          );
-
-          const indexBelt = section.querySelector<HTMLElement>("[data-work-belt]");
-          const indexRuler = section.querySelector<HTMLElement>("[data-work-index]");
-          if (indexBelt && indexRuler) scrubBelt(indexBelt, indexRuler, false);
-
-          const revealCard = (row: HTMLElement, index: number, containerAnimation?: gsap.core.Tween) => {
-            const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-            const depth = row.querySelector<HTMLElement>("[data-project-depth]");
-            const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-            if (!visual || !depth || !copy) return;
-            gsap.fromTo(depth, { yPercent: 7, scale: 1.14 }, { yPercent: -7, scale: 1.05, ease: "none",
-              scrollTrigger: { trigger: row, start: containerAnimation ? "left right" : "clamp(top bottom)",
-                end: containerAnimation ? "right left" : "clamp(bottom top)", scrub: SCENE.scrub,
-                invalidateOnRefresh: true, ...(containerAnimation ? { containerAnimation } : {}) } });
-            if (!hasHorizontalStory) {
-              const mask = row.querySelector<HTMLElement>("[data-card-mask]");
-              const surface = row.querySelector<HTMLElement>("[data-card-surface]");
-              const title = copy.querySelector<HTMLElement>("[data-project-name]");
-              if (!mask || !surface || !title) return;
-              // Each row owns a separate non-overlapping entry interval. The outer window travels
-              // up and its inner surface counter-travels, revealing a stationary screenshot.
-              const entry = gsap.timeline({
-                scrollTrigger: {
-                  trigger: row,
-                  start: "clamp(top 96%)",
-                  end: () => `+=${Math.min(row.offsetHeight * .76, document.documentElement.clientHeight * .55)}`,
-                  scrub: .16,
-                  invalidateOnRefresh: true,
-                },
-              });
-              entry.fromTo(mask, { yPercent: 100 }, { yPercent: 0, duration: .7, ease: "power1.out" }, 0)
-                .fromTo(surface, { yPercent: -100 }, { yPercent: 0, duration: .7, ease: "power1.out" }, 0)
-                .fromTo(title, { yPercent: 108 }, { yPercent: 0, duration: .46, ease: "power2.out" }, .36)
-                .fromTo(copy.querySelector(".project-type"), { x: 16, opacity: .35 },
-                  { x: 0, opacity: 1, duration: .4, ease: "power1.out" }, .33)
-                .fromTo(copy.querySelector(".project-copy"), { y: 14, opacity: .45 },
-                  { y: 0, opacity: 1, duration: .4, ease: "power1.out" }, .60);
-              return;
-            }
-            if (revealedProjects.current.has(index)) return;
-            const scene = gsap.timeline({ defaults: { ease: SCENE.ease }, scrollTrigger: {
-              trigger: row, start: containerAnimation ? "left 90%" : "clamp(top 88%)", once: true,
-              ...(containerAnimation ? { containerAnimation } : {}),
-            }, onComplete: () => { revealedProjects.current.add(index); row.dataset.cardRevealed = "true"; } });
-            scene.fromTo(visual, { clipPath: "inset(14% 0% 14% 0%)", y: 36 },
-              { clipPath: "inset(0% 0% 0% 0%)", y: 0, duration: 1.15, clearProps: "clipPath,transform" }, 0)
-              .fromTo(Array.from(copy.children), { y: 24, opacity: 0 },
-                { y: 0, opacity: 1, duration: .8, stagger: .08, clearProps: "transform,opacity" }, .18);
-          };
-
-          if (hasHorizontalStory && viewport && track && stage) {
-            sizedTrack = track;
-            const setSlideWidth = () => {
-              track.style.setProperty("--project-slide-width", `${viewport.clientWidth}px`);
-            };
-            setSlideWidth();
-
-            const slideWidth = () => viewport.clientWidth;
-            const travelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-            const horizontalStory = gsap.to(track, {
-              x: () => -travelDistance(),
-              ease: "none",
-              scrollTrigger: {
-                id: "portfolio-project-story",
-                trigger: stage,
-                start: "top top+=96",
-                end: () => `+=${travelDistance() + window.innerWidth * 0.22}`,
-                pin: stage,
-                pinSpacing: true,
-                scrub: SCENE.scrub,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-                onEnter: () => {
-                  horizontalStoryPinned = true;
-                  updatePinnedStoryActive(true);
-                },
-                onEnterBack: () => {
-                  horizontalStoryPinned = true;
-                  updatePinnedStoryActive(true);
-                },
-                onUpdate: (self) => {
-                  progressFillRef.current?.style.setProperty(
-                    "--project-story-progress",
-                    String(self.progress),
-                  );
-                  const progressAcrossSlides = self.progress * travelDistance();
-                  const nextIndex = Math.min(
-                    rows.length - 1,
-                    Math.round(progressAcrossSlides / slideWidth()),
-                  );
-                  updateActiveProject(nextIndex);
-                },
-                onLeaveBack: () => {
-                  progressFillRef.current?.style.setProperty("--project-story-progress", "0");
-                  horizontalStoryPinned = false;
-                  updatePinnedStoryActive(false);
-                  updateActiveProject(0);
-                },
-                onLeave: () => {
-                  horizontalStoryPinned = false;
-                  updatePinnedStoryActive(false);
-                },
-              },
-            });
-
-            rows.forEach((row, index) => revealCard(row, index, index === 0 ? undefined : horizontalStory));
-
-            resizeObserver = new ResizeObserver(() => {
-              setSlideWidth();
-              if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
-              refreshFrame = window.requestAnimationFrame(() => {
-                refreshFrame = 0;
-                ScrollTrigger.refresh();
-              });
-            });
-            resizeObserver.observe(viewport);
-          }
-
-          if (!hasHorizontalStory) {
-            rows.forEach((row) => {
-              const visual = row.querySelector<HTMLElement>("[data-project-visual]");
-              const copy = row.querySelector<HTMLElement>("[data-project-copy]");
-              if (!visual || !copy) return;
-              const projectIndex = Number(row.dataset.projectIndex);
-              revealCard(row, projectIndex);
-              ScrollTrigger.create({
-                trigger: row,
-                start: "top center",
-                end: "bottom center",
-                onEnter: () => updateActiveProject(projectIndex),
-                onEnterBack: () => updateActiveProject(projectIndex),
-                onLeaveBack: () => {
-                  if (projectIndex === 0) updateActiveProject(0);
-                },
-              });
-            });
-          }
-
-        }, section);
-        return () => {
-          if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
-          const shouldRestoreProject = Boolean(
-            sizedTrack &&
-            horizontalStoryPinned &&
-            (window.innerWidth < 1024 || window.matchMedia("(prefers-reduced-motion: reduce)").matches),
-          );
-          const projectIndex = activeProjectRef.current;
-          resizeObserver?.disconnect();
-          if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
-          sizedTrack?.style.removeProperty("--project-slide-width");
-          progressFillRef.current?.style.removeProperty("--project-story-progress");
-          updatePinnedStoryActive(false);
-          context.revert();
-          if (shouldRestoreProject) {
-            const activeRow = section.querySelector<HTMLElement>(
-              `[data-project-row][data-project-index="${projectIndex}"]`,
-            );
-            if (activeRow) {
-              restoreProjectFrame = window.requestAnimationFrame(() => {
-                restoreProjectFrame = 0;
-                if (!activeRow.isConnected) return;
-                const targetTop = activeRow.getBoundingClientRect().top + window.scrollY - 96;
-                window.scrollTo({ top: Math.max(0, targetTop), behavior: "instant" });
-                ScrollTrigger.refresh();
-              });
-            }
-          }
-        };
-      },
-    );
-
-    return () => {
-      if (restoreProjectFrame) window.cancelAnimationFrame(restoreProjectFrame);
-      media.revert();
-    };
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, ({ conditions }) => {
+      const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+      rows.forEach((row, index) => {
+        ScrollTrigger.create({
+          trigger: row, start: "top 52%", end: "bottom 52%",
+          onEnter: () => updateActiveProject(index), onEnterBack: () => updateActiveProject(index),
+        });
+        if (conditions?.reduced) return;
+        const q = gsap.utils.selector(row);
+        // Measure the stationary article. Only its inner presentation and mask planes move.
+        const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
+          id: `work-entry-${index + 1}`, trigger: row, start: "clamp(top 96%)",
+          end: () => `+=${Math.min(row.offsetHeight * .90, document.documentElement.clientHeight * .80)}`,
+          scrub: .30, invalidateOnRefresh: true,
+        }});
+        entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
+          { y: 0, duration: 1.06 }, 0)
+          .fromTo(q("[data-project-name]"), { yPercent: 96 }, { yPercent: 0, duration: .53 }, .03)
+          .fromTo(q(".project-type"), { x: -14, opacity: .4 }, { x: 0, opacity: 1, duration: .48 }, .02)
+          .fromTo(q("[data-card-mask]"), { yPercent: 88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
+          .fromTo(q("[data-card-surface]"), { yPercent: -88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
+          .fromTo(q(".project-copy"), { y: 20, opacity: .4 }, { y: 0, opacity: 1, duration: .53 }, .40)
+          .fromTo(q(".project-tech-list, .project-actions"), { y: 12, opacity: .62 },
+            { y: 0, opacity: 1, duration: .39, stagger: .10 }, .56);
+        gsap.fromTo(q("[data-project-depth]"), { yPercent: 4, scale: 1.085 },
+          { yPercent: -4, scale: 1.015, ease: "none", scrollTrigger: { trigger: row,
+            start: "clamp(top bottom)", end: "clamp(bottom top)", scrub: SCENE.scrub, invalidateOnRefresh: true } });
+      });
+      if (progressFillRef.current && conditions?.motion) gsap.fromTo(progressFillRef.current,
+        { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: section,
+          start: "clamp(top center)", end: "clamp(bottom center)", scrub: true } });
+    });
+    return () => media.revert();
   }, []);
 
   useEffect(() => {
@@ -387,11 +216,6 @@ export default function ProjectsSection() {
     }
   };
 
-  const focusedElementIndex =
-    document.activeElement instanceof HTMLElement
-      ? Number(document.activeElement.closest<HTMLElement>("[data-project-row]")?.dataset.projectIndex)
-      : Number.NaN;
-
   const openDetails = (project: Project, trigger: HTMLButtonElement) => {
     openerRef.current = trigger;
     markViewed(project);
@@ -435,16 +259,6 @@ export default function ProjectsSection() {
           </p>
         </Reveal>
 
-        <div className="work-index" data-work-index aria-hidden="true">
-          <div className="work-index__track" data-work-belt>
-            {[0, 1].map(copy => (
-              <div key={copy} className="work-index__cycle">
-                {projects.map(project => <span key={project.id}>{project.title}</span>)}
-              </div>
-            ))}
-          </div>
-        </div>
-
         <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
             <div className="sticky top-32 flex items-start gap-5">
@@ -472,8 +286,6 @@ export default function ProjectsSection() {
             <div data-project-track-viewport className="project-track-viewport">
               <div data-project-track className="project-track">
                 {projects.map((project, index) => {
-                  const focusWithinRow =
-                    focusedProject === index || focusedElementIndex === index;
                   return (
                     <article
                       key={project.id}
@@ -481,30 +293,17 @@ export default function ProjectsSection() {
                       data-reveal-group
                       data-project-index={index}
                       data-active-project={activeProject === index ? "true" : "false"}
-                      tabIndex={0}
                       className="project-row"
-                      onFocus={(event: FocusEvent<HTMLElement>) => {
-                        const row = event.currentTarget;
-                        setFocusedProject(index);
-                        const story = ScrollTrigger.getById("portfolio-project-story");
-                        if (story?.isActive && row.dataset.activeProject !== "true") {
-                          const panelProgress = index / (projects.length - 1);
-                          window.scrollTo({
-                            top: story.start + (story.end - story.start) * panelProgress,
-                            behavior: "auto",
-                          });
-                        }
-                      }}
-                      onBlur={(event: FocusEvent<HTMLElement>) => {
-                        if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-                        if (dialogRef.current?.contains(event.relatedTarget as Node | null)) return;
-                        setFocusedProject((current) => current === index ? null : current);
-                      }}
                       data-testid={`project-${project.id}`}
                       aria-labelledby={`project-title-${project.id}`}
-                      aria-hidden={pinnedStoryActive && activeProject !== index && !focusWithinRow}
-                      inert={pinnedStoryActive && activeProject !== index && !focusWithinRow}
                     >
+                      <div data-project-lift className="project-presentation">
+                      <header className="project-meta">
+                        <p className="project-type">{project.type}</p>
+                        <h3 id={`project-title-${project.id}`} className="project-name">
+                          <span data-project-name>{project.title}</span>
+                        </h3>
+                      </header>
                       <div className="project-aperture min-w-0">
                         <div data-card-mask className="project-aperture__mask">
                           <div data-card-surface>
@@ -553,10 +352,6 @@ export default function ProjectsSection() {
                       </div>
 
                       <div data-project-copy className="min-w-0">
-                        <p className="project-type">{project.type}</p>
-                        <h3 id={`project-title-${project.id}`} className="project-name">
-                          <span data-project-name>{project.title}</span>
-                        </h3>
                         <p className="project-copy">{project.description}</p>
                         <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
                           {project.tech.map((technology) => (
@@ -605,6 +400,7 @@ export default function ProjectsSection() {
                             Detail <span aria-hidden="true">+</span>
                           </m.button>
                         </div>
+                      </div>
                       </div>
                     </article>
                   );

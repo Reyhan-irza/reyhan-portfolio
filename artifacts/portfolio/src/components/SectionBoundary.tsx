@@ -17,7 +17,7 @@ export default function SectionBoundary({ variant }: SectionBoundaryProps) {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
-        gsap.fromTo(boundary, { scaleX: 0, opacity: 0, transformOrigin: "center" }, {
+        gsap.fromTo(boundary, { scaleX: 0, opacity: 0, transformOrigin: variant === "trace" ? "0% 50%" : variant === "return" ? "100% 50%" : "50% 50%" }, {
           scaleX: 1, opacity: 1, ease: "none", scrollTrigger: {
             trigger: boundary, start: "clamp(top 95%)", end: "clamp(top 55%)", scrub: SCENE.scrub,
           },
