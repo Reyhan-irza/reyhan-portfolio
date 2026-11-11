@@ -98,11 +98,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (previouslyOpen.current && !isOpen) {
-      if (window.matchMedia("(min-width: 1024px)").matches) {
-        navRef.current?.querySelector<HTMLElement>(".editorial-nav-link")?.focus();
-      } else {
-        menuTriggerRef.current?.focus();
-      }
+      menuTriggerRef.current?.focus({ preventScroll: true });
     }
     previouslyOpen.current = isOpen;
   }, [isOpen]);
@@ -284,7 +280,7 @@ export default function Navbar() {
             </span>
           </a>
 
-          <div className="hidden items-center gap-7 lg:flex" aria-label="Page sections">
+          <div className="hidden items-center gap-7 lg:flex" aria-label="Page sections" inert={isOpen}>
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -305,7 +301,7 @@ export default function Navbar() {
           <button
             ref={menuTriggerRef}
             type="button"
-            className={`mobile-menu-trigger lg:hidden ${isOpen ? "is-open" : ""}`}
+            className={`mobile-menu-trigger ${isOpen ? "is-open" : ""}`}
             onClick={() => setIsOpen((open) => !open)}
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
@@ -337,7 +333,7 @@ export default function Navbar() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="mobile-navigation-title"
-        aria-label="Mobile navigation"
+        aria-label="Portfolio navigation"
         aria-hidden={!isOpen}
         className="mobile-nav-panel fixed inset-0 z-[49] flex w-full flex-col border-white/10 bg-[#090d14] px-7 pb-8 pt-28 shadow-2xl"
         style={{ display: "none" } as CSSProperties}

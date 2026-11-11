@@ -298,109 +298,109 @@ export default function ProjectsSection() {
                       aria-labelledby={`project-title-${project.id}`}
                     >
                       <div data-project-lift className="project-presentation">
-                      <header className="project-meta">
-                        <p className="project-type">{project.type}</p>
-                        <h3 id={`project-title-${project.id}`} className="project-name">
-                          <span data-project-name>{project.title}</span>
-                        </h3>
-                      </header>
-                      <div className="project-aperture min-w-0">
-                        <div data-card-mask className="project-aperture__mask">
-                          <div data-card-surface>
-                            <div
-                              data-project-visual
-                              className="project-visual project-visual--screenshot"
-                              onPointerMove={handlePointerMove}
-                              data-testid={`project-visual-${project.id}`}
-                            >
-                              <div data-project-depth className="project-image-depth">
-                                <img
-                                  className="project-screenshot"
-                                  src={project.preview.src}
-                                  alt={project.preview.alt}
-                                  width={project.preview.width}
-                                  height={project.preview.height}
-                                  loading="lazy"
-                                  decoding="async"
-                                />
-                              </div>
-                              <div className="project-visual-grid" aria-hidden="true" />
-                              <span className="project-stamp">Cuplikan situs</span>
-                              <span className="project-number" aria-hidden="true">
-                                0{project.id}
-                              </span>
-                              <span className="project-wordmark" aria-hidden="true">
-                                <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
-                                  {project.accent === "VIREON" ? (
-                                    <>
-                                      VI<em>RE</em>ON
-                                    </>
-                                  ) : project.accent === "REYHAN" ? (
-                                    <>
-                                      REY<em>HAN</em>
-                                    </>
-                                  ) : (
-                                    <>
-                                      T<em>JK</em>T
-                                    </>
-                                  )}
+                        <header className="project-meta">
+                          <p className="project-type">{project.type}</p>
+                          <h3 id={`project-title-${project.id}`} className="project-name">
+                            <span data-project-name>{project.title}</span>
+                          </h3>
+                        </header>
+                        <div className="project-aperture min-w-0">
+                          <div data-card-mask className="project-aperture__mask">
+                            <div data-card-surface>
+                              <div
+                                data-project-visual
+                                className="project-visual project-visual--screenshot"
+                                onPointerMove={handlePointerMove}
+                                data-testid={`project-visual-${project.id}`}
+                              >
+                                <div data-project-depth className="project-image-depth">
+                                  <img
+                                    className="project-screenshot"
+                                    src={project.preview.src}
+                                    alt={project.preview.alt}
+                                    width={project.preview.width}
+                                    height={project.preview.height}
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </div>
+                                <div className="project-visual-grid" aria-hidden="true" />
+                                <span className="project-stamp">Cuplikan situs</span>
+                                <span className="project-number" aria-hidden="true">
+                                  0{project.id}
                                 </span>
-                              </span>
+                                <span className="project-wordmark" aria-hidden="true">
+                                  <span data-project-wordmark-motion className="inline-block whitespace-nowrap">
+                                    {project.accent === "VIREON" ? (
+                                      <>
+                                        VI<em>RE</em>ON
+                                      </>
+                                    ) : project.accent === "REYHAN" ? (
+                                      <>
+                                        REY<em>HAN</em>
+                                      </>
+                                    ) : (
+                                      <>
+                                        T<em>JK</em>T
+                                      </>
+                                    )}
+                                  </span>
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div data-project-copy className="min-w-0">
-                        <p className="project-copy">{project.description}</p>
-                        <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
-                          {project.tech.map((technology) => (
-                            <li key={technology} className="project-tech">
-                              {technology}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="project-actions">
-                          <m.a
-                            href={project.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="project-link"
-                            data-testid={`link-live-${project.id}`}
-                            whileHover={reduceMotion ? undefined : { y: -2 }}
-                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                          >
-                            Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                          </m.a>
-                          <m.a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="project-link project-link--quiet project-github-link"
-                            data-testid={`link-github-${project.id}`}
-                            aria-label={`Open ${project.title} GitHub repository`}
-                            whileHover={reduceMotion ? undefined : { y: -2 }}
-                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                          >
-                            <Github className="h-4 w-4" aria-hidden="true" />
-                            <span>GitHub</span>
-                          </m.a>
-                          <m.button
-                            type="button"
-                            onClick={(event) => openDetails(project, event.currentTarget)}
-                            className="project-link project-link--quiet"
-                            data-testid={`button-details-${project.id}`}
-                            aria-label={`Baca selengkapnya tentang ${project.title}`}
-                            whileHover={reduceMotion ? undefined : { y: -2 }}
-                            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                          >
-                            Detail <span aria-hidden="true">+</span>
-                          </m.button>
+                        <div data-project-copy className="min-w-0">
+                          <p className="project-copy">{project.description}</p>
+                          <ul className="project-tech-list" aria-label={`Teknologi ${project.title}`}>
+                            {project.tech.map((technology) => (
+                              <li key={technology} className="project-tech">
+                                {technology}
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="project-actions">
+                            <m.a
+                              href={project.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="project-link"
+                              data-testid={`link-live-${project.id}`}
+                              whileHover={reduceMotion ? undefined : { y: -2 }}
+                              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                            >
+                              Open live site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                            </m.a>
+                            <m.a
+                              href={project.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="project-link project-link--quiet project-github-link"
+                              data-testid={`link-github-${project.id}`}
+                              aria-label={`Open ${project.title} GitHub repository`}
+                              whileHover={reduceMotion ? undefined : { y: -2 }}
+                              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                            >
+                              <Github className="h-4 w-4" aria-hidden="true" />
+                              <span>GitHub</span>
+                            </m.a>
+                            <m.button
+                              type="button"
+                              onClick={(event) => openDetails(project, event.currentTarget)}
+                              className="project-link project-link--quiet"
+                              data-testid={`button-details-${project.id}`}
+                              aria-label={`Baca selengkapnya tentang ${project.title}`}
+                              whileHover={reduceMotion ? undefined : { y: -2 }}
+                              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+                              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                            >
+                              Detail <span aria-hidden="true">+</span>
+                            </m.button>
+                          </div>
                         </div>
-                      </div>
                       </div>
                     </article>
                   );
