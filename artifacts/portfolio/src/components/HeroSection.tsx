@@ -27,8 +27,8 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
         gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
           id: "hero-depth", trigger: section, start: "top top", end: "bottom top",
           scrub: SCENE.scrub, invalidateOnRefresh: true,
-        } }).to("[data-hero-title-depth]", { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
-          .to("[data-hero-bg]", { yPercent: 24, scale: 1.06 }, 0)
+        } }).fromTo("[data-hero-title-depth]", { y: 0 }, { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
+          .fromTo("[data-hero-bg]", { yPercent: 0, scale: 1 }, { yPercent: 24, scale: 1.06 }, 0)
           .to("[data-hero-scroll-cue]", { opacity: 0, y: -18, duration: .25 }, 0);
       }, section);
       return () => context.revert();
