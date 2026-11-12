@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,18 +10,8 @@
     <meta name="author" content="Reyhan Irza Alvano" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#05070b" />
-    <meta name="color-scheme" content="light dark" />
-    <script>
-      (() => {
-        document.documentElement.classList.add("js");
-        let saved;
-        try { saved = localStorage.getItem('rv-theme'); } catch {}
-        const theme = saved === 'light' || saved === 'dark' ? saved : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.style.colorScheme = theme;
-      })();
-    </script>
+    <meta name="color-scheme" content="dark" />
+    <script>document.documentElement.classList.add("js");</script>
     <meta name="application-name" content="Reyhan Irza Alvano" />
     <link rel="canonical" href="https://reyhan-watsap-portfolio.vercel.app/" />
 
@@ -66,12 +56,21 @@
     <link rel="shortcut icon" type="image/png" href="%BASE_URL%favicon.png?v=2" />
     <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png?v=2" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
   <body>
+    <noscript>
+      <main>
+        <h1>Reyhan Irza Alvano</h1>
+        <p>Student Developer · Lubuk Basung, Indonesia</p>
+        <h2>Selected projects</h2>
+        <ul>
+          <li><a href="https://tjkt-tech.vercel.app">TJKT</a></li>
+          <li><a href="https://vireon-lib.vercel.app">VIREON Library</a></li>
+          <li><a href="https://reyhan-watsap-portfolio.vercel.app">Reyhan WhatsApp Portfolio</a></li>
+        </ul>
+        <a href="https://github.com/Reyhan-irza">GitHub · Reyhan-irza</a>
+      </main>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
