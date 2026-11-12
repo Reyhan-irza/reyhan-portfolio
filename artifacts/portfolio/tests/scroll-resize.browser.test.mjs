@@ -260,30 +260,21 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   });
 
   await t.test("award content remains revealed when resizing partway through each card", async () => {
-    const firstAward = phonePage.locator("#achievement > .award-record").nth(0);
-    const secondAward = phonePage.locator("#achievement > .award-record").nth(1);
-    const scrollCardPartway = async (card) => {
+    const awards = phonePage.locator("#achievement > .award-record");
+    for (let index = 0; index < await awards.count(); index++) {
+      const card = awards.nth(index);
+      const title = await card.locator("h2").innerText();
       const top = await card.evaluate((element) =>
         window.scrollY + element.getBoundingClientRect().top + element.getBoundingClientRect().height * 0.42 - window.innerHeight * 0.45,
       );
       await scrollInstantly(phonePage, top);
-    };
-
-    await scrollCardPartway(firstAward);
-    await assertVisibleBox(firstAward, "2025 award card before resize");
-    await phonePage.setViewportSize({ width: 390, height: 844 });
-    await settleLayout(phonePage);
-    await phonePage.setViewportSize({ width: 700, height: 844 });
-    await settleLayout(phonePage);
-    await assertVisibleBox(firstAward, "2025 award card after resize");
-
-    await scrollCardPartway(secondAward);
-    await assertVisibleBox(secondAward, "2026 award card before resize");
-    await phonePage.setViewportSize({ width: 390, height: 844 });
-    await settleLayout(phonePage);
-    await phonePage.setViewportSize({ width: 700, height: 844 });
-    await settleLayout(phonePage);
-    await assertVisibleBox(secondAward, "2026 award card after resize");
+      await assertVisibleBox(card, `${title} before resize`);
+      await phonePage.setViewportSize({ width: 390, height: 844 });
+      await settleLayout(phonePage);
+      await phonePage.setViewportSize({ width: 700, height: 844 });
+      await settleLayout(phonePage);
+      await assertVisibleBox(card, `${title} after resize`);
+    }
   });
 
   await t.test("reveals stay visible after reverse scroll and live reduced-motion changes", async () => {
