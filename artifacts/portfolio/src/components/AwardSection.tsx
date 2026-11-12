@@ -4,15 +4,11 @@ import Reveal from "./Reveal";
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
 const certificatePreviewUrl = `${import.meta.env.BASE_URL}lks-certificate-preview.webp`;
 const digitalLibraryCertificateUrl = `${import.meta.env.BASE_URL}sertifikat-apresiasi-inovasi-digital-2026.webp`;
+const cadiakCertificateUrl = `${import.meta.env.BASE_URL}sertifikat-cadiak-ctf-2026.pdf`;
+const cadiakCertificatePreviewUrl = `${import.meta.env.BASE_URL}cadiak-certificate-preview.webp`;
 const otherEvidence = [
   {
     index: "01",
-    category: "Hasil kompetisi",
-    title: "Posisi kedua",
-    source: "CTF Competition",
-  },
-  {
-    index: "02",
     category: "Proyek perpustakaan digital",
     title: "VIREON Library",
     source: "A digital library system for managing books, members, loans, and reports.",
@@ -93,7 +89,7 @@ export default function AwardSection() {
               href={certificateUrl}
               download="sertifikat-lks-it-software-solution-2025.pdf"
               data-testid="link-download-certificate"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Unduh PDF
@@ -172,10 +168,89 @@ export default function AwardSection() {
               href={digitalLibraryCertificateUrl}
               download="sertifikat-apresiasi-inovasi-digital-2026.webp"
               data-testid="link-download-pustaka-certificate"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Unduh sertifikat
+            </a>
+          </div>
+        </Reveal>
+      </Reveal>
+
+      <Reveal className="award-record mx-auto mt-8 grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10" tall>
+        <Reveal className="flex flex-col justify-between gap-8">
+          <div>
+            <p className="section-kicker">Award / 2026</p>
+            <p className="mt-2 text-sm text-white/55">Hasil kompetisi keamanan siber</p>
+          </div>
+          <div className="flex items-center gap-4 border-y border-white/10 py-6">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center border border-[#667cff]/35 bg-[#667cff]/10 text-[#aab4ff]">
+              <Award className="h-6 w-6" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[.15em] text-[#aab4ff]">2nd place</p>
+              <p className="mt-1 text-sm text-white/65">Sumatra Barat · 30 September 2026</p>
+            </div>
+          </div>
+          <div>
+            <h2 className="portfolio-award-heading font-semibold tracking-[-.055em] text-white">
+              CADIAK CTF 2026
+            </h2>
+            <p className="mt-4 flex items-center gap-2 text-sm text-[#c9d0dc]">
+              <MapPin className="h-4 w-4 shrink-0 text-[#8491ff]" aria-hidden="true" />
+              Padang, Sumatra Barat
+            </p>
+          </div>
+          <p className="max-w-[42ch] text-base leading-relaxed text-white/65">
+            Meraih Juara 2 CADIAK 2026 CTF Competition sebagai peserta dari SMKN 2 Lubuk Basung. Sertifikat diterbitkan oleh Dinas Komunikasi, Informatika, dan Statistik Provinsi Sumatera Barat.
+          </p>
+        </Reveal>
+
+        <Reveal className="min-w-0" media>
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <p className="section-kicker">Certificate / September 2026</p>
+              <p className="mt-2 text-sm font-medium text-white">CADIAK CTF Competition · Juara 2</p>
+            </div>
+            <span className="hidden font-mono text-[9px] uppercase tracking-[.14em] text-white/35 sm:block">PDF document</span>
+          </div>
+          <a
+            href={cadiakCertificateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="certificate-preview group relative block aspect-[7/5] overflow-hidden border border-white/15 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8b9aff]"
+            data-testid="link-cadiak-certificate-preview"
+            aria-label="Buka PDF asli sertifikat Juara 2 CADIAK CTF 2026 di tab baru"
+          >
+            <img
+              src={cadiakCertificatePreviewUrl}
+              alt="Sertifikat Juara 2 CADIAK CTF Competition 2026 untuk Reyhan Irza Alvano dari SMKN 2 Lubuk Basung, Padang, 30 September 2026."
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.015] motion-reduce:transition-none"
+            />
+          </a>
+          <p className="mt-2 text-xs text-white/55">Buka sertifikat untuk membaca dokumen PDF asli.</p>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={cadiakCertificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-view-cadiak-certificate"
+              aria-label="Lihat PDF sertifikat Juara 2 CADIAK CTF 2026 di tab baru"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-[#667cff] px-4 py-3 text-xs font-semibold text-[#05070b] transition-colors sm:w-auto"
+            >
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              Lihat sertifikat
+            </a>
+            <a
+              href={cadiakCertificateUrl}
+              download="sertifikat-cadiak-ctf-2026.pdf"
+              data-testid="link-download-cadiak-certificate"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
+            >
+              <Download className="h-4 w-4" aria-hidden="true" />
+              Unduh PDF
             </a>
           </div>
         </Reveal>

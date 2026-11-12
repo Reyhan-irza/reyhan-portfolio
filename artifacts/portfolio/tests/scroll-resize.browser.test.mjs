@@ -165,7 +165,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   await phonePage.waitForFunction(() =>
     document.querySelector("#home")
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 2,
+    && document.querySelectorAll("#achievement > .award-record").length === 3,
   );
   await dismissIntro(phonePage);
 
@@ -241,6 +241,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     await settleLayout(phonePage);
     const afterResize = await state();
 
+
     assert.equal(afterResize.rowCount, 4, "All education milestones should remain mounted");
     assert.ok(afterResize.activeIndex >= 0, "An education milestone should remain active after resize");
     assert.ok(
@@ -253,35 +254,27 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
 
     await scrollInstantly(phonePage, await targetForProgress(0.84));
     const afterFurtherScroll = await state();
+
     assert.equal(afterFurtherScroll.expectedIndex, 3, "Further scrolling should reach the final education milestone");
     assert.equal(afterFurtherScroll.activeIndex, 3, "The final milestone should activate after resizing and continued scrolling");
   });
 
   await t.test("award content remains revealed when resizing partway through each card", async () => {
-    const firstAward = phonePage.locator("#achievement > .award-record").nth(0);
-    const secondAward = phonePage.locator("#achievement > .award-record").nth(1);
-    const scrollCardPartway = async (card) => {
+    const awards = phonePage.locator("#achievement > .award-record");
+    for (let index = 0; index < await awards.count(); index++) {
+      const card = awards.nth(index);
+      const title = await card.locator("h2").innerText();
       const top = await card.evaluate((element) =>
         window.scrollY + element.getBoundingClientRect().top + element.getBoundingClientRect().height * 0.42 - window.innerHeight * 0.45,
       );
       await scrollInstantly(phonePage, top);
-    };
-
-    await scrollCardPartway(firstAward);
-    await assertVisibleBox(firstAward, "2025 award card before resize");
-    await phonePage.setViewportSize({ width: 390, height: 844 });
-    await settleLayout(phonePage);
-    await phonePage.setViewportSize({ width: 700, height: 844 });
-    await settleLayout(phonePage);
-    await assertVisibleBox(firstAward, "2025 award card after resize");
-
-    await scrollCardPartway(secondAward);
-    await assertVisibleBox(secondAward, "2026 award card before resize");
-    await phonePage.setViewportSize({ width: 390, height: 844 });
-    await settleLayout(phonePage);
-    await phonePage.setViewportSize({ width: 700, height: 844 });
-    await settleLayout(phonePage);
-    await assertVisibleBox(secondAward, "2026 award card after resize");
+      await assertVisibleBox(card, `${title} before resize`);
+      await phonePage.setViewportSize({ width: 390, height: 844 });
+      await settleLayout(phonePage);
+      await phonePage.setViewportSize({ width: 700, height: 844 });
+      await settleLayout(phonePage);
+      await assertVisibleBox(card, `${title} after resize`);
+    }
   });
 
   await t.test("reveals stay visible after reverse scroll and live reduced-motion changes", async () => {
@@ -311,6 +304,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   });
 
   await t.test("mobile address-bar height changes do not reset scroll triggers", { skip: Boolean(process.env.PORTFOLIO_BUILD_DIRECTORY) }, async () => {
+    await phonePage.setViewportSize({width:390,height:844});
     await scrollInstantly(phonePage, 1000);
     await phonePage.waitForTimeout(700);
     await phonePage.evaluate(async () => {
@@ -348,41 +342,43 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
 
   await phoneContext.close();
 
-  await t.test("desktop project story still pins while scrolling", async () => {
-    const desktopContext = await browser.newContext({
-      viewport: { width: 1280, height: 900 },
-      hasTouch: true,
-      reducedMotion: "no-preference",
-    });
-    await mockServices(desktopContext);
-    const desktopPage = await desktopContext.newPage();
-    desktopPage.on("pageerror", (error) => pageErrors.push(error.message));
-    await desktopPage.goto(baseUrl, { waitUntil: "domcontentloaded" });
-    await desktopPage.waitForFunction(() => document.querySelector("[data-project-stage]") !== null);
-    await dismissIntro(desktopPage);
-    await desktopPage.waitForFunction(() =>
-      document.querySelector("[data-project-stage]")?.parentElement?.classList.contains("pin-spacer"),
-    );
-
-    const pinStart = await desktopPage.locator("[data-project-stage]").evaluate((element) =>
-      window.scrollY + element.getBoundingClientRect().top - 96 + 80,
-    );
-    await scrollInstantly(desktopPage, pinStart);
-    const pinnedPosition = await desktopPage.locator("[data-project-stage]").evaluate((element) => ({
-      top: element.getBoundingClientRect().top,
-      position: getComputedStyle(element).position,
-      hasPinSpacer: element.parentElement?.classList.contains("pin-spacer") ?? false,
-    }));
-    assert.equal(pinnedPosition.hasPinSpacer, true, "Desktop project stage should retain its ScrollTrigger pin spacer");
-    assert.equal(pinnedPosition.position, "fixed", "Desktop project stage should enter its pinned position");
-    assert.ok(Math.abs(pinnedPosition.top - 96) < 4, `Desktop project stage should pin at its configured offset, got ${pinnedPosition.top}px`);
-
-    await scrollInstantly(desktopPage, pinStart + 100);
-    const continuedPinTop = await desktopPage.locator("[data-project-stage]").evaluate((element) =>
-      element.getBoundingClientRect().top,
-    );
-    assert.ok(Math.abs(continuedPinTop - pinnedPosition.top) < 2, "Desktop pin should remain stable as scrolling continues");
-    await desktopContext.close();
+  await t.test("desktop projects remain vertical and include each project's details", async () => {
+    const ctx = await browser.newContext({viewport:{width:1440,height:900}});
+    await mockServices(ctx);
+    try {
+      const page = await ctx.newPage();
+      await page.goto(baseUrl);
+      await dismissIntro(page);
+      const rows = page.locator("[data-project-row]");
+      assert.equal(await rows.count(),3);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(),0);
+      let previous = 0;
+      for (const row of await rows.all()) {
+        const top = await row.evaluate(el => el.getBoundingClientRect().top+scrollY);
+        assert.ok(top>previous); previous=top;
+        await scrollInstantly(page,top-120);
+        await page.waitForFunction(el=>Number(getComputedStyle(el).opacity)>.99,await row.locator(".project-copy").elementHandle());
+        assert.ok(await row.locator("img").evaluate(el=>el.complete && el.naturalWidth>0));
+        assert.equal(await row.locator(".project-actions a,.project-actions button").count(),3);
+      }
+    } finally {await ctx.close();}
+  });
+  await t.test("leaving home tears down all its ScrollTriggers and Lenis on repeated visits", {skip:Boolean(process.env.PORTFOLIO_BUILD_DIRECTORY)}, async () => {
+    const ctx=await browser.newContext();
+    await mockServices(ctx);
+    try {
+      const page=await ctx.newPage();
+      await page.goto(baseUrl);
+      for (let pass=0;pass<2;pass++) {
+        await page.waitForFunction(()=>document.querySelector("#home h1")||document.querySelector(".rv-intro-skip"));
+        if (await page.locator(".rv-intro-skip").isVisible()) await dismissIntro(page);
+        await page.waitForFunction(async()=>(await import("/src/lib/motion.ts")).ScrollTrigger.getAll().length>3);
+        await page.getByRole("button",{name:"Developer Access",exact:true}).click();
+        await page.waitForURL("**/admin");
+        await page.waitForFunction(async()=> (await import("/src/lib/scroll.ts")).lenis===null && (await import("/src/lib/motion.ts")).ScrollTrigger.getAll().length===0);
+        if (!pass) await page.goBack();
+      }
+    } finally {await ctx.close();}
   });
 
   assert.deepEqual(pageErrors, [], `Unexpected browser errors: ${pageErrors.join("; ")}`);

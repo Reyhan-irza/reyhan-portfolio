@@ -1,0 +1,56 @@
+[
+  {
+    "width": 360,
+    "height": 800,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  },
+  {
+    "width": 430,
+    "height": 932,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  },
+  {
+    "width": 1280,
+    "height": 900,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "overflow": 0,
+    "previewLoaded": true,
+    "pdfDownload": true,
+    "awardCount": 3,
+    "errors": []
+  }
+]

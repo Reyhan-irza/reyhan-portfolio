@@ -1,0 +1,368 @@
+{
+  "reference": "382096.mp4 (720 \u00d7 1604, 51.968 s)",
+  "baseline": "32abbb32",
+  "captureMethod": "Chromium production build with local fonts and isolated service fixtures",
+  "glyphMethod": "Visible vs unrestricted overflow at the same settled heading, luminance difference >=12/255",
+  "baselineWorkGlyphDifferences": {
+    "390": 101,
+    "1440": 447
+  },
+  "lineReflow": {
+    "repeat": {
+      "samples": 20,
+      "maxTriggerStartErrorPx": 260.47,
+      "samplesOutside2px": 3
+    },
+    "aligned-repeat": {
+      "samples": 20,
+      "maxTriggerStartErrorPx": 0.47,
+      "samplesOutside2px": 0
+    }
+  },
+  "viewports": [
+    {
+      "width": 360,
+      "height": 800,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 360,
+      "logoSize": 39.188,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.382,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.381,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.381,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        24,
+        24,
+        24
+      ],
+      "closingSize": 41.6,
+      "overflow": 0,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 390,
+      "logoSize": 39.188,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "input": {
+        "kind": "native touch",
+        "slow": 325,
+        "fast": 380,
+        "reverse": -245
+      },
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.382,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.383,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.381,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        24,
+        24,
+        24
+      ],
+      "closingSize": 41.6,
+      "overflow": 0,
+      "filmEndSeconds": 36.371,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 430,
+      "logoSize": 39.188,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.379,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.383,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.382,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        24,
+        24,
+        24
+      ],
+      "closingSize": 41.6,
+      "overflow": 0,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 768,
+      "logoSize": 39.188,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.384,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.382,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.381,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        24,
+        24,
+        24
+      ],
+      "closingSize": 56.832,
+      "overflow": 0,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 652.797,
+      "logoSize": 58.875,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.383,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.383,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.384,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        64,
+        64,
+        64
+      ],
+      "closingSize": 94.72,
+      "overflow": 0,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "fonts": [
+        "Outfit",
+        "Manrope",
+        "DM Mono",
+        "DM Mono",
+        "RV Work Display",
+        "RV Editorial",
+        "RV Work Display"
+      ],
+      "menuWidth": 734.391,
+      "logoSize": 66.234,
+      "logoDrift": 0,
+      "logoReverseError": 0,
+      "input": {
+        "kind": "wheel",
+        "slow": 340,
+        "fast": 395,
+        "reverse": -260
+      },
+      "cards": [
+        {
+          "title": "TJKT",
+          "middle": 0.383,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "VIREON Library",
+          "middle": 0.382,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        },
+        {
+          "title": "Reyhan WhatsApp Portfolio",
+          "middle": 0.379,
+          "end": 0,
+          "reverseError": 0,
+          "layoutShift": 0
+        }
+      ],
+      "githubEdges": [
+        144,
+        144,
+        144
+      ],
+      "closingSize": 106.56,
+      "overflow": 0,
+      "filmEndSeconds": 40.162,
+      "headingPixelDifferences": {
+        "hero": 0,
+        "about": 0,
+        "work": 0,
+        "github": 0,
+        "contact": 0
+      }
+    }
+  ]
+}

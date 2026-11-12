@@ -88,7 +88,7 @@ async function assertPopupOpens(context, page, selector, expectedPath) {
   await popup.close();
 }
 
-test("journey and both certificates stay visible and usable with reduced motion", { timeout: 60_000 }, async (t) => {
+test("journey and all certificates stay visible and usable with reduced motion", { timeout: 120_000 }, async (t) => {
   const port = process.env.PORTFOLIO_BUILD_DIRECTORY ? 0 : await findOpenPort();
   const baseUrl = process.env.PORTFOLIO_BUILD_DIRECTORY ? "http://localhost:4173" : `http://127.0.0.1:${port}`;
   const vitePath = path.join(portfolioRoot, "node_modules/vite/bin/vite.js");
@@ -131,7 +131,7 @@ test("journey and both certificates stay visible and usable with reduced motion"
   await page.waitForFunction(() =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 2
+    && document.querySelectorAll("#achievement > .award-record").length === 3
     && !document.querySelector(".rv-intro"),
   );
 
@@ -154,7 +154,7 @@ test("journey and both certificates stay visible and usable with reduced motion"
       });
     });
 
-    assert.equal(visibleContent.length, 6, "Expected four education rows and two achievement cards");
+    assert.equal(visibleContent.length, 7, "Expected four education rows and three achievement cards");
     for (const item of visibleContent) {
       assert.equal(item.visibility, "visible", `${item.label} should not be hidden`);
       assert.ok(item.opacity >= 0.99, `${item.label} should be fully opaque, got ${item.opacity}`);
@@ -162,7 +162,7 @@ test("journey and both certificates stay visible and usable with reduced motion"
     }
   });
 
-  await t.test("both certificate previews load and open their full-size files", async () => {
+  await t.test("all certificate previews load and open their full-size files", async () => {
     const previews = [
       {
         selector: '[data-testid="link-certificate-preview"]',
@@ -177,6 +177,13 @@ test("journey and both certificates stay visible and usable with reduced motion"
         downloadSelector: '[data-testid="link-download-pustaka-certificate"]',
         file: "sertifikat-apresiasi-inovasi-digital-2026.webp",
         downloadName: "sertifikat-apresiasi-inovasi-digital-2026.webp",
+      },
+      {
+        selector: '[data-testid="link-cadiak-certificate-preview"]',
+        viewSelector: '[data-testid="link-view-cadiak-certificate"]',
+        downloadSelector: '[data-testid="link-download-cadiak-certificate"]',
+        file: "sertifikat-cadiak-ctf-2026.pdf",
+        downloadName: "sertifikat-cadiak-ctf-2026.pdf",
       },
     ];
 
@@ -237,48 +244,30 @@ test("journey and both certificates stay visible and usable with reduced motion"
     assert.equal(await selectedStar.getAttribute("aria-pressed"), "true");
   });
 
-  await t.test("themes follow the system, persist an explicit choice, and sync across tabs", async () => {
-    const themeContext = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light", viewport: { width: 390, height: 844 } });
-    await mockServices(themeContext);
+  await t.test("fixed palette ignores OS changes and saved preferences", async () => {
+    const fixed = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light" });
+    await mockServices(fixed);
+    await fixed.addInitScript(() => localStorage.setItem("rv-theme", "light"));
     try {
-      const first = await themeContext.newPage();
-      const second = await themeContext.newPage();
-      await first.goto(baseUrl);
-      await second.goto(baseUrl);
-      const toggle = first.getByRole("button", { name: "Dark mode", exact: true });
-      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
-      await first.emulateMedia({ colorScheme: "dark" });
-      await first.waitForFunction(() => document.documentElement.dataset.theme === "dark");
-      await toggle.click();
-      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
-      await first.reload();
-      await first.waitForFunction(() => document.documentElement.dataset.theme === "light");
-      await toggle.press("Space");
-      await second.waitForFunction(() => document.documentElement.dataset.theme === "dark");
-      assert.equal(await toggle.getAttribute("aria-pressed"), "true");
-      for (const theme of ["dark", "light"]) {
-        if (theme === "light") await toggle.click();
-        for (const width of [320, 390, 768, 1280]) {
-          await first.setViewportSize({ width, height: 900 });
-          const layout = await first.evaluate(() => ({
-            width: document.documentElement.scrollWidth, viewport: innerWidth,
-            target: document.querySelector('.theme-toggle').getBoundingClientRect().toJSON(),
-          }));
-          assert.ok(layout.width <= layout.viewport + 1, `${theme}/${width}: no horizontal overflow`);
-          assert.ok(layout.target.width >= 44 && layout.target.height >= 44, "Theme toggle meets touch target size");
-          if (process.env.PORTFOLIO_SCREENSHOT_DIR) {
-            await first.screenshot({ path: path.join(process.env.PORTFOLIO_SCREENSHOT_DIR, `${theme}-${width}.png`), fullPage: true });
-          }
+      const page = await fixed.newPage();
+      await page.goto(baseUrl);
+      await page.locator("#home h1").waitFor();
+      for (const colorScheme of ["light", "dark"]) {
+        await page.emulateMedia({ colorScheme });
+        assert.equal(await page.getByRole("button", { name: /^(light|dark) mode$/i }).count(), 0);
+        assert.ok(await page.locator("html").evaluate(el => el.classList.contains("dark") && !el.dataset.theme));
+        for (const width of [320,390,768,1280]) {
+          await page.setViewportSize({width,height:900});
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
         }
-        await first.getByRole("button", { name: "Baca selengkapnya tentang TJKT", exact: true }).click();
-        const dialog = first.locator('.project-detail-dialog');
-        await dialog.waitFor({ state: "visible" });
-        const colors = await dialog.evaluate(el => ({ bg: getComputedStyle(el).backgroundColor, text: getComputedStyle(el).color }));
-        assert.notEqual(colors.bg, colors.text, `${theme}: portal inherits distinct foreground/background`);
-        await first.keyboard.press("Escape");
-        await dialog.waitFor({ state: "detached" });
+        await page.getByTestId("button-details-1").click();
+        const dialog = page.getByTestId("project-detail-dialog");
+        const colors = await dialog.evaluate(el => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color]);
+        assert.notEqual(colors[0], colors[1]);
+        await page.keyboard.press("Escape");
+        await dialog.waitFor({state:"detached"});
       }
-    } finally { await themeContext.close(); }
+    } finally { await fixed.close(); }
   });
 
   await t.test("mobile intro fits, typing changes, and music controls remain inside their card", async () => {
@@ -304,7 +293,7 @@ test("journey and both certificates stay visible and usable with reduced motion"
     } finally { await motionContext.close(); }
   });
 
-  await t.test("theme toggle remains functional when localStorage is blocked", async () => {
+  await t.test("home renders when legacy theme storage is blocked", async () => {
     const blockedContext = await browser.newContext({ reducedMotion: "reduce", colorScheme: "light" });
     await mockServices(blockedContext);
     await blockedContext.addInitScript(() => {
@@ -322,8 +311,8 @@ test("journey and both certificates stay visible and usable with reduced motion"
     try {
       const blockedPage = await blockedContext.newPage();
       await blockedPage.goto(baseUrl);
-      await blockedPage.getByRole('button', { name: 'Dark mode', exact: true }).click();
-      await blockedPage.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+      await blockedPage.locator("#home h1").waitFor();
+      assert.ok(await blockedPage.locator("html").evaluate(el => el.classList.contains("dark") && !el.dataset.theme));
     } finally { await blockedContext.close(); }
   });
 

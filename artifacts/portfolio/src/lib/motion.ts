@@ -4,6 +4,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+// Keep the logo film and Lenis on elapsed time, including during slow frames.
+gsap.ticker.lagSmoothing(0);
 
 // Mobile browser chrome changes viewport height during a swipe. Recalculating
 // every trigger then resets scrubbed poses mid-gesture; real width/orientation
@@ -32,6 +34,13 @@ export function cubicBezierEase(
     }
     return sample(t, y1, y2);
   };
+}
+
+// SplitText reflows lines after its own resize observer settles. Notify the home
+// lifecycle once the new line boxes and their animations exist.
+export function afterLineSplit<T extends gsap.core.Animation>(animation: T): T {
+  window.dispatchEvent(new Event("portfolio:lines-changed"));
+  return animation;
 }
 
 export { gsap, ScrollTrigger, SplitText };
