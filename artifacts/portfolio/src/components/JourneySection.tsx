@@ -54,11 +54,14 @@ export default function JourneySection() {
             scrollTrigger: { trigger: education, start: "clamp(top 88%)", once: true },
             onComplete: () => { educationEntered.current = true; }, clearProps: "transform,opacity",
           });
+          let currentMilestone = -1;
           const setActiveMilestone = (progress: number) => {
             const activeIndex = Math.min(
               educationRows.length - 1,
               Math.floor(Math.min(progress, 0.999999) * educationRows.length),
             );
+            if (activeIndex === currentMilestone) return;
+            currentMilestone = activeIndex;
             educationRows.forEach((row, index) => {
               if (index === activeIndex) {
                 row.setAttribute("data-education-active", "true");
@@ -72,9 +75,10 @@ export default function JourneySection() {
           setActiveMilestone(0);
           const educationStory = gsap.timeline({
             defaults: { ease: "none" },
-            onUpdate: () => setActiveMilestone(educationStory.progress()),
             scrollTrigger: {
               trigger: education,
+              onUpdate: self => setActiveMilestone(self.progress),
+              onRefresh: self => setActiveMilestone(self.progress),
               start: "top 70%",
               end: "bottom 34%",
               scrub: compact ? 0.18 : 0.55,

@@ -1,16 +1,12 @@
 import { useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "../lib/motion";
-import { useTheme } from "../lib/themeContext";
 export function useSectionTheme() {
-  const { theme } = useTheme();
   useLayoutEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>(
       "#home, #technology-bands, #proof, #projects, #about, #journey, #achievement, #roadmap, #github, .portfolio-closing-zone, .portfolio-closing-footer",
     ));
-    const opposite = theme === "dark" ? "light" : "dark";
     sections.forEach((section) => {
       section.dataset.sectionTheme = "";
-      section.dataset.theme = ["projects", "achievement", "github"].includes(section.id) ? opposite : theme;
     });
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
@@ -34,7 +30,7 @@ export function useSectionTheme() {
     });
     return () => {
       media.revert();
-      sections.forEach((section) => { delete section.dataset.sectionTheme; delete section.dataset.theme; });
+      sections.forEach((section) => { delete section.dataset.sectionTheme; });
     };
-  }, [theme]);
+  }, []);
 }

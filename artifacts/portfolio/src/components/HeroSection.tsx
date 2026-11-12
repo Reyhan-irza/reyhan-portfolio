@@ -14,21 +14,21 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
         gsap.timeline({ defaults: { ease: SCENE.ease } })
-          .addLabel("image", 0).addLabel("name", .18).addLabel("details", .65)
+          .addLabel("image", 0).addLabel("name", .22).addLabel("details", .88)
           .fromTo(".hero-mark-image", { scale: 1.15, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 1.5, clearProps: "transform,opacity" }, "image")
+            { scale: 1, opacity: 1, duration: 1.75, clearProps: "transform,opacity" }, "image")
           .fromTo("[data-hero-title-line]", { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" },
             { yPercent: 0, rotation: 0, duration: SCENE.title, stagger: SCENE.lineStagger, clearProps: "transform" }, "name")
           .fromTo("[data-hero-rule]", { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "name+=0.2")
           .fromTo("[data-hero-kicker], [data-hero-bio], [data-hero-callout-copy], [data-hero-action], [data-hero-github]",
             { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: SCENE.detail, stagger: .06, clearProps: "transform,opacity" }, "details")
           .fromTo(document.querySelector(".editorial-nav"), { opacity: 0 },
-            { opacity: 1, duration: .3, clearProps: "opacity" }, .15);
+            { opacity: 1, duration: .55, clearProps: "opacity" }, .15);
         gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
           id: "hero-depth", trigger: section, start: "top top", end: "bottom top",
           scrub: SCENE.scrub, invalidateOnRefresh: true,
-        } }).to("[data-hero-title-depth]", { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
-          .to("[data-hero-bg]", { yPercent: 24, scale: 1.06 }, 0)
+        } }).fromTo("[data-hero-title-depth]", { y: 0 }, { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
+          .fromTo("[data-hero-bg]", { yPercent: 0, scale: 1 }, { yPercent: 24, scale: 1.06 }, 0)
           .to("[data-hero-scroll-cue]", { opacity: 0, y: -18, duration: .25 }, 0);
       }, section);
       return () => context.revert();

@@ -27,8 +27,6 @@
 #rv-intro .rv-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(190,205,255,.5)}
 #rv-intro .rv-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 #rv-intro .rv-btn[disabled]{opacity:.4;cursor:default}
-#rv-intro .rv-btn.primary{background:#e9edf5;color:#07080b;border-color:#e9edf5;font-weight:600}
-#rv-intro .rv-btn.primary:hover{background:#fff}
 
 
 #rv-intro .ctrl .rv-btn {min-height:44px}

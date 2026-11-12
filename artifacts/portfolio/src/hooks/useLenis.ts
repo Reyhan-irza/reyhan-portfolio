@@ -6,13 +6,13 @@ export function useLenis(enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0, disposed = false, pending = false;
+    let frame = 0, disposed = false, pending = false, widthChanged = false;
     const refresh = () => {
       pending = true;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (disposed || ScrollTrigger.isScrolling()) return;
-        pending = false;
+        if (disposed || (ScrollTrigger.isScrolling() && !widthChanged)) return;
+        pending = false; widthChanged = false;
         // The frame and scrollEnd already defer measurement until idle. A second
         // resize debounce can measure the transient lines before SplitText reflows.
         ScrollTrigger.refresh();
@@ -32,15 +32,22 @@ export function useLenis(enabled = true) {
     });
     lockObserver.observe(document.body, { attributes: true, attributeFilter: ["style"] });
     let width = document.body.offsetWidth, height = document.body.offsetHeight;
-    const resizeObserver = new ResizeObserver(() => {
-      const nextWidth = document.body.offsetWidth, nextHeight = document.body.offsetHeight;
-      if (width !== nextWidth || height !== nextHeight) {
-        width = nextWidth; height = nextHeight; refresh();
-      }
+    let viewportHeight = window.innerHeight;
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      const box = entry.borderBoxSize[0];
+      const nextWidth = Math.round(box?.inlineSize ?? entry.contentRect.width);
+      const nextHeight = Math.round(box?.blockSize ?? entry.contentRect.height);
+      const viewportChange = Math.abs(window.innerHeight - viewportHeight);
+      const bodyChange = Math.abs(nextHeight - height);
+      // A short change in mobile chrome also resizes svh-based hero content.
+      const browserChrome = nextWidth === width && ScrollTrigger.isTouch === 1
+        && viewportChange > 0 && viewportChange < viewportHeight * .25
+        && bodyChange <= viewportChange * 2 + 2;
+      if (nextWidth !== width) widthChanged = true;
+      if ((nextWidth !== width || nextHeight !== height) && !browserChrome) refresh();
+      width = nextWidth; height = nextHeight; viewportHeight = window.innerHeight;
     });
-    resizeObserver.observe(document.body);
-    const imageLoaded = (event: Event) => { if (event.target instanceof HTMLImageElement) refresh(); };
-    document.addEventListener("load", imageLoaded, true);
+    resizeObserver.observe(document.body, { box: "border-box" });
     window.addEventListener("load", refresh);
     window.addEventListener("portfolio:scroll-lock", syncScrollLock);
     ScrollTrigger.addEventListener("scrollEnd", afterScroll);
@@ -50,7 +57,6 @@ export function useLenis(enabled = true) {
     return () => {
       disposed = true; cancelAnimationFrame(frame);
       lockObserver.disconnect(); resizeObserver.disconnect();
-      document.removeEventListener("load", imageLoaded, true);
       window.removeEventListener("load", refresh);
       window.removeEventListener("portfolio:scroll-lock", syncScrollLock);
       ScrollTrigger.removeEventListener("scrollEnd", afterScroll);

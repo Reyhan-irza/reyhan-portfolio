@@ -42,4 +42,4 @@ export const MOTION = {
 } as const;
 
 /** Scene timings fitted visually; these are not claimed to be IbraCode source values. */
-export const SCENE = { title: 1.05, lineStagger: .09, detail: .65, menu: .85, menuStagger: .065, scrub: .35, ease: "power3.out", curtainEase: "power4.inOut" } as const;
+export const SCENE = { title: 1.25, lineStagger: .13, detail: .78, menu: .85, menuStagger: .065, scrub: .32, ease: "power2.out", curtainEase: "power4.inOut" } as const;
