@@ -6,19 +6,20 @@ export function useLenis(enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0, disposed = false, pending = false, widthChanged = false;
+    let frame = 0, disposed = false, pending = false, geometryChanged = false;
     const refresh = () => {
       pending = true;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (disposed || (ScrollTrigger.isScrolling() && !widthChanged)) return;
-        pending = false; widthChanged = false;
+        if (disposed || (ScrollTrigger.isScrolling() && !geometryChanged)) return;
+        pending = false; geometryChanged = false;
         // The frame and scrollEnd already defer measurement until idle. A second
         // resize debounce can measure the transient lines before SplitText reflows.
         ScrollTrigger.refresh();
       });
     };
     const afterScroll = () => { if (pending) refresh(); };
+    const linesChanged = () => { geometryChanged = true; refresh(); };
     const sync = () => {
       if (reduced.matches) stopSmoothScroll(); else startSmoothScroll();
       syncScrollLock(); refresh();
@@ -43,11 +44,12 @@ export function useLenis(enabled = true) {
       const browserChrome = nextWidth === width && ScrollTrigger.isTouch === 1
         && viewportChange > 0 && viewportChange < viewportHeight * .25
         && bodyChange <= viewportChange * 2 + 2;
-      if (nextWidth !== width) widthChanged = true;
+      if (nextWidth !== width) geometryChanged = true;
       if ((nextWidth !== width || nextHeight !== height) && !browserChrome) refresh();
       width = nextWidth; height = nextHeight; viewportHeight = window.innerHeight;
     });
     resizeObserver.observe(document.body, { box: "border-box" });
+    window.addEventListener("portfolio:lines-changed", linesChanged);
     window.addEventListener("load", refresh);
     window.addEventListener("portfolio:scroll-lock", syncScrollLock);
     ScrollTrigger.addEventListener("scrollEnd", afterScroll);
@@ -57,6 +59,7 @@ export function useLenis(enabled = true) {
     return () => {
       disposed = true; cancelAnimationFrame(frame);
       lockObserver.disconnect(); resizeObserver.disconnect();
+      window.removeEventListener("portfolio:lines-changed", linesChanged);
       window.removeEventListener("load", refresh);
       window.removeEventListener("portfolio:scroll-lock", syncScrollLock);
       ScrollTrigger.removeEventListener("scrollEnd", afterScroll);
