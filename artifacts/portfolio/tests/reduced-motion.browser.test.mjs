@@ -154,7 +154,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
       });
     });
 
-    assert.equal(visibleContent.length, 6, "Expected four education rows and two achievement cards");
+    assert.equal(visibleContent.length, 7, "Expected four education rows and three achievement cards");
     for (const item of visibleContent) {
       assert.equal(item.visibility, "visible", `${item.label} should not be hidden`);
       assert.ok(item.opacity >= 0.99, `${item.label} should be fully opaque, got ${item.opacity}`);
