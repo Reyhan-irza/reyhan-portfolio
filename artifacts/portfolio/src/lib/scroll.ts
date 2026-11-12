@@ -10,14 +10,12 @@ export function startSmoothScroll() {
   lenis = new Lenis({ lerp: MOTION.lerp, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add(tick);
-  gsap.ticker.lagSmoothing(0);
 }
 export function stopSmoothScroll() {
   gsap.ticker.remove(tick);
   lenis?.off("scroll", ScrollTrigger.update);
   lenis?.destroy();
   lenis = null;
-  gsap.ticker.lagSmoothing(500, 33);
 }
 export function syncScrollLock() {
   if (document.body.style.overflow === "hidden") lenis?.stop();
