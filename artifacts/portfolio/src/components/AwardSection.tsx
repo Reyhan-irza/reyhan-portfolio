@@ -89,7 +89,7 @@ export default function AwardSection() {
               href={certificateUrl}
               download="sertifikat-lks-it-software-solution-2025.pdf"
               data-testid="link-download-certificate"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Unduh PDF
@@ -168,7 +168,7 @@ export default function AwardSection() {
               href={digitalLibraryCertificateUrl}
               download="sertifikat-apresiasi-inovasi-digital-2026.webp"
               data-testid="link-download-pustaka-certificate"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Unduh sertifikat
@@ -247,7 +247,7 @@ export default function AwardSection() {
               href={cadiakCertificateUrl}
               download="sertifikat-cadiak-ctf-2026.pdf"
               data-testid="link-download-cadiak-certificate"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-white/15 px-4 py-3 text-xs font-medium text-[#c9d0dc] transition-colors hover:border-[#667cff] hover:text-white sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-[var(--rule)] px-4 py-3 text-xs font-medium text-[var(--ink-primary)] transition-colors hover:border-[#667cff] hover:text-[#334da7] sm:w-auto"
             >
               <Download className="h-4 w-4" aria-hidden="true" />
               Unduh PDF
