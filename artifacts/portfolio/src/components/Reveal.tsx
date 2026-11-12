@@ -1,5 +1,5 @@
 import { createElement, useLayoutEffect, useRef, type HTMLAttributes, type ReactNode, type Ref } from "react";
-import { gsap, SplitText, SCENE } from "../lib/motion";
+import { gsap, SplitText, SCENE, afterLineSplit } from "../lib/motion";
 
 type RevealProps = Omit<HTMLAttributes<HTMLElement>, "children" | "onDrag"> & {
   children?: ReactNode;
@@ -54,7 +54,7 @@ export default function Reveal({ children, as = "div", media = false, tall = fal
           const authored = Array.from(heading.querySelectorAll("[data-heading-line]"));
           if (authored.length) revealLines(authored);
           else SplitText.create(heading, { type: "lines", mask: "lines", autoSplit: true,
-            linesClass: "motion-heading-line", onSplit: split => revealLines(split.lines) });
+            linesClass: "motion-heading-line", onSplit: split => afterLineSplit(revealLines(split.lines)) });
         }
         else gsap.fromTo(element, { opacity: 0 }, { opacity: 1, duration: SCENE.detail, ease: SCENE.ease,
           scrollTrigger: { trigger: element, start: "clamp(top 90%)", once: true }, onComplete: finish, clearProps: "opacity" });
