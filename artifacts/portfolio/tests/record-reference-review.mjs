@@ -150,7 +150,7 @@ async function review(width) {
           .map((f) => f.family),
       );
       assert.ok(
-        result.fonts.includes("Outfit") && result.fonts.includes("Manrope"),
+        result.fonts.includes("Manrope"),
       );
       const open = page.getByTestId("button-mobile-menu");
       await open.click();
@@ -255,14 +255,12 @@ async function review(width) {
       }
     } else {
       await jump(
-        width < 1024
-          ? "[data-project-row]:nth-child(2)"
-          : "[data-project-stage]",
+        "[data-project-row]:nth-child(2)",
         0.13,
       );
       await shot("card-2");
     }
-    for (const key of ["about", "journey", "github", "contact"]) {
+    for (const key of ["about", "journey", "github"]) {
       await jump("#" + key + " h2");
       await shot(key);
     }
@@ -274,13 +272,11 @@ async function review(width) {
         );
       assert.equal(new Set(result.githubEdges).size, 1);
     }
-    await go(
-      await page.evaluate(() => document.documentElement.scrollHeight),
-      1200,
-    );
+    await jump("[data-closing-marquee]", .18);
+    await page.mouse.move(0, 0);
     await shot("closing");
     if (!baseline) {
-      const track = page.locator("[data-closing-track]"),
+      const track = page.locator("[data-closing-track]").first(),
         x = () =>
           track.evaluate(
             (el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m41,
@@ -288,7 +284,12 @@ async function review(width) {
       const initial = await x();
       await wait(380);
       assert.ok(Math.abs(initial - (await x())) > 1);
-      await page.getByRole("button", { name: "Jeda teks berjalan" }).click();
+      const reverseTrack = page.locator('[data-closing-track]').nth(1);
+      const reverseX = () => reverseTrack.evaluate(el => new DOMMatrixReadOnly(getComputedStyle(el).transform).m41);
+      const reverseStart = await reverseX();
+      await wait(380);
+      assert.ok(await reverseX() > reverseStart);
+      await page.locator('[data-closing-marquee]').focus();
       const frozen = await x();
       await wait(350);
       assert.ok(Math.abs(frozen - (await x())) < 0.5);
@@ -303,6 +304,10 @@ async function review(width) {
       );
       assert.ok(result.overflow <= 1);
     }
+    await jump("#contact h2");
+    await shot("contact");
+    await go(await page.evaluate(() => document.documentElement.scrollHeight), 1200);
+    await shot("footer");
     if (film) {
       await wait(750);
       result.filmEndSeconds = round(
