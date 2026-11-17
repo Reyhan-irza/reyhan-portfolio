@@ -1,0 +1,51 @@
+{
+  "width": 1440,
+  "height": 900,
+  "errors": [],
+  "fonts": [
+    "Manrope",
+    "DM Mono",
+    "DM Mono"
+  ],
+  "menuWidth": 734.391,
+  "logoSize": 66.234,
+  "logoDrift": 0,
+  "logoReverseError": 0,
+  "input": {
+    "kind": "wheel",
+    "slow": 340,
+    "fast": 395,
+    "reverse": -260
+  },
+  "cards": [
+    {
+      "title": "TJKT",
+      "middle": 0.383,
+      "end": 0,
+      "reverseError": 0,
+      "layoutShift": 0
+    },
+    {
+      "title": "VIREON Library",
+      "middle": 0.382,
+      "end": 0,
+      "reverseError": 0,
+      "layoutShift": 0
+    },
+    {
+      "title": "Reyhan WhatsApp Portfolio",
+      "middle": 0.383,
+      "end": 0,
+      "reverseError": 0,
+      "layoutShift": 0
+    }
+  ],
+  "githubEdges": [
+    144,
+    144,
+    144
+  ],
+  "closingSize": 120.96,
+  "overflow": 0,
+  "filmEndSeconds": 44.712
+}

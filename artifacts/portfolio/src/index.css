@@ -40,9 +40,9 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
-  --font-sans: 'Manrope', sans-serif;
-  --font-heading: 'Manrope', sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Manrope", Arial, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-serif: var(--font-sans);
   --font-mono: 'DM Mono', 'Menlo', monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -171,15 +171,16 @@
   * {
     @apply border-border;
   }
+  :root { --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Manrope", Arial, sans-serif; }
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     background-color: #05070b;
     color: #f5f7fa;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--font-sans);
     letter-spacing: -0.03em;
   }
   html {
@@ -189,7 +190,7 @@
 
 /* Personal story: warm editorial voice set against the portfolio's RV night palette. */
 .portfolio-shell .story-intro h2 {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: -.065em;
 }
@@ -229,7 +230,7 @@
   opacity: 1;
 }
 .portfolio-shell .story-note h3 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--font-sans);
   font-size: clamp(1.28rem, 2vw, 1.55rem);
   font-weight: 500;
   letter-spacing: -.025em;
@@ -244,13 +245,13 @@
   background-color: rgba(135, 128, 255, .045);
 }
 .portfolio-shell .hero-section [data-hero-bio] {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   letter-spacing: -.035em;
   line-height: 1.36;
 }
 .portfolio-shell .hero-section .hero-name-accent {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: -.09em;
 }
 .portfolio-shell .hero-typing-loop {
@@ -275,7 +276,7 @@
   --accent-red: #667cff;
   color: var(--ink);
   background: #05070b;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-sans);
   overflow: clip;
 }
 .portfolio-shell .glass {
@@ -1198,7 +1199,7 @@
   right: -0.06em;
   bottom: -0.18em;
   color: rgba(232,231,220,0.08);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(8rem, 20vw, 18rem);
   font-weight: 700;
   letter-spacing: -0.13em;
@@ -1235,7 +1236,7 @@
   top: 50%;
   max-width: 72%;
   color: var(--project-paper);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(2.1rem, 5.3vw, 5rem);
   font-weight: 600;
   letter-spacing: -0.09em;
@@ -1257,7 +1258,7 @@
 .project-name {
   margin-top: 0.8rem;
   color: var(--project-paper);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(2rem, 4vw, 4.35rem);
   font-weight: 600;
   letter-spacing: -0.075em;
@@ -2344,7 +2345,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   --rv-border: rgba(255,255,255,.09);
   --rv-blue-wash: rgba(102,124,255,.12);
   --rv-violet-wash: rgba(139,108,255,.09);
-  --rv-display: 'Manrope', sans-serif;
+  --rv-display: var(--font-sans);
   --rv-mono: 'DM Mono', monospace;
   --paper: var(--rv-bg);
   --paper-deep: var(--rv-surface-raised);
@@ -3639,7 +3640,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
 .project-detail-heading h3 {
   margin: 0.55rem 0 0;
   color: var(--detail-text);
-  font-family: 'Outfit', 'Manrope', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(2rem, 5vw, 3.65rem);
   font-weight: 600;
   letter-spacing: -0.065em;
@@ -3722,7 +3723,7 @@ html[data-theme="dim"] ::-webkit-scrollbar-track { background: var(--paper); }
   bottom: -0.25em;
   z-index: 1;
   color: rgba(245, 247, 250, 0.16);
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 700;
   letter-spacing: -0.09em;

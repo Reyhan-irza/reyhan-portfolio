@@ -165,7 +165,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   await phonePage.waitForFunction(() =>
     document.querySelector("#home")
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 3,
+    && document.querySelectorAll("#achievement > .award-record").length === 4,
   );
   await dismissIntro(phonePage);
 

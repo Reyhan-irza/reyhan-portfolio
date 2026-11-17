@@ -94,7 +94,7 @@ export default function ProjectsSection() {
     if (!section) return;
 
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, ({ conditions }) => {
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)" }, ({ conditions }) => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
       rows.forEach((row, index) => {
         ScrollTrigger.create({
@@ -102,6 +102,12 @@ export default function ProjectsSection() {
           onEnter: () => updateActiveProject(index), onEnterBack: () => updateActiveProject(index),
         });
         if (conditions?.reduced) return;
+        const angle = conditions?.desktop ? 10 : 5;
+        const planePose = [
+          { rotationX: angle, rotationY: -angle * .45, z: -55 },
+          { rotationX: -angle * .35, rotationY: angle, z: -75 },
+          { rotationX: angle * .8, rotationY: angle * .35, z: -95 },
+        ][index];
         const q = gsap.utils.selector(row);
         // Measure the stationary article. Only its inner presentation and mask planes move.
         const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
@@ -118,6 +124,13 @@ export default function ProjectsSection() {
           .fromTo(q(".project-copy"), { y: 20, opacity: .4 }, { y: 0, opacity: 1, duration: .53 }, .40)
           .fromTo(q(".project-tech-list, .project-actions"), { y: 12, opacity: .62 },
             { y: 0, opacity: 1, duration: .39, stagger: .10 }, .56);
+        // Let the screenshot reach the viewport before its perspective settles.
+        gsap.fromTo(q("[data-project-plane]"),
+          { ...planePose, transformOrigin: index === 1 ? "right center" : "center bottom" },
+          { rotationX: 0, rotationY: 0, z: 0, ease: "none", scrollTrigger: {
+            id: `work-perspective-${index + 1}`, trigger: row,
+            start: "clamp(top 78%)", end: "clamp(top 12%)", scrub: .42, invalidateOnRefresh: true,
+          } });
         gsap.fromTo(q("[data-project-depth]"), { yPercent: 4, scale: 1.085 },
           { yPercent: -4, scale: 1.015, ease: "none", scrollTrigger: { trigger: row,
             start: "clamp(top bottom)", end: "clamp(bottom top)", scrub: SCENE.scrub, invalidateOnRefresh: true } });
@@ -305,6 +318,7 @@ export default function ProjectsSection() {
                           </h3>
                         </header>
                         <div className="project-aperture min-w-0">
+                          <div data-project-plane>
                           <div data-card-mask className="project-aperture__mask">
                             <div data-card-surface>
                               <div
@@ -349,6 +363,8 @@ export default function ProjectsSection() {
                               </div>
                             </div>
                           </div>
+                        </div>
+
                         </div>
 
                         <div data-project-copy className="min-w-0">

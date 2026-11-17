@@ -1,0 +1,29 @@
+▶ journey and all certificates stay visible and usable with reduced motion
+  ✔ all education rows and achievement cards are fully visible before scrolling (30.775762ms)
+  ✔ all certificate previews load and open their full-size files (3999.41165ms)
+  ✔ rating submission recovers from a summary error and persists the selection (8555.70654ms)
+  ✔ fixed palette ignores OS changes and saved preferences (3536.524482ms)
+  ✔ mobile intro fits, typing changes, and music controls remain inside their card (2654.501881ms)
+  ✔ home renders when legacy theme storage is blocked (1164.529908ms)
+  ﹣ a rendering failure leaves the static portfolio reachable (0.36947ms) # SKIP
+✔ journey and all certificates stay visible and usable with reduced motion (21623.124924ms)
+▶ scroll-linked sections stay aligned when phone width changes
+  ✔ hero scroll motion continues after resizing across phone layouts (2271.548195ms)
+  ✔ education progress matches the resized timeline position (1764.757789ms)
+  ✔ award content remains revealed when resizing partway through each card (9309.833408ms)
+  ✔ reveals stay visible after reverse scroll and live reduced-motion changes (6386.718129ms)
+  ✔ mobile card zoom settles once and does not reverse (2072.529259ms)
+  ﹣ mobile address-bar height changes do not reset scroll triggers (0.719417ms) # SKIP
+  ✔ headings and copy stay readable at the required viewport widths (10960.379562ms)
+  ✔ desktop projects remain vertical and include each project's details (4214.177712ms)
+  ﹣ leaving home tears down all its ScrollTriggers and Lenis on repeated visits (0.463792ms) # SKIP
+✔ scroll-linked sections stay aligned when phone width changes (39917.04086ms)
+✔ sans typography, four certificates and independent spatial scenes (108679.487401ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 3
+ℹ todo 0
+ℹ duration_ms 175546.122232

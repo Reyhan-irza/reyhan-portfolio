@@ -131,7 +131,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
   await page.waitForFunction(() =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 3
+    && document.querySelectorAll("#achievement > .award-record").length === 4
     && !document.querySelector(".rv-intro"),
   );
 
@@ -154,7 +154,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
       });
     });
 
-    assert.equal(visibleContent.length, 7, "Expected four education rows and three achievement cards");
+    assert.equal(visibleContent.length, 8, "Expected four education rows and four achievement cards");
     for (const item of visibleContent) {
       assert.equal(item.visibility, "visible", `${item.label} should not be hidden`);
       assert.ok(item.opacity >= 0.99, `${item.label} should be fully opaque, got ${item.opacity}`);
@@ -185,6 +185,13 @@ test("journey and all certificates stay visible and usable with reduced motion",
         file: "sertifikat-cadiak-ctf-2026.pdf",
         downloadName: "sertifikat-cadiak-ctf-2026.pdf",
       },
+      {
+        selector: '[data-testid="link-dicoding-certificate-preview"]',
+        viewSelector: '[data-testid="link-view-dicoding-certificate"]',
+        downloadSelector: '[data-testid="link-download-dicoding-certificate"]',
+        file: "sertifikat-dicoding-microsoft-fabric-2026.jpeg",
+        downloadName: "sertifikat-dicoding-microsoft-fabric-2026.jpeg",
+      },
     ];
 
     for (const preview of previews) {
@@ -202,7 +209,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
         return { status: response.status, contentType: response.headers.get("content-type") };
       }, preview.selector);
       assert.equal(assetResponse.status, 200, `${preview.file} should be served successfully`);
-      assert.match(assetResponse.contentType ?? "", /^(application\/pdf|image\/webp)/);
+      assert.match(assetResponse.contentType ?? "", /^(application\/pdf|image\/webp|image\/jpeg)/);
 
       assert.equal(await link.getAttribute("target"), "_blank");
       assert.ok((await link.getAttribute("href")).endsWith(preview.file));

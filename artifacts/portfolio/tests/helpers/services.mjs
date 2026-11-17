@@ -14,7 +14,7 @@ export async function mockServices(context) {
       if (!path.extname(file)) file = path.join(root, 'index.html');
       try {
         if (!(await stat(file)).isFile()) return route.fulfill({ status: 404, body: 'Not found' });
-        const types = { '.html':'text/html', '.js':'application/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg', '.pdf':'application/pdf', '.woff2':'font/woff2' };
+        const types = { '.html':'text/html', '.js':'application/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.pdf':'application/pdf', '.woff2':'font/woff2' };
         return route.fulfill({ body: await readFile(file), contentType: types[path.extname(file)] ?? 'application/octet-stream' });
       } catch { return route.fulfill({ status: 404, body: 'Not found' }); }
     });

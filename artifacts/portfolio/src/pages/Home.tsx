@@ -13,6 +13,7 @@ import GitHubSection from "@/components/GitHubSection";
 import ContactSection from "@/components/ContactSection";
 import PortfolioRatingSection from "@/components/PortfolioRatingSection";
 import Footer from "@/components/Footer";
+import ClosingMarquee from "@/components/ClosingMarquee";
 import AchievementToast from "@/components/AchievementToast";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
@@ -27,9 +28,9 @@ const SecondaryArchive = lazy(() => import("@/components/SecondaryArchive"));
 
 export default function Home() {
   useSectionTheme();
-  useEditorialScenes();
   const [introFinished, setIntroFinished] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
+  useEditorialScenes(introFinished);
   const revealHero = useCallback(() => setHeroReady(true), []);
   useLenis(introFinished);
   const [archiveVisited, setArchiveVisited] = useState(false);
@@ -103,6 +104,7 @@ export default function Home() {
         <GitHubSection />
         <SectionBoundary variant="resolve" />
         <div className="portfolio-closing-zone">
+          <ClosingMarquee />
           <ContactSection />
           <PortfolioRatingSection />
           <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {

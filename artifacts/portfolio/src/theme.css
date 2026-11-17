@@ -1,8 +1,6 @@
-@font-face { font-family: 'Outfit'; src: url('./assets/type/outfit-latin.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Manrope'; src: url('./assets/type/manrope-latin.woff2') format('woff2'); font-weight: 200 800; font-style: normal; font-display: swap; }
 @font-face { font-family: 'DM Mono'; src: url('./assets/type/dm-mono-400-latin.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: 'DM Mono'; src: url('./assets/type/dm-mono-500-latin.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: 'Fraunces'; src: url('./assets/type/fraunces-latin.woff2') format('woff2'); font-weight: 400 800; font-style: normal; font-display: swap; }
 
 /* RV mineral palette. Semantic tokens also reach dialogs rendered in body portals. */
 :root {
@@ -33,13 +31,13 @@ body { background: var(--canvas); }
   --rv-blue-wash: var(--signal-wash);
   --rv-violet-wash: var(--signal-wash);
   --muted-ink: var(--ink-muted);
-  --rv-display: 'Outfit', 'Manrope', sans-serif;
+  --rv-display: var(--font-sans);
 }
 .portfolio-shell::after { content: none; }
 .portfolio-shell .hero-section { background: var(--canvas); }
 .portfolio-shell h1,
 .portfolio-shell .projects-title,
-.portfolio-shell .project-name { font-family: 'Outfit', 'Manrope', sans-serif; }
+.portfolio-shell .project-name { font-family: var(--font-sans); }
 .portfolio-shell .hero-section h1 { font-size: clamp(4rem, 9vw, 8.5rem); font-weight: 600; letter-spacing: -.075em; line-height: .9; }
 .portfolio-shell .hero-content { min-height: min(48rem, calc(100svh - 12rem)); }
 .portfolio-shell .hero-section [data-hero-bio] { font-size: clamp(1.05rem, 1.6vw, 1.4rem); }
@@ -163,23 +161,23 @@ body { background: var(--canvas); }
 
 /* The opening holds a single identity composition until the film has exited. */
 .hero-section[data-hero-ready="false"] > * { visibility: hidden; }
-.portfolio-shell .hero-section [data-hero-bio], .portfolio-shell :is(.story-lead,.project-copy) { font-family: 'Manrope', sans-serif; letter-spacing: -.015em; line-height: 1.65; }
-.portfolio-shell :is(.portfolio-section-heading,.portfolio-award-heading) { font-family: 'Outfit', sans-serif; }
+.portfolio-shell .hero-section [data-hero-bio], .portfolio-shell :is(.story-lead,.project-copy) { font-family: var(--font-sans); letter-spacing: -.015em; line-height: 1.65; }
+.portfolio-shell :is(.portfolio-section-heading,.portfolio-award-heading) { font-family: var(--font-sans); }
 .portfolio-shell #about .story-notes { display: block; border-bottom: 0; background: transparent !important; }
 .portfolio-shell #about .story-note { display: grid; grid-template-columns: 3rem minmax(0,.8fr) minmax(0,1.2fr); gap: 2rem; padding: 2rem 0; border: 0; border-bottom: 1px solid var(--rule); background: transparent !important; }
 .portfolio-shell .story-note > div svg { display: none; }
 .portfolio-shell .story-note h3, .portfolio-shell .story-note p { margin: 0; max-width: 50ch; }
-.portfolio-shell .story-note h3 { font-family: 'Outfit', sans-serif; }
+.portfolio-shell .story-note h3 { font-family: var(--font-sans); }
 .portfolio-shell .story-note > div { justify-content: flex-start; padding-top: .4rem; }
 .portfolio-shell .secondary-archive-content { background: var(--panel); padding: 0 clamp(1rem,3vw,2.5rem); }
 .portfolio-shell .secondary-archive-content > section { padding: 3rem 0; border-bottom: 1px solid var(--rule); }
 .portfolio-shell .secondary-archive-content .text-center { text-align: left; }
 .portfolio-shell .secondary-archive-content .mx-auto { margin-left: 0; }
-.portfolio-shell .secondary-archive-content h2 { font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.045em; }
+.portfolio-shell .secondary-archive-content h2 { font-family: var(--font-sans); font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.045em; }
 .portfolio-shell .secondary-archive-content .rgb-divider { display: none; }
 .portfolio-shell .secondary-archive-content :is(.glass,.music-card) { background: var(--panel-raised) !important; border-radius: 4px; box-shadow: none; }
 .portfolio-shell .secondary-archive-tools { padding: 2rem 0; gap: 1rem; }
-.portfolio-shell .secondary-archive-tools-label { font: 500 .85rem 'Manrope', sans-serif; letter-spacing: 0; text-transform: none; }
+.portfolio-shell .secondary-archive-tools-label { font: 500 .85rem var(--font-sans); letter-spacing: 0; text-transform: none; }
 .portfolio-shell :is(#about,#journey,#roadmap) { padding-block: clamp(3.5rem,7vw,6rem); }
 .portfolio-shell .editorial-divider { margin-block: 0; }
 @media (max-width: 767px) {
@@ -193,7 +191,7 @@ body { background: var(--canvas); }
 .portfolio-shell .hero-mark-image { inset: 8%; }
 .portfolio-shell .hero-section h1 { font-size: clamp(4rem, 8.8vw, 9rem); line-height: .93; letter-spacing: -.065em; }
 .portfolio-shell .hero-name-accent { color: var(--signal); }
-.portfolio-shell [data-hero-kicker] { font-family: 'Manrope', sans-serif; text-transform: none; font-size: .8rem; letter-spacing: 0; }
+.portfolio-shell [data-hero-kicker] { font-family: var(--font-sans); text-transform: none; font-size: .8rem; letter-spacing: 0; }
 .portfolio-shell .hero-section [data-hero-bio] { max-width: 36ch; }
 .portfolio-shell .proof-strip { padding-block: 2.5rem; }
 .portfolio-shell .proof-item { padding-block: 1.5rem; }
@@ -202,7 +200,7 @@ body { background: var(--canvas); }
 .portfolio-shell .project-stamp { background: #101113; padding: .4rem .65rem; color: #f3f3ef; }
 .portfolio-shell .project-wordmark { display: none; }
 .portfolio-shell .project-visual--screenshot { border-radius: 2px; }
-.portfolio-shell :is(.project-type,.section-kicker,.projects-kicker) { font-family: 'Manrope', sans-serif; letter-spacing: .035em; text-transform: none; }
+.portfolio-shell :is(.project-type,.section-kicker,.projects-kicker) { font-family: var(--font-sans); letter-spacing: .035em; text-transform: none; }
 .portfolio-shell .secondary-archive { border-top: 2px solid var(--rule); }
 .portfolio-shell .secondary-archive summary { padding-block: 1.75rem; }
 @media (max-width: 1023px) {
@@ -287,11 +285,9 @@ body { background: var(--canvas); }
 /* Keep the outgoing page readable under the sliding menu edge. */
 .portfolio-shell .nav-scrim { background: rgb(2 4 10 / 12%); }
 
-@font-face { font-family:'RV Work Display'; src:url('./assets/type/barlow-condensed-latin-600-normal.woff2') format('woff2'); font-style:normal; font-weight:600; font-display:swap; }
-@font-face { font-family:'RV Editorial'; src:url('./assets/type/fraunces-latin-500-italic.woff2') format('woff2'); font-style:italic; font-weight:500; font-display:swap; }
-.portfolio-shell .projects-title .project-heading-accent { font-family:'RV Editorial',Georgia,serif; font-style:italic; font-weight:500; letter-spacing:-.055em; }
+.portfolio-shell .projects-title .project-heading-accent { font-family:var(--font-sans); font-style:normal; font-weight:650; letter-spacing:-.045em; }
 .project-aperture,.project-aperture__mask { overflow:clip; }
-.portfolio-shell .project-name { overflow:clip; font-family:'RV Work Display',sans-serif; font-weight:600; letter-spacing:-.022em; }
+.portfolio-shell .project-name { overflow:clip; font-family:var(--font-sans); font-weight:600; letter-spacing:-.022em; }
 .project-rail-marker { transition:none; }
 @media (min-width:768px) and (max-width:1023px) {
   .portfolio-shell .projects-heading { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1.75rem; }
@@ -300,8 +296,8 @@ body { background: var(--canvas); }
 }
 .portfolio-shell [data-project-name] { display:block; padding-bottom:.1em; }
 .portfolio-shell #github .github-heading { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); align-items:end; gap:2rem; margin-bottom:0; padding-bottom:clamp(1.25rem,3vw,2.5rem); border-bottom:1px solid var(--rule); text-align:left; }
-.portfolio-shell #github .github-heading h2 { width:fit-content; max-width:100%; margin:.7rem 0 0; color:var(--ink-primary); font:600 clamp(3.6rem,8.8vw,7.5rem)/.98 'RV Work Display',sans-serif; letter-spacing:-.025em; }
-.portfolio-shell #github .github-description { max-width:30ch; margin:0; font:italic 500 clamp(1.22rem,2vw,1.75rem)/1.32 'RV Editorial',Georgia,serif; color:var(--ink-secondary); }
+.portfolio-shell #github .github-heading h2 { width:fit-content; max-width:100%; margin:.7rem 0 0; color:var(--ink-primary); font:600 clamp(3.6rem,8.8vw,7.5rem)/.98 var(--font-sans); letter-spacing:-.025em; }
+.portfolio-shell #github .github-description { max-width:30ch; margin:0; font:500 clamp(1.1rem,1.8vw,1.5rem)/1.5 var(--font-sans); color:var(--ink-secondary); }
 .github-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); text-align:left; margin:0 0 2rem; }
 .github-stats > div { border-bottom:1px solid var(--rule); padding:1rem .3rem 1rem 0; }
 .github-profile-link { display:flex; justify-content:flex-start; margin-top:1.1rem; }
@@ -334,7 +330,6 @@ body { background: var(--canvas); }
   .portfolio-shell .project-row:nth-child(2) .project-presentation { grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); grid-template-areas:"title image" "detail image"; }
 }
 
-@font-face { font-family:'RV Work Display'; src:url('./assets/type/barlow-condensed-latin-800-normal.woff2') format('woff2'); font-style:normal; font-weight:800; font-display:swap; }
 .portfolio-shell :is(.projects-title,.portfolio-section-heading,.portfolio-award-heading) { line-height:1.08; }
 .portfolio-shell .motion-heading-line-mask,
 .portfolio-shell .projects-title > span,
@@ -344,17 +339,38 @@ body { background: var(--canvas); }
 .portfolio-shell [data-heading-open="true"] :is(.motion-heading-line-mask,.projects-title > span) { overflow:visible !important; }
 .portfolio-shell .projects-title .project-heading-accent { padding-inline:.04em .1em; }
 .portfolio-shell .contact-title { line-height:1.13; }
-.closing-marquee { display:flex; align-items:center; gap:clamp(.75rem,2vw,2rem); margin:clamp(2rem,5vw,4rem) -1.5rem -2rem; padding:.6rem max(1rem,3vw) .65rem 0; border-top:1px solid var(--rule); }
-.closing-marquee__window { flex:1; min-width:0; overflow:clip; }
-.closing-marquee__track,.closing-marquee__cycle { display:flex; width:max-content; align-items:center; }
-.closing-marquee__cycle { flex:none; min-width:100vw; justify-content:space-around; gap:.46em; padding:.06em .46em .13em 0; color:var(--ink-primary); font:800 clamp(2.6rem,7.4vw,8rem)/1.12 'RV Work Display',sans-serif; text-transform:uppercase; letter-spacing:-.015em; white-space:nowrap; }
-.closing-marquee__cycle i { display:block; width:.55em; height:.065em; background:var(--signal); flex:none; }
-.closing-marquee__control { display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--rule); border-radius:50%; color:var(--ink-primary); }
-@media(prefers-reduced-motion:reduce) {
-  .closing-marquee { padding-left:1.5rem; }
-  .closing-marquee__control,.closing-marquee__cycle + .closing-marquee__cycle,.closing-marquee__cycle i { display:none; }
-  .closing-marquee__track,.closing-marquee__cycle { width:100%; min-width:0; }
-  .closing-marquee__cycle { flex-wrap:wrap; justify-content:flex-start; gap:.12em .5em; white-space:normal; }
+.closing-marquee {
+  position: relative;
+  display: grid;
+  gap: clamp(.65rem, 1.5vw, 1.4rem);
+  overflow: clip;
+  padding-block: clamp(3rem, 7vw, 7rem);
+  border-block: 1px solid var(--rule);
+  background: var(--canvas);
+}
+.closing-marquee:focus-visible { outline: 2px solid var(--signal); outline-offset: -6px; }
+.closing-marquee__window { min-width: 0; overflow: clip; }
+.closing-marquee__track, .closing-marquee__cycle { display: flex; width: max-content; align-items: center; }
+.closing-marquee__cycle {
+  flex: none;
+  min-width: 100vw;
+  justify-content: space-around;
+  gap: .48em;
+  padding-right: .48em;
+  color: var(--ink-primary);
+  font: 700 clamp(2.8rem, 8.4vw, 8.4rem)/1.2 var(--font-sans);
+  letter-spacing: -.05em;
+  white-space: nowrap;
+}
+.closing-marquee__word { display: inline-flex; align-items: center; gap: .48em; padding-block: .04em; }
+.closing-marquee__word i { display: block; width: .5em; height: .055em; background: var(--signal); flex: none; }
+.closing-marquee__window + .closing-marquee__window .closing-marquee__cycle { color: var(--ink-secondary); font-weight: 500; }
+@media (prefers-reduced-motion: reduce) {
+  .closing-marquee { padding-inline: 1.5rem; }
+  .closing-marquee__cycle + .closing-marquee__cycle, .closing-marquee__word i { display: none; }
+  .closing-marquee__track, .closing-marquee__cycle { width: 100%; min-width: 0; }
+  .closing-marquee__cycle { flex-wrap: wrap; justify-content: flex-start; gap: .12em .5em; white-space: normal; }
+  .closing-marquee__word { white-space: normal; font-size: clamp(2rem, 7vw, 5rem); }
 }
 
 .portfolio-shell .secondary-archive { padding-inline:clamp(1rem,3vw,2rem); }
@@ -362,6 +378,25 @@ body { background: var(--canvas); }
 @media (min-width:1024px) {
   .portfolio-shell .editorial-nav .mobile-menu-trigger { display:inline-flex; }
   .portfolio-shell .mobile-nav-panel { left:auto; width:clamp(32rem,51vw,54rem); padding-inline:clamp(2.5rem,5vw,5rem); }
-  .portfolio-shell .mobile-nav-panel [data-menu-item] { min-height:clamp(3.75rem,8vh,6rem); font:600 clamp(2.5rem,4vw,4.75rem)/1.08 'RV Work Display',sans-serif; }
+  .portfolio-shell .mobile-nav-panel [data-menu-item] { min-height:clamp(3.75rem,8vh,6rem); font:600 clamp(2.5rem,4vw,4.75rem)/1.08 var(--font-sans); }
   .portfolio-shell .editorial-nav[data-menu-open="true"] [aria-label="Page sections"] { visibility:hidden; }
 }
+
+/* Spatial presentation belongs to these inner planes, independently of entrance and image parallax. */
+.portfolio-shell #home h1 { font-size: clamp(3.5rem, 8.3vw, 8.4rem); font-weight: 650; letter-spacing: -.065em; line-height: 1.02; }
+.portfolio-shell :is(h1,h2,h3,h4) { font-optical-sizing: auto; }
+.portfolio-shell .project-heading-accent { font-style: normal; }
+.portfolio-shell .github-description { font-style: normal; }
+.portfolio-shell .hero-mark-image { perspective: 900px; }
+.hero-mark-sculpture { width: 100%; height: 100%; transform-style: preserve-3d; }
+.portfolio-shell .project-aperture { perspective: 1100px; }
+[data-project-plane] { transform-style: preserve-3d; }
+[data-award-copy] { min-width: 0; }
+[data-award-copy] h2 { font-size: clamp(2rem, 4.5vw, 4rem); letter-spacing: -.045em; line-height: 1.1; }
+[data-award-media] { min-width: 0; perspective: 1100px; }
+[data-award-plane] { transform-style: preserve-3d; transform-origin: center bottom; }
+.award-title-line { padding-bottom: .1em; }
+.award-title-line-mask { padding-block: .04em .12em; margin-block: -.04em -.12em; }
+.story-note, .contact-title { perspective: 1000px; }
+
+.portfolio-shell :is(.projects-title,.portfolio-section-heading) { letter-spacing: -.045em; }
