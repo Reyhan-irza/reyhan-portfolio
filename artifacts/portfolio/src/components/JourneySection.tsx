@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
 
@@ -22,7 +22,6 @@ export default function JourneySection() {
   const educationRef = useRef<HTMLDivElement>(null);
   const educationProgressRef = useRef<HTMLSpanElement>(null);
   const didFire = useRef(false);
-  const educationEntered = useRef(false);
 
   useLayoutEffect(() => {
     const el = sectionRef.current;
@@ -49,10 +48,22 @@ export default function JourneySection() {
         if (!mediaContext.conditions?.reduced && education && educationProgress) {
           const compact = Boolean(mediaContext.conditions?.compact);
           const educationRows = gsap.utils.toArray<HTMLElement>("[data-education-row]", education);
-          if (!educationEntered.current) gsap.from(educationRows, {
-            x: 24, opacity: 0, duration: SCENE.detail, stagger: .09, ease: SCENE.ease,
-            scrollTrigger: { trigger: education, start: "clamp(top 88%)", once: true },
-            onComplete: () => { educationEntered.current = true; }, clearProps: "transform,opacity",
+          educationRows.forEach(row => {
+            const scene = gsap.timeline({
+              scrollTrigger: {
+                trigger: row,
+                start: "clamp(top 94%)",
+                end: compact ? "clamp(center 66%)" : "clamp(center 68%)",
+                scrub: compact ? 0.25 : 0.45,
+                invalidateOnRefresh: true,
+              },
+            });
+            scene.from(row.querySelector(".education-period"), {
+              x: compact ? -12 : -28, opacity: 0.5, duration: 0.6, ease: "power1.out",
+            }).from(row.querySelector("[data-education-content]"), {
+              y: compact ? 18 : 26, rotationX: -12, transformPerspective: 700,
+              transformOrigin: "center bottom", duration: 0.85, ease: "power2.out",
+            }, 0.18);
           });
           let currentMilestone = -1;
           const setActiveMilestone = (progress: number) => {
@@ -65,10 +76,8 @@ export default function JourneySection() {
             educationRows.forEach((row, index) => {
               if (index === activeIndex) {
                 row.setAttribute("data-education-active", "true");
-                row.setAttribute("aria-current", "step");
               } else {
                 row.removeAttribute("data-education-active");
-                row.removeAttribute("aria-current");
               }
             });
           };
@@ -120,14 +129,12 @@ export default function JourneySection() {
           <div ref={educationRef} className="education-timeline relative mt-8 pl-9 md:pl-12">
             <span className="education-timeline-track" aria-hidden="true" />
             <span ref={educationProgressRef} className="education-timeline-progress" aria-hidden="true" />
-                    <div className="space-y-3">
+            <div className="space-y-3">
               {educationPeriods.map((entry, index) => {
                 const isCurrent = "current" in entry && entry.current;
                 return (
-                  <Reveal
+                  <article
                     key={entry.level}
-                    as="article"
-                    mount
                     className={`education-item grid gap-2 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6 ${isCurrent ? "education-item-current" : ""}`}
                     data-education-row
                     data-education-current={isCurrent || undefined}
@@ -150,7 +157,7 @@ export default function JourneySection() {
                         </>
                       ) : null}
                     </div>
-                  </Reveal>
+                  </article>
                 );
               })}
             </div>
