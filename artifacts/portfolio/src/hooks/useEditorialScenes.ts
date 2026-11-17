@@ -1,8 +1,9 @@
 import { useLayoutEffect } from "react";
 import { gsap, SplitText, SCENE, afterLineSplit } from "../lib/motion";
 
-export function useEditorialScenes() {
+export function useEditorialScenes(enabled = true) {
   useLayoutEffect(() => {
+    if (!enabled) return;
     const root = document.querySelector<HTMLElement>(".portfolio-shell");
     if (!root) return;
     const media = gsap.matchMedia();
@@ -88,5 +89,5 @@ export function useEditorialScenes() {
       return () => context.revert();
     });
     return () => media.revert();
-  }, []);
+  }, [enabled]);
 }
