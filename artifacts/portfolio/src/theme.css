@@ -398,3 +398,5 @@ body { background: var(--canvas); }
 .award-title-line { padding-bottom: .1em; }
 .award-title-line-mask { padding-block: .04em .12em; margin-block: -.04em -.12em; }
 .story-note, .contact-title { perspective: 1000px; }
+
+.portfolio-shell :is(.projects-title,.portfolio-section-heading) { letter-spacing: -.045em; }
