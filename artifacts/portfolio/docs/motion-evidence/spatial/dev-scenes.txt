@@ -1,0 +1,49 @@
+▶ journey and all certificates stay visible and usable with reduced motion
+  ✔ all education rows and achievement cards are fully visible before scrolling (22.914531ms)
+  ✔ all certificate previews load and open their full-size files (3154.401901ms)
+  ✖ rating submission recovers from a summary error and persists the selection (10102.036218ms)
+  ✔ fixed palette ignores OS changes and saved preferences (4046.873908ms)
+  ✔ mobile intro fits, typing changes, and music controls remain inside their card (3994.676396ms)
+  ✔ home renders when legacy theme storage is blocked (4648.130841ms)
+  ✔ a rendering failure leaves the static portfolio reachable (1134.280891ms)
+✖ journey and all certificates stay visible and usable with reduced motion (39037.982271ms)
+▶ scroll-linked sections stay aligned when phone width changes
+  ✔ hero scroll motion continues after resizing across phone layouts (4665.618013ms)
+  ✔ education progress matches the resized timeline position (2226.308079ms)
+  ✔ award content remains revealed when resizing partway through each card (6870.662091ms)
+  ✔ reveals stay visible after reverse scroll and live reduced-motion changes (8582.794035ms)
+  ✔ mobile card zoom settles once and does not reverse (2216.901197ms)
+  ✔ mobile address-bar height changes do not reset scroll triggers (4902.726379ms)
+  ✔ headings and copy stay readable at the required viewport widths (9796.659323ms)
+  ✔ desktop projects remain vertical and include each project's details (6083.722735ms)
+  ✔ leaving home tears down all its ScrollTriggers and Lenis on repeated visits (7883.437327ms)
+✔ scroll-linked sections stay aligned when phone width changes (58735.701314ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 16
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 105954.756673
+
+✖ failing tests:
+
+test at tests/reduced-motion.browser.test.mjs:229:11
+✖ rating submission recovers from a summary error and persists the selection (10102.036218ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/eaa983e1fd04/rv-spatial/artifacts/portfolio/tests/reduced-motion.browser.test.mjs:246:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/eaa983e1fd04/rv-spatial/artifacts/portfolio/tests/reduced-motion.browser.test.mjs:229:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
