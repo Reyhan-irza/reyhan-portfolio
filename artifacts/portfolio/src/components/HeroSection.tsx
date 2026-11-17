@@ -29,6 +29,8 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
           scrub: SCENE.scrub, invalidateOnRefresh: true,
         } }).fromTo("[data-hero-title-depth]", { y: 0 }, { y: () => -Math.min(90, section.clientHeight * .12) }, 0)
           .fromTo("[data-hero-bg]", { yPercent: 0, scale: 1 }, { yPercent: 24, scale: 1.06 }, 0)
+          .fromTo("[data-hero-sculpture]", { rotationX: 8, rotationY: -14, z: -32 },
+            { rotationX: -6, rotationY: 20, z: 50 }, 0)
           .to("[data-hero-scroll-cue]", { opacity: 0, y: -18, duration: .25 }, 0);
       }, section);
       return () => context.revert();
@@ -89,12 +91,14 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
         <div className="hero-identity-frame">
         <aside data-hero-bg data-hero-mark-stage className="hero-mark-stage relative mx-auto aspect-square w-full max-w-[520px]" aria-label="Identitas visual RV">
           <div className="hero-mark-image absolute inset-[13%]">
+            <div data-hero-sculpture className="hero-mark-sculpture">
             <BrandLogo
               size="custom"
               alt="Monogram RV berwarna perak metalik dengan cahaya biru"
               fetchPriority="high"
               className="h-full w-full"
             />
+            </div>
           </div>
           <div className="absolute bottom-[9%] left-[8%] font-mono text-[9px] uppercase tracking-[.18em] text-white/35">Identitas / 01</div>
           <div className="absolute right-[8%] top-[9%] font-mono text-[9px] uppercase tracking-[.18em] text-[#8a98ff]">Vierlykirk</div>

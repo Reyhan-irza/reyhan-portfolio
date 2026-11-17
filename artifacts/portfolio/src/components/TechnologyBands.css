@@ -150,10 +150,10 @@
 }
 .technology-band__mark svg { display: block; width: 100%; height: 100%; }
 .technology-band__technology-name {
-  color: var(--ink-secondary); font: 600 clamp(1.65rem, 2.7vw, 2.85rem)/1.05 'RV Work Display',sans-serif;
+  color: var(--ink-secondary); font: 600 clamp(1.65rem, 2.7vw, 2.85rem)/1.05 var(--font-sans);
   letter-spacing: -.02em; white-space: nowrap;
 }
-.technology-band--system .technology-band__technology-name { font-family: 'RV Editorial', Georgia, serif; font-style: italic; font-weight: 500; }
+.technology-band--system .technology-band__technology-name { font-family: var(--font-sans); font-style: normal; font-weight: 500; }
 .technology-band__item.is-touch-active .technology-band__mark { color: var(--signal); }
 @media (hover:hover) and (pointer:fine) { .technology-band__item:hover .technology-band__mark { color:var(--signal); } }
 .technology-bands .technology-bands__header { margin-bottom: clamp(1rem,3vw,2.5rem); }
