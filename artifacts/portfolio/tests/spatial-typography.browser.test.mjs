@@ -90,6 +90,25 @@ test('sans typography, four certificates and independent spatial scenes', {
         assert.equal(await page.getByTestId('link-download-dicoding-certificate').getAttribute('download'), 'sertifikat-dicoding-microsoft-fabric-2026.jpeg');
         assert.equal(await page.locator('[data-award-record]').count(), 4);
         await capture('certificate');
+        assert.equal(await page.locator('[data-education-row][aria-current=step]').count(), 1);
+        if (width >= 1024) {
+          assert.equal(await page.locator('.editorial-nav [aria-label="Page sections"]').count(), 0);
+
+        }
+        const trigger = page.getByTestId('button-mobile-menu');
+        assert.equal(await trigger.isVisible(), true);
+        assert.equal(await trigger.locator('.mobile-menu-line').count(), 2);
+        await trigger.click();
+        const dialog = page.getByRole('dialog', { name: 'Explore / portfolio' });
+        await dialog.waitFor();
+        await page.waitForTimeout(1400);
+        const bounds = await dialog.boundingBox();
+        assert.ok(Math.abs(bounds.x) < 1 && Math.abs(bounds.width - width) <= 1);
+        await capture('navigation');
+        await page.keyboard.press('Escape');
+        await dialog.waitFor({ state: 'hidden' });
+        await jump('.education-timeline');
+        await capture('journey');
         await jump('#closing-type');
         await page.mouse.move(0, 0);
         const strip = page.locator('#closing-type');
@@ -107,6 +126,7 @@ test('sans typography, four certificates and independent spatial scenes', {
         const seams = await tracks.evaluateAll(nodes => nodes.map(el => Math.abs(el.children[0].getBoundingClientRect().width - el.children[1].getBoundingClientRect().width)));
         assert.ok(seams.every(error => error < .1));
         await capture('marquee');
+        await page.keyboard.press("Tab");
         await strip.focus();
         const stopped = await positions();
         await page.waitForTimeout(250);
