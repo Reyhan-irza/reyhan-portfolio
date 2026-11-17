@@ -102,18 +102,18 @@ export default function ProjectsSection() {
           onEnter: () => updateActiveProject(index), onEnterBack: () => updateActiveProject(index),
         });
         if (conditions?.reduced) return;
-        const angle = conditions?.desktop ? 10 : 5;
+        const angle = conditions?.desktop ? 19 : 12;
         const planePose = [
-          { rotationX: angle, rotationY: -angle * .45, z: -55 },
-          { rotationX: -angle * .35, rotationY: angle, z: -75 },
-          { rotationX: angle * .8, rotationY: angle * .35, z: -95 },
+          { rotationX: angle, rotationY: -angle * .45, z: -90, xPercent: -7, rotationZ: -2.5 },
+          { rotationX: -angle * .35, rotationY: angle, z: -120, xPercent: 9, rotationZ: 3 },
+          { rotationX: angle * .8, rotationY: angle * .35, z: -150, xPercent: 0, rotationZ: -1.5 },
         ][index];
         const q = gsap.utils.selector(row);
         // Measure the stationary article. Only its inner presentation and mask planes move.
         const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
           id: `work-entry-${index + 1}`, trigger: row, start: "clamp(top 96%)",
           end: () => `+=${Math.min(row.offsetHeight * .90, document.documentElement.clientHeight * .80)}`,
-          scrub: .30, invalidateOnRefresh: true,
+          scrub: .55, invalidateOnRefresh: true,
         }});
         entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
           { y: 0, duration: 1.06 }, 0)
@@ -127,9 +127,9 @@ export default function ProjectsSection() {
         // Let the screenshot reach the viewport before its perspective settles.
         gsap.fromTo(q("[data-project-plane]"),
           { ...planePose, transformOrigin: index === 1 ? "right center" : "center bottom" },
-          { rotationX: 0, rotationY: 0, z: 0, ease: "none", scrollTrigger: {
+          { rotationX: 0, rotationY: 0, rotationZ: 0, xPercent: 0, z: 0, ease: "none", scrollTrigger: {
             id: `work-perspective-${index + 1}`, trigger: row,
-            start: "clamp(top 78%)", end: "clamp(top 12%)", scrub: .42, invalidateOnRefresh: true,
+            start: "clamp(top 78%)", end: "clamp(top 5%)", scrub: .65, invalidateOnRefresh: true,
           } });
         gsap.fromTo(q("[data-project-depth]"), { yPercent: 4, scale: 1.085 },
           { yPercent: -4, scale: 1.015, ease: "none", scrollTrigger: { trigger: row,

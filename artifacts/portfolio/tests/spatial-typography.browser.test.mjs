@@ -72,7 +72,7 @@ test('sans typography, four certificates and independent spatial scenes', {
           const entry = await pose();
           assert.ok(Math.abs(entry.x) + Math.abs(entry.y) > .002, `3D entry at ${width}/${index}`);
           await capture(`project-${index + 1}-entry`);
-          await go(Math.max(layout.top - height * .96 + distance + 80, layout.top - height * .12 + 40));
+          await go(Math.max(layout.top - height * .96 + distance + 80, layout.top - height * .05 + 40));
           const rest = await pose();
           assert.ok(Math.abs(rest.x) + Math.abs(rest.y) < .002);
           if (index === 1) await capture('project');
@@ -99,6 +99,8 @@ test('sans typography, four certificates and independent spatial scenes', {
         assert.equal(await tracks.count(), 2);
         const positions = () => tracks.evaluateAll(nodes => nodes.map(el => new DOMMatrixReadOnly(getComputedStyle(el).transform).m41));
         const first = await positions();
+        await page.locator('[data-closing-marquee]').hover();
+        await page.evaluate(() => window.scrollBy(0, -35));
         await page.waitForTimeout(400);
         const next = await positions();
         assert.ok(next[0] < first[0] - 1 && next[1] > first[1] + 1, `opposing tracks at ${width}`);
