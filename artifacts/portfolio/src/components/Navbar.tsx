@@ -280,24 +280,7 @@ export default function Navbar() {
             </span>
           </a>
 
-          <div className="hidden items-center gap-7 lg:flex" aria-label="Page sections" inert={isOpen}>
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                aria-current={activeHref === link.href ? "location" : undefined}
-                className={`editorial-nav-link relative py-2 text-xs uppercase tracking-[.11em] transition-colors ${activeHref === link.href ? "text-white" : "text-white/65 hover:text-white"}`}
-              >
-                {link.label}
-                {activeHref === link.href && <span className="absolute -bottom-1 left-0 h-px w-full bg-[#8290ff]" />}
-              </a>
-            ))}
-            <a href="https://github.com/Reyhan-irza" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 whitespace-nowrap border border-white/15 px-3 py-2 text-xs tracking-[.035em] text-white/80 transition-colors hover:border-[#667cff]/60 hover:text-white">
-              GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
-            </a>
-          </div>
-
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 lg:hidden">
           <button
             ref={menuTriggerRef}
             type="button"
