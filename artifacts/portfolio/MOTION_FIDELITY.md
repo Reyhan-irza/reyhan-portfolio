@@ -1,3 +1,5 @@
+> Revisi terbaru 17 November 2026: lihat [Spatial Motion Review](SPATIAL_MOTION_REVIEW.md). Keputusan font serif, marquee paling bawah, dan tombol pause pada laporan historis ini sudah diganti oleh revisi tersebut.
+
 # RV portfolio · motion review
 
 [Rekaman ponsel](docs/motion-evidence/mobile-review.mp4) · [Rekaman desktop](docs/motion-evidence/desktop-review.mp4) · [IbraCode, sebelum dan sesudah](docs/motion-evidence/mobile-comparison.jpg) · [Urutan menu dan kartu](docs/motion-evidence/sequence-comparison.jpg) · [Perbandingan desktop RV](docs/motion-evidence/desktop-comparison.jpg) · [Detail huruf](docs/motion-evidence/heading-comparison.png)
