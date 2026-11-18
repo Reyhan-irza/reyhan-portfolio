@@ -1,3 +1,4 @@
+import { viewportPortal } from "../lib/scroll";
 import { useState } from "react";
 import { X, RefreshCw, HelpCircle } from "lucide-react";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
@@ -55,7 +56,7 @@ export default function GuessMyAge() {
         Guess My Age
       </button>
 
-      {open && (
+      {open && viewportPortal(
         <div
           className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm"
           onClick={() => setOpen(false)}
