@@ -219,8 +219,8 @@ export default function Navbar() {
           gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
             .set(panel, { display: "flex" })
-            .fromTo(panel, { xPercent: 100, yPercent: 0 }, {
-              xPercent: 0, duration: SCENE.menu, ease: SCENE.curtainEase,
+            .fromTo(panel, { xPercent: 100, yPercent: 0, borderTopLeftRadius: 150, borderBottomLeftRadius: 150 }, {
+              borderTopLeftRadius: 14, borderBottomLeftRadius: 14, xPercent: 0, duration: SCENE.menu, ease: SCENE.curtainEase,
             })
             .fromTo(targets, { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" }, {
               yPercent: 0, rotation: 0, duration: SCENE.detail, stagger: SCENE.menuStagger, ease: SCENE.ease,
