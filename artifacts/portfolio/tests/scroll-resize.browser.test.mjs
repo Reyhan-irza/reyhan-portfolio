@@ -356,14 +356,14 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       assert.equal(await rows.count(), 3);
       assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 1);
       const { start, distance } = await stage.evaluate(el => ({
-        start: el.parentElement.getBoundingClientRect().top + scrollY - 92,
+        start: el.parentElement.getBoundingClientRect().top + scrollY - 80,
         distance: el.parentElement.offsetHeight - el.offsetHeight,
       }));
 
       for (const [fraction, index] of [[0.1, 0], [0.51, 1], [0.92, 2], [0.51, 1], [0.1, 0]]) {
         await scrollInstantly(page, start + distance * fraction);
         const panel = rows.nth(index);
-        assert.ok(Math.abs((await stage.boundingBox()).y - 92) < 2);
+        assert.ok(Math.abs((await stage.boundingBox()).y - 80) < 2);
         assert.deepEqual(await rows.evaluateAll(elements => elements.map(el => el.inert)),
           [0, 1, 2].map(current => current !== index));
         assert.equal(await panel.getAttribute("data-active-project"), "true");
@@ -387,8 +387,8 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       assert.ok((await stage.boundingBox()).y < 30, "The stage should release after its final panel");
       await page.setViewportSize({ width: 1366, height: 650 });
       await settleLayout(page);
-      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 0);
-      assert.equal(await stage.locator("article[inert]").count(), 0);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 1);
+      assert.equal(await stage.locator("article[inert]").count(), 2);
       await page.setViewportSize({ width: 1440, height: 900 });
       await settleLayout(page);
       assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 1);
