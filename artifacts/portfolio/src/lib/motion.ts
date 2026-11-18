@@ -13,6 +13,24 @@ gsap.ticker.lagSmoothing(0);
 // changes and content resizes still refresh normally.
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+// Prepare local scenes ahead of the viewport while keeping deep links and
+// reduced-motion content in normal document flow.
+export function prepareNearby(element: HTMLElement, setup: () => void) {
+  let context: gsap.Context | undefined;
+  const start = () => { context = gsap.context(setup, element); };
+  if (!("IntersectionObserver" in window)) {
+    start();
+    return () => context?.revert();
+  }
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    start();
+  }, { rootMargin: "100% 0px" });
+  observer.observe(element);
+  return () => { observer.disconnect(); context?.revert(); };
+}
+
 export function cubicBezierEase(
   x1: number,
   y1: number,
