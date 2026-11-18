@@ -72,6 +72,12 @@ async function scrollInstantly(page, top) {
     return clampedTop;
   }, top);
   await page.waitForFunction((expectedTop) => Math.abs(window.scrollY - expectedTop) < 3, target);
+  await page.waitForFunction((expectedTop) => {
+    const content = document.querySelector("#smooth-content");
+    if (!content || document.querySelector("#smooth-wrapper")?.hasAttribute("data-scroll-native")) return true;
+    const rendered = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+    return Math.abs(rendered - expectedTop) < 3;
+  }, target);
   await settleLayout(page);
 }
 
