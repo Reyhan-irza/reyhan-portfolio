@@ -16,7 +16,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
     await page.goto('http://localhost:4173');
     await page.locator('#home h1').waitFor({state:'attached'});
     if (await page.locator('.rv-intro-skip').isVisible()) await page.locator('.rv-intro-skip').click();
-    await page.waitForFunction(()=>document.documentElement.classList.contains('lenis'));
+    await page.waitForFunction(()=>document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
     await t.test('marquee continuity at 360/390/430/tablet/desktop',async()=>{
       for(const width of [360,390,430,768,1280,1440]){
         await page.setViewportSize({width,height:844});
@@ -34,33 +34,39 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
         assert.equal(v.actual,`rgb(${v.expected.slice(1).match(/../g).map(x=>parseInt(x,16)).join(', ')})`);
       }
     });
-    await t.test('project modal locks Lenis and restores keyboard focus',async()=>{
+    await t.test('project modal locks the page and restores keyboard focus',async()=>{
       await page.getByTestId('button-details-1').click();
       await page.getByTestId('project-detail-dialog').waitFor({state:'visible'});
-      await page.waitForFunction(()=>document.documentElement.classList.contains('lenis-stopped'));
+      await page.waitForFunction(()=>document.body.style.overflow === 'hidden');
       await page.keyboard.press('Escape');
       await page.getByTestId('project-detail-dialog').waitFor({state:'hidden'});
-      await page.waitForFunction(()=>!document.documentElement.classList.contains('lenis-stopped'));
+      await page.waitForFunction(()=>document.body.style.overflow !== 'hidden');
       await page.waitForFunction(()=>document.activeElement?.getAttribute('data-testid')==='button-details-1');
     });
     await t.test('live reduced motion keeps menu usable and every reveal visible',async()=>{
       await page.emulateMedia({reducedMotion:'reduce'});
-      await page.waitForFunction(()=>!document.documentElement.classList.contains('lenis'));
+      await page.waitForFunction(()=>document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
       assert.equal(await page.locator('[data-band-track]').first().evaluate(el=>getComputedStyle(el).animationName),'none');
       assert.ok(await page.locator('[data-reveal], [data-reveal-group] > *').evaluateAll(nodes=>nodes.every(el=>Number(getComputedStyle(el).opacity)===1)));
       await page.getByTestId('button-mobile-menu').click();
       await page.locator('#mobile-navigation').getByRole('link',{name:'Contact'}).click();
       await page.waitForFunction(()=>location.hash==='#contact'&&document.body.style.overflow!=='hidden');
       await page.emulateMedia({reducedMotion:'no-preference'});
-      await page.waitForFunction(()=>document.documentElement.classList.contains('lenis'));
+      await page.waitForFunction(()=>document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
     });
-    await t.test('route cleanup releases Lenis and the body lock',async()=>{
-      await page.getByRole('button',{name:'Developer Access',exact:true}).click();
+    await t.test('route cleanup releases ScrollSmoother and the body lock',async()=>{
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      const developerButton = page.getByRole('button', { name: 'Developer Access', exact: true });
+      await page.waitForFunction(() => {
+        const button = document.querySelector('button[title="Developer Access"]');
+        return button?.getBoundingClientRect().bottom <= innerHeight;
+      });
+      await developerButton.click();
       await page.waitForURL('**/admin');
       // React's passive cleanup runs after the route URL commits.
-      await page.waitForFunction(()=>!document.documentElement.classList.contains('lenis')&&document.body.style.overflow!=='hidden');
+      await page.waitForFunction(()=>!document.querySelector('#smooth-wrapper') && document.body.style.height === '' && document.body.style.overflow !== 'hidden');
       await page.goBack();
-      await page.waitForFunction(()=>document.documentElement.classList.contains('lenis'));
+      await page.waitForFunction(()=>document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
     });
     await t.test("developer form rejects invalid input and accepts the isolated account",async()=>{
       await page.goto('http://localhost:4173/admin');
@@ -81,7 +87,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
     await t.test('CPU 4x scrolling progresses without hidden reading content',async tc=>{
       // Independent navigation prevents a failed route assertion from cascading.
       await page.goto('http://localhost:4173');
-      await page.waitForFunction(()=>document.documentElement.classList.contains('lenis'));
+      await page.waitForFunction(()=>document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
       const cdp=await context.newCDPSession(page); await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});
       try{
         await page.waitForTimeout(1800);
