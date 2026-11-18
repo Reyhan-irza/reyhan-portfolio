@@ -1,3 +1,4 @@
+import { viewportPortal } from "../lib/scroll";
 import { useState } from "react";
 import { X, Flame } from "lucide-react";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
@@ -49,7 +50,7 @@ export default function RoastButton() {
       </button>
 
       {/* Modal */}
-      {open && (
+      {open && viewportPortal(
         <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setOpen(false)}>
          <div className="modal-enter glass border border-[#a43f2d]/30 rounded-3xl p-7 max-w-md w-full relative" onClick={(e) => e.stopPropagation()}>
              <button className="absolute top-4 right-4 text-[#6d6a62] hover:text-[#211f1b] transition-colors" onClick={() => setOpen(false)}>
