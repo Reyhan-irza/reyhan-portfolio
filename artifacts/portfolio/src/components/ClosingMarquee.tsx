@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap } from "../lib/motion";
 
 const rows = [
   ["Reyhan Irza Alvano", "Creative Developer"],
@@ -14,33 +14,37 @@ export default function ClosingMarquee() {
     if (!strip) return;
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
-      const loops = Array.from(strip.querySelectorAll<HTMLElement>("[data-closing-track]"))
-        .map((track, index) => gsap.fromTo(track,
-          { xPercent: index === 0 ? 0 : -50 },
-          { xPercent: index === 0 ? -50 : 0, duration: 20 + index * 4,
-            ease: "none", repeat: -1, paused: true }));
+      const tracks = Array.from(strip.querySelectorAll<HTMLElement>("[data-closing-track]"));
+      // Constant pixel speed, independent of the width of each sentence.
+      const loops = tracks.map((track, index) => gsap.fromTo(track,
+        { xPercent: index === 0 ? 0 : -50, force3D: true },
+        { xPercent: index === 0 ? -50 : 0,
+          duration: Math.max(1, track.scrollWidth / 2 / (index === 0 ? 65 : 55)),
+          ease: "none", repeat: -1, paused: true }));
       let visible = false;
       const sync = () => {
-        const focused = strip.contains(document.activeElement);
-        loops.forEach(loop => loop.paused(!visible || document.hidden || focused));
+        const keyboardFocus = strip.matches(":focus-visible");
+        loops.forEach(loop => loop.paused(!visible || document.hidden || keyboardFocus));
       };
-      const rates = loops.map(loop => gsap.quickTo(loop, "timeScale", { duration: .8, ease: "sine.out" }));
-      const settle = gsap.delayedCall(.3, () => rates.forEach(rate => rate(1))).pause();
-      const scene = ScrollTrigger.create({
-        trigger: strip, start: "top bottom", end: "bottom top",
-        onToggle: self => { visible = self.isActive; sync(); },
-        onUpdate: self => {
-          const speed = 1 + Math.min(Math.abs(self.getVelocity()) / 2400, .6);
-          rates.forEach(rate => rate(speed));
-          settle.restart(true);
-        },
+      const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting; sync();
       });
+      observer.observe(strip);
+      const resize = new ResizeObserver(() => {
+        tracks.forEach((track, index) => {
+          const progress = loops[index].totalProgress();
+          loops[index].duration(Math.max(1, track.scrollWidth / 2 / (index === 0 ? 65 : 55)));
+          loops[index].totalProgress(progress);
+        });
+      });
+      tracks.forEach(track => resize.observe(track));
       strip.addEventListener("focusin", sync);
       strip.addEventListener("focusout", sync);
       document.addEventListener("visibilitychange", sync);
-      visible = scene.isActive;
       sync();
       return () => {
+        observer.disconnect();
+        resize.disconnect();
         strip.removeEventListener("focusin", sync);
         strip.removeEventListener("focusout", sync);
         document.removeEventListener("visibilitychange", sync);

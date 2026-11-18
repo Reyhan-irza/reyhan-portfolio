@@ -39,15 +39,6 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const desktopLayout = window.matchMedia("(min-width: 1024px)");
-    const closeMobileMenu = (event: MediaQueryListEvent) => {
-      if (event.matches) setIsOpen(false);
-    };
-    desktopLayout.addEventListener("change", closeMobileMenu);
-    return () => desktopLayout.removeEventListener("change", closeMobileMenu);
-  }, []);
-
-  useEffect(() => {
     if (!isOpen) return;
     const panel = panelRef.current;
     const focusables = () => {
@@ -199,8 +190,7 @@ export default function Navbar() {
               gsap.set(targets, { x: 0, y: 0, yPercent: 0, rotation: 0, opacity: 1, visibility: "visible" });
               gsap.set(footer, { opacity: 1, y: 0 });
               gsap.set(glyphLines[0], { y: open ? 5 : 0, rotation: open ? 45 : 0 });
-              gsap.set(glyphLines[1], { scaleX: open ? 0 : 1, opacity: open ? 0 : 1 });
-              gsap.set(glyphLines[2], { y: open ? -5 : 0, rotation: open ? -45 : 0 });
+              gsap.set(glyphLines[1], { y: open ? -5 : 0, rotation: open ? -45 : 0 });
             };
             staticMenuRef.current = apply;
             apply(isOpenRef.current);
@@ -224,8 +214,7 @@ export default function Navbar() {
             }, .24)
             .fromTo(footer, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: SCENE.detail }, .4)
             .to(glyphLines[0], { y: 5, rotation: 45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0)
-            .to(glyphLines[1], { scaleX: 0, opacity: 0, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0)
-            .to(glyphLines[2], { y: -5, rotation: -45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0);
+            .to(glyphLines[1], { y: -5, rotation: -45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0);
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
@@ -280,7 +269,7 @@ export default function Navbar() {
             </span>
           </a>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2">
           <button
             ref={menuTriggerRef}
             type="button"
@@ -294,7 +283,6 @@ export default function Navbar() {
           >
             <span className="mobile-menu-glyph" aria-hidden="true">
               <span className="mobile-menu-line mobile-menu-line-top" />
-              <span className="mobile-menu-line mobile-menu-line-middle" />
               <span className="mobile-menu-line mobile-menu-line-bottom" />
             </span>
           </button>

@@ -138,7 +138,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
   });
   await page.waitForFunction(() =>
     document.querySelector("#contact").getBoundingClientRect().top <= window.innerHeight * 0.56
-    && document.querySelector('.editorial-nav-link[href="#contact"]')?.getAttribute("aria-current") === "location",
+    && document.querySelector('#mobile-navigation a[href="#contact"]')?.getAttribute("aria-current") === "location",
   );
   await page.locator('[data-testid="button-mobile-menu"]').click();
   await page.waitForFunction(() => document.querySelector("#mobile-navigation")?.getAttribute("aria-hidden") === "false");
@@ -151,7 +151,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
   });
   await page.waitForFunction(() =>
     window.location.hash === "#journey"
-    && document.querySelector('.editorial-nav-link[href="#journey"]')?.getAttribute("aria-current") === "location",
+    && document.querySelector('#mobile-navigation a[href="#journey"]')?.getAttribute("aria-current") === "location",
   );
   await page.locator('[data-testid="button-mobile-menu"]').click();
   await page.waitForFunction(() => document.querySelector("#mobile-navigation")?.getAttribute("aria-hidden") === "false");
