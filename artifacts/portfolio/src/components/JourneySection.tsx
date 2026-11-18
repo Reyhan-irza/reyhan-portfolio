@@ -65,29 +65,10 @@ export default function JourneySection() {
               transformOrigin: "center bottom", duration: 0.85, ease: "power2.out",
             }, 0.18);
           });
-          let currentMilestone = -1;
-          const setActiveMilestone = (progress: number) => {
-            const activeIndex = Math.min(
-              educationRows.length - 1,
-              Math.floor(Math.min(progress, 0.999999) * educationRows.length),
-            );
-            if (activeIndex === currentMilestone) return;
-            currentMilestone = activeIndex;
-            educationRows.forEach((row, index) => {
-              if (index === activeIndex) {
-                row.setAttribute("data-education-active", "true");
-              } else {
-                row.removeAttribute("data-education-active");
-              }
-            });
-          };
-          setActiveMilestone(0);
           const educationStory = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: education,
-              onUpdate: self => setActiveMilestone(self.progress),
-              onRefresh: self => setActiveMilestone(self.progress),
               start: "top 70%",
               end: "bottom 34%",
               scrub: compact ? 0.18 : 0.55,

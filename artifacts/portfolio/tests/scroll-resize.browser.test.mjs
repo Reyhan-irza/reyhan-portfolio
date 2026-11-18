@@ -222,18 +222,23 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       const start = documentTop - window.innerHeight * 0.7;
       const end = documentBottom - window.innerHeight * 0.34;
       const progress = Math.max(0, Math.min(0.999999, (window.scrollY - start) / (end - start)));
-      const active = Array.from(document.querySelectorAll("#journey [data-education-row]"))
-        .findIndex((row) => row.getAttribute("data-education-active") === "true");
+      const rail = timelineElement.querySelector(".education-timeline-track").getBoundingClientRect();
+      const fill = timelineElement.querySelector(".education-timeline-progress").getBoundingClientRect();
+      const nodes = [...timelineElement.querySelectorAll("[data-education-node]")];
       return {
-        expectedIndex: Math.min(3, Math.floor(progress * 4)),
-        activeIndex: active,
-        rowCount: document.querySelectorAll("#journey [data-education-row]").length,
+        progress,
+        renderedProgress: fill.height / rail.height,
+        current: timelineElement.querySelector('[aria-current="step"] .education-node-current')?.closest("article")?.textContent,
+        offset: Math.max(...nodes.map(node => {
+          const rect = node.getBoundingClientRect();
+          return Math.abs(rect.left + rect.width / 2 - rail.left - rail.width / 2);
+        })),
       };
     });
 
     await scrollInstantly(phonePage, await targetForProgress(0.46));
     const beforeResize = await state();
-    assert.ok(beforeResize.activeIndex >= 0, "An education milestone should be active before resize");
+    assert.match(beforeResize.current, /SMK Negeri 2 Lubuk Basung/);
 
     await phonePage.setViewportSize({ width: 390, height: 844 });
     await settleLayout(phonePage);
@@ -242,21 +247,13 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     const afterResize = await state();
 
 
-    assert.equal(afterResize.rowCount, 4, "All education milestones should remain mounted");
-    assert.ok(afterResize.activeIndex >= 0, "An education milestone should remain active after resize");
-    assert.ok(
-      Math.abs(afterResize.activeIndex - afterResize.expectedIndex) <= 1,
-      `Education progress should follow its resized trigger position (expected near ${afterResize.expectedIndex}, got ${afterResize.activeIndex})`,
-    );
-    for (const row of await phonePage.locator("#journey [data-education-row]").all()) {
-      await assertVisibleBox(row, "education milestone");
-    }
-
-    await scrollInstantly(phonePage, await targetForProgress(0.84));
-    const afterFurtherScroll = await state();
-
-    assert.equal(afterFurtherScroll.expectedIndex, 3, "Further scrolling should reach the final education milestone");
-    assert.equal(afterFurtherScroll.activeIndex, 3, "The final milestone should activate after resizing and continued scrolling");
+    assert.equal(afterResize.current, beforeResize.current);
+    assert.ok(afterResize.offset < 1, "All milestone markers should remain centered on the rail");
+    assert.ok(Math.abs(afterResize.renderedProgress - afterResize.progress) < 0.05);
+    await scrollInstantly(phonePage, await targetForProgress(0.1));
+    const reversed = await state();
+    assert.ok(reversed.renderedProgress < beforeResize.renderedProgress);
+    assert.equal(reversed.current, beforeResize.current);
   });
 
   await t.test("award content remains revealed when resizing partway through each card", async () => {
