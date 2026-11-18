@@ -14,26 +14,6 @@ export function useEditorialScenes(enabled = true) {
       const prepare = (element: HTMLElement, setup: () => void) => {
         releases.push(prepareNearby(element, setup));
       };
-      root.querySelectorAll<HTMLElement>(".story-note").forEach((row, index) => prepare(row, () => {
-        const heading = row.querySelector("h3");
-        const paragraph = row.querySelector("p");
-        const delayedColumn = desktop && index % 2 === 1;
-        if (heading) gsap.fromTo(heading,
-          { x: index % 2 === 0 ? 24 : -24, opacity: .4, rotationX: 10, transformOrigin: "left bottom" },
-          { x: 0, opacity: 1, rotationX: 0, ease: "sine.out", scrollTrigger: {
-            trigger: row, start: delayedColumn ? "clamp(top 80%)" : "clamp(top 92%)",
-            end: delayedColumn ? "clamp(top 48%)" : "clamp(top 62%)", scrub: .36,
-          } });
-        if (paragraph) SplitText.create(paragraph, {
-          type: "lines", autoSplit: true, linesClass: "motion-reading-line",
-          onSplit: split => afterLineSplit(gsap.fromTo(split.lines,
-            { opacity: .35 }, { opacity: 1, stagger: .22, ease: "none", scrollTrigger: {
-              trigger: row, start: delayedColumn ? "clamp(top 75%)" : "clamp(top 86%)",
-              end: "clamp(bottom 66%)", scrub: SCENE.scrub, invalidateOnRefresh: true,
-            } })),
-        });
-      }));
-
       root.querySelectorAll<HTMLElement>("[data-award-record]").forEach((card, index) => prepare(card, () => {
         const copy = card.querySelector<HTMLElement>("[data-award-copy]");
         const heading = copy?.querySelector("h2");
