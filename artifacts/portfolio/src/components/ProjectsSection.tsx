@@ -96,9 +96,9 @@ export default function ProjectsSection() {
     if (!section || !stage) return;
 
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, ({ conditions }) => {
+    media.add({ mouse: "(min-width: 768px) and (hover: hover) and (pointer: fine)", motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, ({ conditions }) => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
-      if (conditions?.motion) {
+      if (conditions?.motion && !conditions.mouse) {
         const progressFill = progressFillRef.current;
         stage.dataset.projectPinned = "true";
         const viewport = stage.querySelector<HTMLElement>(".project-track-viewport")!;
@@ -174,6 +174,45 @@ export default function ProjectsSection() {
         };
       }
 
+      if (conditions?.mouse && conditions.motion) {
+        const preview = document.createElement("img");
+        preview.className = "project-pointer-preview";
+        preview.alt = "";
+        preview.setAttribute("aria-hidden", "true");
+        document.body.append(preview);
+        const moveX = gsap.quickTo(preview, "x", { duration: .24, ease: "power3.out" });
+        const moveY = gsap.quickTo(preview, "y", { duration: .24, ease: "power3.out" });
+        let current = -1;
+        const hide = () => { current = -1; preview.classList.remove("is-visible"); };
+        const move = (event: globalThis.PointerEvent) => {
+          const target = event.target as HTMLElement;
+          const row = target.closest<HTMLElement>("[data-project-row]");
+          if (!row || !stage.contains(row) || event.pointerType !== "mouse" || target.closest("a, button")) {
+            hide(); return;
+          }
+          const index = Number(row.dataset.projectIndex);
+          const x = event.clientX + 24 + preview.offsetWidth < innerWidth
+            ? event.clientX + 24 : event.clientX - preview.offsetWidth - 24;
+          const y = gsap.utils.clamp(12, innerHeight - preview.offsetHeight - 12, event.clientY - preview.offsetHeight / 2);
+          if (current !== index) {
+            if (current < 0) gsap.set(preview, { x, y });
+            current = index;
+            preview.src = projects[index].preview.src;
+            preview.classList.add("is-visible");
+            updateActiveProject(index);
+          }
+          moveX(x); moveY(y);
+        };
+        document.addEventListener("pointermove", move, { passive: true });
+        window.addEventListener("scroll", hide, { passive: true });
+        window.addEventListener("blur", hide);
+        return () => {
+          document.removeEventListener("pointermove", move);
+          window.removeEventListener("scroll", hide);
+          window.removeEventListener("blur", hide);
+          preview.remove();
+        };
+      }
       rows.forEach((row, index) => {
         ScrollTrigger.create({
           trigger: row, start: "top 52%", end: "bottom 52%",
