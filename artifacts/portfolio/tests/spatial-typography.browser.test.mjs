@@ -60,8 +60,9 @@ test('sans typography, four certificates and independent spatial scenes', {
         const cards = page.locator('[data-project-row]');
         const panelActions = [];
         const pinnedStage = page.locator('[data-project-pinned]');
-        assert.equal(await pinnedStage.count(), 1, `whole panel pinned at ${width}`);
-        {
+        const mouse = await page.evaluate(() => matchMedia("(min-width:768px) and (hover:hover) and (pointer:fine)").matches);
+        assert.equal(await pinnedStage.count(), mouse ? 0 : 1);
+        if (!mouse) {
           const { top, distance } = await pinnedStage.evaluate(el => ({
             top: el.parentElement.getBoundingClientRect().top + scrollY - 80,
             distance: el.parentElement.offsetHeight - el.offsetHeight,
@@ -75,6 +76,27 @@ test('sans typography, four certificates and independent spatial scenes', {
             await capture(`project-panel-${index + 1}`);
           }
         }
+        if (mouse) {
+          for (const card of await cards.all()) {
+            const title = card.locator('h3');
+            await title.hover();
+            const preview = page.locator('.project-pointer-preview.is-visible');
+            await preview.waitFor();
+            assert.equal(await preview.getAttribute('src'), await card.locator('img').first().getAttribute('src'));
+          }
+          await capture('mouse-preview');
+        }
+        const about = page.locator('.story-notes[data-cycle]');
+        const range = await about.evaluate(el => ({
+          top: el.parentElement.getBoundingClientRect().top + scrollY - Math.min(80, innerHeight - el.offsetHeight - 12),
+          height: el.offsetHeight,
+        }));
+        for (const index of [0, 1, 2, 3, 4, 2]) {
+          await go(range.top + (index + .05) * range.height);
+          const position = await about.locator('.story-note').nth(index % 4).boundingBox();
+          assert.ok(Math.abs(position.x - (await about.boundingBox()).x) < 3);
+        }
+        await capture('about');
         await jump('[data-testid="link-dicoding-certificate-preview"]');
         const certificate = page.getByTestId('link-dicoding-certificate-preview');
         await certificate.locator('img').evaluate(image => image.decode());
@@ -96,7 +118,8 @@ test('sans typography, four certificates and independent spatial scenes', {
         await dialog.waitFor();
         await page.waitForTimeout(1400);
         const bounds = await dialog.boundingBox();
-        assert.ok(Math.abs(bounds.x) < 1 && Math.abs(bounds.width - width) <= 1);
+        if (width >= 1024) assert.ok(bounds.x > width / 2 && bounds.width <= 512 && bounds.height < height);
+        else assert.ok(Math.abs(bounds.x) < 1 && Math.abs(bounds.width - width) <= 1);
         await capture('navigation');
         await page.keyboard.press('Escape');
         await dialog.waitFor({ state: 'hidden' });
