@@ -102,8 +102,7 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
         root.dataset.phase = 'handoff';
       }, [], 'handoff')
         .to(logo, { x: () => dock.x, y: () => dock.y, scale: () => dock.scale, duration: .9, ease: 'power3.inOut' }, 'handoff')
-        .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1)
-        .call(reveal, [], 4.4);
+        .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1);
     }, root);
     const arm = () => { window.clearTimeout(timer); if (!document.hidden) timer = window.setTimeout(finish, 12000); };
     const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { if (ready) timeline?.play(); arm(); } };
@@ -131,7 +130,8 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       document.removeEventListener('visibilitychange', visibility);
       reduced.removeEventListener('change', preference);
       window.removeEventListener('resize', resize);
-      context.revert();
+      // Every target in this context leaves the DOM with the intro.
+      context.kill(false);
       document.body.style.overflow = previousOverflow;
       if (nav) nav.inert = previousNavInert;
       if (navLogo) navLogo.style.visibility = previousLogoVisibility;
