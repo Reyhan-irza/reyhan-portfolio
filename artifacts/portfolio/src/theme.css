@@ -441,10 +441,10 @@ body { background: var(--canvas); }
   overflow: visible !important;
 }
 
-.portfolio-shell .story-notes[data-cycle] {
+.portfolio-shell #about .story-notes[data-cycle] {
   display: grid; grid-template-columns: minmax(0,1fr); overflow: clip; isolation: isolate;
 }
-.story-notes[data-cycle] > .story-note {
+.portfolio-shell #about .story-notes[data-cycle] > .story-note {
   grid-area: 1/1; min-height: clamp(24rem,72svh,54rem); display: flex;
   flex-direction: column; justify-content: center; padding: clamp(1.5rem,7vw,7rem);
   background: var(--canvas);
