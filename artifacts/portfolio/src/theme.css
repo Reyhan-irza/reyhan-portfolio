@@ -411,3 +411,25 @@ body { background: var(--canvas); }
 .portfolio-shell :is(.education-timeline-track, .education-timeline-progress) { left: var(--rail-x); }
 .portfolio-shell .education-item-current { border-left: 0; box-shadow: inset 1px 0 var(--signal); }
 .portfolio-shell .education-node { left: calc(var(--rail-x) - var(--row-indent) - .35rem + .5px); }
+
+
+.portfolio-shell [data-project-pinned] .project-track-viewport { overflow: clip; }
+.portfolio-shell [data-project-pinned] .project-track { display: grid; isolation: isolate; }
+.portfolio-shell [data-project-pinned] .project-row {
+  grid-area: 1 / 1;
+  align-content: center;
+  min-height: min(66svh, 42rem);
+  padding-block: 1.5rem;
+  background: var(--canvas);
+  transform-origin: center top;
+}
+.portfolio-shell [data-project-pinned] aside > div { position: static; margin-top: 2rem; }
+
+@media (max-width: 767px) and (min-height: 720px) and (prefers-reduced-motion: no-preference) {
+  .portfolio-shell .project-presentation { display: flex; flex-direction: column; }
+  .portfolio-shell .project-presentation .project-aperture { position: sticky; top: 5.5rem; }
+  .portfolio-shell .project-presentation [data-project-copy] {
+    position: relative;
+    background: var(--canvas);
+  }
+}

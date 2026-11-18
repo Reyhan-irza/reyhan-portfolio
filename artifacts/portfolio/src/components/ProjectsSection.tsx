@@ -70,6 +70,7 @@ type Project = (typeof projects)[number];
 export default function ProjectsSection() {
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<HTMLSpanElement>(null);
   const progressFillRef = useRef<HTMLSpanElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -91,11 +92,64 @@ export default function ProjectsSection() {
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    const stage = stageRef.current;
+    if (!section || !stage) return;
 
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)" }, ({ conditions }) => {
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)", pin: "(min-width: 1024px) and (min-height: 720px)" }, ({ conditions }) => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
+      if (conditions?.motion && conditions.pin) {
+        const progressFill = progressFillRef.current;
+        stage.dataset.projectPinned = "true";
+        const transitionDuration = 1;
+        const holdDuration = 0.85;
+        const step = holdDuration + transitionDuration;
+        let visiblePanel = -1;
+
+        const setVisiblePanel = (index: number) => {
+          if (index === visiblePanel) return;
+          const shouldMoveFocus = rows[visiblePanel]?.contains(document.activeElement);
+          visiblePanel = index;
+          rows.forEach((row, rowIndex) => { row.inert = rowIndex !== index; });
+          updateActiveProject(index);
+          if (shouldMoveFocus) rows[index].querySelector("h3")?.focus({ preventScroll: true });
+        };
+
+        const scene = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            id: "pinned-projects",
+            trigger: stage,
+            start: "top 92px",
+            end: () => `+=${Math.round(stage.offsetHeight * 2.7)}`,
+            pin: true,
+            scrub: 0.18,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        const duration = step * (rows.length - 1) + holdDuration;
+        if (progressFill) scene.fromTo(progressFill, { scaleY: 0 }, { scaleY: 1, duration }, 0);
+        rows.slice(1).forEach((row, index) => {
+          const start = index * step + holdDuration;
+          scene
+            .fromTo(row, { yPercent: 104 }, { yPercent: 0, duration: transitionDuration, ease: "power2.inOut" }, start)
+            .to(rows[index], { scale: 0.95, yPercent: -2, duration: transitionDuration, ease: "power2.inOut" }, start)
+            .fromTo(row.querySelector("[data-project-copy]"), { y: 24, opacity: 0.55 },
+              { y: 0, opacity: 1, duration: 0.48, ease: "power2.out" }, start + 0.52);
+        });
+        scene.eventCallback("onUpdate", () => {
+          const index = Math.floor((scene.time() + transitionDuration * 0.30) / step);
+          setVisiblePanel(Math.min(rows.length - 1, index));
+        });
+        setVisiblePanel(0);
+
+        return () => {
+          delete stage.dataset.projectPinned;
+          rows.forEach(row => { row.inert = false; });
+        };
+      }
+
       rows.forEach((row, index) => {
         ScrollTrigger.create({
           trigger: row, start: "top 52%", end: "bottom 52%",
@@ -139,6 +193,7 @@ export default function ProjectsSection() {
       if (progressFillRef.current && conditions?.motion) gsap.fromTo(progressFillRef.current,
         { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: section,
           start: "clamp(top center)", end: "clamp(bottom center)", scrub: true } });
+      return undefined;
     });
     return () => media.revert();
   }, []);
@@ -273,7 +328,7 @@ export default function ProjectsSection() {
           </p>
         </Reveal>
 
-        <div data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
+        <div ref={stageRef} data-project-stage className="project-stage grid grid-cols-1 gap-8 lg:grid-cols-[7rem_1fr] lg:gap-12">
           <aside className="hidden lg:block">
             <div className="sticky top-32 flex items-start gap-5">
               <div className="project-rail relative h-24 w-px">
@@ -314,7 +369,7 @@ export default function ProjectsSection() {
                       <div data-project-lift className="project-presentation">
                         <header className="project-meta">
                           <p className="project-type">{project.type}</p>
-                          <h3 id={`project-title-${project.id}`} className="project-name">
+                          <h3 id={`project-title-${project.id}`} className="project-name" tabIndex={-1}>
                             <span data-project-name>{project.title}</span>
                           </h3>
                         </header>
