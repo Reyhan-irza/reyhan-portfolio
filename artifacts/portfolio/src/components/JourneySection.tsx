@@ -65,6 +65,157 @@ export default function JourneySection() {
               transformOrigin: "center bottom", duration: 0.85, ease: "power2.out",
             }, 0.18);
           });
+          const educationStory = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: education,
+              start: "top 70%",
+              end: "bottom 34%",
+              scrub: compact ? 0.18 : 0.55,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          educationStory.fromTo(educationProgress, {
+            scaleY: 0,
+            transformOrigin: "top center",
+          }, {
+            scaleY: 1,
+            duration: 1,
+          }, 0);
+
+        }
+
+      }, el);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} id="journey" className="relative px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <Reveal className="flex flex-col justify-between gap-6 border-b border-[rgba(27,28,24,.16)] pb-9 md:flex-row md:items-end">
+          <div><p className="section-kicker">Personal journey</p><h2 className="portfolio-section-heading mt-5 font-semibold tracking-[-.07em]">My journey so far.</h2></div>
+          <p className="story-aside max-w-sm text-base leading-relaxed">Saya masih di awal perjalanan. Sejauh ini, sekolah, proyek, dan tantangan baru ikut membentuk cara saya belajar.</p>
+        </Reveal>
+
+        <section className="mt-10" aria-labelledby="education-timeline-title">
+          <div className="flex flex-col gap-2 border-b border-[rgba(27,28,24,.16)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="section-kicker">The path so far</p>
+              <h3 id="education-timeline-title" className="mt-3 text-[clamp(1.65rem,2.5vw,2.25rem)] font-semibold tracking-[-.05em] text-white">Education Timeline</h3>
+            </div>
+          </div>
+          <div ref={educationRef} className="education-timeline relative mt-8 pl-9 md:pl-12">
+            <span className="education-timeline-track" aria-hidden="true" />
+            <span ref={educationProgressRef} className="education-timeline-progress" aria-hidden="true" />
+            <div className="space-y-3">
+              {educationPeriods.map((entry, index) => {
+                const isCurrent = "current" in entry && entry.current;
+                return (
+                  <article
+                    key={entry.level}
+                    className={`education-item grid gap-2 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-6 ${isCurrent ? "education-item-current" : ""}`}
+                    data-education-row
+                    data-education-current={isCurrent || undefined}
+                    aria-current={isCurrent ? "step" : undefined}
+                  >
+                    <span className={`education-node ${isCurrent ? "education-node-current" : ""}`} data-education-node aria-hidden="true" />
+                    <div className="education-period">
+                      <p className="font-mono text-sm tracking-[.035em] text-[#aab4ff]">{entry.period}</p>
+                      <p className="mt-1 font-mono text-xs uppercase tracking-[.12em] text-white/55">{entry.level}</p>
+                    </div>
+                    <div data-education-content>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                        <p className="text-sm uppercase tracking-[.08em] text-white/65">{entry.label}</p>
+                        {isCurrent ? <span className="education-current-badge">Saat ini</span> : null}
+                      </div>
+                      {"school" in entry ? (
+                        <>
+                          <h4 className="mt-2 text-xl font-semibold tracking-[-.035em] text-white md:text-2xl">{entry.school}</h4>
+                          <p className="mt-1 text-base text-[#c9d0dc]">Jurusan {entry.major}</p>
+                        </>
+                      ) : null}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  );
+}
+import { useLayoutEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "../lib/motion";
+import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
+import Reveal from "./Reveal";
+
+const educationPeriods = [
+  { period: "2014–2015", level: "TK", label: "Taman Kanak-kanak" },
+  { period: "2015–2021", level: "SD", label: "Sekolah Dasar" },
+  { period: "2021–2024", level: "SMP", label: "Sekolah Menengah Pertama" },
+  {
+    period: "2024–sekarang",
+    level: "SMK",
+    label: "Sekolah Menengah Kejuruan",
+    school: "SMK Negeri 2 Lubuk Basung",
+    major: "TJKT",
+    current: true,
+  },
+] as const;
+
+export default function JourneySection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const educationRef = useRef<HTMLDivElement>(null);
+  const educationProgressRef = useRef<HTMLSpanElement>(null);
+  const didFire = useRef(false);
+
+  useLayoutEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const media = gsap.matchMedia();
+    media.add({
+      reduced: "(prefers-reduced-motion: reduce)",
+      compact: "(max-width: 767px)",
+      wide: "(min-width: 768px)",
+    }, (mediaContext) => {
+      const context = gsap.context(() => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 72%",
+          onEnter: () => {
+            if (didFire.current) return;
+            didFire.current = true;
+            unlockAchievement(ACHIEVEMENTS.JOURNEY_READER);
+          },
+        });
+
+        const education = educationRef.current;
+        const educationProgress = educationProgressRef.current;
+        if (!mediaContext.conditions?.reduced && education && educationProgress) {
+          const compact = Boolean(mediaContext.conditions?.compact);
+          const educationRows = gsap.utils.toArray<HTMLElement>("[data-education-row]", education);
+          educationRows.forEach(row => {
+            const scene = gsap.timeline({
+              scrollTrigger: {
+                trigger: row,
+                start: "clamp(top 94%)",
+                end: compact ? "clamp(center 66%)" : "clamp(center 68%)",
+                scrub: compact ? 0.25 : 0.45,
+                invalidateOnRefresh: true,
+              },
+            });
+            scene.from(row.querySelector(".education-period"), {
+              x: compact ? -12 : -28, opacity: 0.5, duration: 0.6, ease: "power1.out",
+            }).from(row.querySelector("[data-education-content]"), {
+              y: compact ? 18 : 26, rotationX: -12, transformPerspective: 700,
+              transformOrigin: "center bottom", duration: 0.85, ease: "power2.out",
+            }, 0.18);
+          });
           let currentMilestone = -1;
           const setActiveMilestone = (progress: number) => {
             const activeIndex = Math.min(
