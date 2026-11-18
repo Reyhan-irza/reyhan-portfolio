@@ -1,3 +1,4 @@
+import { viewportPortal } from "../lib/scroll";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Terminal, X } from "lucide-react";
 
@@ -127,7 +128,7 @@ export default function TerminalMode() {
       </button>
 
       {/* Modal */}
-      {open && (
+      {open && viewportPortal(
         <div
           className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/60 backdrop-blur-sm"
           onClick={() => setOpen(false)}
