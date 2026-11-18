@@ -66,7 +66,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
                 <span aria-hidden="true">
                   Belakangan ini, saya juga mendalami:
                   <br />
-                  <HeroTypingLoop />
+                  <HeroTypingLoop ready={ready} />
                 </span>
                 <span className="sr-only">
                   Belakangan ini, saya juga mendalami web, TypeScript, Tailwind, dan AI lewat proyek di waktu luang.
