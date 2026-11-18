@@ -7,13 +7,14 @@ import HeroTypingLoop from "./HeroTypingLoop";
 
 export default function HeroSection({ ready = true }: { ready?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const entrance = useRef<gsap.core.Timeline | null>(null);
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    if (!ready || !section) return;
+    if (!section) return;
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
-        gsap.timeline({ defaults: { ease: SCENE.ease } })
+        entrance.current = gsap.timeline({ paused: true, defaults: { ease: SCENE.ease } })
           .addLabel("image", 0).addLabel("name", .22).addLabel("details", .88)
           .fromTo(".hero-mark-image", { scale: 1.15, opacity: 0 },
             { scale: 1, opacity: 1, duration: 1.75, clearProps: "transform,opacity" }, "image")
@@ -33,10 +34,12 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
             { rotationX: -6, rotationY: 20, z: 50 }, 0)
           .to("[data-hero-scroll-cue]", { opacity: 0, y: -18, duration: .25 }, 0);
       }, section);
-      return () => context.revert();
+      if (section.dataset.heroReady === "true") entrance.current?.play();
+      return () => { entrance.current = null; context.revert(); };
     });
     return () => media.revert();
-  }, [ready]);
+  }, []);
+  useLayoutEffect(() => { if (ready) entrance.current?.play(); }, [ready]);
 
   return (
     <section ref={sectionRef} id="home" data-hero data-hero-ready={ready} inert={!ready} aria-hidden={!ready} className="hero-section relative min-h-[100svh] overflow-hidden px-5 pb-16 pt-32 md:px-10 md:pt-40">
@@ -66,7 +69,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
                 <span aria-hidden="true">
                   Belakangan ini, saya juga mendalami:
                   <br />
-                  <HeroTypingLoop />
+                  <HeroTypingLoop ready={ready} />
                 </span>
                 <span className="sr-only">
                   Belakangan ini, saya juga mendalami web, TypeScript, Tailwind, dan AI lewat proyek di waktu luang.

@@ -440,3 +440,41 @@ body { background: var(--canvas); }
   height: auto !important;
   overflow: visible !important;
 }
+
+.portfolio-shell #about .story-notes[data-cycle] {
+  display: grid; grid-template-columns: minmax(0,1fr); overflow: clip; isolation: isolate;
+}
+.portfolio-shell #about .story-notes[data-cycle] > .story-note {
+  grid-area: 1/1; min-height: clamp(24rem,72svh,54rem); display: flex;
+  flex-direction: column; justify-content: center; padding: clamp(1.5rem,7vw,7rem);
+  background: var(--canvas);
+}
+.story-notes[data-cycle] h3 { font-size: clamp(1.7rem,4.8vw,4.5rem); line-height: 1.08; max-width: 21ch; }
+.story-notes[data-cycle] p { max-width: 62ch; }
+.project-pointer-preview {
+  position: fixed; left: 0; top: 0; width: clamp(13rem,24vw,24rem); aspect-ratio: 1.6;
+  object-fit: cover; object-position: top; pointer-events: none;
+  z-index: 35; opacity: 0; border-radius: .55rem; transition: opacity .16s ease;
+}
+.project-pointer-preview.is-visible { opacity: 1; }
+@media (min-width:768px) and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .portfolio-shell .project-row:nth-child(n) .project-presentation {
+    display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-areas: "title detail";
+    align-items:center;
+  }
+  .portfolio-shell .project-row .project-aperture { display:none; }
+}
+@media (min-width:1024px) {
+  .portfolio-shell #mobile-navigation {
+    inset: 76px max(1rem,calc((100vw - 1440px)/2 + 1rem)) auto auto;
+    width: min(32rem,48vw); height:auto; max-height:calc(100dvh - 88px);
+    min-height:0; padding:clamp(1.2rem,2.2vw,2rem); border:1px solid var(--line); border-radius:14px;
+    overflow-y:auto;
+  }
+  .portfolio-shell #mobile-navigation [data-menu-item] { min-height:3rem; font-size:clamp(1.7rem,2.9vw,2.6rem); }
+  .portfolio-shell #mobile-navigation [data-menu-footer] { padding-top:1.5rem; }
+}
+.rv-pointer-dot {
+  position:fixed; inset:0 auto auto 0; z-index:36; width:5px; height:5px;
+  border-radius:50%; background:#91a8ff; pointer-events:none; opacity:0;
+}

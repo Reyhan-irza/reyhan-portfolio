@@ -15,7 +15,8 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
     const root = rootRef.current;
     if (!root) return;
     let finished = false, disposed = false, revealed = false;
-    let timer = 0, decodeTimer = 0;
+    let timer = 0, decodeTimer = 0, playFrame = 0;
+    let ready = false;
     let timeline: gsap.core.Timeline | undefined;
     const q = (s: string) => root.querySelector<HTMLElement>(s)!;
     const logo = q('.logo'), stage = q('.stage'), full = q('.full');
@@ -101,11 +102,10 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
         root.dataset.phase = 'handoff';
       }, [], 'handoff')
         .to(logo, { x: () => dock.x, y: () => dock.y, scale: () => dock.scale, duration: .9, ease: 'power3.inOut' }, 'handoff')
-        .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1)
-        .call(reveal, [], 4.4);
+        .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1);
     }, root);
     const arm = () => { window.clearTimeout(timer); if (!document.hidden) timer = window.setTimeout(finish, 12000); };
-    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { timeline?.play(); arm(); } };
+    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { if (ready) timeline?.play(); arm(); } };
     const preference = () => { if (reduced.matches) finish(); };
     const resize = () => { if ((timeline?.time() ?? 0) >= 3.95) finish(); };
     document.addEventListener('visibilitychange', visibility);
@@ -117,14 +117,21 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       new Promise((_, reject) => { decodeTimer = window.setTimeout(() => reject(new Error('Intro assets unavailable')), 1500); }),
     ]).then(() => {
       window.clearTimeout(decodeTimer);
-      if (!disposed && !finished && !document.hidden) timeline?.play(0);
+      // Let the initial layout paint before starting the authored film clock.
+      playFrame = requestAnimationFrame(() => {
+        playFrame = requestAnimationFrame(() => {
+          ready = true;
+          if (!disposed && !finished && !document.hidden) timeline?.play(0);
+        });
+      });
     }).catch(finish);
     return () => {
-      disposed = true; window.clearTimeout(timer); window.clearTimeout(decodeTimer);
+      disposed = true; cancelAnimationFrame(playFrame); window.clearTimeout(timer); window.clearTimeout(decodeTimer);
       document.removeEventListener('visibilitychange', visibility);
       reduced.removeEventListener('change', preference);
       window.removeEventListener('resize', resize);
-      context.revert();
+      // Every target in this context leaves the DOM with the intro.
+      context.kill(false);
       document.body.style.overflow = previousOverflow;
       if (nav) nav.inert = previousNavInert;
       if (navLogo) navLogo.style.visibility = previousLogoVisibility;

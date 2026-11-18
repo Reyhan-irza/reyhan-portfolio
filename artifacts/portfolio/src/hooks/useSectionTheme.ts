@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import { gsap, ScrollTrigger } from "../lib/motion";
+import { getPageScroll } from "../lib/scroll";
 export function useSectionTheme() {
   useLayoutEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>(
@@ -19,12 +20,27 @@ export function useSectionTheme() {
             duration: 0.6, ease: "power2.out", overwrite: true,
           });
         };
-        sections.forEach((section) => ScrollTrigger.create({
-          trigger: section, start: "top 50%", end: "bottom 50%",
-          onEnter: () => apply(section), onEnterBack: () => apply(section),
-        }));
-        const active = sections.filter((section) => section.getBoundingClientRect().top <= innerHeight / 2).at(-1);
-        if (active) apply(active);
+        let tops: number[] = [];
+        let current: HTMLElement | undefined;
+        const update = () => {
+          const midpoint = getPageScroll() + innerHeight / 2;
+          let index = tops.length - 1;
+          while (index >= 0 && tops[index] > midpoint) index--;
+          const active = sections[index];
+          if (active && active !== current) {
+            current = active;
+            apply(active);
+          }
+        };
+        const measure = () => {
+          const offset = getPageScroll();
+          tops = sections.map(section => section.getBoundingClientRect().top + offset);
+          update();
+        };
+        measure();
+        ScrollTrigger.create({ start: 0, end: "max", onUpdate: update, onRefresh: measure });
+        ScrollTrigger.addEventListener("refresh", measure);
+        return () => ScrollTrigger.removeEventListener("refresh", measure);
       });
       return () => context.revert();
     });

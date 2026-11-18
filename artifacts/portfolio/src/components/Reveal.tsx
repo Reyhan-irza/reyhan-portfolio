@@ -1,5 +1,5 @@
 import { createElement, useLayoutEffect, useRef, type HTMLAttributes, type ReactNode, type Ref } from "react";
-import { gsap, SplitText, SCENE, afterLineSplit } from "../lib/motion";
+import { gsap, SplitText, SCENE, afterLineSplit, prepareNearby } from "../lib/motion";
 
 type RevealProps = Omit<HTMLAttributes<HTMLElement>, "children" | "onDrag"> & {
   children?: ReactNode;
@@ -31,7 +31,7 @@ export default function Reveal({ children, as = "div", media = false, tall = fal
         element.dataset.revealed = "true";
         return;
       }
-      const context = gsap.context(() => {
+      const release = prepareNearby(element, () => {
         const finish = () => { completed.current = true; element.dataset.revealed = "true"; };
         if (heading) {
           const revealLines = (lines: Element[]) => {
@@ -58,8 +58,8 @@ export default function Reveal({ children, as = "div", media = false, tall = fal
         }
         else gsap.fromTo(element, { opacity: 0 }, { opacity: 1, duration: SCENE.detail, ease: SCENE.ease,
           scrollTrigger: { trigger: element, start: "clamp(top 90%)", once: true }, onComplete: finish, clearProps: "opacity" });
-      }, element);
-      return () => { context.revert(); delete element.dataset.headingOpen; };
+      });
+      return () => { release(); delete element.dataset.headingOpen; };
     });
     return () => mediaQuery.revert();
   }, [mount, tall]);

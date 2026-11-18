@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 
 const rows = [
   ["Reyhan Irza Alvano", "Creative Developer"],
@@ -21,6 +21,21 @@ export default function ClosingMarquee() {
         { xPercent: index === 0 ? -50 : 0,
           duration: Math.max(1, track.scrollWidth / 2 / (index === 0 ? 65 : 55)),
           ease: "none", repeat: -1, paused: true }));
+      // Each row keeps its own direction. A swipe adds speed that decays
+      // toward cruising speed even when the visitor stops or scrolls back up.
+      const pace = { value: 1 };
+      const settle = gsap.to(pace, {
+        value: 1, duration: .8, ease: "power2.out", paused: true,
+        onUpdate: () => loops.forEach(loop => loop.timeScale(pace.value)),
+      });
+      ScrollTrigger.create({
+        trigger: strip, start: "top bottom", end: "bottom top",
+        onUpdate: trigger => {
+          if (!trigger.isActive) return;
+          pace.value = 1 + Math.min(1.4, Math.abs(trigger.getVelocity()) / 2000);
+          settle.invalidate().restart();
+        },
+      });
       let visible = false;
       const sync = () => {
         const keyboardFocus = strip.matches(":focus-visible");

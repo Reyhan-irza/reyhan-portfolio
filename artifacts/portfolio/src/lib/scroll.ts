@@ -15,7 +15,13 @@ export function getPageScroll() {
 }
 
 export function syncScrollLock() {
-  ScrollSmoother.get()?.paused(document.body.style.overflow === "hidden");
+  const smoother = ScrollSmoother.get();
+  if (!smoother) return;
+  const lock = document.body.style.overflow === "hidden";
+  if (lock && !smoother.paused() && Math.abs(smoother.scrollTop() - window.scrollY) < 2) {
+    smoother.scrollTop(window.scrollY);
+  }
+  smoother.paused(lock);
 }
 
 export function viewportPortal(children: ReactNode) {

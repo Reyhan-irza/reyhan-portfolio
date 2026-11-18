@@ -72,6 +72,12 @@ async function scrollInstantly(page, top) {
     return clampedTop;
   }, top);
   await page.waitForFunction((expectedTop) => Math.abs(window.scrollY - expectedTop) < 3, target);
+  await page.waitForFunction((expectedTop) => {
+    const content = document.querySelector("#smooth-content");
+    if (!content || document.querySelector("#smooth-wrapper")?.hasAttribute("data-scroll-native")) return true;
+    const rendered = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+    return Math.abs(rendered - expectedTop) < 3;
+  }, target);
   await settleLayout(page);
 }
 
@@ -344,8 +350,8 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
 
   await phoneContext.close();
 
-  await t.test("desktop project panels pin, reverse, and release with accessible details", async () => {
-    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await t.test("wide touch project panels pin, reverse, and release with accessible details", async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, hasTouch: true });
     await mockServices(ctx);
     try {
       const page = await ctx.newPage();
