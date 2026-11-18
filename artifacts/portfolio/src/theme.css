@@ -413,15 +413,16 @@ body { background: var(--canvas); }
 .portfolio-shell .education-node { left: calc(var(--rail-x) - var(--row-indent) - .35rem + .5px); }
 
 
-.portfolio-shell [data-project-pinned] .project-track-viewport { overflow: clip; }
+.portfolio-shell [data-project-pinned] .project-track-viewport { height: calc(100svh - 96px); overflow: clip; }
 .portfolio-shell [data-project-pinned] .project-track { display: grid; isolation: isolate; }
 .portfolio-shell [data-project-pinned] .project-row {
   grid-area: 1 / 1;
   align-content: center;
-  min-height: min(66svh, 42rem);
+  align-self: start;
+  min-height: calc(100svh - 96px);
   padding-block: 1.5rem;
   background: var(--canvas);
-  transform-origin: center top;
+  transform-origin: center bottom;
 }
 .portfolio-shell [data-project-pinned] aside > div { position: static; margin-top: 2rem; }
 
