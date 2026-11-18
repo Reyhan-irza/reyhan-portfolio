@@ -11,7 +11,7 @@ export function PortfolioScrollController() {
     if (!wrapper || !content) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const smooth = 0.95;
-    const smoothTouch = 0.32;
+    const smoothTouch = 0.18;
     const smoother = ScrollSmoother.create({
       wrapper,
       content,
@@ -19,6 +19,40 @@ export function PortfolioScrollController() {
       smoothTouch,
       autoResize: false,
       onFocusIn: (_smoother, event) => shouldAutoScrollFocus(content, event),
+    });
+    const pointerMedia = gsap.matchMedia();
+    pointerMedia.add("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)", () => {
+      const dots = Array.from({ length: 4 }, () => {
+        const dot = document.createElement("i");
+        dot.className = "rv-pointer-dot";
+        dot.setAttribute("aria-hidden", "true");
+        document.body.append(dot);
+        return dot;
+      });
+      const followers = dots.map((dot, index) => ({
+        x: gsap.quickTo(dot, "x", { duration: .07 + index * .05, ease: "power2.out" }),
+        y: gsap.quickTo(dot, "y", { duration: .07 + index * .05, ease: "power2.out" }),
+      }));
+      const fade = gsap.to(dots, { opacity: 0, duration: .25, paused: true });
+      let tracking = false;
+      const clear = () => { tracking = false; fade.invalidate().restart(); };
+      const idle = gsap.delayedCall(.09, clear).pause();
+      const move = (event: PointerEvent) => {
+        if (event.pointerType !== "mouse" || !(event.target instanceof Element)
+          || !event.target.closest("#home, #projects")) {
+          if (tracking) clear();
+          return;
+        }
+        fade.pause();
+        if (!tracking) {
+          gsap.set(dots, { x: event.clientX, y: event.clientY, opacity: i => .58 - i * .1 });
+          tracking = true;
+        }
+        followers.forEach(dot => { dot.x(event.clientX); dot.y(event.clientY); });
+        idle.restart(true);
+      };
+      document.addEventListener("pointermove", move, { passive: true });
+      return () => { document.removeEventListener("pointermove", move); dots.forEach(dot => dot.remove()); };
     });
     let frame = 0, disposed = false, pending = false, geometryChanged = false;
     const refresh = () => {
@@ -97,6 +131,7 @@ export function PortfolioScrollController() {
       window.removeEventListener("portfolio:scroll-lock", syncScrollLock);
       ScrollTrigger.removeEventListener("scrollEnd", afterScroll);
       reduced.removeEventListener("change", sync);
+      pointerMedia.revert();
       smoother.kill();
       wrapper.removeAttribute("data-scroll-native");
       // Each component reverts its own ScrollTriggers, including on route changes.
