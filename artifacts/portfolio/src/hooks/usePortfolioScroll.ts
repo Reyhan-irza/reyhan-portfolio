@@ -1,16 +1,14 @@
-import { useLayoutEffect, type RefObject } from "react";
+import { useLayoutEffect } from "react";
 import { gsap, ScrollSmoother, ScrollTrigger } from "../lib/motion";
 import { shouldAutoScrollFocus, syncScrollLock } from "../lib/scroll";
 
-export function usePortfolioScroll(
-  wrapperRef: RefObject<HTMLDivElement | null>,
-  contentRef: RefObject<HTMLDivElement | null>,
-  enabled: boolean,
-) {
+// Mount before scene components so ScrollSmoother installs its scroller once,
+// before child ScrollTriggers measure the portfolio.
+export function PortfolioScrollController() {
   useLayoutEffect(() => {
-    const wrapper = wrapperRef.current;
-    const content = contentRef.current;
-    if (!enabled || !wrapper || !content) return;
+    const wrapper = document.getElementById("smooth-wrapper");
+    const content = document.getElementById("smooth-content");
+    if (!wrapper || !content) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const smooth = 0.95;
     const smoothTouch = 0.32;
@@ -103,5 +101,6 @@ export function usePortfolioScroll(
       wrapper.removeAttribute("data-scroll-native");
       // Each component reverts its own ScrollTriggers, including on route changes.
     };
-  }, [wrapperRef, contentRef, enabled]);
+  }, []);
+  return null;
 }
