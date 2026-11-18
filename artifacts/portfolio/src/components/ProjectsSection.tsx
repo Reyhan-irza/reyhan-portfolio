@@ -102,8 +102,8 @@ export default function ProjectsSection() {
         const progressFill = progressFillRef.current;
         stage.dataset.projectPinned = "true";
         const viewport = stage.querySelector<HTMLElement>(".project-track-viewport")!;
-        const travel = () => viewport.clientHeight;
-        const excess = (row: HTMLElement) => Math.max(0, row.offsetHeight - travel());
+        let lastHeight = -1;
+        let lastOverflows: number[] = [];
         const activeTimes = [0];
         let visiblePanel = -1;
 
@@ -120,12 +120,18 @@ export default function ProjectsSection() {
         // Timeline units are scroll pixels. A tall panel gets enough travel to
         // reveal its last action before the following project covers it.
         const compose = () => {
+          const height = viewport.clientHeight;
+          const overflows = rows.map(row => Math.max(0, row.offsetHeight - height));
+          if (height === lastHeight && overflows.every((value, i) => value === lastOverflows[i])) return;
+          lastHeight = height;
+          lastOverflows = overflows;
+          scene.progress(0, true);
           scene.clear();
+          rows.forEach((row, index) => gsap.set(row, { y: index ? height : 0, scale: 1 }));
           activeTimes.length = 1;
-          const height = travel();
           let cursor = 0;
           rows.forEach((row, index) => {
-            const overflow = excess(row);
+            const overflow = overflows[index];
             const next = rows[index + 1];
             scene.fromTo(row, { y: 0 }, { y: -overflow, duration: Math.max(1, overflow),
               immediateRender: false }, cursor);
@@ -145,12 +151,7 @@ export default function ProjectsSection() {
           });
           if (progressFill) scene.fromTo(progressFill, { scaleY: 0 }, { scaleY: 1, duration: cursor }, 0);
         };
-        const resetPanels = () => {
-          scene.progress(0, true);
-          rows.forEach((row, index) => gsap.set(row, { y: index ? travel() : 0, scale: 1 }));
-          compose();
-        };
-        resetPanels();
+        compose();
         scene.eventCallback("onUpdate", () => {
           let index = 0;
           while (index + 1 < activeTimes.length && scene.time() >= activeTimes[index + 1]) index++;
@@ -159,7 +160,7 @@ export default function ProjectsSection() {
         ScrollTrigger.create({
           id: "pinned-projects", trigger: stage, animation: scene,
           start: "top 80px", end: () => "+=" + scene.duration(),
-          pin: true, scrub: true, onRefreshInit: resetPanels,
+          pin: true, scrub: true, onRefreshInit: compose,
         });
         setVisiblePanel(0);
 
