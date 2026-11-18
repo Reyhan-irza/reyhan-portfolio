@@ -1,10 +1,11 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
-// Keep the logo film and Lenis on elapsed time, including during slow frames.
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+// Keep the logo film on elapsed time, including during slow frames.
 gsap.ticker.lagSmoothing(0);
 
 // Mobile browser chrome changes viewport height during a swipe. Recalculating
@@ -43,11 +44,11 @@ export function afterLineSplit<T extends gsap.core.Animation>(animation: T): T {
   return animation;
 }
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger, ScrollSmoother, SplitText };
 /** Shared PRD motion tokens; phase-specific exceptions live beside their timelines. */
 export const MOTION = {
   ease: "power3.out", menuEase: "power4.inOut", reveal: 0.9, text: 0.7,
-  menu: 0.9, y: 40, cardY: 60, stagger: 0.07, start: "top 88%", lerp: 0.1,
+  menu: 0.9, y: 40, cardY: 60, stagger: 0.07, start: "top 88%",
 } as const;
 
 /** Scene timings fitted visually; these are not claimed to be IbraCode source values. */
