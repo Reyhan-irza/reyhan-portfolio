@@ -96,14 +96,15 @@ export default function ProjectsSection() {
     if (!section || !stage) return;
 
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)", pin: "(min-width: 1024px) and (min-height: 720px)", touchPin: "(max-width: 767px) and (min-height: 720px)" }, ({ conditions }) => {
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, ({ conditions }) => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
-      if (conditions?.motion && conditions.pin) {
+      if (conditions?.motion) {
         const progressFill = progressFillRef.current;
         stage.dataset.projectPinned = "true";
-        const transitionDuration = 1;
-        const holdDuration = 0.85;
-        const step = holdDuration + transitionDuration;
+        const viewport = stage.querySelector<HTMLElement>(".project-track-viewport")!;
+        const travel = () => viewport.clientHeight;
+        const excess = (row: HTMLElement) => Math.max(0, row.offsetHeight - travel());
+        const activeTimes = [0];
         let visiblePanel = -1;
 
         const setVisiblePanel = (index: number) => {
@@ -115,38 +116,60 @@ export default function ProjectsSection() {
           if (shouldMoveFocus) rows[index].querySelector("h3")?.focus({ preventScroll: true });
         };
 
-        const scene = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            id: "pinned-projects",
-            trigger: stage,
-            start: "top 92px",
-            end: () => `+=${Math.round(stage.offsetHeight * 2.7)}`,
-            pin: true,
-            scrub: 0.18,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        const duration = step * (rows.length - 1) + holdDuration;
-        if (progressFill) scene.fromTo(progressFill, { scaleY: 0 }, { scaleY: 1, duration }, 0);
-        rows.slice(1).forEach((row, index) => {
-          const start = index * step + holdDuration;
-          scene
-            .fromTo(row, { yPercent: 104 }, { yPercent: 0, duration: transitionDuration, ease: "power2.inOut" }, start)
-            .to(rows[index], { scale: 0.95, yPercent: -2, duration: transitionDuration, ease: "power2.inOut" }, start)
-            .fromTo(row.querySelector("[data-project-copy]"), { y: 24, opacity: 0.55 },
-              { y: 0, opacity: 1, duration: 0.48, ease: "power2.out" }, start + 0.52);
-        });
+        const scene = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        // Timeline units are scroll pixels. A tall panel gets enough travel to
+        // reveal its last action before the following project covers it.
+        const compose = () => {
+          scene.clear();
+          activeTimes.length = 1;
+          const height = travel();
+          let cursor = 0;
+          rows.forEach((row, index) => {
+            const overflow = excess(row);
+            const next = rows[index + 1];
+            scene.fromTo(row, { y: 0 }, { y: -overflow, duration: Math.max(1, overflow),
+              immediateRender: false }, cursor);
+            cursor += overflow + height * .32;
+            if (!next) return;
+            const handoff = height * 1.06;
+            scene.fromTo(next, { y: height }, { y: 0, duration: handoff,
+              ease: "sine.inOut", immediateRender: false }, cursor)
+              .fromTo(row, { scale: 1, y: -overflow }, { scale: .84, y: -overflow - height * .14,
+                duration: handoff, immediateRender: false }, cursor)
+              .fromTo(next.querySelector("[data-project-depth]"), { scale: 1.18 },
+                { scale: 1, duration: handoff, ease: "power1.out" }, cursor)
+              .fromTo(next.querySelectorAll(".project-meta, [data-project-copy]"), { y: height * .065 },
+                { y: 0, duration: handoff * .64, stagger: handoff * .10 }, cursor + handoff * .24);
+            activeTimes.push(cursor + handoff * .55);
+            cursor += handoff;
+          });
+          if (progressFill) scene.fromTo(progressFill, { scaleY: 0 }, { scaleY: 1, duration: cursor }, 0);
+        };
+        const resetPanels = () => {
+          scene.progress(0, true);
+          rows.forEach((row, index) => gsap.set(row, { y: index ? travel() : 0, scale: 1 }));
+          compose();
+        };
+        resetPanels();
         scene.eventCallback("onUpdate", () => {
-          const index = Math.floor((scene.time() + transitionDuration * 0.30) / step);
-          setVisiblePanel(Math.min(rows.length - 1, index));
+          let index = 0;
+          while (index + 1 < activeTimes.length && scene.time() >= activeTimes[index + 1]) index++;
+          setVisiblePanel(index);
+        });
+        ScrollTrigger.create({
+          id: "pinned-projects", trigger: stage, animation: scene,
+          start: "top 80px", end: () => "+=" + scene.duration(),
+          pin: true, scrub: true, onRefreshInit: resetPanels,
         });
         setVisiblePanel(0);
 
         return () => {
           delete stage.dataset.projectPinned;
           rows.forEach(row => { row.inert = false; });
+          // Refresh may rebuild tweens outside the original matchMedia callback.
+          gsap.set([...rows, ...stage.querySelectorAll(".project-meta, [data-project-copy], [data-project-depth]")],
+            { clearProps: "transform" });
+          if (progressFill) gsap.set(progressFill, { clearProps: "transform" });
         };
       }
 
@@ -155,56 +178,7 @@ export default function ProjectsSection() {
           trigger: row, start: "top 52%", end: "bottom 52%",
           onEnter: () => updateActiveProject(index), onEnterBack: () => updateActiveProject(index),
         });
-        if (conditions?.reduced) return;
-        const wide = Boolean(conditions?.desktop);
-        const angle = wide ? 19 : 12;
-        const planePose = [
-          { rotationX: angle, rotationY: -angle * .45, z: -90, xPercent: -7, rotationZ: -2.5 },
-          { rotationX: -angle * .35, rotationY: angle, z: -120, xPercent: 9, rotationZ: 3 },
-          { rotationX: angle * .8, rotationY: angle * .35, z: -150, xPercent: 0, rotationZ: -1.5 },
-        ][index];
-        const q = gsap.utils.selector(row);
-        const aperture = q(".project-aperture")[0] as HTMLElement;
-        const copy = q("[data-project-copy]")[0] as HTMLElement;
-        if (conditions?.touchPin) {
-          ScrollTrigger.create({
-            trigger: aperture,
-            start: "top 88px",
-            end: () => `+=${Math.min(130, Math.round(copy.offsetHeight * 0.55))}`,
-            pin: true,
-            pinSpacing: false,
-            invalidateOnRefresh: true,
-          });
-        }
-        // Measure the stationary article. Only its inner presentation and mask planes move.
-        const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
-          id: `work-entry-${index + 1}`, trigger: row, start: "clamp(top 96%)",
-          end: () => `+=${Math.min(row.offsetHeight * .90, document.documentElement.clientHeight * .80)}`,
-          scrub: wide ? .18 : .24, invalidateOnRefresh: true,
-        }});
-        if (!conditions?.touchPin) entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
-          { y: 0, duration: 1.06 }, 0);
-        entry.fromTo(q("[data-project-name]"), { yPercent: 96 }, { yPercent: 0, duration: .53 }, .03)
-          .fromTo(q(".project-type"), { x: -14, opacity: .4 }, { x: 0, opacity: 1, duration: .48 }, .02)
-          .fromTo(q("[data-card-mask]"), { yPercent: 88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
-          .fromTo(q("[data-card-surface]"), { yPercent: -88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
-          .fromTo(q(".project-copy"), { y: 20, opacity: .4 }, { y: 0, opacity: 1, duration: .53 }, .40)
-          .fromTo(q(".project-tech-list, .project-actions"), { y: 12, opacity: .62 },
-            { y: 0, opacity: 1, duration: .39, stagger: .10 }, .56);
-        // Let the screenshot reach the viewport before its perspective settles.
-        gsap.fromTo(q("[data-project-plane]"),
-          { ...planePose, transformOrigin: index === 1 ? "right center" : "center bottom" },
-          { rotationX: 0, rotationY: 0, rotationZ: 0, xPercent: 0, z: 0, ease: "none", scrollTrigger: {
-            id: `work-perspective-${index + 1}`, trigger: row,
-            start: "clamp(top 78%)", end: "clamp(top 5%)", scrub: wide ? .26 : .32, invalidateOnRefresh: true,
-          } });
-        gsap.fromTo(q("[data-project-depth]"), { yPercent: 4, scale: 1.085 },
-          { yPercent: -4, scale: 1.015, ease: "none", scrollTrigger: { trigger: row,
-            start: "clamp(top bottom)", end: "clamp(bottom top)", scrub: SCENE.scrub, invalidateOnRefresh: true } });
       });
-      if (progressFillRef.current && conditions?.motion) gsap.fromTo(progressFillRef.current,
-        { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger: { trigger: section,
-          start: "clamp(top center)", end: "clamp(bottom center)", scrub: true } });
       return undefined;
     });
     return () => media.revert();
