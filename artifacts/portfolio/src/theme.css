@@ -427,9 +427,15 @@ body { background: var(--canvas); }
 
 @media (max-width: 767px) and (min-height: 720px) and (prefers-reduced-motion: no-preference) {
   .portfolio-shell .project-presentation { display: flex; flex-direction: column; }
-  .portfolio-shell .project-presentation .project-aperture { position: sticky; top: 5.5rem; }
   .portfolio-shell .project-presentation [data-project-copy] {
     position: relative;
     background: var(--canvas);
   }
+}
+
+
+#smooth-wrapper[data-scroll-native] {
+  position: relative !important;
+  height: auto !important;
+  overflow: visible !important;
 }
