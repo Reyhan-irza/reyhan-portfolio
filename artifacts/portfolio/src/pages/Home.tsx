@@ -18,7 +18,8 @@ import AchievementToast from "@/components/AchievementToast";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
 import { gsap, ScrollTrigger } from "../lib/motion";
-import { useLenis } from "../hooks/useLenis";
+import { usePortfolioScroll } from "../hooks/usePortfolioScroll";
+import { scrollToSection } from "../lib/scroll";
 import IntroAnimation from "@/components/IntroAnimation";
 import SectionBoundary from "@/components/SectionBoundary";
 import { LazyMotion, domAnimation } from "framer-motion";
@@ -32,7 +33,9 @@ export default function Home() {
   const [heroReady, setHeroReady] = useState(false);
   useEditorialScenes(introFinished);
   const revealHero = useCallback(() => setHeroReady(true), []);
-  useLenis(introFinished);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  usePortfolioScroll(wrapperRef, contentRef, introFinished);
   const [archiveVisited, setArchiveVisited] = useState(false);
   const finishIntro = useCallback(() => { setHeroReady(true); setIntroFinished(true); }, []);
 
@@ -69,8 +72,10 @@ export default function Home() {
   return (
     <LazyMotion features={domAnimation}>
     <div className="portfolio-shell relative min-h-[100dvh]">
-      <a className="skip-to-content" href="#main-content">Skip to content</a>
+      <a className="skip-to-content" href="#main-content" onClick={(event) => { event.preventDefault(); scrollToSection("#main-content"); }}>Skip to content</a>
       <Navbar />
+      <div ref={wrapperRef} id="smooth-wrapper">
+        <div ref={contentRef} id="smooth-content">
       <main inert={!introFinished} id="main-content" className="relative z-10">
         <HeroSection ready={heroReady} />
         <TechnologyBands />
@@ -128,6 +133,9 @@ export default function Home() {
       <div className="relative z-10" ref={footerRef}>
         <Footer />
         </div>
+        </div>
+      </div>
+      <div id="portfolio-overlays" />
       <AchievementToast />
       {!introFinished && <IntroAnimation onReveal={revealHero} onFinish={finishIntro} />}
     </div>

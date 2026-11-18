@@ -329,7 +329,12 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   await t.test("headings and copy stay readable at the required viewport widths", async () => {
     for (const width of [360, 390, 430, 768]) {
       await phonePage.setViewportSize({ width, height: 844 });
-      await phonePage.locator('#about .story-intro').scrollIntoViewIfNeeded();
+      const top = await phonePage.locator('#about').evaluate(el => {
+        const content = document.querySelector('#smooth-content');
+        const visualScroll = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+        return el.getBoundingClientRect().top + visualScroll - innerHeight * 0.2;
+      });
+      await scrollInstantly(phonePage, top);
       await phonePage.waitForTimeout(1500);
       await assertVisibleBox(phonePage.locator('#about h2'), 'About heading');
       await assertVisibleBox(phonePage.locator('#about .story-lead'), 'About copy');
@@ -395,7 +400,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       await ctx.close();
     }
   });
-  await t.test("leaving home tears down all its ScrollTriggers and Lenis on repeated visits", {skip:Boolean(process.env.PORTFOLIO_BUILD_DIRECTORY)}, async () => {
+  await t.test("leaving home tears down all its ScrollTriggers and ScrollSmoother on repeated visits", {skip:Boolean(process.env.PORTFOLIO_BUILD_DIRECTORY)}, async () => {
     const ctx=await browser.newContext();
     await mockServices(ctx);
     try {
@@ -405,9 +410,10 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
         await page.waitForFunction(()=>document.querySelector("#home h1")||document.querySelector(".rv-intro-skip"));
         if (await page.locator(".rv-intro-skip").isVisible()) await dismissIntro(page);
         await page.waitForFunction(async()=>(await import("/src/lib/motion.ts")).ScrollTrigger.getAll().length>3);
+        await scrollInstantly(page, await page.evaluate(() => document.documentElement.scrollHeight));
         await page.getByRole("button",{name:"Developer Access",exact:true}).click();
         await page.waitForURL("**/admin");
-        await page.waitForFunction(async()=> (await import("/src/lib/scroll.ts")).lenis===null && (await import("/src/lib/motion.ts")).ScrollTrigger.getAll().length===0);
+        await page.waitForFunction(async()=> !(await import("/src/lib/motion.ts")).ScrollSmoother.get() && (await import("/src/lib/motion.ts")).ScrollTrigger.getAll().length===0);
         if (!pass) await page.goBack();
       }
     } finally {await ctx.close();}

@@ -1,11 +1,27 @@
-import { useEffect } from "react";
-import { ScrollTrigger } from "../lib/motion";
-import { startSmoothScroll, stopSmoothScroll, syncScrollLock } from "../lib/scroll";
+import { useLayoutEffect, type RefObject } from "react";
+import { gsap, ScrollSmoother, ScrollTrigger } from "../lib/motion";
+import { shouldAutoScrollFocus, syncScrollLock } from "../lib/scroll";
 
-export function useLenis(enabled = true) {
-  useEffect(() => {
-    if (!enabled) return;
+export function usePortfolioScroll(
+  wrapperRef: RefObject<HTMLDivElement | null>,
+  contentRef: RefObject<HTMLDivElement | null>,
+  enabled: boolean,
+) {
+  useLayoutEffect(() => {
+    const wrapper = wrapperRef.current;
+    const content = contentRef.current;
+    if (!enabled || !wrapper || !content) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const smooth = 0.55;
+    const smoothTouch = 0.15;
+    const smoother = ScrollSmoother.create({
+      wrapper,
+      content,
+      smooth,
+      smoothTouch,
+      autoResize: false,
+      onFocusIn: (_smoother, event) => shouldAutoScrollFocus(content, event),
+    });
     let frame = 0, disposed = false, pending = false, geometryChanged = false;
     const refresh = () => {
       pending = true;
@@ -18,11 +34,27 @@ export function useLenis(enabled = true) {
         ScrollTrigger.refresh();
       });
     };
+    const syncHash = () => {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target && content.contains(target)) smoother.scrollTo(target, false, "top 96px");
+    };
+    const onHashChange = (event: HashChangeEvent) => {
+      if (event.isTrusted) syncHash();
+    };
     const afterScroll = () => { if (pending) refresh(); };
     const linesChanged = () => { geometryChanged = true; refresh(); };
     const sync = () => {
-      if (reduced.matches) stopSmoothScroll(); else startSmoothScroll();
-      syncScrollLock(); refresh();
+      const scroll = window.scrollY;
+      const duration = ScrollTrigger.isTouch === 1 ? smoothTouch : smooth;
+      // Retain the same scroller proxy so existing scene triggers remain attached.
+      smoother.smooth(reduced.matches ? 0 : duration);
+      wrapper.toggleAttribute("data-scroll-native", reduced.matches);
+      if (reduced.matches) gsap.set(content, { clearProps: "transform" });
+      else gsap.set(content, { y: -scroll });
+      smoother.scrollTop(scroll);
+      syncScrollLock();
+      geometryChanged = true;
+      refresh();
     };
     // Observe existing intro/menu/modal locks, not every body color tween.
     let overflow = document.body.style.overflow;
@@ -32,7 +64,7 @@ export function useLenis(enabled = true) {
       syncScrollLock();
     });
     lockObserver.observe(document.body, { attributes: true, attributeFilter: ["style"] });
-    let width = document.body.offsetWidth, height = document.body.offsetHeight;
+    let width = content.offsetWidth, height = content.offsetHeight;
     let viewportHeight = window.innerHeight;
     const resizeObserver = new ResizeObserver(([entry]) => {
       const box = entry.borderBoxSize[0];
@@ -48,24 +80,28 @@ export function useLenis(enabled = true) {
       if ((nextWidth !== width || nextHeight !== height) && !browserChrome) refresh();
       width = nextWidth; height = nextHeight; viewportHeight = window.innerHeight;
     });
-    resizeObserver.observe(document.body, { box: "border-box" });
+    resizeObserver.observe(content, { box: "border-box" });
     window.addEventListener("portfolio:lines-changed", linesChanged);
     window.addEventListener("load", refresh);
+    window.addEventListener("hashchange", onHashChange);
     window.addEventListener("portfolio:scroll-lock", syncScrollLock);
     ScrollTrigger.addEventListener("scrollEnd", afterScroll);
     reduced.addEventListener("change", sync);
     document.fonts.ready.then(() => { if (!disposed) refresh(); });
     sync();
+    const initialHashFrame = requestAnimationFrame(syncHash);
     return () => {
-      disposed = true; cancelAnimationFrame(frame);
+      disposed = true; cancelAnimationFrame(frame); cancelAnimationFrame(initialHashFrame);
       lockObserver.disconnect(); resizeObserver.disconnect();
       window.removeEventListener("portfolio:lines-changed", linesChanged);
       window.removeEventListener("load", refresh);
+      window.removeEventListener("hashchange", onHashChange);
       window.removeEventListener("portfolio:scroll-lock", syncScrollLock);
       ScrollTrigger.removeEventListener("scrollEnd", afterScroll);
       reduced.removeEventListener("change", sync);
-      stopSmoothScroll();
+      smoother.kill();
+      wrapper.removeAttribute("data-scroll-native");
       // Each component reverts its own ScrollTriggers, including on route changes.
     };
-  }, [enabled]);
+  }, [wrapperRef, contentRef, enabled]);
 }

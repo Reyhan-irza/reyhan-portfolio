@@ -1,3 +1,4 @@
+import { scrollElementIntoView } from "../lib/scroll";
 import { useState, useEffect, useRef } from "react";
 import {
   MessageSquare, Send, User, Search, SlidersHorizontal,
@@ -148,8 +149,7 @@ export default function CommentsSection() {
     setTimeout(() => setSuccess(false), 4000);
     setPage(1);
     setTimeout(() => {
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      listRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      if (listRef.current) scrollElementIntoView(listRef.current);
     }, 150);
     setSubmitting(false);
   };

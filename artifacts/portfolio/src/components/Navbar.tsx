@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { gsap, ScrollTrigger, SCENE } from "../lib/motion";
-import { scrollToSection } from "../lib/scroll";
+import { getPageScroll, scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
 
 const navLinks = [
@@ -32,9 +32,9 @@ export default function Navbar() {
   useEffect(() => {
     const trigger = ScrollTrigger.create({ start: 32, end: "max",
       onToggle: (self) => setScrolled(self.scroll() > 32),
-      onRefresh: () => setScrolled(window.scrollY > 32),
+      onRefresh: () => setScrolled(getPageScroll() > 32),
     });
-    setScrolled(window.scrollY > 32);
+    setScrolled(getPageScroll() > 32);
     return () => trigger.kill();
   }, []);
 
@@ -114,7 +114,7 @@ export default function Navbar() {
         return;
       }
       hashActiveHref.current = null;
-      const scroll = window.scrollY;
+      const scroll = getPageScroll();
       let nextHref = "";
       for (const { href, activationScroll } of sections) {
         if (activationScroll > scroll) break;
@@ -123,7 +123,7 @@ export default function Navbar() {
       selectSection(nextHref);
     };
     const measureSections = () => {
-      const viewportOffset = window.scrollY - window.innerHeight * 0.56;
+      const viewportOffset = getPageScroll() - window.innerHeight * 0.56;
       for (const entry of sections) {
         entry.activationScroll = entry.section.getBoundingClientRect().top + viewportOffset;
       }
@@ -313,7 +313,6 @@ export default function Navbar() {
       <aside
         ref={panelRef}
         id="mobile-navigation"
-        data-lenis-prevent
         role="dialog"
         aria-modal="true"
         aria-labelledby="mobile-navigation-title"

@@ -96,7 +96,7 @@ export default function ProjectsSection() {
     if (!section || !stage) return;
 
     const media = gsap.matchMedia();
-    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)", pin: "(min-width: 1024px) and (min-height: 720px)" }, ({ conditions }) => {
+    media.add({ motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)", desktop: "(min-width: 768px)", pin: "(min-width: 1024px) and (min-height: 720px)", touchPin: "(max-width: 767px) and (min-height: 720px)" }, ({ conditions }) => {
       const rows = gsap.utils.toArray<HTMLElement>("[data-project-row]", section);
       if (conditions?.motion && conditions.pin) {
         const progressFill = progressFillRef.current;
@@ -164,15 +164,27 @@ export default function ProjectsSection() {
           { rotationX: angle * .8, rotationY: angle * .35, z: -150, xPercent: 0, rotationZ: -1.5 },
         ][index];
         const q = gsap.utils.selector(row);
+        const aperture = q(".project-aperture")[0] as HTMLElement;
+        const copy = q("[data-project-copy]")[0] as HTMLElement;
+        if (conditions?.touchPin) {
+          ScrollTrigger.create({
+            trigger: aperture,
+            start: "top 88px",
+            end: () => `+=${Math.min(130, Math.round(copy.offsetHeight * 0.55))}`,
+            pin: true,
+            pinSpacing: false,
+            invalidateOnRefresh: true,
+          });
+        }
         // Measure the stationary article. Only its inner presentation and mask planes move.
         const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
           id: `work-entry-${index + 1}`, trigger: row, start: "clamp(top 96%)",
           end: () => `+=${Math.min(row.offsetHeight * .90, document.documentElement.clientHeight * .80)}`,
           scrub: wide ? .18 : .24, invalidateOnRefresh: true,
         }});
-        entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
-          { y: 0, duration: 1.06 }, 0)
-          .fromTo(q("[data-project-name]"), { yPercent: 96 }, { yPercent: 0, duration: .53 }, .03)
+        if (!conditions?.touchPin) entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
+          { y: 0, duration: 1.06 }, 0);
+        entry.fromTo(q("[data-project-name]"), { yPercent: 96 }, { yPercent: 0, duration: .53 }, .03)
           .fromTo(q(".project-type"), { x: -14, opacity: .4 }, { x: 0, opacity: 1, duration: .48 }, .02)
           .fromTo(q("[data-card-mask]"), { yPercent: 88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
           .fromTo(q("[data-card-surface]"), { yPercent: -88 }, { yPercent: 0, duration: .81, ease: "sine.inOut" }, .08)
@@ -491,7 +503,6 @@ export default function ProjectsSection() {
         {modal && <m.div
           key="project-detail-overlay"
           className="project-detail-overlay"
-          data-lenis-prevent
           role="presentation"
           onClick={() => setModal(null)}
           data-testid="project-detail-overlay"
