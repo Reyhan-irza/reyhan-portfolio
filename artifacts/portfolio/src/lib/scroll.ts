@@ -9,7 +9,8 @@ export function startSmoothScroll() {
   if (lenis) return;
   lenis = new Lenis({ lerp: MOTION.lerp, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add(tick);
+  // Update the scroll position before GSAP renders this tick.
+  gsap.ticker.add(tick, false, true);
 }
 export function stopSmoothScroll() {
   gsap.ticker.remove(tick);

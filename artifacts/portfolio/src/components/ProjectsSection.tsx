@@ -102,7 +102,8 @@ export default function ProjectsSection() {
           onEnter: () => updateActiveProject(index), onEnterBack: () => updateActiveProject(index),
         });
         if (conditions?.reduced) return;
-        const angle = conditions?.desktop ? 19 : 12;
+        const wide = Boolean(conditions?.desktop);
+        const angle = wide ? 19 : 12;
         const planePose = [
           { rotationX: angle, rotationY: -angle * .45, z: -90, xPercent: -7, rotationZ: -2.5 },
           { rotationX: -angle * .35, rotationY: angle, z: -120, xPercent: 9, rotationZ: 3 },
@@ -113,7 +114,7 @@ export default function ProjectsSection() {
         const entry = gsap.timeline({ defaults: { ease: "sine.out" }, scrollTrigger: {
           id: `work-entry-${index + 1}`, trigger: row, start: "clamp(top 96%)",
           end: () => `+=${Math.min(row.offsetHeight * .90, document.documentElement.clientHeight * .80)}`,
-          scrub: .55, invalidateOnRefresh: true,
+          scrub: wide ? .18 : .24, invalidateOnRefresh: true,
         }});
         entry.fromTo(q("[data-project-lift]"), { y: () => Math.min(64, row.offsetHeight * .085) },
           { y: 0, duration: 1.06 }, 0)
@@ -129,7 +130,7 @@ export default function ProjectsSection() {
           { ...planePose, transformOrigin: index === 1 ? "right center" : "center bottom" },
           { rotationX: 0, rotationY: 0, rotationZ: 0, xPercent: 0, z: 0, ease: "none", scrollTrigger: {
             id: `work-perspective-${index + 1}`, trigger: row,
-            start: "clamp(top 78%)", end: "clamp(top 5%)", scrub: .65, invalidateOnRefresh: true,
+            start: "clamp(top 78%)", end: "clamp(top 5%)", scrub: wide ? .26 : .32, invalidateOnRefresh: true,
           } });
         gsap.fromTo(q("[data-project-depth]"), { yPercent: 4, scale: 1.085 },
           { yPercent: -4, scale: 1.015, ease: "none", scrollTrigger: { trigger: row,
