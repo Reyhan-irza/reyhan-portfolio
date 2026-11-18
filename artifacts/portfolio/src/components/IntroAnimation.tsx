@@ -15,7 +15,8 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
     const root = rootRef.current;
     if (!root) return;
     let finished = false, disposed = false, revealed = false;
-    let timer = 0, decodeTimer = 0;
+    let timer = 0, decodeTimer = 0, playFrame = 0;
+    let ready = false;
     let timeline: gsap.core.Timeline | undefined;
     const q = (s: string) => root.querySelector<HTMLElement>(s)!;
     const logo = q('.logo'), stage = q('.stage'), full = q('.full');
@@ -105,7 +106,7 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
         .call(reveal, [], 4.4);
     }, root);
     const arm = () => { window.clearTimeout(timer); if (!document.hidden) timer = window.setTimeout(finish, 12000); };
-    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { timeline?.play(); arm(); } };
+    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { if (ready) timeline?.play(); arm(); } };
     const preference = () => { if (reduced.matches) finish(); };
     const resize = () => { if ((timeline?.time() ?? 0) >= 3.95) finish(); };
     document.addEventListener('visibilitychange', visibility);
@@ -117,10 +118,16 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       new Promise((_, reject) => { decodeTimer = window.setTimeout(() => reject(new Error('Intro assets unavailable')), 1500); }),
     ]).then(() => {
       window.clearTimeout(decodeTimer);
-      if (!disposed && !finished && !document.hidden) timeline?.play(0);
+      // Let the initial layout paint before starting the authored film clock.
+      playFrame = requestAnimationFrame(() => {
+        playFrame = requestAnimationFrame(() => {
+          ready = true;
+          if (!disposed && !finished && !document.hidden) timeline?.play(0);
+        });
+      });
     }).catch(finish);
     return () => {
-      disposed = true; window.clearTimeout(timer); window.clearTimeout(decodeTimer);
+      disposed = true; cancelAnimationFrame(playFrame); window.clearTimeout(timer); window.clearTimeout(decodeTimer);
       document.removeEventListener('visibilitychange', visibility);
       reduced.removeEventListener('change', preference);
       window.removeEventListener('resize', resize);
