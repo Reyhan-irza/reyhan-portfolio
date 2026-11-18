@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "../lib/motion";
+import { gsap, ScrollTrigger, prepareNearby } from "../lib/motion";
 import { unlockAchievement, ACHIEVEMENTS } from "../lib/achievement";
 import Reveal from "./Reveal";
 
@@ -32,7 +32,7 @@ export default function JourneySection() {
       compact: "(max-width: 767px)",
       wide: "(min-width: 768px)",
     }, (mediaContext) => {
-      const context = gsap.context(() => {
+      return prepareNearby(el, () => {
         ScrollTrigger.create({
           trigger: el,
           start: "top 72%",
@@ -86,8 +86,7 @@ export default function JourneySection() {
 
         }
 
-      }, el);
-      return () => context.revert();
+      });
     });
     return () => media.revert();
   }, []);
