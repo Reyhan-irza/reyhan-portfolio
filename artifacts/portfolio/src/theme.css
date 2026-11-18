@@ -75,7 +75,7 @@ body { background: var(--canvas); }
 .portfolio-shell .contact-link:hover :is(.contact-label,.contact-icon,.contact-arrow) { color: var(--signal); }
 .portfolio-shell .education-current-badge { color: var(--signal); border-color: var(--signal); }
 .portfolio-shell .education-item-current { background: var(--signal-wash); }
-.portfolio-shell .education-item[data-education-active="true"] .education-node { box-shadow: 0 0 0 4px var(--canvas); }
+.portfolio-shell .education-node-current { background: var(--signal); box-shadow: 0 0 0 4px var(--canvas); }
 .portfolio-shell :is(.journey-timeline-progress,.education-timeline-progress,.award-evidence-line) { background: var(--signal); }
 .portfolio-shell .projects-section {
   --project-paper: var(--ink-primary); --project-muted: var(--ink-secondary);
