@@ -350,8 +350,8 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
 
   await phoneContext.close();
 
-  await t.test("desktop project panels pin, reverse, and release with accessible details", async () => {
-    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await t.test("wide touch project panels pin, reverse, and release with accessible details", async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, hasTouch: true });
     await mockServices(ctx);
     try {
       const page = await ctx.newPage();
