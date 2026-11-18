@@ -58,42 +58,22 @@ test('sans typography, four certificates and independent spatial scenes', {
           assert.ok(!platformFonts[selector].some(font => /Times|Georgia|Fraunces/i.test(font)));
         }
         const cards = page.locator('[data-project-row]');
-        const poses = [];
+        const panelActions = [];
         const pinnedStage = page.locator('[data-project-pinned]');
-        if (await pinnedStage.count()) {
+        assert.equal(await pinnedStage.count(), 1, `whole panel pinned at ${width}`);
+        {
           const { top, distance } = await pinnedStage.evaluate(el => ({
-            top: el.parentElement.getBoundingClientRect().top + scrollY - 92,
+            top: el.parentElement.getBoundingClientRect().top + scrollY - 80,
             distance: el.parentElement.offsetHeight - el.offsetHeight,
           }));
-          for (const [fraction, index] of [[.10, 0], [.51, 1], [.92, 2]]) {
+          for (const [fraction, index] of [[.05, 0], [.50, 1], [.96, 2], [.50, 1], [.05, 0]]) {
             await go(top + distance * fraction);
             assert.equal(await cards.nth(index).getAttribute('data-active-project'), 'true');
+            const actions = await cards.nth(index).locator('.project-actions').boundingBox();
+            panelActions.push({ fraction, index, top: actions.y, bottom: actions.y + actions.height });
+            assert.ok(actions.y >= 80 && actions.y + actions.height <= height, `reachable actions at ${width}/${index}`);
             await capture(`project-panel-${index + 1}`);
           }
-        } else {
-          for (let index = 0; index < 3; index++) {
-            const card = cards.nth(index);
-            const layout = await card.evaluate(el => ({ top: el.getBoundingClientRect().top + scrollY, height: el.offsetHeight }));
-            const distance = Math.min(layout.height * .9, height * .8);
-            const middle = layout.top - height * .96 + distance * .65;
-            const pose = () => card.locator('[data-project-plane]').evaluate(el => {
-              const m = new DOMMatrixReadOnly(getComputedStyle(el).transform);
-              return { x: m.m13, y: m.m23, z: m.m43 };
-            });
-            await go(middle);
-            const entry = await pose();
-            assert.ok(Math.abs(entry.x) + Math.abs(entry.y) > .002, `3D entry at ${width}/${index}`);
-            await capture(`project-${index + 1}-entry`);
-            await go(Math.max(layout.top - height * .96 + distance + 80, layout.top - height * .05 + 40));
-            const rest = await pose();
-            assert.ok(Math.abs(rest.x) + Math.abs(rest.y) < .002);
-            if (index === 1) await capture('project');
-            await go(middle);
-            const reversed = await pose();
-            assert.ok(Math.abs(entry.x - reversed.x) + Math.abs(entry.y - reversed.y) < .02);
-            poses.push(entry);
-          }
-          assert.equal(new Set(poses.map(pose => `${Math.sign(pose.x)},${Math.sign(pose.y)}`)).size, 3);
         }
         await jump('[data-testid="link-dicoding-certificate-preview"]');
         const certificate = page.getByTestId('link-dicoding-certificate-preview');
@@ -154,7 +134,7 @@ test('sans typography, four certificates and independent spatial scenes', {
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         assert.equal(overflow, 0);
         assert.deepEqual(errors, []);
-        results.push({ width, height, platformFonts, projectPoses: poses, marqueeDelta: next.map((x, i) => x - first[i]), seams, overflow, reducedMotion: reduced, errors });
+        results.push({ width, height, platformFonts, panelActions, marqueeDelta: next.map((x, i) => x - first[i]), seams, overflow, reducedMotion: reduced, errors });
       } finally { await context.close(); }
     }
     if (evidence) await writeFile(path.join(evidence, 'results.json'), JSON.stringify(results, null, 2) + '\n');

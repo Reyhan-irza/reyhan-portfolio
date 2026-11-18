@@ -35,6 +35,15 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
       }
     });
     await t.test('project modal locks the page and restores keyboard focus',async()=>{
+      await page.locator('[data-project-stage]').evaluate(el => {
+        const spacer = el.parentElement;
+        window.scrollTo(0, spacer.getBoundingClientRect().top + scrollY - 80 + el.offsetHeight * .15);
+      });
+      await page.waitForFunction(() => {
+        const button = document.querySelector('[data-testid="button-details-1"]');
+        const box = button.getBoundingClientRect();
+        return button.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+      });
       await page.getByTestId('button-details-1').click();
       await page.getByTestId('project-detail-dialog').waitFor({state:'visible'});
       await page.waitForFunction(()=>document.body.style.overflow === 'hidden');
