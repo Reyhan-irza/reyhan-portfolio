@@ -342,26 +342,61 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
 
   await phoneContext.close();
 
-  await t.test("desktop projects remain vertical and include each project's details", async () => {
-    const ctx = await browser.newContext({viewport:{width:1440,height:900}});
+  await t.test("desktop project panels pin, reverse, and release with accessible details", async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     await mockServices(ctx);
     try {
       const page = await ctx.newPage();
       await page.goto(baseUrl);
       await dismissIntro(page);
-      const rows = page.locator("[data-project-row]");
-      assert.equal(await rows.count(),3);
-      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(),0);
-      let previous = 0;
-      for (const row of await rows.all()) {
-        const top = await row.evaluate(el => el.getBoundingClientRect().top+scrollY);
-        assert.ok(top>previous); previous=top;
-        await scrollInstantly(page,top-120);
-        await page.waitForFunction(el=>Number(getComputedStyle(el).opacity)>.99,await row.locator(".project-copy").elementHandle());
-        assert.ok(await row.locator("img").evaluate(el=>el.complete && el.naturalWidth>0));
-        assert.equal(await row.locator(".project-actions a,.project-actions button").count(),3);
+      const stage = page.locator("[data-project-stage]");
+      const rows = stage.locator("[data-project-row]");
+      assert.equal(await rows.count(), 3);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 1);
+      const { start, distance } = await stage.evaluate(el => ({
+        start: el.parentElement.getBoundingClientRect().top + scrollY - 92,
+        distance: el.parentElement.offsetHeight - el.offsetHeight,
+      }));
+
+      for (const [fraction, index] of [[0.1, 0], [0.51, 1], [0.92, 2], [0.51, 1], [0.1, 0]]) {
+        await scrollInstantly(page, start + distance * fraction);
+        const panel = rows.nth(index);
+        assert.ok(Math.abs((await stage.boundingBox()).y - 92) < 2);
+        assert.deepEqual(await rows.evaluateAll(elements => elements.map(el => el.inert)),
+          [0, 1, 2].map(current => current !== index));
+        assert.equal(await panel.getAttribute("data-active-project"), "true");
+        assert.ok(await panel.locator("img").evaluate(el => el.complete && el.naturalWidth > 0));
+        assert.equal(await panel.locator(".project-actions a,.project-actions button").count(), 3);
+        assert.ok((await panel.locator(".project-actions").boundingBox()).y < 900);
       }
-    } finally {await ctx.close();}
+
+      await scrollInstantly(page, start + distance * 0.29);
+      const overlapTop = (await rows.nth(1).boundingBox()).y;
+      assert.ok(overlapTop > 140 && overlapTop < 650, "The incoming panel should overlap the pinned panel");
+      await scrollInstantly(page, start + distance * 0.51);
+      const details = page.getByTestId("button-details-2");
+      await details.click();
+      const detailDialog = page.getByRole("dialog");
+      await detailDialog.waitFor();
+      await page.keyboard.press("Escape");
+      await detailDialog.waitFor({ state: "hidden" });
+      assert.equal(await details.evaluate(el => document.activeElement === el), true);
+      await scrollInstantly(page, start + distance + 110);
+      assert.ok((await stage.boundingBox()).y < 30, "The stage should release after its final panel");
+      await page.setViewportSize({ width: 1366, height: 650 });
+      await settleLayout(page);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 0);
+      assert.equal(await stage.locator("article[inert]").count(), 0);
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await settleLayout(page);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 1);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await settleLayout(page);
+      assert.equal(await stage.locator("article[inert]").count(), 0);
+      assert.equal(await page.locator(".pin-spacer [data-project-stage]").count(), 0);
+    } finally {
+      await ctx.close();
+    }
   });
   await t.test("leaving home tears down all its ScrollTriggers and Lenis on repeated visits", {skip:Boolean(process.env.PORTFOLIO_BUILD_DIRECTORY)}, async () => {
     const ctx=await browser.newContext();
