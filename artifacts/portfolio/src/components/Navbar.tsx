@@ -99,22 +99,35 @@ export default function Navbar() {
     if (!nav) return;
     const sections = ["#home", ...navLinks.map(({ href }) => href)].flatMap((href) => {
       const section = document.querySelector<HTMLElement>(href);
-      return section ? [{ href, section }] : [];
+      return section ? [{ href, section, activationScroll: 0 }] : [];
     });
     sections.sort((a, b) => (a.section.compareDocumentPosition(b.section) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1);
+    let activeSection = "";
+    const selectSection = (href: string) => {
+      if (href === activeSection) return;
+      activeSection = href;
+      setActiveHref(href);
+    };
     const updateActiveFromScroll = () => {
       if (hashActiveHref.current && window.location.hash === hashActiveHref.current) {
-        setActiveHref(hashActiveHref.current);
+        selectSection(hashActiveHref.current);
         return;
       }
       hashActiveHref.current = null;
-      const activationLine = window.innerHeight * 0.56;
+      const scroll = window.scrollY;
       let nextHref = "";
-      for (const { href, section } of sections) {
-        if (section.getBoundingClientRect().top > activationLine) break;
+      for (const { href, activationScroll } of sections) {
+        if (activationScroll > scroll) break;
         nextHref = href;
       }
-      setActiveHref(nextHref);
+      selectSection(nextHref);
+    };
+    const measureSections = () => {
+      const viewportOffset = window.scrollY - window.innerHeight * 0.56;
+      for (const entry of sections) {
+        entry.activationScroll = entry.section.getBoundingClientRect().top + viewportOffset;
+      }
+      updateActiveFromScroll();
     };
     const clearHashSelection = () => {
       if (isOpenRef.current || !hashActiveHref.current) return;
@@ -132,7 +145,7 @@ export default function Navbar() {
       const target = sections.find(({ href }) => href === window.location.hash);
       if (target) {
         hashActiveHref.current = target.href;
-        setActiveHref(target.href);
+        selectSection(target.href);
       } else {
         hashActiveHref.current = null;
         updateActiveFromScroll();
@@ -145,7 +158,7 @@ export default function Navbar() {
         start: 0,
         end: "max",
         onUpdate: updateActiveFromScroll,
-        onRefresh: updateActiveFromScroll,
+        onRefresh: measureSections,
       });
     }, nav);
     window.addEventListener("wheel", clearHashSelection, { passive: true });
@@ -153,7 +166,7 @@ export default function Navbar() {
     window.addEventListener("keydown", handleScrollKey);
     window.addEventListener("hashchange", syncNavigationState);
     window.addEventListener("popstate", syncNavigationState);
-    updateActiveFromScroll();
+    measureSections();
     syncNavigationState();
     return () => {
       window.removeEventListener("wheel", clearHashSelection);
