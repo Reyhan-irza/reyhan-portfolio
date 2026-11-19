@@ -574,6 +574,7 @@ body { background: var(--canvas); }
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
 }
+.portfolio-closing-zone[data-palette-wave] { padding-top: clamp(3rem, 6vw, 5rem); }
 .palette-wave-surface {
   position: absolute;
   inset: -1px 0 auto;
