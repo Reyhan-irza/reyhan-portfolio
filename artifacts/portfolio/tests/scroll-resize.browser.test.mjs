@@ -343,7 +343,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
       await phonePage.setViewportSize({ width, height: 844 });
       const top = await phonePage.locator('#about').evaluate(el => {
         const content = document.querySelector('#smooth-content');
-        const visualScroll = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+        const visualScroll = document.querySelector("#smooth-wrapper[data-scroll-native]") ? scrollY : -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
         return el.getBoundingClientRect().top + visualScroll - innerHeight * 0.2;
       });
       await scrollInstantly(phonePage, top);

@@ -109,6 +109,8 @@ export default function AwardSection() {
             aria-label="Open the full 2025 LKS certificate PDF in a new tab"
           >
             <img
+              sizes="(max-width: 767px) 88vw, 60vw"
+              srcSet={`${import.meta.env.BASE_URL}lks-mobile.webp 864w, ${certificatePreviewUrl} 1680w`}
               src={certificatePreviewUrl}
               alt="Sertifikat Juara I Reyhan Irza Alvano di IT Software Solution For Business tingkat Kabupaten Agam tahun 2025."
               loading="lazy"
@@ -188,6 +190,8 @@ export default function AwardSection() {
             aria-label="Open the August 2026 Pustaka Digital award certificate image in a new tab"
           >
             <img
+              sizes="(max-width: 767px) 88vw, 60vw"
+              srcSet={`${import.meta.env.BASE_URL}pustaka-mobile.webp 864w, ${digitalLibraryCertificateUrl} 1491w`}
               src={digitalLibraryCertificateUrl}
               alt="Sertifikat penghargaan SMK Negeri 2 Lubuk Basung kepada Reyhan Irza Alvano atas pengembangan Aplikasi Pustaka Digital, Agustus 2026."
               loading="lazy"
@@ -267,6 +271,8 @@ export default function AwardSection() {
             aria-label="Buka PDF asli sertifikat Juara 2 CADIAK CTF 2026 di tab baru"
           >
             <img
+              sizes="(max-width: 767px) 88vw, 60vw"
+              srcSet={`${import.meta.env.BASE_URL}cadiak-mobile.webp 864w, ${cadiakCertificatePreviewUrl} 1800w`}
               src={cadiakCertificatePreviewUrl}
               alt="Sertifikat Juara 2 CADIAK CTF Competition 2026 untuk Reyhan Irza Alvano dari SMKN 2 Lubuk Basung, Padang, 30 September 2026."
               loading="lazy"

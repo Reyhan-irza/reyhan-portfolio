@@ -444,7 +444,12 @@ body { background: var(--canvas); }
 .portfolio-shell #about .story-notes[data-cycle] {
   display: grid; grid-template-columns: minmax(0,1fr); overflow: clip; isolation: isolate;
 }
-.portfolio-shell #about .story-notes[data-cycle] > .story-note {
+.story-track { display: contents; }
+.story-track > [aria-hidden="true"] { display: none !important; }
+.story-notes[data-cycle] .story-track { display: flex; min-width: 0; }
+.story-notes[data-cycle] .story-track > [aria-hidden="true"] { display: flex !important; }
+.portfolio-shell #about .story-notes[data-cycle] .story-note {
+  flex: 0 0 100%; min-width: 0;
   grid-area: 1/1; min-height: clamp(24rem,72svh,54rem); display: flex;
   flex-direction: column; justify-content: center; padding: clamp(1.5rem,7vw,7rem);
   background: var(--canvas);
@@ -508,3 +513,7 @@ body { background: var(--canvas); }
   .award-stage[data-gallery] .certificate-preview { height: min(33svh,18rem); width: 100%; }
   .award-stage[data-gallery] [data-award-media] > div:last-child { flex-direction: row; }
 }
+
+/* Only the document owns vertical scroll. A fixed wrapper that scrolls on focus
+   can move a pinned button between pointerdown and pointerup. */
+#smooth-wrapper:has([data-project-pinned]:is(:hover, :focus-within)) { overflow: clip !important; }
