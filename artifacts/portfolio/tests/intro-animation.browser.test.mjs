@@ -126,6 +126,10 @@ async function createTrackedPage(viewport, options = {}) {
 }
 
 async function waitForIntroCompletion(page, timeout = 7_000) {
+  const go = page.getByRole("button", { name: "KETUK DIMANA SAJA UNTUK LANJUT" });
+  await go.waitFor({ timeout });
+  assert.equal(await page.locator("#main-content").getAttribute("inert"), "");
+  await go.click();
   await page.waitForFunction(
     () => window.__introTiming?.end !== null && window.__introTiming?.end !== undefined,
     null,

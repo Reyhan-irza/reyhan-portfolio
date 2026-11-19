@@ -1,6 +1,6 @@
 import { Award, Download, ExternalLink, MapPin } from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
-import { gsap, ScrollSmoother } from "../lib/motion";
+import { gsap, ScrollSmoother, ScrollTrigger } from "../lib/motion";
 import Reveal from "./Reveal";
 
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
@@ -39,7 +39,7 @@ export default function AwardSection() {
       const track = stage.querySelector(".award-track")!;
       const tween = gsap.to(track, { xPercent: -100 * (panels.length - 1), ease: "none",
         onUpdate() { select(Math.round(this.progress() * (panels.length - 1))); },
-        scrollTrigger: { trigger: stage, pin: true, start: () => "top " + Math.min(72, innerHeight - stage.offsetHeight) + "px",
+        scrollTrigger: { trigger: stage, pin: true, pinType: ScrollTrigger.isTouch === 1 ? "fixed" : "transform", start: () => "top " + Math.min(72, innerHeight - stage.offsetHeight) + "px",
           end: () => "+=" + (panels.length - 1) * stage.clientWidth, scrub: true, invalidateOnRefresh: true },
       });
       const jump = (event: MouseEvent) => {

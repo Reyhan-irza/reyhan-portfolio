@@ -2,6 +2,8 @@ import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useSta
 import { useEditorialScenes } from "../hooks/useEditorialScenes";
 import { useSectionTheme } from "../hooks/useSectionTheme";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import CommentsSection from "@/components/CommentsSection";
+import MusicController from "@/components/MusicController";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TechnologyBands from "@/components/TechnologyBands";
@@ -73,6 +75,7 @@ export default function Home() {
       <a className="skip-to-content" href="#main-content" onClick={(event) => { event.preventDefault(); scrollToSection("#main-content"); }}>Skip to content</a>
       <PortfolioScrollController />
       <Navbar />
+      <div inert={!introFinished}><MusicController /></div>
       <div id="smooth-wrapper">
         <div id="smooth-content">
       <main inert={!introFinished} id="main-content" className="relative z-10">
@@ -111,12 +114,15 @@ export default function Home() {
           <ClosingMarquee />
           <ContactSection />
           <PortfolioRatingSection />
+          <ErrorBoundary fallback={<p className="px-6 py-8 text-center" role="status">Komentar belum bisa dimuat.</p>}>
+            <CommentsSection />
+          </ErrorBoundary>
           <details className="secondary-archive mx-auto max-w-6xl" onToggle={(event) => {
             if (event.currentTarget.open) setArchiveVisited(true);
           }}>
             <summary data-testid="button-open-secondary-archive">
               <span>Arsip lainnya</span>
-              <span>News · music · comments</span>
+              <span>News · playlist</span>
             </summary>
             {archiveVisited && (
               <ErrorBoundary fallback={<div className="secondary-archive-content space-y-4 py-8" role="status">

@@ -516,4 +516,39 @@ body { background: var(--canvas); }
 
 /* Only the document owns vertical scroll. A fixed wrapper that scrolls on focus
    can move a pinned button between pointerdown and pointerup. */
-#smooth-wrapper:has([data-project-pinned]:is(:hover, :focus-within)) { overflow: clip !important; }
+#smooth-wrapper:not([data-scroll-native]):has([data-project-pinned]:is(:hover, :focus-within)) { overflow: clip !important; }
+
+.rating-burst {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  pointer-events: none;
+}
+.rating-burst i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--signal);
+  opacity: 0;
+}
+.rating-burst i:nth-child(3n) { background: #fff; }
+
+.portfolio-shell :is([data-testid="button-mobile-menu"], [data-hero-action], .project-actions :is(a, button), .contact-primary-cta, [data-rating-star]):active {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-shell :is([data-testid="button-mobile-menu"], [data-hero-action], .project-actions :is(a, button), .contact-primary-cta, [data-rating-star]):hover {
+    box-shadow: inset 0 0 0 1px var(--signal), 0 0 12px var(--signal-wash);
+  }
+}
+.portfolio-shell .portfolio-music-controller {
+  opacity: 1;
+}
+
+@media (max-width: 639px) {
+  .portfolio-shell :is(#about, #projects, #journey, #awards, #github, #contact, #portfolio-rating, #comments) {
+    padding-inline: clamp(1rem, 5vw, 1.5rem);
+  }
+  .portfolio-shell #comments :is(input, textarea, select) { font-size: 1rem; }
+}

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "../lib/motion";
 import "./intro.css";
 
@@ -8,6 +8,8 @@ const name = "REYHAN IRZA ALVANO";
 
 /** Rey's supplied film, integrated without its mock homepage or global controller. */
 export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationProps) {
+  const [awaitingTap, setAwaitingTap] = useState(false);
+  const continueRef = useRef<() => void>(() => {});
   const rootRef = useRef<HTMLDivElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
   const finishRef = useRef<() => void>(() => {});
@@ -16,7 +18,7 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
     if (!root) return;
     let finished = false, disposed = false, revealed = false;
     let timer = 0, decodeTimer = 0, playFrame = 0;
-    let ready = false;
+    let ready = false, waiting = false, leaving = false;
     let timeline: gsap.core.Timeline | undefined;
     const q = (s: string) => root.querySelector<HTMLElement>(s)!;
     const logo = q('.logo'), stage = q('.stage'), full = q('.full');
@@ -46,6 +48,16 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       });
     };
     finishRef.current = finish;
+    const startMusic = () => window.dispatchEvent(new CustomEvent('music:play'));
+    continueRef.current = () => {
+      if (!waiting || leaving || finished) return;
+      leaving = true;
+      waiting = false;
+      setAwaitingTap(false);
+      startMusic();
+      arm();
+      timeline?.resume();
+    };
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     if (reduced.matches) { finish(); return; }
     document.body.style.overflow = 'hidden';
@@ -66,6 +78,11 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       timeline = t;
       const labels = { stage: 0, fragments: .4, tension: 1.2, assemble: 1.5, impact: 2.1, type: 2.5, handoff: 3.95 };
       Object.entries(labels).forEach(([label, at]) => t.addLabel(label, at));
+      t.addPause('handoff-=0.04', () => {
+        waiting = true;
+        window.clearTimeout(timer);
+        setAwaitingTap(true);
+      });
       t.to(q('.vig'), { opacity: 1, duration: 1.2, ease: 'power1.out' }, 'stage')
         .to(q('.hair'), { scaleX: 1, duration: .9, ease: 'expo.inOut' }, .1);
       [[-10,-6],[-8,12],[10,-8]].forEach(([x,y], i) => {
@@ -104,8 +121,8 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
         .to(logo, { x: () => dock.x, y: () => dock.y, scale: () => dock.scale, duration: .9, ease: 'power3.inOut' }, 'handoff')
         .to([q('.bg'),q('.vig')], { opacity: 0, duration: .7, ease: 'power2.inOut' }, 4.1);
     }, root);
-    const arm = () => { window.clearTimeout(timer); if (!document.hidden) timer = window.setTimeout(finish, 12000); };
-    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { if (ready) timeline?.play(); arm(); } };
+    const arm = () => { window.clearTimeout(timer); if (!document.hidden && !waiting) timer = window.setTimeout(finish, 12000); };
+    const visibility = () => { if (document.hidden) { timeline?.pause(); window.clearTimeout(timer); } else { if (ready && !waiting) timeline?.play(); arm(); } };
     const preference = () => { if (reduced.matches) finish(); };
     const resize = () => { if ((timeline?.time() ?? 0) >= 3.95) finish(); };
     document.addEventListener('visibilitychange', visibility);
@@ -139,11 +156,14 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
     };
   }, [onFinish, onReveal]);
   return <div id="rv-intro" className="rv-intro" ref={rootRef} role="dialog" aria-modal="true"
-    aria-label="Reyhan Irza Alvano — logo intro" data-phase="play" onKeyDown={event => {
+    aria-label="Reyhan Irza Alvano — logo intro" data-phase="play" onClick={() => continueRef.current()} onKeyDown={event => {
       if (event.key === 'Escape') finishRef.current();
+      if (event.key === 'Enter' && event.target === rootRef.current) continueRef.current();
       if (event.key === 'Tab') {
         event.preventDefault();
-        skipRef.current?.focus();
+        const next = awaitingTap && event.target === skipRef.current
+          ? rootRef.current?.querySelector<HTMLButtonElement>('.rv-intro-continue') : skipRef.current;
+        next?.focus();
       }
     }}>
     <div className="bg" /><div className="vig" /><div className="hair" />
@@ -157,6 +177,14 @@ export default function IntroAnimation({ onFinish, onReveal }: IntroAnimationPro
       <p className="name" data-intro-copy aria-label="Reyhan Irza Alvano"><span className="chars" aria-hidden="true">{Array.from(name).map((c,i) => <span className="ch" key={i}>{c === ' ' ? '\u00a0' : c}</span>)}</span></p>
       <p className="sub" data-intro-copy>Creative Developer</p>
     </div>
-    <div className="ctrl"><button ref={skipRef} className="rv-btn rv-intro-skip" type="button" aria-label="Skip introduction" onClick={() => finishRef.current()}>Skip intro</button></div>
+    <div className="ctrl"><button ref={skipRef} className="rv-btn rv-intro-skip" type="button" aria-label="Skip introduction" onClick={event => {
+      event.stopPropagation();
+      window.dispatchEvent(new CustomEvent('music:play'));
+      finishRef.current();
+    }}>Skip intro</button></div>
+    {awaitingTap && <button className="rv-intro-continue rv-btn" type="button" onClick={event => {
+      event.stopPropagation();
+      continueRef.current();
+    }}>KETUK DIMANA SAJA UNTUK LANJUT</button>}
   </div>;
 }

@@ -162,7 +162,7 @@ export default function ProjectsSection() {
         ScrollTrigger.create({
           id: "pinned-projects", trigger: stage, animation: scene,
           start: "top 80px", end: () => "+=" + scene.duration(),
-          pin: true, scrub: true, onRefreshInit: compose,
+          pin: true, pinType: ScrollTrigger.isTouch === 1 ? "fixed" : "transform", scrub: true, onRefreshInit: compose,
         });
         setVisiblePanel(0);
 

@@ -157,11 +157,11 @@ export default function CommentsSection() {
   const getReplies = (commentId: number) => replies.filter((r) => r.comment_id === commentId);
 
   return (
-    <section id="comments" className="relative py-24 px-6 pb-32">
+    <section id="comments" className="relative px-5 py-14 sm:px-6 sm:py-20">
       <div className="max-w-3xl mx-auto">
 
         {/* HEADER */}
-        <div className="text-center mb-14">
+        <div className="mb-8 text-center sm:mb-12">
         <Reveal>
           <p className="text-[#a43f2d] text-sm font-semibold uppercase tracking-widest mb-3">
             COMMENTS
@@ -177,7 +177,7 @@ export default function CommentsSection() {
         </div>
 
         {/* FORM */}
-        <Reveal className="glass neon-border rounded-2xl p-6 mb-8">
+        <Reveal className="glass neon-border mb-8 rounded-2xl p-4 sm:p-6">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
                <label htmlFor="comment-name" className="block text-[#6d6a62] text-xs font-medium mb-1.5 uppercase tracking-wide">Nama</label>
@@ -219,7 +219,7 @@ export default function CommentsSection() {
             <button
               type="submit"
               disabled={submitting}
-              className="btn-neon w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="btn-neon w-full py-3 rounded-xl min-h-11 text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               {submitting ? "Mengirim..." : "Kirim Komentar"}

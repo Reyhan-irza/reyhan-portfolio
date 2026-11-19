@@ -6,8 +6,8 @@ const STORAGE_KEY = "reyhan_music_v1";
 export default function MusicController() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying]   = useState(false);
-  const [volume, setVolume]     = useState(0.55);
-  const [minimized, setMin]     = useState(false);
+  const [volume, setVolume]     = useState(0.30);
+  const [minimized, setMin]     = useState(true);
   const [muted, setMuted]       = useState(false);
   const [hasError, setHasError] = useState(false);
   const [ready, setReady]       = useState(false);
@@ -15,7 +15,7 @@ export default function MusicController() {
   useEffect(() => {
     const audio = new Audio(`${import.meta.env.BASE_URL}music.mp3`);
     audio.loop    = true;
-    audio.volume  = 0.55;
+    audio.volume  = 0.30;
     audio.preload = "none";
 
     audio.addEventListener("canplaythrough", () => setReady(true), { once: true });
@@ -37,7 +37,7 @@ export default function MusicController() {
     const handler = () => {
       const audio = audioRef.current;
       if (!audio || hasError) return;
-      audio.load();
+      window.dispatchEvent(new CustomEvent("bgmusic:play"));
       audio.play().then(() => setPlaying(true)).catch(() => {});
     };
     window.addEventListener("music:play", handler);
@@ -95,7 +95,7 @@ export default function MusicController() {
   const BAR_HEIGHTS = [0.55, 0.9, 0.65, 1, 0.45, 0.8, 0.6];
 
   return (
-    <div className="portfolio-music-controller fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-2">
+    <div className="portfolio-music-controller fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[80] flex flex-col items-end gap-2">
       {!minimized && (
         <div className="glass border border-[rgba(33,31,27,.16)] rounded-2xl p-4 w-56 animate-in fade-in slide-in-from-bottom-2 duration-300">
           {/* Header */}
