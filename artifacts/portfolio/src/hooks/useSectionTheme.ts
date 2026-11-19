@@ -12,6 +12,16 @@ export function useSectionTheme() {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {
+        // Curve the seam only when neighboring sections use different palettes.
+        sections.slice(1).forEach((section, index) => {
+          const previous = sections[index];
+          if (getComputedStyle(previous).colorScheme === getComputedStyle(section).colorScheme) return;
+          section.dataset.paletteWave = "";
+          gsap.fromTo(section, { "--palette-wave-height": "0px" }, {
+            "--palette-wave-height": "72px", ease: "sine.inOut", yoyo: true, repeat: 1,
+            scrollTrigger: { trigger: section, start: "clamp(top bottom)", end: "clamp(top 35%)", scrub: .35 },
+          });
+        });
         const apply = (section: HTMLElement) => {
           const css = getComputedStyle(section);
           gsap.to(document.body, {
@@ -40,13 +50,19 @@ export function useSectionTheme() {
         measure();
         ScrollTrigger.create({ start: 0, end: "max", onUpdate: update, onRefresh: measure });
         ScrollTrigger.addEventListener("refresh", measure);
-        return () => ScrollTrigger.removeEventListener("refresh", measure);
+        return () => {
+          ScrollTrigger.removeEventListener("refresh", measure);
+          sections.forEach((section) => { delete section.dataset.paletteWave; });
+        };
       });
       return () => context.revert();
     });
     return () => {
       media.revert();
-      sections.forEach((section) => { delete section.dataset.sectionTheme; });
+      sections.forEach((section) => {
+        delete section.dataset.sectionTheme;
+        delete section.dataset.paletteWave;
+      });
     };
   }, []);
 }
