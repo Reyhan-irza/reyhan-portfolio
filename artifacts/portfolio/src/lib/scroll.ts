@@ -11,9 +11,10 @@ export function focusWithoutScroll(target: HTMLElement | null) {
 }
 
 export function shouldAutoScrollFocus(content: HTMLElement, event: Event) {
-  return event.target instanceof HTMLElement
-    && content.contains(event.target)
-    && event.target !== anchorFocus;
+  const target = event.target;
+  if (!(target instanceof HTMLElement) || !content.contains(target) || target === anchorFocus) return false;
+  const bounds = target.getBoundingClientRect();
+  return bounds.top < 72 || bounds.bottom > innerHeight;
 }
 
 export function getPageScroll() {
