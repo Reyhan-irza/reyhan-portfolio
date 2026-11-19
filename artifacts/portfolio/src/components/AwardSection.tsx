@@ -28,7 +28,10 @@ export default function AwardSection() {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference) and (min-height: 540px)", () => {
       stage.dataset.gallery = "";
+      let activeIndex = -1;
       const select = (index: number) => {
+        if (index === activeIndex) return;
+        activeIndex = index;
         panels.forEach((panel, i) => { panel.inert = i !== index; });
         buttons.forEach((button, i) => button.setAttribute("aria-current", String(i === index)));
       };
