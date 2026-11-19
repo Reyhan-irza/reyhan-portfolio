@@ -286,18 +286,17 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
     }
   });
 
-  await t.test("reveals stay visible after reverse scroll and live reduced-motion changes", async () => {
-    const note = phonePage.locator('.story-note').first();
-    await note.scrollIntoViewIfNeeded();
-    await phonePage.waitForTimeout(1200);
-    const pose = () => note.evaluate(el => ({ y: new DOMMatrix(getComputedStyle(el).transform).m42, opacity: Number(getComputedStyle(el).opacity) }));
-    assert.ok((await pose()).opacity > .99);
-    await scrollInstantly(phonePage, 0);
-    assert.ok(Math.abs((await pose()).y) < 1);
-    for (const mode of ['reduce', 'no-preference']) {
-      await phonePage.emulateMedia({ reducedMotion: mode }); await settleLayout(phonePage);
-      assert.ok((await pose()).opacity > .99);
-    }
+  await t.test("About uses responsive lines and restores plain text in reduced motion", async () => {
+    const paragraph = phonePage.locator('#about .story-lead');
+    await paragraph.scrollIntoViewIfNeeded();
+    const lines = paragraph.locator('.about-copy-line');
+    await lines.first().waitFor();
+    assert.ok(await lines.count() > 1);
+    await phonePage.emulateMedia({ reducedMotion: 'reduce' });
+    await lines.first().waitFor({ state: 'detached' });
+    assert.match(await paragraph.innerText(), /Saya Reyhan/);
+    await phonePage.emulateMedia({ reducedMotion: 'no-preference' });
+    await lines.first().waitFor();
   });
   await t.test("mobile card zoom settles once and does not reverse", async () => {
     const row = phonePage.locator('[data-project-row]').first();
