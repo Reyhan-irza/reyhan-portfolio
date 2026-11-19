@@ -4,6 +4,12 @@ import { ScrollSmoother } from "./motion";
 
 let anchorFocus: HTMLElement | null = null;
 
+export function focusWithoutScroll(target: HTMLElement | null) {
+  anchorFocus = target;
+  try { target?.focus({ preventScroll: true }); }
+  finally { anchorFocus = null; }
+}
+
 export function shouldAutoScrollFocus(content: HTMLElement, event: Event) {
   return event.target instanceof HTMLElement
     && content.contains(event.target)
@@ -47,9 +53,7 @@ export function scrollToSection(hash: string) {
 
   const previous = target.getAttribute("tabindex");
   target.setAttribute("tabindex", "-1");
-  anchorFocus = target;
-  target.focus({ preventScroll: true });
-  anchorFocus = null;
+  focusWithoutScroll(target);
   if (previous === null) target.removeAttribute("tabindex");
   else target.setAttribute("tabindex", previous);
 
