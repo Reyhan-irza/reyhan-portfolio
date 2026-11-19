@@ -11,12 +11,12 @@ export function PortfolioScrollController() {
     if (!wrapper || !content) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const smooth = 0.95;
-    const smoothTouch = 0.1;
+    const touchOnly = ScrollTrigger.isTouch === 1;
     const smoother = ScrollSmoother.create({
       wrapper,
       content,
       smooth,
-      smoothTouch,
+      smoothTouch: 0,
       autoResize: false,
       onFocusIn: (_smoother, event) => shouldAutoScrollFocus(content, event),
     });
@@ -55,11 +55,12 @@ export function PortfolioScrollController() {
       return () => { document.removeEventListener("pointermove", move); dots.forEach(dot => dot.remove()); };
     });
     let frame = 0, disposed = false, pending = false, geometryChanged = false;
+    let touching = false;
     const refresh = () => {
       pending = true;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        if (disposed || (ScrollTrigger.isScrolling() && !geometryChanged)) return;
+        if (disposed || touching || (ScrollTrigger.isScrolling() && (ScrollTrigger.isTouch === 1 || !geometryChanged))) return;
         pending = false; geometryChanged = false;
         // The frame and scrollEnd already defer measurement until idle. A second
         // resize debounce can measure the transient lines before SplitText reflows.
@@ -74,14 +75,22 @@ export function PortfolioScrollController() {
       if (event.isTrusted) syncHash();
     };
     const afterScroll = () => { if (pending) refresh(); };
+    const touchStart = () => { touching = true; };
+    const touchEnd = (event: TouchEvent) => {
+      touching = event.touches.length > 0;
+      if (!touching && pending) refresh();
+    };
+    window.addEventListener("touchstart", touchStart, { passive: true });
+    window.addEventListener("touchend", touchEnd, { passive: true });
+    window.addEventListener("touchcancel", touchEnd, { passive: true });
     const linesChanged = () => { geometryChanged = true; refresh(); };
     const sync = () => {
       const scroll = window.scrollY;
-      const duration = ScrollTrigger.isTouch === 1 ? smoothTouch : smooth;
+      const nativeScroll = reduced.matches || touchOnly;
       // Retain the same scroller proxy so existing scene triggers remain attached.
-      smoother.smooth(reduced.matches ? 0 : duration);
-      wrapper.toggleAttribute("data-scroll-native", reduced.matches);
-      if (reduced.matches) gsap.set(content, { clearProps: "transform" });
+      smoother.smooth(nativeScroll ? 0 : smooth);
+      wrapper.toggleAttribute("data-scroll-native", nativeScroll);
+      if (nativeScroll) gsap.set(content, { clearProps: "transform" });
       else gsap.set(content, { y: -scroll });
       smoother.scrollTop(scroll);
       syncScrollLock();
@@ -124,6 +133,9 @@ export function PortfolioScrollController() {
     const initialHashFrame = requestAnimationFrame(syncHash);
     return () => {
       disposed = true; cancelAnimationFrame(frame); cancelAnimationFrame(initialHashFrame);
+      window.removeEventListener("touchstart", touchStart);
+      window.removeEventListener("touchend", touchEnd);
+      window.removeEventListener("touchcancel", touchEnd);
       lockObserver.disconnect(); resizeObserver.disconnect();
       window.removeEventListener("portfolio:lines-changed", linesChanged);
       window.removeEventListener("load", refresh);
