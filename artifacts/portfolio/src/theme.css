@@ -478,3 +478,33 @@ body { background: var(--canvas); }
   position:fixed; inset:0 auto auto 0; z-index:36; width:5px; height:5px;
   border-radius:50%; background:#91a8ff; pointer-events:none; opacity:0;
 }
+
+.section-marquee { overflow: clip; margin-top: clamp(2rem,5vw,5rem); border-block: 1px solid var(--rule); }
+.section-marquee > div { display: flex; width: max-content; }
+.section-marquee span, .section-marquee b { display: inline-flex; align-items: center; white-space: nowrap; }
+.section-marquee b { font: 600 clamp(2rem,5.2vw,6rem)/1.35 var(--font-sans); letter-spacing: -.045em; }
+.section-marquee i { padding-inline: .6em; color: var(--signal); font-style: normal; }
+.award-stage nav { display: none; }
+.award-stage[data-gallery] { position: relative; overflow: clip; }
+.award-stage[data-gallery] .award-track { display: flex; align-items: center; }
+.award-stage[data-gallery] .award-record { flex: 0 0 100%; min-width: 0; margin: 0; max-width: none; }
+.award-stage .certificate-preview { display: grid; place-items: center; }
+.award-stage .certificate-preview img { object-fit: contain; transform: none; }
+@media (min-width: 1024px) {
+  #technology-bands { min-height: 100svh; display: grid; align-content: center; }
+  #technology-bands .technology-bands__intro, #technology-bands .technology-band__label { display: none; }
+  #technology-bands .technology-band { grid-template-columns: minmax(0,1fr); }
+  .award-stage[data-gallery] .award-record { padding-right: 5rem; }
+  .award-stage[data-gallery] .certificate-preview { height: min(50svh,32rem); width: 100%; }
+  .award-stage[data-gallery] nav { display: grid; position: absolute; right: .5rem; top: 50%; transform: translateY(-50%); }
+  .award-stage nav button { min-width: 44px; min-height: 44px; border-right: 2px solid var(--rule); }
+  .award-stage nav [aria-current=true] { color: var(--signal); border-color: currentColor; }
+}
+@media (max-width: 1023px) {
+  .award-stage[data-gallery] .award-record { grid-template-columns: 1fr; gap: .8rem; padding: 1rem; }
+  .award-stage[data-gallery] [data-award-copy] { gap: .5rem; }
+  .award-stage[data-gallery] [data-award-copy] > .border-y { padding-block: .3rem; }
+  .award-stage[data-gallery] .portfolio-award-heading { font-size: clamp(1.25rem,4vw,2rem); }
+  .award-stage[data-gallery] .certificate-preview { height: min(33svh,18rem); width: 100%; }
+  .award-stage[data-gallery] [data-award-media] > div:last-child { flex-direction: row; }
+}
