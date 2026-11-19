@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import Reveal from "./Reveal";
 import VisitorCounter from "./VisitorCounter";
 import GuessMyAge from "./GuessMyAge";
+import ClosingMarquee from "./ClosingMarquee";
 import BrandLogo from "./BrandLogo";
 
 export default function Footer() {
@@ -23,7 +24,8 @@ export default function Footer() {
 
   return (
     <footer className="portfolio-closing-footer relative overflow-hidden border-t border-neutral-800/60 px-6 pb-8 pt-10 md:pt-12">
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <ClosingMarquee />
+      <div data-footer-content className="relative z-10 max-w-6xl mx-auto">
         {/* Top row */}
         <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
           <Reveal mount>

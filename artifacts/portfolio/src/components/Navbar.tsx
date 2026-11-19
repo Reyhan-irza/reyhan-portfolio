@@ -16,6 +16,7 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollingDown, setScrollingDown] = useState(false);
   const [activeHref, setActiveHref] = useState("");
   const hashActiveHref = useRef<string | null>(null);
   const isOpenRef = useRef(isOpen);
@@ -30,8 +31,16 @@ export default function Navbar() {
   const previouslyOpen = useRef(false);
 
   useEffect(() => {
-    const trigger = ScrollTrigger.create({ start: 32, end: "max",
-      onToggle: (self) => setScrolled(self.scroll() > 32),
+    let previous = getPageScroll();
+    const trigger = ScrollTrigger.create({ start: 0, end: "max",
+      onUpdate: () => {
+        const position = getPageScroll();
+        if (position < 100 || Math.abs(position - previous) >= 10) {
+          setScrollingDown(position >= 100 && position > previous);
+          previous = position;
+        }
+        setScrolled(position > 32);
+      },
       onRefresh: () => setScrolled(getPageScroll() > 32),
     });
     setScrolled(getPageScroll() > 32);
@@ -42,7 +51,8 @@ export default function Navbar() {
     if (!isOpen) return;
     const panel = panelRef.current;
     const focusables = () => {
-      return Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? []);
+      return Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? [])
+        .filter((item) => item.getClientRects().length > 0);
     };
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -190,9 +200,11 @@ export default function Navbar() {
       {
         reduced: "(prefers-reduced-motion: reduce)",
         motion: "(prefers-reduced-motion: no-preference)",
+        desktop: "(min-width: 1024px)",
       },
       (context) => {
         const reduced = Boolean(context.conditions?.reduced);
+        const desktop = Boolean(context.conditions?.desktop);
         const scope = gsap.context(() => {
           reducedRef.current = reduced;
           staticMenuRef.current = null;
@@ -215,13 +227,16 @@ export default function Navbar() {
             pendingTarget.current = null;
             if (target) scrollToSection(target);
           };
-          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: 100, yPercent: 0 });
+          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: desktop ? 0 : 100, yPercent: desktop ? -110 : 0 });
           gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
             .set(panel, { display: "flex" })
-            .fromTo(panel, { xPercent: 100, yPercent: 0, borderTopLeftRadius: 150, borderBottomLeftRadius: 150 }, {
-              borderTopLeftRadius: 14, borderBottomLeftRadius: 14, xPercent: 0, duration: SCENE.menu, ease: SCENE.curtainEase,
-            })
+            .fromTo(panel, desktop
+              ? { yPercent: -110, borderBottomLeftRadius: "50% 24%", borderBottomRightRadius: "50% 24%" }
+              : { xPercent: 100, borderTopLeftRadius: 150, borderBottomLeftRadius: 150 },
+            desktop
+              ? { yPercent: 0, borderBottomLeftRadius: "0% 0%", borderBottomRightRadius: "0% 0%", duration: .95, ease: "elastic.out(1, .72)" }
+              : { xPercent: 0, borderTopLeftRadius: 14, borderBottomLeftRadius: 14, duration: SCENE.menu, ease: SCENE.curtainEase })
             .fromTo(targets, { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" }, {
               yPercent: 0, rotation: 0, duration: SCENE.detail, stagger: SCENE.menuStagger, ease: SCENE.ease,
             }, .24)
@@ -264,6 +279,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         data-menu-open={isOpen}
+        data-scroll-away={scrollingDown && !isOpen}
         onClick={(event) => {
           const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
           if (link && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
@@ -345,6 +361,7 @@ export default function Navbar() {
             </a>
           ))}
         </nav>
+        <button type="button" className="portfolio-menu-close" onClick={closeMenu} aria-label="Close navigation menu">×</button>
         <div data-menu-footer className="mt-auto flex items-end justify-between">
           <div>
             <p className="text-xs text-white/70">Reyhan Irza Alvano</p>

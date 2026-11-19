@@ -28,7 +28,8 @@ export function useEditorialScenes(enabled = true) {
           .from(contact.querySelector(".contact-primary-cta"), { y: 24, opacity: 0, duration: .8 }, .85)),
       }));
       const footer = root.querySelector<HTMLElement>(".portfolio-closing-footer");
-      if (footer?.firstElementChild) prepare(footer, () => gsap.fromTo(footer.firstElementChild!,
+      const footerContent = footer?.querySelector("[data-footer-content]");
+      if (footer && footerContent) prepare(footer, () => gsap.fromTo(footerContent,
         { y: 64 }, { y: 0, ease: "none", scrollTrigger: {
           id: "closing-handoff", trigger: footer, start: "clamp(top bottom)",
           end: "clamp(bottom bottom)", scrub: SCENE.scrub, invalidateOnRefresh: true,

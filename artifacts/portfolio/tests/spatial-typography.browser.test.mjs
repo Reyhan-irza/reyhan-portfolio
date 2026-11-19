@@ -87,18 +87,17 @@ test('sans typography, four certificates and independent spatial scenes', {
           }
           await capture('mouse-preview');
         }
-        const about = page.locator('.story-notes[data-cycle]');
-        const range = await about.evaluate(el => ({
-          top: el.parentElement.getBoundingClientRect().top + scrollY - Math.min(80, innerHeight - el.offsetHeight - 12),
-          height: el.offsetHeight,
-        }));
-        for (const index of [0, 1, 2, 3, 4, 2]) {
-          await go(range.top + (index + .05) * range.height);
-          const position = await about.locator('.story-note').nth(index).boundingBox();
-          const panelTitle = await about.locator(".story-note h3").nth(index).boundingBox();
-          assert.ok(panelTitle.y >= 0 && panelTitle.y + panelTitle.height <= height, "active About heading inside viewport");
-          assert.ok(Math.abs(position.x - (await about.boundingBox()).x) < 3);
-        }
+        await jump('#about .story-lead');
+        const about = page.locator('#about');
+        await about.locator('.about-copy-line').first().waitFor();
+        assert.ok(await about.locator('.about-copy-line').count() > 1);
+        const portrait = about.locator('img');
+        await portrait.evaluate(image => image.decode());
+        const photoBox = await portrait.boundingBox();
+        const textBox = await about.locator('.story-lead').boundingBox();
+        assert.ok(Math.abs(photoBox.width / photoBox.height - .8) < .02);
+        if (width >= 768) assert.ok(photoBox.x + photoBox.width < textBox.x);
+        else assert.ok(photoBox.y + photoBox.height < textBox.y);
         await capture('about');
         const awards = page.locator(".award-stage");
         const start = await awards.evaluate(stage => stage.parentElement.getBoundingClientRect().top + scrollY
@@ -132,13 +131,14 @@ test('sans typography, four certificates and independent spatial scenes', {
         const trigger = page.getByTestId('button-mobile-menu');
         assert.equal(await trigger.isVisible(), true);
         assert.equal(await trigger.locator('.mobile-menu-line').count(), 2);
+        await trigger.focus();
         await trigger.click();
         const dialog = page.getByRole('dialog', { name: 'Explore / portfolio' });
         await dialog.waitFor();
         await page.waitForTimeout(1400);
         const bounds = await dialog.boundingBox();
-        if (width >= 1024) assert.ok(bounds.x > width / 2 && bounds.width <= 512 && bounds.height < height);
-        else assert.ok(Math.abs(bounds.x) < 1 && Math.abs(bounds.width - width) <= 1);
+        assert.ok(Math.abs(bounds.x) < 1 && Math.abs(bounds.width - width) <= 1);
+        if (width >= 1024) assert.ok(Math.abs(bounds.y) < 1 && Math.abs(bounds.height - height) <= 1);
         await capture('navigation');
         await page.keyboard.press('Escape');
         await dialog.waitFor({ state: 'hidden' });
@@ -147,26 +147,18 @@ test('sans typography, four certificates and independent spatial scenes', {
         await jump('#closing-type');
         await page.mouse.move(0, 0);
         const strip = page.locator('#closing-type');
-        assert.ok(await strip.evaluate(el => Boolean(el.compareDocumentPosition(document.querySelector('#contact')) & Node.DOCUMENT_POSITION_FOLLOWING)));
-        assert.equal(await strip.locator('button').count(), 0);
+        assert.ok(await strip.evaluate(el => el.parentElement instanceof HTMLElement && el.parentElement.tagName === 'FOOTER'));
+        assert.equal(await strip.getAttribute('aria-hidden'), 'true');
         const tracks = strip.locator('[data-closing-track]');
-        assert.equal(await tracks.count(), 2);
+        assert.equal(await tracks.count(), 1);
         const positions = () => tracks.evaluateAll(nodes => nodes.map(el => new DOMMatrixReadOnly(getComputedStyle(el).transform).m41));
         const first = await positions();
-        await page.locator('[data-closing-marquee]').hover();
-        await page.evaluate(() => window.scrollBy(0, -35));
         await page.waitForTimeout(400);
         const next = await positions();
-        assert.ok(next[0] < first[0] - 1 && next[1] > first[1] + 1, `opposing tracks at ${width}`);
+        assert.ok(next[0] < first[0] - 1, `footer track moves at ${width}`);
         const seams = await tracks.evaluateAll(nodes => nodes.map(el => Math.abs(el.children[0].getBoundingClientRect().width - el.children[1].getBoundingClientRect().width)));
         assert.ok(seams.every(error => error < .1));
         await capture('marquee');
-        await page.keyboard.press("Tab");
-        await strip.focus();
-        const stopped = await positions();
-        await page.waitForTimeout(250);
-        assert.ok((await positions()).every((value, index) => Math.abs(value - stopped[index]) < .5));
-        await page.keyboard.press('Tab');
         await jump('#github h2');
         await capture('github');
         await page.emulateMedia({ reducedMotion: 'reduce' });

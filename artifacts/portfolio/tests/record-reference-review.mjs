@@ -284,15 +284,8 @@ async function review(width) {
       const initial = await x();
       await wait(380);
       assert.ok(Math.abs(initial - (await x())) > 1);
-      const reverseTrack = page.locator('[data-closing-track]').nth(1);
-      const reverseX = () => reverseTrack.evaluate(el => new DOMMatrixReadOnly(getComputedStyle(el).transform).m41);
-      const reverseStart = await reverseX();
-      await wait(380);
-      assert.ok(await reverseX() > reverseStart);
-      await page.locator('[data-closing-marquee]').focus();
-      const frozen = await x();
-      await wait(350);
-      assert.ok(Math.abs(frozen - (await x())) < 0.5);
+      assert.equal(await page.locator("[data-closing-track]").count(), 1);
+      assert.equal(await page.locator("[data-closing-marquee]").getAttribute("aria-hidden"), "true");
       result.closingSize = round(
         await track
           .locator("span")
