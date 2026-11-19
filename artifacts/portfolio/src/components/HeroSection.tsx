@@ -1,3 +1,4 @@
+import SectionMarquee from "./SectionMarquee";
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { gsap, SCENE } from "../lib/motion";
@@ -111,6 +112,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
       <a data-hero-scroll-cue href="#technology-bands" onClick={(event) => { event.preventDefault(); scrollToSection("#technology-bands"); }} className="hero-scroll-cue absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-white/40 transition-colors hover:text-white/80">
         Kenali lebih dekat <span className="h-7 w-px bg-gradient-to-b from-[#8190ff] to-transparent" aria-hidden="true" />
       </a>
+    <SectionMarquee text="Student Developer · Lubuk Basung" />
     </section>
   );
 }
