@@ -1,30 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
-import { SiInstagram, SiTiktok, SiWhatsapp } from "react-icons/si";
+import { contacts } from "../lib/socialLinks";
 import Reveal from "./Reveal";
-
-const contacts = [
-  {
-    id: "whatsapp",
-    label: "WhatsApp",
-    handle: "ReyhanWhatsap",
-    icon: SiWhatsapp,
-    href: "https://wa.me/62881385242876",
-  },
-  {
-    id: "instagram",
-    label: "Instagram",
-    handle: "@vierlyk",
-    icon: SiInstagram,
-    href: "https://www.instagram.com/vierlyk?fqnt=ZHBneTE2NDUzdWky",
-  },
-  {
-    id: "tiktok",
-    label: "TikTok",
-    handle: "@rehanwatsav",
-    icon: SiTiktok,
-    href: "https://www.tiktok.com/@rehanwatsav?_r=1&_t=ZS-95Kk0Lxdw5B",
-  },
-];
 
 export default function ContactSection() {
 
@@ -43,7 +19,7 @@ export default function ContactSection() {
 
         <div className="contact-actions">
           <ul aria-label="Contact links" className="contact-list">
-            {contacts.map((contact) => (
+            {contacts.filter(({ id }) => id !== "whatsapp").map((contact) => (
               <ContactRow key={contact.id} contact={contact} />
             ))}
           </ul>

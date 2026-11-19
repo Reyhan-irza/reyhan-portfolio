@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUpRight, MoveUpRight } from "lucide-react";
 import { gsap, SCENE } from "../lib/motion";
 import { scrollToSection } from "../lib/scroll";
 import BrandLogo from "./BrandLogo";
+import SocialDock from "./SocialDock";
 import HeroTypingLoop from "./HeroTypingLoop";
 
 export default function HeroSection({ ready = true }: { ready?: boolean }) {
@@ -89,6 +90,7 @@ export default function HeroSection({ ready = true }: { ready?: boolean }) {
               GitHub <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </div>
+          <SocialDock />
           </div>
         </div>
 
