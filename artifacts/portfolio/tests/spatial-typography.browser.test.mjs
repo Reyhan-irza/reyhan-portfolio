@@ -9,7 +9,7 @@ const viewports = [[360, 800], [390, 844], [430, 932], [768, 1024], [1280, 900],
 
 test('sans typography, four certificates and independent spatial scenes', {
   skip: !process.env.PORTFOLIO_BUILD_DIRECTORY,
-  timeout: 180_000,
+  timeout: 240_000,
 }, async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH, args: ['--no-sandbox'] });
   const evidence = process.env.SPATIAL_EVIDENCE_DIRECTORY;
@@ -99,7 +99,23 @@ test('sans typography, four certificates and independent spatial scenes', {
           assert.ok(Math.abs(position.x - (await about.boundingBox()).x) < 3);
         }
         await capture('about');
-        await jump('[data-testid="link-dicoding-certificate-preview"]');
+        const awards = page.locator(".award-stage");
+        const start = await awards.evaluate(stage => stage.parentElement.getBoundingClientRect().top + scrollY
+          - Math.min(72, innerHeight - stage.offsetHeight));
+        const step = await awards.evaluate(stage => stage.clientWidth);
+        for (const index of [0, 1, 2, 3, 1, 3]) {
+          await go(start + step * index);
+          const active = awards.locator("[data-award-record]").nth(index);
+          const image = await active.locator("img").boundingBox();
+          const frame = await active.locator("[data-award-plane]").boundingBox();
+          assert.ok(image.height <= frame.height + 1 && image.width <= frame.width + 1);
+          assert.ok(image.x >= -2 && image.x + image.width <= width + 2 && image.y >= 0 && image.y + image.height <= height);
+        }
+        if (width >= 1024) {
+          await awards.getByRole("button", { name: "LKS" }).click();
+          await page.waitForFunction(() => !document.querySelector("[data-award-record]").inert);
+          await go(start + step * 3);
+        }
         const certificate = page.getByTestId('link-dicoding-certificate-preview');
         await certificate.locator('img').evaluate(image => image.decode());
         assert.ok(await certificate.locator('img').evaluate(image => image.naturalWidth > 700));

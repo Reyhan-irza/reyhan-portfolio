@@ -1,4 +1,6 @@
 import { Award, Download, ExternalLink, MapPin } from "lucide-react";
+import { useLayoutEffect, useRef } from "react";
+import { gsap, ScrollSmoother } from "../lib/motion";
 import Reveal from "./Reveal";
 
 const certificateUrl = `${import.meta.env.BASE_URL}sertifikat-lks-it-software-solution-2025.pdf`;
@@ -17,8 +19,49 @@ const otherEvidence = [
 ] as const;
 
 export default function AwardSection() {
+  const stageRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const panels = Array.from(stage.querySelectorAll<HTMLElement>("[data-award-record]"));
+    const buttons = Array.from(stage.querySelectorAll<HTMLButtonElement>("nav button"));
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference) and (min-height: 540px)", () => {
+      stage.dataset.gallery = "";
+      let activeIndex = -1;
+      const select = (index: number) => {
+        if (index === activeIndex) return;
+        activeIndex = index;
+        panels.forEach((panel, i) => { panel.inert = i !== index; });
+        buttons.forEach((button, i) => button.setAttribute("aria-current", String(i === index)));
+      };
+      select(0);
+      const track = stage.querySelector(".award-track")!;
+      const tween = gsap.to(track, { xPercent: -100 * (panels.length - 1), ease: "none",
+        onUpdate() { select(Math.round(this.progress() * (panels.length - 1))); },
+        scrollTrigger: { trigger: stage, pin: true, start: () => "top " + Math.min(72, innerHeight - stage.offsetHeight) + "px",
+          end: () => "+=" + (panels.length - 1) * stage.clientWidth, scrub: true, invalidateOnRefresh: true },
+      });
+      const jump = (event: MouseEvent) => {
+        const trigger = tween.scrollTrigger!;
+        const index = buttons.indexOf(event.currentTarget as HTMLButtonElement);
+        const y = trigger.start + (trigger.end - trigger.start) * index / (buttons.length - 1);
+        const smoother = ScrollSmoother.get();
+        if (smoother) smoother.scrollTo(y, true);
+        else window.scrollTo({ top: y, behavior: "smooth" });
+      };
+      buttons.forEach(button => button.addEventListener("click", jump));
+      return () => {
+        buttons.forEach(button => button.removeEventListener("click", jump));
+        panels.forEach(panel => { panel.inert = false; });
+        delete stage.dataset.gallery;
+      };
+    });
+    return () => media.revert();
+  }, []);
   return (
       <section id="achievement" aria-labelledby="award-title" className="relative px-6 py-16 md:py-24">
+      <div ref={stageRef} className="award-stage"><div className="award-track">
       <article data-award-record
         className="award-record mx-auto grid max-w-6xl gap-8 p-6 md:grid-cols-[.82fr_1.18fr] md:gap-12 md:p-10"
 
@@ -336,6 +379,10 @@ export default function AwardSection() {
         </div>
       </article>
 
+      </div>
+      <nav aria-label="Pilih sertifikat">{["LKS", "Apresiasi inovasi digital", "Cadiak CTF", "Dicoding"].map((name, i) =>
+        <button type="button" key={name} aria-label={name}>{String(i + 1).padStart(2, "0")}</button>
+      )}</nav></div>
       <section
         className="mx-auto mt-8 max-w-6xl"
         aria-labelledby="award-evidence-title"

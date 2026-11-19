@@ -1,3 +1,4 @@
+import SectionMarquee from "./SectionMarquee";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { createPortal } from "react-dom";
@@ -622,6 +623,7 @@ export default function ProjectsSection() {
         </AnimatePresence>,
         document.body,
       )}
+    <SectionMarquee reverse text={projects.map(project => project.title).join(" · ")} />
     </section>
     </LazyMotion>
   );

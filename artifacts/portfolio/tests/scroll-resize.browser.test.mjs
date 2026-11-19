@@ -171,7 +171,7 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   await phonePage.waitForFunction(() =>
     document.querySelector("#home")
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 4,
+    && document.querySelectorAll("[data-award-record]").length === 4,
   );
   await dismissIntro(phonePage);
 
@@ -263,19 +263,25 @@ test("scroll-linked sections stay aligned when phone width changes", { timeout: 
   });
 
   await t.test("award content remains revealed when resizing partway through each card", async () => {
-    const awards = phonePage.locator("#achievement > .award-record");
+    const awards = phonePage.locator("[data-award-record]");
     for (let index = 0; index < await awards.count(); index++) {
       const card = awards.nth(index);
       const title = await card.locator("h2").innerText();
-      const top = await card.evaluate((element) =>
-        window.scrollY + element.getBoundingClientRect().top + element.getBoundingClientRect().height * 0.42 - window.innerHeight * 0.45,
-      );
-      await scrollInstantly(phonePage, top);
+      const selectCard = async () => {
+        const top = await phonePage.locator(".award-stage").evaluate((stage, index) => {
+          const spacer = stage.parentElement;
+          return scrollY + spacer.getBoundingClientRect().top - Math.min(72, innerHeight - stage.offsetHeight)
+            + stage.clientWidth * index;
+        }, index);
+        await scrollInstantly(phonePage, top);
+      };
+      await selectCard();
       await assertVisibleBox(card, `${title} before resize`);
       await phonePage.setViewportSize({ width: 390, height: 844 });
       await settleLayout(phonePage);
       await phonePage.setViewportSize({ width: 700, height: 844 });
       await settleLayout(phonePage);
+      await selectCard();
       await assertVisibleBox(card, `${title} after resize`);
     }
   });
