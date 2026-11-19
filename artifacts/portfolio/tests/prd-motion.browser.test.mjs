@@ -16,7 +16,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
     await page.goto('http://localhost:4173');
     await page.locator('#home h1').waitFor({state:'attached'});
     if (await page.locator('.rv-intro-skip').isVisible()) await page.locator('.rv-intro-skip').click();
-    await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
+    await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper[data-scroll-native]') && getComputedStyle(document.querySelector('#smooth-content')).transform === 'none');
     await t.test('marquee continuity at 360/390/430/tablet/desktop',async()=>{
       for(const width of [360,390,430,768,1280,1440]){
         await page.setViewportSize({width,height:844});
@@ -61,7 +61,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
       await page.locator('#mobile-navigation').getByRole('link',{name:'Contact'}).click();
       await page.waitForFunction(()=>location.hash==='#contact'&&document.body.style.overflow!=='hidden');
       await page.emulateMedia({reducedMotion:'no-preference'});
-      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
+      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper[data-scroll-native]') && getComputedStyle(document.querySelector('#smooth-content')).transform === 'none');
     });
     await t.test('route cleanup releases ScrollSmoother and the body lock',async()=>{
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -75,7 +75,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
       // React's passive cleanup runs after the route URL commits.
       await page.waitForFunction(()=>!document.querySelector('#smooth-wrapper') && document.body.style.height === '' && document.body.style.overflow !== 'hidden');
       await page.goBack();
-      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
+      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper[data-scroll-native]') && getComputedStyle(document.querySelector('#smooth-content')).transform === 'none');
     });
     await t.test("developer form rejects invalid input and accepts the isolated account",async()=>{
       await page.goto('http://localhost:4173/admin');
@@ -96,7 +96,7 @@ test('PRD production motion acceptance', {skip: !process.env.PORTFOLIO_BUILD_DIR
     await t.test('CPU 4x scrolling progresses without hidden reading content',async tc=>{
       // Independent navigation prevents a failed route assertion from cascading.
       await page.goto('http://localhost:4173');
-      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper')?.style.position === 'fixed' && !document.querySelector('#smooth-wrapper')?.hasAttribute('data-scroll-native'));
+      await page.waitForFunction(()=>!document.querySelector('#rv-intro') && document.querySelector('#smooth-wrapper[data-scroll-native]') && getComputedStyle(document.querySelector('#smooth-content')).transform === 'none');
       const cdp=await context.newCDPSession(page); await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});
       try{
         await page.waitForTimeout(1800);

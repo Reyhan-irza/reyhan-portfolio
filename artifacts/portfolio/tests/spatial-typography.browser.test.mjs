@@ -94,8 +94,8 @@ test('sans typography, four certificates and independent spatial scenes', {
         }));
         for (const index of [0, 1, 2, 3, 4, 2]) {
           await go(range.top + (index + .05) * range.height);
-          const position = await about.locator('.story-note').nth(index % 4).boundingBox();
-          const panelTitle = await about.locator(".story-note h3").nth(index % 4).boundingBox();
+          const position = await about.locator('.story-note').nth(index).boundingBox();
+          const panelTitle = await about.locator(".story-note h3").nth(index).boundingBox();
           assert.ok(panelTitle.y >= 0 && panelTitle.y + panelTitle.height <= height, "active About heading inside viewport");
           assert.ok(Math.abs(position.x - (await about.boundingBox()).x) < 3);
         }

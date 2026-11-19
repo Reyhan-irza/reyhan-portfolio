@@ -135,7 +135,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
   await page.evaluate(() => {
     const contact = document.querySelector("#contact");
     const content = document.querySelector("#smooth-content");
-    const visualScroll = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+    const visualScroll = document.querySelector("#smooth-wrapper[data-scroll-native]") ? scrollY : -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
     window.scrollTo({ top: contact.getBoundingClientRect().top + visualScroll, behavior: "instant" });
   });
   await page.waitForFunction(() =>
@@ -169,7 +169,7 @@ test("mobile navigation stays reachable and contains scrolling on short screens"
     await page.evaluate(() => window.scrollTo({ top: 420, behavior: "instant" }));
     await page.waitForFunction(() => {
       const content = document.querySelector("#smooth-content");
-      const visualScroll = -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
+      const visualScroll = document.querySelector("#smooth-wrapper[data-scroll-native]") ? scrollY : -new DOMMatrixReadOnly(getComputedStyle(content).transform).m42;
       return Math.abs(visualScroll - window.scrollY) < 2;
     });
     const backgroundScrollBeforeOpen = await page.evaluate(() => window.scrollY);
