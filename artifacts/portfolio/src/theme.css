@@ -444,7 +444,12 @@ body { background: var(--canvas); }
 .portfolio-shell #about .story-notes[data-cycle] {
   display: grid; grid-template-columns: minmax(0,1fr); overflow: clip; isolation: isolate;
 }
-.portfolio-shell #about .story-notes[data-cycle] > .story-note {
+.story-track { display: contents; }
+.story-track > [aria-hidden="true"] { display: none !important; }
+.story-notes[data-cycle] .story-track { display: flex; min-width: 0; }
+.story-notes[data-cycle] .story-track > [aria-hidden="true"] { display: flex !important; }
+.portfolio-shell #about .story-notes[data-cycle] .story-note {
+  flex: 0 0 100%; min-width: 0;
   grid-area: 1/1; min-height: clamp(24rem,72svh,54rem); display: flex;
   flex-direction: column; justify-content: center; padding: clamp(1.5rem,7vw,7rem);
   background: var(--canvas);
