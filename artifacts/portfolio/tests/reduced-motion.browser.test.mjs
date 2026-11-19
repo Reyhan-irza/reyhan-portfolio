@@ -293,7 +293,14 @@ test("journey and all certificates stay visible and usable with reduced motion",
       await mobile.waitForFunction(() => document.querySelector('.hero-typing-loop')?.textContent.trim().length > 3);
       const first = await mobile.locator('.hero-typing-loop').textContent();
       await mobile.waitForFunction(value => document.querySelector('.hero-typing-loop')?.textContent !== value, first);
-      await mobile.locator('.secondary-archive summary').click();
+      const archive = mobile.locator('.secondary-archive summary');
+      await archive.evaluate(el => scrollTo(0, scrollY + el.getBoundingClientRect().top - innerHeight * .4));
+      await mobile.waitForFunction(() => {
+        const summary = document.querySelector('.secondary-archive summary');
+        const box = summary.getBoundingClientRect();
+        return summary.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2));
+      });
+      await archive.click();
       const slider = mobile.getByRole('slider', { name: 'Volume' });
       const bounds = await slider.boundingBox();
       assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 320, 'volume stays inside viewport');
