@@ -131,7 +131,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
   await page.waitForFunction(() =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
     && document.querySelectorAll("#journey [data-education-row]").length === 4
-    && document.querySelectorAll("#achievement > .award-record").length === 4
+    && document.querySelectorAll("[data-award-record]").length === 4
     && !document.querySelector(".rv-intro"),
   );
 
@@ -139,7 +139,7 @@ test("journey and all certificates stay visible and usable with reduced motion",
     const visibleContent = await page.evaluate(() => {
       const elements = [
         ...document.querySelectorAll("#journey [data-education-row]"),
-        ...document.querySelectorAll("#achievement > .award-record"),
+        ...document.querySelectorAll("[data-award-record]"),
       ];
       return elements.map((element) => {
         const style = getComputedStyle(element);
