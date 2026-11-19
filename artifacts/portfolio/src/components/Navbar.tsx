@@ -227,15 +227,15 @@ export default function Navbar() {
             pendingTarget.current = null;
             if (target) scrollToSection(target);
           };
-          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: desktop ? 0 : 100, yPercent: desktop ? -110 : 0 });
+          gsap.set(panel, { display: "none", x: 0, y: 0, xPercent: desktop ? 0 : 100, yPercent: 0 });
           gsap.set(glyphLines, { transformOrigin: "center center" });
           const timeline = gsap.timeline({ paused: true, onReverseComplete: finishClose })
             .set(panel, { display: "flex" })
             .fromTo(panel, desktop
-              ? { yPercent: -110, borderBottomLeftRadius: "50% 24%", borderBottomRightRadius: "50% 24%" }
+              ? { "--curtain-edge": "-36%", "--curtain-bend": "0%" }
               : { xPercent: 100, borderTopLeftRadius: 150, borderBottomLeftRadius: 150 },
             desktop
-              ? { yPercent: 0, borderBottomLeftRadius: "0% 0%", borderBottomRightRadius: "0% 0%", duration: .95, ease: "elastic.out(1, .72)" }
+              ? { "--curtain-edge": "100%", duration: 1.12, ease: "power3.inOut" }
               : { xPercent: 0, borderTopLeftRadius: 14, borderBottomLeftRadius: 14, duration: SCENE.menu, ease: SCENE.curtainEase })
             .fromTo(targets, { yPercent: 110, rotation: 3, transformOrigin: "0% 100%" }, {
               yPercent: 0, rotation: 0, duration: SCENE.detail, stagger: SCENE.menuStagger, ease: SCENE.ease,
@@ -243,6 +243,11 @@ export default function Navbar() {
             .fromTo(footer, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: SCENE.detail }, .4)
             .to(glyphLines[0], { y: 5, rotation: 45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0)
             .to(glyphLines[1], { y: -5, rotation: -45, duration: reduced ? 0 : SCENE.menu, ease: SCENE.curtainEase }, 0);
+          if (desktop) {
+            timeline.to(panel, { "--curtain-bend": "32%", duration: .45, ease: "sine.inOut" }, 0)
+              .to(panel, { "--curtain-bend": "-8%", duration: .53, ease: "sine.inOut" }, .45)
+              .to(panel, { "--curtain-bend": "0%", duration: .4, ease: "sine.out" }, .98);
+          }
           menuTimelineRef.current = timeline;
           if (isOpenRef.current) timeline.progress(1);
         }, panel);
