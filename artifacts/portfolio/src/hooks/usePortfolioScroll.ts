@@ -11,7 +11,7 @@ export function PortfolioScrollController() {
     if (!wrapper || !content) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const smooth = 0.95;
-    const smoothTouch = 0.18;
+    const smoothTouch = 0.1;
     const smoother = ScrollSmoother.create({
       wrapper,
       content,
