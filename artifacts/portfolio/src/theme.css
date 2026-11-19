@@ -569,33 +569,16 @@ body { background: var(--canvas); }
   .portfolio-shell #comments :is(input, textarea, select) { font-size: 1rem; }
 }
 
-.portfolio-shell [data-palette-wave] { position: relative; }
-.portfolio-shell :is(#technology-bands,#achievement,#github)[data-palette-wave] { --wave-origin: #101113; }
-.portfolio-shell [data-palette-wave]::after {
-  content: "";
+.portfolio-shell [data-palette-wave] {
+  position: relative;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+.palette-wave-surface {
   position: absolute;
-  inset: 0 0 auto;
-  height: min(25svh, calc(var(--palette-wave-height, 0px) * 2.8));
-  background-image:
-    repeating-radial-gradient(ellipse at 32% -240%, transparent 0 9px, color-mix(in srgb, var(--canvas) 14%, transparent) 10px, transparent 12px),
-    linear-gradient(178deg, transparent 20%, color-mix(in srgb, var(--canvas) 28%, transparent) 90%);
-  background-color: var(--wave-origin, #e8edf4);
-  /* Droplets detach from the silhouette as its scroll-driven height grows. */
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H480V48C400 105 335 14 238 42S88 99 0 48Z'/%3E%3C/svg%3E"),
-    radial-gradient(circle at 4% 68%, black 2px, transparent 3px),
-    radial-gradient(circle at 9% 82%, black 1px, transparent 2px),
-    radial-gradient(circle at 17% 89%, black 3px, transparent 4px),
-    radial-gradient(circle at 23% 83%, black 1px, transparent 2px),
-    radial-gradient(circle at 32% 77%, black 2px, transparent 3px),
-    radial-gradient(circle at 44% 62%, black 1px, transparent 2px),
-    radial-gradient(circle at 55% 49%, black 2px, transparent 3px),
-    radial-gradient(circle at 63% 55%, black 1px, transparent 2px),
-    radial-gradient(circle at 73% 68%, black 3px, transparent 4px),
-    radial-gradient(circle at 82% 79%, black 1px, transparent 2px),
-    radial-gradient(circle at 91% 78%, black 2px, transparent 3px),
-    radial-gradient(circle at 97% 65%, black 1px, transparent 2px);
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
+  inset: -1px 0 auto;
+  width: 100%;
+  overflow: hidden;
   pointer-events: none;
 }
 
