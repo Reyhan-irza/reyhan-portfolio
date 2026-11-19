@@ -511,4 +511,4 @@ body { background: var(--canvas); }
 
 /* Only the document owns vertical scroll. A fixed wrapper that scrolls on focus
    can move a pinned button between pointerdown and pointerup. */
-#smooth-wrapper:not([data-scroll-native]) { overflow: clip !important; }
+#smooth-wrapper:has([data-project-pinned]:is(:hover, :focus-within)) { overflow: clip !important; }
