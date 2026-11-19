@@ -107,6 +107,8 @@ test('sans typography, four certificates and independent spatial scenes', {
           await go(start + step * index);
           const active = awards.locator("[data-award-record]").nth(index);
           const image = await active.locator("img").boundingBox();
+          const frame = await active.locator("[data-award-plane]").boundingBox();
+          assert.ok(image.height <= frame.height + 1 && image.width <= frame.width + 1);
           assert.ok(image.x >= -2 && image.x + image.width <= width + 2 && image.y >= 0 && image.y + image.height <= height);
         }
         if (width >= 1024) {
