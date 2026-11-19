@@ -13,9 +13,9 @@ const contacts = [
   {
     id: "instagram",
     label: "Instagram",
-    handle: "@irzalvano_",
+    handle: "@vierlyk",
     icon: SiInstagram,
-    href: "https://www.instagram.com/irzalvano_?igsh=ZXRqM2lvY3EyY2Nj",
+    href: "https://www.instagram.com/vierlyk?fqnt=ZHBneTE2NDUzdWky",
   },
   {
     id: "tiktok",
