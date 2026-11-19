@@ -49,6 +49,8 @@ export default function PortfolioRatingSection() {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [animationRating, setAnimationRating] = useState(0);
   const [animationVersion, setAnimationVersion] = useState(0);
+  const burstRef = useRef<HTMLSpanElement>(null);
+  const [burst, setBurst] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [submitError, setSubmitError] = useState("");
@@ -104,6 +106,21 @@ export default function PortfolioRatingSection() {
     return () => context.revert();
   }, [animationRating, animationVersion]);
 
+  useEffect(() => {
+    const origin = burstRef.current;
+    if (!burst || !origin) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const dots = Array.from(origin.children);
+      gsap.fromTo(dots, { x: 0, y: 0, opacity: 1, scale: 1 }, {
+        x: i => Math.cos(i * Math.PI / 6) * (34 + (i % 3) * 9),
+        y: i => Math.sin(i * Math.PI / 6) * (34 + (i % 3) * 9),
+        opacity: 0, scale: .25, duration: .68, ease: "power3.out",
+      });
+    });
+    return () => media.revert();
+  }, [burst]);
+
   const submitRating = async (value: number) => {
     if (submitting) return;
     setSubmitting(true);
@@ -127,6 +144,7 @@ export default function PortfolioRatingSection() {
         // The database write succeeded; retain the in-memory selection.
       }
       setMyRating(value);
+      if (value === 5) setBurst(count => count + 1);
       setFeedback("Terima kasih, penilaian Anda sudah tersimpan.");
 
       const { data, error: summaryFetchError } = await supabase
@@ -150,7 +168,7 @@ export default function PortfolioRatingSection() {
 
   return (
     <section id="portfolio-rating" className="relative px-6 py-16 sm:py-20">
-      <Reveal className="glass mx-auto max-w-4xl rounded-3xl border border-white/10 px-5 py-8 text-center sm:px-8 sm:py-10">
+      <Reveal className="glass mx-auto max-w-3xl rounded-3xl border border-white/10 px-5 py-8 text-center sm:px-8 sm:py-10">
         <p className="mb-3 text-[10px] font-semibold uppercase tracking-[.2em] text-[#aeb8ff]">
           Visitor feedback
         </p>
@@ -185,8 +203,11 @@ export default function PortfolioRatingSection() {
                 onFocus={() => setHoverRating(value)}
                 onBlur={() => setHoverRating(null)}
                 onClick={() => void submitRating(value)}
-                className="grid h-12 w-12 place-items-center rounded-xl text-[#8290ff] transition-colors hover:bg-white/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] disabled:cursor-wait disabled:opacity-60"
+                className="relative grid h-11 w-11 sm:h-12 sm:w-12 place-items-center rounded-xl text-[#8290ff] transition-colors hover:bg-white/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8290ff] disabled:cursor-wait disabled:opacity-60"
               >
+                {value === 5 && <span ref={burstRef} aria-hidden="true" className="rating-burst">
+                  {Array.from({ length: 12 }, (_, i) => <i key={i} />)}
+                </span>}
                 <Star
                   aria-hidden="true"
                   className={`h-7 w-7 transition-colors ${active ? "fill-current text-[#aeb8ff]" : "fill-transparent text-[#667085]"}`}

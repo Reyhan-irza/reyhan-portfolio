@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { gsap } from "../lib/motion";
+import { gsap, ScrollTrigger } from "../lib/motion";
 import { Code2, Database, Layout, Workflow } from "lucide-react";
 import Reveal from "./Reveal";
 
@@ -20,7 +20,7 @@ export default function AboutSection() {
       const track = stage.querySelector<HTMLElement>(".story-track")!;
       stage.dataset.cycle = "";
       const sequence = gsap.timeline({ scrollTrigger: {
-        trigger: stage, pin: true, scrub: true,
+        trigger: stage, pin: true, pinType: ScrollTrigger.isTouch === 1 ? "fixed" : "transform", scrub: true,
         start: () => "top " + Math.min(80, innerHeight - stage.offsetHeight - 12) + "px",
         end: () => "+=" + notes.length * stage.offsetHeight,
         invalidateOnRefresh: true,

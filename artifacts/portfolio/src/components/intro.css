@@ -33,3 +33,16 @@
 @media(max-width:360px){#rv-intro .name{letter-spacing:.28em}}
 
 #rv-intro {background:transparent;min-height:0}
+
+#rv-intro .rv-intro-continue {
+  position: absolute;
+  z-index: 3;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + .75rem));
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  min-height: 44px;
+  line-height: 1.5;
+  text-align: center;
+}
