@@ -17,20 +17,18 @@ export default function AboutSection() {
     if (!stage) return;
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
-      const cards = [...stage.querySelectorAll<HTMLElement>(".story-note")];
+      const track = stage.querySelector<HTMLElement>(".story-track")!;
       stage.dataset.cycle = "";
       const sequence = gsap.timeline({ scrollTrigger: {
         trigger: stage, pin: true, scrub: true,
         start: () => "top " + Math.min(80, innerHeight - stage.offsetHeight - 12) + "px",
-        end: () => "+=" + cards.length * stage.offsetHeight,
+        end: () => "+=" + notes.length * stage.offsetHeight,
         invalidateOnRefresh: true,
       } });
-      gsap.set(cards.slice(1), { xPercent: 100 });
-      cards.forEach((card, i) => {
-        const next = cards[(i + 1) % cards.length];
-        sequence.to(card, { xPercent: -100, duration: .65, ease: "sine.inOut" }, i + .35)
-          .fromTo(next, { xPercent: 100 }, { xPercent: 0, duration: .65, ease: "sine.inOut",
-            immediateRender: false }, i + .35);
+      notes.forEach((_, index) => {
+        sequence.fromTo(track, { xPercent: -100 * index }, {
+          xPercent: -100 * (index + 1), duration: .65, ease: "sine.inOut", immediateRender: false,
+        }, index + .35);
       });
       return () => { delete stage.dataset.cycle; };
     });
@@ -52,16 +50,16 @@ export default function AboutSection() {
           </div>
         </Reveal>
         <div ref={stageRef} className="story-notes mt-16 grid gap-px border-y border-[rgba(255,255,255,.12)] bg-[rgba(255,255,255,.12)] md:grid-cols-2">
-          {notes.map(({ icon: Icon, label, text }, index) => (
-            <Reveal mount key={label} as="article" className="story-note p-7 md:p-9" staggerIndex={index}>
+          <div className="story-track">{[...notes, notes[0]].map(({ icon: Icon, label, text }, index) => (
+            <Reveal mount key={index} aria-hidden={index === notes.length || undefined} as="article" className="story-note p-7 md:p-9" staggerIndex={index}>
               <div className="flex items-start justify-between gap-5">
                  <Icon className="h-5 w-5 text-[#a43f2d]" aria-hidden="true" />
-                <span className="font-mono text-[10px] text-[#77796e]">0{index + 1}</span>
+                <span className="font-mono text-[10px] text-[#77796e]">0{index % notes.length + 1}</span>
               </div>
               <h3 className="mt-12 text-xl font-semibold tracking-[-.04em]">{label}</h3>
               <p className="mt-3 max-w-sm text-base leading-relaxed text-[#65675f]">{text}</p>
             </Reveal>
-          ))}
+          ))}</div>
         </div>
       </div>
     </section>
