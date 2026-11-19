@@ -79,6 +79,7 @@ test('sans typography, four certificates and independent spatial scenes', {
         if (mouse) {
           for (const card of await cards.all()) {
             const title = card.locator('h3');
+            await go(await title.evaluate(el => el.getBoundingClientRect().top + scrollY - innerHeight * .45));
             await title.hover();
             const preview = page.locator('.project-pointer-preview.is-visible');
             await preview.waitFor();
