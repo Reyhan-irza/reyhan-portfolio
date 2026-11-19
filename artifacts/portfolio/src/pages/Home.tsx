@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useEditorialScenes } from "../hooks/useEditorialScenes";
 import { useSectionTheme } from "../hooks/useSectionTheme";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TechnologyBands from "@/components/TechnologyBands";
@@ -118,12 +119,19 @@ export default function Home() {
               <span>News · music · comments</span>
             </summary>
             {archiveVisited && (
-              <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading news and community features">
-                <div className="h-2 w-28 animate-pulse bg-white/10" />
-                <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
+              <ErrorBoundary fallback={<div className="secondary-archive-content space-y-4 py-8" role="status">
+                <p>Arsip belum bisa dimuat.</p>
+                <button type="button" className="rounded border border-current px-4 py-2" onClick={() => window.location.reload()}>
+                  Muat ulang halaman
+                </button>
               </div>}>
-                <SecondaryArchive />
-              </Suspense>
+                <Suspense fallback={<div className="secondary-archive-content space-y-4 py-8" role="status" aria-label="Loading news and community features">
+                  <div className="h-2 w-28 animate-pulse bg-white/10" />
+                  <div className="h-28 animate-pulse border border-white/[.07] bg-white/[.025]" />
+                </div>}>
+                  <SecondaryArchive />
+                </Suspense>
+              </ErrorBoundary>
             )}
           </details>
         </div>
