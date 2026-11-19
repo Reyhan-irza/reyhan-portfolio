@@ -1,3 +1,4 @@
+import { focusWithoutScroll } from "../lib/scroll";
 import SectionMarquee from "./SectionMarquee";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { PointerEvent } from "react";
@@ -114,7 +115,7 @@ export default function ProjectsSection() {
           visiblePanel = index;
           rows.forEach((row, rowIndex) => { row.inert = rowIndex !== index; });
           updateActiveProject(index);
-          if (shouldMoveFocus) rows[index].querySelector("h3")?.focus({ preventScroll: true });
+          if (shouldMoveFocus) focusWithoutScroll(rows[index].querySelector("h3"));
         };
 
         const scene = gsap.timeline({ paused: true, defaults: { ease: "none" } });
@@ -513,7 +514,7 @@ export default function ProjectsSection() {
       {createPortal(
         <AnimatePresence onExitComplete={() => {
           if (skipFocusRestoreRef.current) { skipFocusRestoreRef.current = false; return; }
-          if (openerRef.current?.isConnected) openerRef.current.focus({ preventScroll: true });
+          if (openerRef.current?.isConnected) focusWithoutScroll(openerRef.current);
         }}>
         {modal && <m.div
           key="project-detail-overlay"
