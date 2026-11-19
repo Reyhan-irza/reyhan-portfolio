@@ -51,8 +51,8 @@ export default function Navbar() {
     if (!isOpen) return;
     const panel = panelRef.current;
     const focusables = () => {
-      return Array.from(panel?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? [])
-        .filter((item) => item.getClientRects().length > 0);
+      const links = Array.from(panel?.querySelectorAll<HTMLElement>("a[href]") ?? []);
+      return menuTriggerRef.current ? [...links, menuTriggerRef.current] : links;
     };
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -62,7 +62,7 @@ export default function Navbar() {
       if (event.key !== "Tab") return;
       const items = focusables();
       if (!items.length) return;
-      if (!panel?.contains(document.activeElement)) {
+      if (!items.includes(document.activeElement as HTMLElement)) {
         event.preventDefault();
         (event.shiftKey ? items[items.length - 1] : items[0]).focus();
         return;
@@ -361,7 +361,6 @@ export default function Navbar() {
             </a>
           ))}
         </nav>
-        <button type="button" className="portfolio-menu-close" onClick={closeMenu} aria-label="Close navigation menu">×</button>
         <div data-menu-footer className="mt-auto flex items-end justify-between">
           <div>
             <p className="text-xs text-white/70">Reyhan Irza Alvano</p>
