@@ -508,3 +508,7 @@ body { background: var(--canvas); }
   .award-stage[data-gallery] .certificate-preview { height: min(33svh,18rem); width: 100%; }
   .award-stage[data-gallery] [data-award-media] > div:last-child { flex-direction: row; }
 }
+
+/* Only the document owns vertical scroll. A fixed wrapper that scrolls on focus
+   can move a pinned button between pointerdown and pointerup. */
+#smooth-wrapper:not([data-scroll-native]) { overflow: clip !important; }
