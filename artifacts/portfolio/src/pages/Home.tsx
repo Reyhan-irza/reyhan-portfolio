@@ -16,7 +16,7 @@ import GitHubSection from "@/components/GitHubSection";
 import ContactSection from "@/components/ContactSection";
 import PortfolioRatingSection from "@/components/PortfolioRatingSection";
 import Footer from "@/components/Footer";
-import ClosingMarquee from "@/components/ClosingMarquee";
+import { WhatsAppShortcut } from "@/components/SocialDock";
 import AchievementToast from "@/components/AchievementToast";
 import { unlockAchievement, ACHIEVEMENTS } from "@/lib/achievement";
 import { recordVisit } from "@/lib/adminAuth";
@@ -75,7 +75,7 @@ export default function Home() {
       <a className="skip-to-content" href="#main-content" onClick={(event) => { event.preventDefault(); scrollToSection("#main-content"); }}>Skip to content</a>
       <PortfolioScrollController />
       <Navbar />
-      <div inert={!introFinished}><MusicController /></div>
+      <div inert={!introFinished}><MusicController />{introFinished && <WhatsAppShortcut />}</div>
       <div id="smooth-wrapper">
         <div id="smooth-content">
       <main inert={!introFinished} id="main-content" className="relative z-10">
@@ -111,7 +111,6 @@ export default function Home() {
         <GitHubSection />
         <SectionBoundary variant="resolve" />
         <div className="portfolio-closing-zone">
-          <ClosingMarquee />
           <ContactSection />
           <PortfolioRatingSection />
           <ErrorBoundary fallback={<p className="px-6 py-8 text-center" role="status">Komentar belum bisa dimuat.</p>}>
