@@ -6,7 +6,7 @@ export const contacts = [
     label: "WhatsApp",
     handle: "ReyhanWhatsap",
     icon: SiWhatsapp,
-    href: "https://wa.me/62881385242876",
+    href: "https://wa.me/6281385242876",
   },
   {
     id: "instagram",
