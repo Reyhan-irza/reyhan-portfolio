@@ -42,7 +42,7 @@ export default function AboutSection() {
           <p className="section-kicker">01 / About</p>
           <h2 className="portfolio-section-heading mt-5 font-semibold tracking-[-.07em] text-[#1b1c18]">Belajar lewat karya.</h2>
           <p ref={copy} className="story-lead mt-6 max-w-2xl">
-            Saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung. Rasa penasaran saya pada komputer berawal dari warnet, lalu berkembang lewat eksperimen dengan Python dan bot WhatsApp. Pada 2025, saya meraih Juara I LKS IT Software Solution for Business tingkat Kabupaten Agam. Sekarang saya membangun proyek web dengan TypeScript dan Tailwind sambil mendalami AI dan keamanan siber.
+      Halo semua nya! perkenalkan saya Reyhan, pelajar TJKT di SMK Negeri 2 Lubuk Basung saat ini. Rasa penasaran saya pada komputer berawal dari warnet semenjak 2014, lalu berkembang lewat eksperimen dengan Python dan bot WhatsApp. Pada 2025, saya meraih Juara I LKS IT Software Solution for Business tingkat Kabupaten Agam, pada 2026 saya meraih juara II CADiaK CTF Cybersecurity. Sekarang saya membangun proyek web dengan TypeScript dan Tailwind sambil mendalami AI dan keamanan siber.
           </p>
         </div>
       </div>
